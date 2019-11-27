@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/deissh/osu-api-server/api"
+	"github.com/deissh/osu-api-server/pkg"
+	"github.com/deissh/osu-api-server/pkg/database"
 	"os"
 
 	"github.com/gin-contrib/logger"
@@ -22,6 +23,8 @@ func main() {
 		log.Panic().Err(err)
 	}
 
+	_, _ = database.Initialize()
+
 	log.Logger = log.Output(
 		zerolog.ConsoleWriter{
 			Out:     os.Stderr,
@@ -32,7 +35,7 @@ func main() {
 	app := gin.New()
 	app.Use(logger.SetLogger())
 
-	api.ApplyRoutes(app)
+	pkg.ApplyRoutes(app)
 
 	if err := app.Run(":" + os.Getenv("PORT")); err != nil {
 		log.Err(err)
