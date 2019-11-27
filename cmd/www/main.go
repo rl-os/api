@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"github.com/deissh/osu-api-server/api"
 	"os"
-	"time"
 
 	"github.com/gin-contrib/logger"
 	"github.com/gin-gonic/gin"
@@ -19,7 +18,6 @@ func main() {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 
-	// load .env environment variables
 	if err := godotenv.Load(); err != nil {
 		log.Panic().Err(err)
 	}
@@ -34,9 +32,7 @@ func main() {
 	app := gin.New()
 	app.Use(logger.SetLogger())
 
-	app.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong "+fmt.Sprint(time.Now().Unix()))
-	})
+	api.ApplyRoutes(app)
 
 	if err := app.Run(":" + os.Getenv("PORT")); err != nil {
 		log.Err(err)
