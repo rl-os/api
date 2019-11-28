@@ -1,0 +1,27 @@
+# External services
+services:
+  avatars: 'https://a.localhost'
+  cheesegull: 'https://storage.localhost'
+
+
+# API server configuration
+server:
+  host: '0.0.0.0'
+  port: 2100
+
+  sentry_dns:
+
+  database:
+    driver: mysql
+    dsn: 'user:password@/dbname'
+
+  redis:
+    host: '127.0.0.1'
+    password:
+    db: 0
+
+  mailgun:
+    domain: ''
+    private_key: ''
+    public_key: ''
+    from: ''
