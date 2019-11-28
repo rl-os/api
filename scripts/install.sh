@@ -1,8 +1,10 @@
 #!/bin/bash
 bash scripts/message.sh
 
+set -e
+
 echo "  >  Checking if there is any missing dependencies..."
-go get ./...
+go mod download
 
 echo "  >  Cleaning build cache"
 go get -v golang.org/x/lint/golint

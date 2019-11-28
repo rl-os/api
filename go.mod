@@ -3,9 +3,9 @@ module github.com/deissh/osu-api-server
 go 1.13
 
 require (
-	github.com/gin-contrib/logger v0.0.2
+	github.com/gin-contrib/logger v0.0.3-0.20191126031415-55c0f3c3242c
 	github.com/gin-gonic/gin v1.5.0
-	github.com/go-sql-driver/mysql v1.4.0
+	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gookit/config/v2 v2.0.12
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/onsi/ginkgo v1.10.3 // indirect
