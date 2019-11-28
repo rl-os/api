@@ -18,8 +18,8 @@ server:
     dsn: 'root:toor@/osuserver'
 
   redis:
-    host: '127.0.0.1'
-    password:
+    host: '127.0.0.1:6379'
+    password: ''
     db: 0
 
   mailgun:

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/deissh/osu-api-server/pkg"
+	v2 "github.com/deissh/osu-api-server/pkg/v2"
 	"github.com/gin-contrib/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/config/v2"
@@ -41,11 +42,16 @@ func main() {
 	}
 
 	pkg.InitializeDB()
+	pkg.InitializeRedis()
 
 	app := gin.New()
 	app.Use(logger.SetLogger())
 
-	pkg.ApplyRoutes(app)
+	api := app.Group("/api")
+	{
+		// todo: v1.ApplyRoutes(api)
+		v2.ApplyRoutes(api)
+	}
 
 	err = app.Run(config.String("server.host") + ":" + config.String("server.port"))
 	if err != nil {

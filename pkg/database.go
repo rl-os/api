@@ -7,24 +7,31 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// Current database connection
-var Connection *sqlx.DB
+// Db connection
+var Db *sqlx.DB
 
 // InitializeDB database connection
 func InitializeDB() {
-	db, err := sqlx.Connect(config.String("server.database.driver"), config.String("server.database.dsn"))
+	Db, err := sqlx.Connect(config.String("server.database.driver"), config.String("server.database.dsn"))
 	if err != nil {
 		log.Fatal().
 			Err(err).
 			Msg("initialize database")
 	}
 
-	if err = db.Ping(); err != nil {
+	if err = Db.Ping(); err != nil {
 		log.Fatal().
 			Err(err).
 			Msg("database ping")
 	}
 
-	log.Debug().
+	stats := Db.Stats()
+
+	log.Info().
+		Str("driver", config.String("server.database.driver")).
+		Int("open_connections", stats.OpenConnections).
+		Int("max_open_connections", stats.MaxOpenConnections).
+		Int("idle", stats.Idle).
+		Int("in_use", stats.InUse).
 		Msg("database connected")
 }
