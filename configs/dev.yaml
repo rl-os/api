@@ -1,3 +1,5 @@
+debug: true
+
 # External services
 services:
   avatars: 'https://a.localhost'
@@ -13,7 +15,7 @@ server:
 
   database:
     driver: mysql
-    dsn: 'user:password@/dbname'
+    dsn: 'root:toor@/osuserver'
 
   redis:
     host: '127.0.0.1'
