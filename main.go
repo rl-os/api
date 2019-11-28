@@ -21,7 +21,7 @@ func main() {
 	config.AddDriver(yaml.Driver)
 	config.LoadOSEnv([]string{"config"}, true)
 
-	err := config.LoadFiles(config.String("config", "configs/dev.yaml"))
+	err := config.LoadFiles(config.String("config", "config.yaml"))
 	if err != nil {
 		panic(err)
 	}
