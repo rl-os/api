@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/deissh/osu-api-server/pkg"
+	v1 "github.com/deissh/osu-api-server/pkg/v1"
 	v2 "github.com/deissh/osu-api-server/pkg/v2"
 	"github.com/gin-contrib/logger"
 	"github.com/gin-gonic/gin"
@@ -49,7 +50,7 @@ func main() {
 
 	api := app.Group("/api")
 	{
-		// todo: v1.ApplyRoutes(api)
+		v1.ApplyRoutes(api)
 		v2.ApplyRoutes(api)
 	}
 

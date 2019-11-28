@@ -12,8 +12,8 @@ func ping(c *gin.Context) {
 
 // ApplyRoutes applies router to the gin Engine
 func ApplyRoutes(r *gin.RouterGroup) {
-	v1 := r.Group("/v2")
+	v2 := r.Group("/v2")
 	{
-		v1.GET("/ping", ping)
+		v2.GET("/ping", ping)
 	}
 }
