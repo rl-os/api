@@ -1,22 +1,20 @@
 package main
 
 import (
-	// "github.com/deissh/osu-api-server/pkg"
+	"github.com/deissh/osu-api-server/pkg"
 	v1 "github.com/deissh/osu-api-server/pkg/v1"
 	v2 "github.com/deissh/osu-api-server/pkg/v2"
-	"github.com/gin-contrib/logger"
-	"github.com/gin-gonic/gin"
 	"github.com/gookit/config/v2"
 	"github.com/gookit/config/v2/yaml"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"
+
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
-	// setup default mode
-	gin.SetMode(gin.ReleaseMode)
-
 	// loading configuration
 	config.WithOptions(config.ParseEnv, config.Readonly)
 	config.AddDriver(yaml.Driver)
@@ -39,14 +37,15 @@ func main() {
 			},
 		).With().Caller().Logger()
 
-		gin.SetMode(gin.DebugMode)
 	}
 
-	// pkg.InitializeDB()
-	// pkg.InitializeRedis()
+	pkg.InitializeDB()
+	pkg.InitializeRedis()
 
-	app := gin.New()
-	app.Use(logger.SetLogger())
+	app := echo.New()
+	app.Use(middleware.Logger())
+	app.Use(middleware.RequestID())
+	app.Use(middleware.Recover())
 
 	api := app.Group("/api")
 	{
@@ -54,7 +53,7 @@ func main() {
 		v2.ApplyRoutes(api)
 	}
 
-	err = app.Run(config.String("server.host") + ":" + config.String("server.port"))
+	err = app.Start(config.String("server.host") + ":" + config.String("server.port"))
 	if err != nil {
 		log.Fatal().
 			Err(err).

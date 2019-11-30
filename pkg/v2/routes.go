@@ -2,86 +2,87 @@ package v2
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
 )
 
-func ping(c *gin.Context) {
-	c.JSON(200, gin.H{
+func empty(c echo.Context) (err error) {
+	return c.JSON(200, gin.H{
 		"message": "I'm alive!",
 	})
 }
 
 // ApplyRoutes applies router to the gin Engine
-func ApplyRoutes(r *gin.RouterGroup) {
+func ApplyRoutes(r *echo.Group) {
 	v2 := r.Group("/v2")
 	{
 		// Health status
 		// хз для чего я пишу в каждой версии свой пинг
-		v2.GET("/ping", ping)
+		v2.GET("/empty", empty)
 
 		// === Me ===
-		v2.GET("/me/:mode")
-		v2.GET("/me/download-quota-check")
+		v2.GET("/me/:mode", empty)
+		v2.GET("/me/download-quota-check", empty)
 
 		// === Friends ===
-		v2.GET("/friends")
-		
+		v2.GET("/friends", empty)
+
 		// === Users ===
-		v2.GET("/users/:user/kudosu")
-		v2.GET("/users/:user/scores/:type")
-		v2.GET("/users/:user/beatmapsets/:type")
-		v2.GET("/users/:user/recent_activity")
-		v2.GET("/users/:user/:mode")
+		v2.GET("/users/:user/kudosu", empty)
+		v2.GET("/users/:user/scores/:type", empty)
+		v2.GET("/users/:user/beatmapsets/:type", empty)
+		v2.GET("/users/:user/recent_activity", empty)
+		v2.GET("/users/:user/:mode", empty)
 
 		// === Beatmaps ===
-		v2.GET("/beatmaps/lookup")
-		v2.GET("/beatmaps/:beatmap")
-		v2.GET("/beatmaps/:beatmap/scores")
-		v2.GET("/beatmapsets/lookup")
-		v2.GET("/beatmapsets/search/:filters")
-		v2.GET("/beatmapsets/:beatmapset")
-		v2.GET("/beatmapsets/:beatmapset/download")
-		v2.GET("/beatmapsets/:beatmapset/favourites")
+		v2.GET("/beatmaps/lookup", empty)
+		v2.GET("/beatmaps/:beatmap", empty)
+		v2.GET("/beatmaps/:beatmap/scores", empty)
+		v2.GET("/beatmapsets/lookup", empty)
+		v2.GET("/beatmapsets/search/:filters", empty)
+		v2.GET("/beatmapsets/:beatmapset", empty)
+		v2.GET("/beatmapsets/:beatmapset/download", empty)
+		v2.GET("/beatmapsets/:beatmapset/favourites", empty)
 
 		// === Scores ===
-		v2.GET("/scores/:mode/:score/download")
+		v2.GET("/scores/:mode/:score/download", empty)
 
 		// === Rooms ===
-		v2.POST("/rooms")
-		v2.GET("/rooms/:room")
-		v2.PUT("/rooms/:room/users/:user")
-		v2.DELETE("/rooms/:room/users/:user")
-		v2.GET("/rooms/:room/leaderboard")
-		v2.POST("/rooms/:room/playlist/:playlist/scores")
-		v2.PUT("/rooms/:room/playlist/:playlist/scores/:score")
+		v2.POST("/rooms", empty)
+		v2.GET("/rooms/:room", empty)
+		v2.PUT("/rooms/:room/users/:user", empty)
+		v2.DELETE("/rooms/:room/users/:user", empty)
+		v2.GET("/rooms/:room/leaderboard", empty)
+		v2.POST("/rooms/:room/playlist/:playlist/scores", empty)
+		v2.PUT("/rooms/:room/playlist/:playlist/scores/:score", empty)
 
 		// === Chats ===
-		v2.POST("/chat/new")
-		v2.GET("/chat/updates")
-		v2.GET("/chat/presence") // ???
-		v2.GET("/chat/channels")
-		v2.GET("/chat/channels/:channel/messages")
-		v2.POST("/chat/channels/:channel/messages")
-		v2.PUT("/chat/channels/:channel/users/:user")
-		v2.DELETE("/chat/channels/:channel/users/:user")
-		v2.PUT("/chat/channels/:channel/mark-as-read/:message")
+		v2.POST("/chat/new", empty)
+		v2.GET("/chat/updates", empty)
+		v2.GET("/chat/presence", empty) // ???
+		v2.GET("/chat/channels", empty)
+		v2.GET("/chat/channels/:channel/messages", empty)
+		v2.POST("/chat/channels/:channel/messages", empty)
+		v2.PUT("/chat/channels/:channel/users/:user", empty)
+		v2.DELETE("/chat/channels/:channel/users/:user", empty)
+		v2.PUT("/chat/channels/:channel/mark-as-read/:message", empty)
 
 		// === Comments ===
-		v2.GET("/comments")
-		v2.POST("/comments")
-		v2.GET("/comments/:comment")
-		v2.PUT("/comments/:comment")
-		v2.PATCH("/comments/:comment")
-		v2.DELETE("/comments/:comment")
-		v2.POST("/comments/:comment/vote")
-		v2.DELETE("/comments/:comment/vote")
+		v2.GET("/comments", empty)
+		v2.POST("/comments", empty)
+		v2.GET("/comments/:comment", empty)
+		v2.PUT("/comments/:comment", empty)
+		v2.PATCH("/comments/:comment", empty)
+		v2.DELETE("/comments/:comment", empty)
+		v2.POST("/comments/:comment/vote", empty)
+		v2.DELETE("/comments/:comment/vote", empty)
 
 		// === Notifications ===
-		v2.GET("/notifications")
-		v2.POST("/notifications/mark-read")
+		v2.GET("/notifications", empty)
+		v2.POST("/notifications/mark-read", empty)
 
 		// === Misc ===
-		v2.POST("/reports")
-		v2.GET("/changelog")
-		v2.GET("/changelog/{changelog}")
+		v2.POST("/reports", empty)
+		v2.GET("/changelog", empty)
+		v2.GET("/changelog/:changelog", empty)
 	}
 }
