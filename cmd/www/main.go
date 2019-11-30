@@ -8,10 +8,13 @@ import (
 	"github.com/gookit/config/v2/yaml"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"os"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+
+	"context"
+	"os"
+	"os/signal"
+	"time"
 )
 
 func main() {
@@ -42,25 +45,47 @@ func main() {
 	// pkg.InitializeDB()
 	// pkg.InitializeRedis()
 
+	// Seting up Echo
 	app := echo.New()
 	app.HideBanner = true
+
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: `{"level": "info","time":${time_unix},"id":"${id}","remote_ip":"${remote_ip}","host":"${host}",` +
-			`"method":"${method}","uri":"${uri}","status":${status},"error":"${error}","latency":${latency},` +
-			`"latency_human":"${latency_human}","bytes_in":${bytes_in},` +
-			`"bytes_out":${bytes_out}}` + "\n",
+		Format: config.String("server.http_log_format") + "\n",
 	}))
 	app.Use(middleware.RequestID())
 	app.Use(middleware.Recover())
 
+	if config.Bool("server.cors.enable") {
+		app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+			AllowOrigins: config.Strings("server.cors.allow_origins"),
+			AllowHeaders: config.Strings("server.cors.allow_headers"),
+		}))
+	}
+
+	// Mount routes
 	api := app.Group("/api")
 	{
 		v1.ApplyRoutes(api)
 		v2.ApplyRoutes(api)
 	}
 
-	err = app.Start(config.String("server.host") + ":" + config.String("server.port"))
-	if err != nil {
+	// Graceful start and stop HTTP server
+	go func() {
+		if err := app.Start(config.String("server.host") + ":" + config.String("server.port")); err != nil {
+			log.Info().Msg("shutting down the server")
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server with
+	// a timeout of 10 seconds.
+	quit := make(chan os.Signal)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := app.Shutdown(ctx); err != nil {
 		log.Fatal().
 			Err(err).
 			Send()
