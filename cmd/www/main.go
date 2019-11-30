@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/deissh/osu-api-server/pkg"
+	// "github.com/deissh/osu-api-server/pkg"
 	v1 "github.com/deissh/osu-api-server/pkg/v1"
 	v2 "github.com/deissh/osu-api-server/pkg/v2"
 	"github.com/gookit/config/v2"
@@ -39,11 +39,17 @@ func main() {
 
 	}
 
-	pkg.InitializeDB()
-	pkg.InitializeRedis()
+	// pkg.InitializeDB()
+	// pkg.InitializeRedis()
 
 	app := echo.New()
-	app.Use(middleware.Logger())
+	app.HideBanner = true
+	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: `{"level": "info","time":${time_unix},"id":"${id}","remote_ip":"${remote_ip}","host":"${host}",` +
+			`"method":"${method}","uri":"${uri}","status":${status},"error":"${error}","latency":${latency},` +
+			`"latency_human":"${latency_human}","bytes_in":${bytes_in},` +
+			`"bytes_out":${bytes_out}}` + "\n",
+	}))
 	app.Use(middleware.RequestID())
 	app.Use(middleware.Recover())
 

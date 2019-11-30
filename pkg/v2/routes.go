@@ -17,7 +17,7 @@ func ApplyRoutes(r *echo.Group) {
 	{
 		// Health status
 		// хз для чего я пишу в каждой версии свой пинг
-		v2.GET("/empty", empty)
+		v2.GET("/ping", empty)
 
 		// === Me ===
 		v2.GET("/me/:mode", empty)
