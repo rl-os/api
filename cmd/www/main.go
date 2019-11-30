@@ -2,6 +2,7 @@ package main
 
 import (
 	// "github.com/deissh/osu-api-server/pkg"
+	oauth "github.com/deissh/osu-api-server/pkg/oauth"
 	v1 "github.com/deissh/osu-api-server/pkg/v1"
 	v2 "github.com/deissh/osu-api-server/pkg/v2"
 	"github.com/gookit/config/v2"
@@ -65,6 +66,7 @@ func main() {
 	// Mount routes
 	api := app.Group("/api")
 	{
+		oauth.ApplyRoutes(api)
 		v1.ApplyRoutes(api)
 		v2.ApplyRoutes(api)
 	}
