@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/deissh/osu-api-server/pkg"
+	// "github.com/deissh/osu-api-server/pkg"
 	v1 "github.com/deissh/osu-api-server/pkg/v1"
 	v2 "github.com/deissh/osu-api-server/pkg/v2"
 	"github.com/gin-contrib/logger"
@@ -42,8 +42,8 @@ func main() {
 		gin.SetMode(gin.DebugMode)
 	}
 
-	pkg.InitializeDB()
-	pkg.InitializeRedis()
+	// pkg.InitializeDB()
+	// pkg.InitializeRedis()
 
 	app := gin.New()
 	app.Use(logger.SetLogger())
