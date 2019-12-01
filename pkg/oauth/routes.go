@@ -2,6 +2,7 @@ package oauth
 
 
 import (
+	"github.com/deissh/osu-api-server/pkg/oauth/token"
 	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
 )
@@ -17,7 +18,7 @@ func ApplyRoutes(r *echo.Group) {
 	oauth := r.Group("/oauth")
 	{
 		// === Requesting Tokens ===
-		oauth.POST("/token", empty) // https://laravel.com/docs/5.7/passport#refreshing-tokens
+		oauth.POST("/token", token.CreateTokenHandler) // https://laravel.com/docs/5.7/passport#refreshing-tokens
 
 		// === Managing Tokens ===
 		oauth.GET("/scopes", empty)
