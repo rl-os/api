@@ -1,7 +1,7 @@
 # Readme
 
 
+Up database
 ```bash
-# start server with autoreload
-$ ./scripts/dev.start.sh cmd/www/main.go
+$ DATABASE_URL="postgres://postgres@127.0.0.1:5432/osuserver?sslmode=disable" dbmate up
 ```
