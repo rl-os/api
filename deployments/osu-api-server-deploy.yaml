@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: osu-api-server
+  labels:
+    app: osu-api-server
+    component: service
+    version: "1.0.0"
+spec:
+  ports:
+    - name: http
+      port: 80
+  selector:
+    app: osu-api-server
+    component: service
+    version: latest
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: osu-api-server
+  labels:
+    app: osu-api-server
+    component: service
+    version: latest
+spec:
+  replicas: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: osu-api-server
+      component: service
+      version: latest
+  template:
+    metadata:
+      labels:
+        app: osu-api-server
+        component: service
+        version: latest
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: osu-api-server
+          image: deissh/osu-api-server:latest
+          resources:
+          # requests:
+          #   memory: 100M
+          #   cpu: 100m
+          # limits:
+          #   memory: 250M
+          #   cpu: 250m
+          env:
+            - name: HTTP_HOST
+              value: ":80"
+            - name: DB_HOST
+              value: "postgresql"
+            - name: DB_NAME
+              value: "microapi"
+            - name: DB_USER
+              value: "postgres"
+            - name: DB_PSW
+              value: "postgres"
+            - name: SENDGRID_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: services-secrets
+                  key: sendgrid_token
+          ports:
+            - containerPort: 80
+          imagePullPolicy: IfNotPresent #Always
