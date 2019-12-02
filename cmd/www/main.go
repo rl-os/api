@@ -7,10 +7,10 @@ import (
 	v2 "github.com/deissh/osu-api-server/pkg/v2"
 	"github.com/gookit/config/v2"
 	"github.com/gookit/config/v2/yaml"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"context"
 	"os"

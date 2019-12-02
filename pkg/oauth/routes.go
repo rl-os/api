@@ -1,6 +1,5 @@
 package oauth
 
-
 import (
 	"github.com/deissh/osu-api-server/pkg/oauth/token"
 	"github.com/gin-gonic/gin"
