@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/amacneil/dbmate v1.7.0 // indirect
 	github.com/gin-gonic/gin v1.5.0
+	github.com/go-playground/validator/v10 v10.0.1
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gookit/config/v2 v2.0.12
 	github.com/jmoiron/sqlx v1.2.0

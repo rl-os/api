@@ -1,4 +1,4 @@
-package oauth
+package pkg
 
 // ErrorResponse default struct for errors
 type ErrorResponse struct {

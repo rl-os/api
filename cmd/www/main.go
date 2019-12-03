@@ -2,9 +2,9 @@ package main
 
 import (
 	// "github.com/deissh/osu-api-server/pkg"
-	oauth "github.com/deissh/osu-api-server/pkg/oauth"
-	v1 "github.com/deissh/osu-api-server/pkg/v1"
-	v2 "github.com/deissh/osu-api-server/pkg/v2"
+	"github.com/deissh/osu-api-server/pkg/oauth"
+	"github.com/deissh/osu-api-server/pkg/v1"
+	"github.com/deissh/osu-api-server/pkg/v2"
 	"github.com/gookit/config/v2"
 	"github.com/gookit/config/v2/yaml"
 	"github.com/labstack/echo/v4"
@@ -40,7 +40,6 @@ func main() {
 				NoColor: false,
 			},
 		).With().Caller().Logger()
-
 	}
 
 	// pkg.InitializeDB()
