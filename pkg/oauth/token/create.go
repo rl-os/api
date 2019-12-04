@@ -5,7 +5,6 @@ import (
 	"github.com/deissh/osu-api-server/pkg/services"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
-	"github.com/rs/zerolog/log"
 	"net/http"
 )
 
@@ -35,7 +34,6 @@ type CreateTokenResponseData struct {
 // CreateTokenHandler create new access_token and refresh_token pare
 func CreateTokenHandler(c echo.Context) (err error) {
 	params := new(CreateTokenRequestData)
-
 	if err := c.Bind(params); err != nil {
 		return c.JSON(400, pkg.ErrorResponse{
 			Error:            "params_error",
@@ -52,25 +50,10 @@ func CreateTokenHandler(c echo.Context) (err error) {
 		})
 	}
 
-	token := services.OAuthToken{
-		UserId:       1,
-		AccessToken:  "",
-		RefreshToken: "",
-	}
-
-	_, err = pkg.Db.NamedExec(
-		"INSERT INTO oauth_token (user_id, access_token, refresh_token, scopes) VALUES (:user_id, :access_token, :refresh_token)",
-		token)
+	token, err := services.CreateOAuthToken(0, params.ClientID, params.ClientSecret, params.Scope)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("Creating token")
+		return err
 	}
 
-	return c.JSON(http.StatusOK, CreateTokenResponseData{
-		AccessToken:  token.AccessToken,
-		RefreshToken: token.RefreshToken,
-		TokenType:    "bearer",
-		ExpiresIn:    0,
-	})
+	return c.JSON(http.StatusOK, token)
 }
