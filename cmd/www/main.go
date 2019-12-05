@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/deissh/osu-api-server/pkg/middlewares/customlogger"
 	// "github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/oauth"
 	"github.com/deissh/osu-api-server/pkg/v1"
@@ -22,9 +23,8 @@ func main() {
 	// loading configuration
 	config.WithOptions(config.ParseEnv, config.Readonly)
 	config.AddDriver(yaml.Driver)
-	config.LoadOSEnv([]string{"config"}, true)
 
-	err := config.LoadFiles(config.String("config", "config.yaml"))
+	err := config.LoadFiles("config.yaml")
 	if err != nil {
 		panic(err)
 	}
@@ -49,11 +49,9 @@ func main() {
 	app := echo.New()
 	app.HideBanner = true
 
-	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: config.String("server.http_log_format") + "\n",
-	}))
 	app.Use(middleware.RequestID())
 	app.Use(middleware.Recover())
+	app.Use(customlogger.Middleware())
 
 	if config.Bool("server.cors.enable") {
 		app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
