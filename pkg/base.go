@@ -17,8 +17,8 @@ func (he *ErrorResponse) Error() string {
 // NewHTTPError return new Go-style error with loaded information from config file
 func NewHTTPError(code int, err string, message string) error {
 	return &ErrorResponse{
-		ErrorID: err,
+		ErrorID:          err,
 		ErrorDescription: message,
-		Message: message,
+		Message:          message,
 	}
 }

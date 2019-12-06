@@ -5,15 +5,17 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 
-	"strconv"
 	"net/http"
+	"strconv"
 )
 
 // CustomHTTPErrorHandler transform GoLang error to JSON response
 func CustomHTTPErrorHandler(err error, c echo.Context) {
-	if c.Response().Size > 0 { return }
+	if c.Response().Size > 0 {
+		return
+	}
 
-	code := http.StatusInternalServerError	
+	code := http.StatusInternalServerError
 	res := pkg.ErrorResponse{
 		ErrorID:          err.Error(),
 		ErrorDescription: err.Error(),
@@ -35,5 +37,7 @@ func CustomHTTPErrorHandler(err error, c echo.Context) {
 	// todo: getting locale and translate error message
 
 	err = c.JSON(code, res)
-	if err != nil { log.Error().Err(err) }
+	if err != nil {
+		log.Error().Err(err)
+	}
 }

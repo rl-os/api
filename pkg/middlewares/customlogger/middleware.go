@@ -1,6 +1,5 @@
 package customlogger
 
-
 import (
 	"strconv"
 	"time"

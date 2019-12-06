@@ -1,8 +1,8 @@
 package oauth
 
 import (
-	"github.com/deissh/osu-api-server/pkg/oauth/token"
 	"github.com/deissh/osu-api-server/pkg"
+	"github.com/deissh/osu-api-server/pkg/oauth/token"
 	"github.com/labstack/echo/v4"
 )
 
