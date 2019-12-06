@@ -4,6 +4,8 @@ import (
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
+
+	"strconv"
 	"net/http"
 )
 
@@ -13,19 +15,21 @@ func CustomHTTPErrorHandler(err error, c echo.Context) {
 
 	code := http.StatusInternalServerError	
 	res := pkg.ErrorResponse{
-		Error:            err.Error(),
+		ErrorID:          err.Error(),
 		ErrorDescription: err.Error(),
 		Message:          http.StatusText(code),
 	}
 
 	if he, ok := err.(*echo.HTTPError); ok {
 		code = he.Code
-		res.Message = http.StatusText(code)
+		res.ErrorID = strconv.Itoa(he.Code)
+		res.ErrorDescription = http.StatusText(code)
+		res.ErrorDescription = he.Error()
 	}
 
 	// if custom error
-	if he, ok := err.(*pkg.HTTPError); ok {
-		res = he.Body
+	if he, ok := err.(*pkg.ErrorResponse); ok {
+		res = *he
 	}
 
 	// todo: getting locale and translate error message
