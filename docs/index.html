@@ -21,6 +21,7 @@
       loadNavbar: true,
       autoHeader: true,
 
+      formatUpdated: '{DD}/{MM} {HH}:{mm}',
       noCompileLinks: [
         '/files/.*'
       ],
@@ -46,6 +47,22 @@
         tabComments: true,      // default
         tabHeadings: true       // default
       },
+
+      plugins: [
+        function (hook, vm) {
+          hook.beforeEach(function (html) {
+            if (/githubusercontent\.com/.test(vm.route.file)) {
+              url = vm.route.file
+                .replace('raw.githubusercontent.com', 'github.com')
+                .replace(/\/master/, '/blob/master')
+            } else {
+              url = 'https://github.com/deissh/osu-api-server/blob/master/docs/' + vm.route.file
+            }
+            var editHtml = '[:memo: Edit Document](' + url + ')\n'
+            return editHtml + html
+          })
+        },
+      ]
     }
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
@@ -53,6 +70,7 @@
   <script src="//unpkg.com/docsify-copy-code"></script>
   <script src="//unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
   <script src="//unpkg.com/docsify/lib/plugins/emoji.min.js"></script>
+  <script src="//unpkg.com/docsify-edit-on-github/index.js"></script>
   <script src="//unpkg.com/docsify-tabs@1"></script>
 
   <!-- language highlight -->
