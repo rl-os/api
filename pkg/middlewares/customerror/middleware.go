@@ -16,6 +16,7 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 }
 
+// CustomHTTPErrorHandler transform GoLang error to JSON response
 func CustomHTTPErrorHandler(err error, c echo.Context) {
 	if c.Response().Size > 0 { return }
 	
