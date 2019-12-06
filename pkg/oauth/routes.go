@@ -2,14 +2,12 @@ package oauth
 
 import (
 	"github.com/deissh/osu-api-server/pkg/oauth/token"
-	"github.com/gin-gonic/gin"
+	"github.com/deissh/osu-api-server/pkg"
 	"github.com/labstack/echo/v4"
 )
 
 func empty(c echo.Context) (err error) {
-	return c.JSON(200, gin.H{
-		"message": "I'm alive!",
-	})
+	return pkg.NewHTTPError(400, "invalid_credentials", "The user credentials were incorrect.")
 }
 
 // ApplyRoutes applies router to the gin Engine
