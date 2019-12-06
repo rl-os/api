@@ -2,7 +2,7 @@
 create table oauth_client
 (
     id            serial                              not null
-        constraint oauth_token_pk
+        constraint oauth_client_pk
             primary key,
     user_id       integer                             not null,
     name  varchar                             not null,
@@ -11,7 +11,6 @@ create table oauth_client
     revoked       boolean default false                            not null,
     created_at    timestamp default CURRENT_TIMESTAMP not null
 );
-public
 alter table oauth_client
     owner to postgres;
 

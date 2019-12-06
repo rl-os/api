@@ -12,7 +12,6 @@ create table oauth_token
     expires_at    timestamp                           not null,
     created_at    timestamp default CURRENT_TIMESTAMP not null
 );
-public
 alter table oauth_token
     owner to postgres;
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/deissh/osu-api-server/pkg/middlewares/customerror"
 	"github.com/deissh/osu-api-server/pkg/middlewares/customlogger"
 	// "github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/oauth"
@@ -48,6 +49,7 @@ func main() {
 	// Seting up Echo
 	app := echo.New()
 	app.HideBanner = true
+	app.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
 
 	app.Use(middleware.RequestID())
 	app.Use(middleware.Recover())

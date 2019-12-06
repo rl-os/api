@@ -10,6 +10,16 @@ services:
       POSTGRES_DB: ${DB_NAME:-osu-server}
     volumes:
       - /var/lib/postgresql/osu-api-server:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+
+  redis:
+    image: redis:5-alpine
+    restart: unless-stopped
+    volumes:
+      - /var/lib/redis/osu-api-server:/var/lib/redis/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "localhost", "ping"]
 
   backend:
     image: deissh/osu-api-server:${BACKEND_TAG:-latest}
@@ -18,3 +28,6 @@ services:
       context: .
     depends_on:
       - postgres
+      - redis
+    ports:
+      - 2100:2100

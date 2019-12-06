@@ -1,7 +1,6 @@
 package token
 
 import (
-	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/services"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -35,19 +34,11 @@ type CreateTokenResponseData struct {
 func CreateTokenHandler(c echo.Context) (err error) {
 	params := new(CreateTokenRequestData)
 	if err := c.Bind(params); err != nil {
-		return c.JSON(400, pkg.ErrorResponse{
-			Error:            "params_error",
-			ErrorDescription: "Failed binding params",
-			Message:          err.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, "Failed binding params")
 	}
 
 	if err := validator.New().Struct(params); err != nil {
-		return c.JSON(400, pkg.ErrorResponse{
-			Error:            "validate_error",
-			ErrorDescription: "Failed validate",
-			Message:          err.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate")
 	}
 
 	token, err := services.CreateOAuthToken(0, params.ClientID, params.ClientSecret, params.Scope)
