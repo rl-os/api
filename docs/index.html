@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <!-- Theme: Simple Dark -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      name: 'API Documentation',
+      repo: 'https://github.com/deissh/osu-api-server',
+      
+      loadSidebar: true,
+      coverpage: false,
+      loadNavbar: true,
+      autoHeader: true,
+
+      noCompileLinks: [
+        '/files/.*'
+      ],
+      alias: {
+        '/ru/(.*)': 'ru/$1',
+        '/(.*)': 'en/$1',
+      },
+      search: {
+        noData: {
+          '/ru/': 'Не найдено',
+          '/': 'Not results!'
+        },
+        paths: 'auto',
+        placeholder: {
+          '/ru/': 'Поиск',
+          '/': 'Search'
+        }
+      },
+      tabs: {
+        persist    : true,      // default
+        sync       : true,      // default
+        theme      : 'classic', // default
+        tabComments: true,      // default
+        tabHeadings: true       // default
+      },
+    }
+  </script>
+  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
+  <script src="//unpkg.com/docsify-copy-code"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/emoji.min.js"></script>
+  <script src="//unpkg.com/docsify-tabs@1"></script>
+
+  <!-- language highlight -->
+  <script src="//unpkg.com/prismjs/components/prism-go.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-bash.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-js.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-python.min.js"></script>
+</body>
+</html>
