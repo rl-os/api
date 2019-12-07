@@ -109,6 +109,40 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    username character varying NOT NULL,
+    email character varying NOT NULL,
+    password_hash character varying NOT NULL,
+    last_visit timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
 -- Name: oauth_client id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -120,6 +154,13 @@ ALTER TABLE ONLY public.oauth_client ALTER COLUMN id SET DEFAULT nextval('public
 --
 
 ALTER TABLE ONLY public.oauth_token ALTER COLUMN id SET DEFAULT nextval('public.oauth_token_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
@@ -139,6 +180,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: users users_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pk PRIMARY KEY (id);
+
+
+--
 -- Name: oauth_client_id_uindex; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -153,6 +202,20 @@ CREATE UNIQUE INDEX oauth_token_id_uindex ON public.oauth_token USING btree (id)
 
 
 --
+-- Name: users_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX users_id_uindex ON public.users USING btree (id);
+
+
+--
+-- Name: users_username_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX users_username_uindex ON public.users USING btree (username);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -164,4 +227,7 @@ CREATE UNIQUE INDEX oauth_token_id_uindex ON public.oauth_token USING btree (id)
 INSERT INTO public.schema_migrations (version) VALUES
     ('20191202100404'),
     ('20191204172445'),
-    ('20191207083235');
+    ('20191207083235'),
+    ('20191207174450'),
+    ('20191207194321'),
+    ('20191207194641');

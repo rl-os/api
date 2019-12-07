@@ -31,7 +31,7 @@ func LoginByPassword(username string, password string) (BaseUser, error) {
 
 	err = pkg.Db.Get(
 		&baseUser,
-		`SELECT * FROM user WHERE username = ? AND password_hash = ?`,
+		`SELECT * FROM users WHERE username = ? AND password_hash = ?`,
 				username, hashed,
 	)
 	if err != nil {

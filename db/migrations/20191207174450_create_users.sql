@@ -1,21 +1,24 @@
 -- migrate:up
-create table user
+create table users
 (
-    id            serial                              not null constraint user_pk primary key,
+    id            serial                              not null constraint users_pk primary key,
     username      varchar                             not null,
     email         varchar                             not null,
     password_hash varchar                             not null,
     last_visit    timestamp default CURRENT_TIMESTAMP not null,
-    created_at    timestamp default CURRENT_TIMESTAMP not null,
+    created_at    timestamp default CURRENT_TIMESTAMP not null
 );
-alter table oauth_token
+alter table users
     owner to postgres;
 
-create unique index user_username_uindex
-    on user (username);
+create unique index users_id_uindex
+    on users (id);
+
+create unique index users_username_uindex
+    on users (username);
 
 -- migrate:down
 
-drop index user_id_uindex;
-drop index user_username_uindex;
-drop table user;
+drop index users_id_uindex;
+drop index users_username_uindex;
+drop table users;
