@@ -2,6 +2,7 @@ package token
 
 import (
 	"github.com/deissh/osu-api-server/pkg/services/oauth"
+	"github.com/deissh/osu-api-server/pkg/services/user"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -41,9 +42,18 @@ func CreateTokenHandler(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate")
 	}
 
-	token, err := oauth.CreateOAuthToken(0, params.ClientID, params.ClientSecret, params.Scope)
-	if err != nil {
-		return err
+	var token oauth.OAuthToken
+	
+	if params.GrantType == "password" {
+		user, err := user.LoginByPassword(params.Username, params.Password)
+		if err != nil { return err }
+
+		token, err = oauth.CreateOAuthToken(user.ID, params.ClientID, params.ClientSecret, params.Scope)
+		if err != nil { return err }
+	} else if params.GrantType == "refresh_token" {
+		token = oauth.OAuthToken{}
+	} else {
+		return echo.NewHTTPError(http.StatusBadRequest, "Not valid grant_type")
 	}
 
 	return c.JSON(http.StatusOK, token)

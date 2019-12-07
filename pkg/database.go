@@ -14,19 +14,20 @@ var Db *sqlx.DB
 
 // InitializeDB database connection
 func InitializeDB() {
-	Db, err := sqlx.Connect(config.String("server.database.driver"), config.String("server.database.dsn"))
+	conn, err := sqlx.Connect(config.String("server.database.driver"), config.String("server.database.dsn"))
 	if err != nil {
 		log.Fatal().
 			Err(err).
 			Msg("initialize database")
 	}
 
-	if err = Db.Ping(); err != nil {
+	if err = conn.Ping(); err != nil {
 		log.Fatal().
 			Err(err).
 			Msg("database ping")
 	}
 
+	Db = conn
 	stats := Db.Stats()
 
 	log.Info().

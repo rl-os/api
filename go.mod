@@ -16,6 +16,7 @@ require (
 	github.com/onsi/gomega v1.7.1 // indirect
 	github.com/rs/zerolog v1.17.2
 	github.com/urfave/cli v1.22.2 // indirect
+	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
 	google.golang.org/appengine v1.6.5 // indirect
 	gopkg.in/redis.v5 v5.2.9
 )

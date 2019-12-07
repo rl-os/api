@@ -8,7 +8,7 @@ services:
 
 # API server configuration
 server:
-  host: ${SERVER__HOST|'127.0.0.1'}
+  host: ${SERVER__HOST|127.0.0.1}
   port: ${SERVER__PORT|2100}
   cors:
     enable: false
@@ -23,11 +23,11 @@ server:
 
   database:
     driver: ${SERVER__DATABASE__DRIVER|postgres}
-    dsn: ${SERVER__DATABASE__DSN|'root:toor@/osuserver'}
+    dsn: ${SERVER__DATABASE__DSN|postgres://postgres:postgres@/osuserver}
 
   redis:
-    host: ${SERVER__REDIS__HOST|'127.0.0.1:6379'}
-    password: ${SERVER__REDIS__PASSWORD}
+    host: ${SERVER__REDIS__HOST|127.0.0.1:6379}
+    password: ${SERVER__REDIS__PASSWORD|}
     db: ${SERVER__REDIS__DB}
 
   mailgun:

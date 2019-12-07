@@ -1,4 +1,4 @@
-package services
+package user
 
 import (
 	"time"
@@ -6,9 +6,8 @@ import (
 
 // CurrentUser data structure
 type CurrentUser struct {
-	ID                               int                 `json:"id"`
-	Username                         string              `json:"username"`
-	JoinDate                         time.Time           `json:"join_date"`
+	BaseUser
+
 	Country                          Country             `json:"country"`
 	AvatarURL                        string              `json:"avatar_url"`
 	IsSupporter                      bool                `json:"is_supporter"`
@@ -25,7 +24,6 @@ type CurrentUser struct {
 	Occupation                       string              `json:"occupation"`
 	Title                            interface{}         `json:"title"`
 	Location                         interface{}         `json:"location"`
-	LastVisit                        time.Time           `json:"last_visit"`
 	IsOnline                         bool                `json:"is_online"`
 	Twitter                          string              `json:"twitter"`
 	Lastfm                           interface{}         `json:"lastfm"`
