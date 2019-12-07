@@ -8,10 +8,10 @@ services:
 
 # API server configuration
 server:
-  host: ${SERVER__HOST:-'127.0.0.1'}
-  port: ${SERVER__PORT:-2100}
+  host: ${SERVER__HOST|'127.0.0.1'}
+  port: ${SERVER__PORT|2100}
   cors:
-    enable: true
+    enable: false
     allow_origins:
       - localhost
     allow_headers:
@@ -19,16 +19,16 @@ server:
       - Content-Type
       - Accept
 
-  sentry_dsn: $SERVER__SENTRY_DSN
+  sentry_dsn: ${SERVER__SENTRY_DSN}
 
   database:
-    driver: ${SERVER__DATABASE__DRIVER:-postgres}
-    dsn: ${SERVER__DATABASE__DSN:-'root:toor@/osuserver'}
+    driver: ${SERVER__DATABASE__DRIVER|postgres}
+    dsn: ${SERVER__DATABASE__DSN|'root:toor@/osuserver'}
 
   redis:
-    host: '127.0.0.1:6379'
-    password: ''
-    db: 0
+    host: ${SERVER__REDIS__HOST|'127.0.0.1:6379'}
+    password: ${SERVER__REDIS__PASSWORD}
+    db: ${SERVER__REDIS__DB}
 
   mailgun:
     domain: ''
