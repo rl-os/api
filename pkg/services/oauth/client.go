@@ -1,4 +1,4 @@
-package services
+package oauth
 
 import (
 	"github.com/deissh/osu-api-server/pkg"

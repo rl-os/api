@@ -74,7 +74,8 @@ CREATE TABLE public.oauth_token (
     scopes character varying NOT NULL,
     revoked boolean DEFAULT false NOT NULL,
     expires_at timestamp without time zone NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    client_id integer DEFAULT 0 NOT NULL
 );
 
 
@@ -130,14 +131,6 @@ ALTER TABLE ONLY public.oauth_client
 
 
 --
--- Name: oauth_token oauth_token_pk; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.oauth_token
-    ADD CONSTRAINT oauth_token_pk PRIMARY KEY (id);
-
-
---
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -170,4 +163,5 @@ CREATE UNIQUE INDEX oauth_token_id_uindex ON public.oauth_token USING btree (id)
 
 INSERT INTO public.schema_migrations (version) VALUES
     ('20191202100404'),
-    ('20191204172445');
+    ('20191204172445'),
+    ('20191207083235');

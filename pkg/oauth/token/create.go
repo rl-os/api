@@ -1,7 +1,7 @@
 package token
 
 import (
-	"github.com/deissh/osu-api-server/pkg/services"
+	"github.com/deissh/osu-api-server/pkg/services/oauth"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -41,7 +41,7 @@ func CreateTokenHandler(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate")
 	}
 
-	token, err := services.CreateOAuthToken(0, params.ClientID, params.ClientSecret, params.Scope)
+	token, err := oauth.CreateOAuthToken(0, params.ClientID, params.ClientSecret, params.Scope)
 	if err != nil {
 		return err
 	}

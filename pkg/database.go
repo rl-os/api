@@ -2,6 +2,8 @@ package pkg
 
 import (
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
+
 	"github.com/gookit/config/v2"
 	"github.com/jmoiron/sqlx"
 	"github.com/rs/zerolog/log"

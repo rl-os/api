@@ -8,9 +8,8 @@ services:
 
 # API server configuration
 server:
-  host: '127.0.0.1'
-  port: 2100
-  http_log_format: '{"level": "info","time":${time_unix},"id":"${id}","remote_ip":"${remote_ip}","host":"${host}","method":"${method}","uri":"${uri}","status":${status},"error":"${error}","latency":${latency},"latency_human":"${latency_human}","bytes_in":${bytes_in},`"bytes_out":${bytes_out}}\n'
+  host: ${SERVER__HOST:-'127.0.0.1'}
+  port: ${SERVER__PORT:-2100}
   cors:
     enable: true
     allow_origins:
@@ -20,11 +19,11 @@ server:
       - Content-Type
       - Accept
 
-  sentry_dns:
+  sentry_dsn: $SERVER__SENTRY_DSN
 
   database:
-    driver: mysql
-    dsn: 'root:toor@/osuserver'
+    driver: ${SERVER__DATABASE__DRIVER:-postgres}
+    dsn: ${SERVER__DATABASE__DSN:-'root:toor@/osuserver'}
 
   redis:
     host: '127.0.0.1:6379'
