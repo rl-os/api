@@ -1,7 +1,6 @@
 package oauth
 
 import (
-	"database/sql"
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/utils"
 	"github.com/labstack/echo/v4"
@@ -15,9 +14,10 @@ type OAuthToken struct {
 	ClientId     uint           `db:"client_id" json:"client_id"`
 	AccessToken  string         `db:"access_token" json:"access_token"`
 	RefreshToken string         `db:"refresh_token" json:"refresh_token"`
-	Scopes       sql.NullString `db:"scopes" json:"scopes"`
+	Scopes       string         `db:"scopes" json:"scopes"`
 	Revoked      bool           `db:"revoked" json:"revoked" json:"revoked"`
 	ExpiresAt    time.Time      `db:"expires_at" json:"expires_at"`
+	CreatedAt 	 time.Time		`db:"created_at" json:"created_at"`
 }
 
 // CreateOAuthToken and return model with valid access_token and refresh_token
@@ -38,10 +38,10 @@ func CreateOAuthToken(userId int, clientId string, clientSecret string, scopes s
 	// inserting new oauth_token
 	err = pkg.Db.Get(
 		&token,
-		`INSERT INTO oauth_token (user_id, client_id, access_token, refresh_token, scopes)
-				VALUES ($1, $2, $3, $4)
+		`INSERT INTO oauth_token (user_id, client_id, access_token, refresh_token, scopes, expires_at)
+				VALUES ($1, $2, $3, $4, $5, $6)
 				RETURNING *`,
-		userId, client.Id, "todo", refreshToken, scopes,
+		userId, client.Id, "todo", refreshToken, scopes, time.Now(),
 	)
 	if err != nil {
 		return OAuthToken{}, echo.NewHTTPError(500, "Creating new access_token in database error.")

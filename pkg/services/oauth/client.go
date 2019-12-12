@@ -4,6 +4,7 @@ import (
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/utils"
 	"github.com/labstack/echo/v4"
+	"time"
 )
 
 // OAuthClient model
@@ -14,6 +15,7 @@ type OAuthClient struct {
 	Secret   string `db:"secret" json:"secret"`
 	Redirect string `db:"redirect" json:"redirect"`
 	Revoked  string `db:"revoked" json:"revoked"`
+	CreatedAt time.Time `db:"created_at" json:"created_at"`
 }
 
 // CreateOAuthClient and return it
@@ -38,12 +40,13 @@ func CreateOAuthClient(userId int, name string, redirect string) (client OAuthCl
 }
 
 // FindOAuthClient by clientId and secretId
-func FindOAuthClient(clientId string, clientSecret string) (out OAuthToken, err error) {
-	err = pkg.Db.Get(
+func FindOAuthClient(clientId string, clientSecret string) (OAuthClient, error) {
+	out := OAuthClient{}
+
+	err := pkg.Db.Get(
 		&out,
-		`SELECT * FROM oauth_client WHERE client_id=$1 AND secret=$2`,
+		`SELECT * FROM oauth_client WHERE id = $1 AND secret = $2`,
 		clientId, clientSecret,
 	)
-
-	return
+	return out, err
 }

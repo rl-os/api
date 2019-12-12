@@ -1,11 +1,10 @@
 package user
 
 import (
-	"net/http"
-	"time"
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/utils"
-	"github.com/labstack/echo/v4"
+	"net/http"
+	"time"
 )
 
 // BaseUser data struct
@@ -25,18 +24,17 @@ type BaseUser struct {
 func LoginByPassword(username string, password string) (BaseUser, error) {
 	var baseUser BaseUser
 
-	hashed, err := utils.GetHash(password)
-	if err != nil {
-		return BaseUser{}, echo.NewHTTPError(500, "Getting hash from password error.")
-	}
-
-	err = pkg.Db.Get(
+	err := pkg.Db.Get(
 		&baseUser,
-		`SELECT * FROM users WHERE username = ? AND password_hash = ?`,
-				username, hashed,
+		`SELECT * FROM users WHERE username = $1`,
+				username,
 	)
 	if err != nil {
-		return BaseUser{}, echo.NewHTTPError(401, "The user credentials were incorrect.")
+		return BaseUser{}, pkg.NewHTTPError(http.StatusUnauthorized, "user_login_error", "The user credentials were incorrect.")
+	}
+
+	if ok := utils.CompareHash(baseUser.PasswordHash, password); !ok {
+		return BaseUser{}, pkg.NewHTTPError(http.StatusUnauthorized, "user_login_error", "The user credentials were incorrect.")
 	}
 
 	return baseUser, nil
