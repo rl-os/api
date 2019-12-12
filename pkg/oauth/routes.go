@@ -30,5 +30,5 @@ func ApplyRoutes(r *echo.Group) {
 	}
 
 	// User registration and password recover
-	r.POST("/user", user.CreateTokenHandler)
+	r.POST("/users", user.CreateTokenHandler)
 }

@@ -7,11 +7,11 @@ import (
 	"net/http"
 )
 
-// CreateTokenRequestData contain incoming data with user credentials
+// CreateUserRequestData contain incoming data with user credentials
 type CreateUserRequestData struct {
-	Username string `json:"username" form:"username" validate:"required"`
-	Email string `json:"email" form:"email" validate:"required,email"`
-	Password string `json:"password" form:"password" validate:"required"`
+	Username string `json:"username" form:"user[username]" validate:"required"`
+	Email string `json:"email" form:"user[user_email]" validate:"required,email"`
+	Password string `json:"password" form:"user[password]" validate:"required"`
 }
 
 // CreateTokenHandler create new access_token and refresh_token pare

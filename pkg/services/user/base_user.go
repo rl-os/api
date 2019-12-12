@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/utils"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"time"
 )
@@ -26,14 +27,16 @@ func LoginByPassword(username string, password string) (BaseUser, error) {
 
 	err := pkg.Db.Get(
 		&baseUser,
-		`SELECT * FROM users WHERE username = $1`,
+		`SELECT * FROM users WHERE username = $1 OR email = $1`,
 				username,
 	)
 	if err != nil {
+		log.Debug().Msg("login uncorrect")
 		return BaseUser{}, pkg.NewHTTPError(http.StatusUnauthorized, "user_login_error", "The user credentials were incorrect.")
 	}
 
 	if ok := utils.CompareHash(baseUser.PasswordHash, password); !ok {
+		log.Debug().Msg("password uncorrect")
 		return BaseUser{}, pkg.NewHTTPError(http.StatusUnauthorized, "user_login_error", "The user credentials were incorrect.")
 	}
 
