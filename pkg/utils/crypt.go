@@ -16,10 +16,10 @@ func GetHash(pwd string) (string, error) {
 
 // CompareHash and return error if not equil
 func CompareHash(hashed, plain string) bool {
-    err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(plain))
-    if err != nil {
-        return false
-    }
-    
-    return true
+	err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(plain))
+	if err != nil {
+		return false
+	}
+
+	return true
 }

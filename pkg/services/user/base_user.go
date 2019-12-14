@@ -10,9 +10,9 @@ import (
 
 // BaseUser data struct
 type BaseUser struct {
-	ID           int    `json:"id" db:"id"`
+	ID           uint   `json:"id" db:"id"`
 	Username     string `json:"username" db:"username"`
-	Email		 string `json:"email" db:"email"`
+	Email        string `json:"email" db:"email"`
 	PasswordHash string `json:"-" db:"password_hash"`
 
 	// todo: вынести данные которые общие у модели пользователя и текущего пользователя
@@ -28,7 +28,7 @@ func LoginByPassword(username string, password string) (BaseUser, error) {
 	err := pkg.Db.Get(
 		&baseUser,
 		`SELECT * FROM users WHERE username = $1 OR email = $1`,
-				username,
+		username,
 	)
 	if err != nil {
 		log.Debug().Msg("login uncorrect")

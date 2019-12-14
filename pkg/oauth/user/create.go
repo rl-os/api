@@ -10,7 +10,7 @@ import (
 // CreateUserRequestData contain incoming data with user credentials
 type CreateUserRequestData struct {
 	Username string `json:"username" form:"user[username]" validate:"required"`
-	Email string `json:"email" form:"user[user_email]" validate:"required,email"`
+	Email    string `json:"email" form:"user[user_email]" validate:"required,email"`
 	Password string `json:"password" form:"user[password]" validate:"required"`
 }
 
@@ -32,4 +32,3 @@ func CreateTokenHandler(c echo.Context) (err error) {
 
 	return c.JSON(http.StatusOK, user)
 }
-
