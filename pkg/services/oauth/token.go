@@ -1,12 +1,13 @@
 package oauth
 
 import (
-	"fmt"
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/utils"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gookit/config/v2"
 	"github.com/labstack/echo/v4"
+
+	"fmt"
 	"time"
 )
 
@@ -85,8 +86,35 @@ func RevokeOAuthToken() (err error) {
 }
 
 // ValidateOAuthToken and return OAuthToken with full information
-func ValidateOAuthToken(accessToken string) (OAuthToken, err error) {
-	return nil, nil
+func ValidateOAuthToken(accessToken string) (Token, error) {
+	_, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
+		return []byte(config.String("server.jwt.secret")), nil
+	})
+
+	v, _ := err.(*jwt.ValidationError)
+	if err != nil && v.Errors == jwt.ValidationErrorExpired {
+		_, _ = pkg.Db.Exec(`UPDATE oauth_token SET revoked = true WHERE access_token = $1`, accessToken)
+
+		return Token{}, pkg.NewHTTPError(401, "oauth_token_revoked", "Access token expired")
+	} else if err != nil {
+		return Token{}, pkg.NewHTTPError(401, "oauth_token_error", "Invalid access token")
+	}
+
+	var token Token
+	err = pkg.Db.Get(
+		&token,
+		`SELECT * FROM oauth_token
+				WHERE access_token = $1`,
+		accessToken,
+	)
+	if err != nil {
+		return Token{}, echo.NewHTTPError(500, "Selecting access_token in database error.")
+	}
+	if token.Revoked {
+		return Token{}, pkg.NewHTTPError(401, "oauth_token_revoked", "Access token expired")
+	}
+
+	return token, nil
 }
 
 // RefreshOAuthToken create new access_token and return it

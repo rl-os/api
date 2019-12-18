@@ -1,6 +1,7 @@
 package customlogger
 
 import (
+	"github.com/deissh/osu-api-server/pkg/services/oauth"
 	"strconv"
 	"time"
 
@@ -32,8 +33,14 @@ func Middleware() echo.MiddlewareFunc {
 
 			evt := logger.Info()
 
+			// getting token information if present
+			data := c.Get("uset_token")
+			if userToken, ok := data.(*oauth.Token); ok {
+				evt.Uint("user_id", userToken.UserID)
+				evt.Str("user_scopes", userToken.Scopes)
+			}
 			if id != "" {
-				evt.Str("id", id)
+				evt.Str("request_id", id)
 			}
 			evt.Str("remote_ip", c.RealIP())
 			evt.Str("host", req.Host)

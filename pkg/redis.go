@@ -16,7 +16,7 @@ func InitializeRedis() {
 		DB:       config.Int("server.redis.db"),
 	})
 
-	if err := Rb.Ping().Err(); err != nil {
+	if err := conn.Ping().Err(); err != nil {
 		log.Fatal().
 			Err(err).
 			Msg("redis ping")

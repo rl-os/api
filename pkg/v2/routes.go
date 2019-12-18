@@ -1,6 +1,7 @@
 package v2
 
 import (
+	"github.com/deissh/osu-api-server/pkg/middlewares/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
 )
@@ -20,7 +21,7 @@ func ApplyRoutes(r *echo.Group) {
 		v2.GET("/ping", empty)
 
 		// === Me ===
-		v2.GET("/me/:mode", empty)
+		v2.GET("/me/:mode", empty, auth.Middleware([]string{}, []string{}))
 		v2.GET("/me/download-quota-check", empty)
 
 		// === Friends ===
