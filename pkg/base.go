@@ -8,6 +8,9 @@ type ErrorResponse struct {
 	ErrorDescription string `json:"error_description"`
 	// addition information
 	Message string `json:"message"`
+
+	// response status
+	Status int `json:"-"`
 }
 
 func (he *ErrorResponse) Error() string {
@@ -20,5 +23,6 @@ func NewHTTPError(code int, err string, message string) error {
 		ErrorID:          err,
 		ErrorDescription: message,
 		Message:          message,
+		Status:           code,
 	}
 }
