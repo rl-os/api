@@ -12,15 +12,16 @@ import (
 
 // Token model
 type Token struct {
-	ID           uint      `db:"id" json:"id"`
-	UserID       uint      `db:"user_id" json:"user_id"`
-	ClientID     uint      `db:"client_id" json:"client_id"`
-	AccessToken  string    `db:"access_token" json:"access_token"`
-	RefreshToken string    `db:"refresh_token" json:"refresh_token"`
-	Scopes       string    `db:"scopes" json:"scopes"`
-	Revoked      bool      `db:"revoked" json:"revoked" json:"revoked"`
-	ExpiresAt    time.Time `db:"expires_at" json:"expires_at"`
-	CreatedAt    time.Time `db:"created_at" json:"created_at"`
+	ID           uint   `db:"id" json:"id"`
+	UserID       uint   `db:"user_id" json:"user_id"`
+	ClientID     uint   `db:"client_id" json:"client_id"`
+	AccessToken  string `db:"access_token" json:"access_token"`
+	RefreshToken string `db:"refresh_token" json:"refresh_token"`
+	Scopes       string `db:"scopes" json:"scopes"`
+	Revoked      bool   `db:"revoked" json:"revoked" json:"revoked"`
+
+	ExpiresAt time.Time `db:"expires_at" json:"expires_at"`
+	CreatedAt time.Time `db:"created_at" json:"created_at"`
 }
 
 // CreateOAuthToken and return model with valid access_token and refresh_token
@@ -38,7 +39,9 @@ func CreateOAuthToken(userID uint, clientID uint, clientSecret string, scopes st
 	}
 
 	now := time.Now()
-	expireAt := now.AddDate(0, 0, 1) // fixme: конфигурация на сколько давать токен
+	expireAt := now.Add(
+		time.Hour * time.Duration(config.Int("server.jwt.hours_before_revoke", 1)),
+	)
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.MapClaims{
 		"aud":    fmt.Sprint(clientID),
@@ -48,7 +51,7 @@ func CreateOAuthToken(userID uint, clientID uint, clientSecret string, scopes st
 		"sub":    fmt.Sprint(userID),
 		"scopes": []string{scopes},
 	})
-	accessToken, err := tokenClaims.SignedString([]byte(config.String("server.jwt_secret")))
+	accessToken, err := tokenClaims.SignedString([]byte(config.String("server.jwt.secret")))
 	if err != nil {
 		return Token{}, echo.NewHTTPError(500, "New access token generate error.")
 	}

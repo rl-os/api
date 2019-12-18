@@ -21,7 +21,9 @@ server:
 
   sentry_dsn: ${SERVER__SENTRY_DSN}
 
-  jwt_secret: ${SERVER__JWT_SECRET}
+  jwt:
+    secret: ${SERVER__JWT_SECRET}
+    hours_before_revoke: 24
 
   database:
     driver: ${SERVER__DATABASE__DRIVER|postgres}
