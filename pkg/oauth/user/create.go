@@ -10,12 +10,12 @@ import (
 // CreateTokenRequestData contain incoming data with user credentials
 type CreateUserRequestData struct {
 	Username string `json:"username" form:"username" validate:"required"`
-	Email string `json:"email" form:"email" validate:"required,email"`
+	Email    string `json:"email" form:"email" validate:"required,email"`
 	Password string `json:"password" form:"password" validate:"required"`
 }
 
-// CreateTokenHandler create new access_token and refresh_token pare
-func CreateTokenHandler(c echo.Context) (err error) {
+// CreateUserHandler create new access_token and refresh_token pare
+func CreateUserHandler(c echo.Context) (err error) {
 	params := new(CreateUserRequestData)
 	if err := c.Bind(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed binding params")
@@ -32,4 +32,3 @@ func CreateTokenHandler(c echo.Context) (err error) {
 
 	return c.JSON(http.StatusOK, user)
 }
-
