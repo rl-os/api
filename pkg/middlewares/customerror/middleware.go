@@ -32,6 +32,7 @@ func CustomHTTPErrorHandler(err error, c echo.Context) {
 	// if custom error
 	if he, ok := err.(*pkg.ErrorResponse); ok {
 		res = *he
+		code = he.Status
 	}
 
 	// todo: getting locale and translate error message
