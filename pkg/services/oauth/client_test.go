@@ -7,21 +7,21 @@ import (
 
 func TestCreateOAuthClient(t *testing.T) {
 	type args struct {
-		userId   int
+		userID   uint
 		name     string
 		redirect string
 	}
 	tests := []struct {
 		name       string
 		args       args
-		wantClient OAuthClient
+		wantClient Client
 		wantErr    bool
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotClient, err := CreateOAuthClient(tt.args.userId, tt.args.name, tt.args.redirect)
+			gotClient, err := CreateOAuthClient(tt.args.userID, tt.args.name, tt.args.redirect)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CreateOAuthClient() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -35,20 +35,20 @@ func TestCreateOAuthClient(t *testing.T) {
 
 func TestFindOAuthClient(t *testing.T) {
 	type args struct {
-		clientId     string
+		clientID     uint
 		clientSecret string
 	}
 	tests := []struct {
 		name    string
 		args    args
-		wantOut OAuthToken
+		wantOut Token
 		wantErr bool
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotOut, err := FindOAuthClient(tt.args.clientId, tt.args.clientSecret)
+			gotOut, err := FindOAuthClient(tt.args.clientID, tt.args.clientSecret)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("FindOAuthClient() error = %v, wantErr %v", err, tt.wantErr)
 				return

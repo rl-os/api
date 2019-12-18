@@ -7,9 +7,9 @@ import (
 
 func TestCreateOAuthToken(t *testing.T) {
 	type args struct {
-		userId   int
-		clientId string
-		secretId string
+		userID   uint
+		clientID uint
+		secretID string
 		scopes   string
 	}
 	tests := []struct {
@@ -22,7 +22,7 @@ func TestCreateOAuthToken(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotOAuthToken, gotErr := CreateOAuthToken(tt.args.userId, tt.args.clientId, tt.args.secretId, tt.args.scopes)
+			gotOAuthToken, gotErr := CreateOAuthToken(tt.args.userID, tt.args.clientID, tt.args.secretID, tt.args.scopes)
 			if !reflect.DeepEqual(gotOAuthToken, tt.wantOAuthToken) {
 				t.Errorf("CreateOAuthToken() gotOAuthToken = %v, want %v", gotOAuthToken, tt.wantOAuthToken)
 			}

@@ -21,6 +21,8 @@ server:
 
   sentry_dsn: ${SERVER__SENTRY_DSN}
 
+  jwt_secret: ${SERVER__JWT_SECRET}
+
   database:
     driver: ${SERVER__DATABASE__DRIVER|postgres}
     dsn: ${SERVER__DATABASE__DSN|postgres://postgres:postgres@/osuserver}

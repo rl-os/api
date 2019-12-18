@@ -11,7 +11,7 @@ import (
 // CreateTokenRequestData contain incoming data with user credentials
 type CreateTokenRequestData struct {
 	GrantType    string `json:"grant_type" form:"grant_type" validate:"required"`
-	ClientID     string `json:"client_id" form:"client_id" validate:"required"`
+	ClientID     uint   `json:"client_id" form:"client_id" validate:"required"`
 	ClientSecret string `json:"client_secret" form:"client_secret" validate:"required"`
 	Scope        string `json:"scope" form:"scope" validate:"required"`
 
@@ -42,16 +42,20 @@ func CreateTokenHandler(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate")
 	}
 
-	var token oauthService.OAuthToken
-	
+	var token oauthService.Token
+
 	if params.GrantType == "password" {
 		user, err := userService.LoginByPassword(params.Username, params.Password)
-		if err != nil { return err }
+		if err != nil {
+			return err
+		}
 
 		token, err = oauthService.CreateOAuthToken(user.ID, params.ClientID, params.ClientSecret, params.Scope)
-		if err != nil { return err }
+		if err != nil {
+			return err
+		}
 	} else if params.GrantType == "refresh_token" {
-		token = oauthService.OAuthToken{}
+		token = oauthService.Token{}
 	} else {
 		return echo.NewHTTPError(http.StatusBadRequest, "Not valid grant_type")
 	}
