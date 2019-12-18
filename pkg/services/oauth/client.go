@@ -3,7 +3,6 @@ package oauth
 import (
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/utils"
-	"github.com/labstack/echo/v4"
 	"time"
 )
 
@@ -22,7 +21,7 @@ type Client struct {
 func CreateOAuthClient(userID uint, name string, redirect string) (client Client, err error) {
 	secret, err := utils.GenerateRandomString(255)
 	if err != nil {
-		return Client{}, echo.NewHTTPError(500, "New refresh token generate error.")
+		return Client{}, pkg.NewHTTPError(500, "server_error", "New refresh token generate error.")
 	}
 
 	err = pkg.Db.Get(
@@ -33,7 +32,7 @@ func CreateOAuthClient(userID uint, name string, redirect string) (client Client
 		userID, name, secret, redirect,
 	)
 	if err != nil {
-		return Client{}, echo.NewHTTPError(500, "Creating new oauth_client in database error.")
+		return Client{}, pkg.NewHTTPError(500, "server_error", "Creating new oauth_client in database error.")
 	}
 
 	return

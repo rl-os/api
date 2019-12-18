@@ -1,6 +1,7 @@
 package token
 
 import (
+	"github.com/deissh/osu-api-server/pkg"
 	oauthService "github.com/deissh/osu-api-server/pkg/services/oauth"
 	userService "github.com/deissh/osu-api-server/pkg/services/user"
 	"github.com/go-playground/validator/v10"
@@ -35,11 +36,11 @@ type CreateTokenResponseData struct {
 func CreateTokenHandler(c echo.Context) (err error) {
 	params := new(CreateTokenRequestData)
 	if err := c.Bind(params); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Failed binding params")
+		return pkg.NewHTTPError(http.StatusBadRequest, "request_params_error", "Failed binding params")
 	}
 
 	if err := validator.New().Struct(params); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate")
+		return pkg.NewHTTPError(http.StatusBadRequest, "request_validate_error", "Failed validate")
 	}
 
 	var token oauthService.Token
@@ -57,7 +58,7 @@ func CreateTokenHandler(c echo.Context) (err error) {
 	} else if params.GrantType == "refresh_token" {
 		token = oauthService.Token{}
 	} else {
-		return echo.NewHTTPError(http.StatusBadRequest, "Not valid grant_type")
+		return pkg.NewHTTPError(http.StatusBadRequest, "request_validate_error", "Invalid grand_type")
 	}
 
 	return c.JSON(http.StatusOK, token)
