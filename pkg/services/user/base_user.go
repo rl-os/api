@@ -15,7 +15,18 @@ type BaseUser struct {
 	Email        string `json:"email" db:"email"`
 	PasswordHash string `json:"-" db:"password_hash"`
 
-	// todo: вынести данные которые общие у модели пользователя и текущего пользователя
+	// computed
+	IsOnline bool `json:"is_online"`
+
+	IsBot         bool   `json:"is_bot"`
+	IsActive      bool   `json:"is_active"`
+	IsSupporter   bool   `json:"is_supporter"`
+	HasSupported  bool   `json:"has_supported"`
+	SupportLevel  int    `json:"support_level"`
+	PmFriendsOnly bool   `json:"pm_friends_only"`
+	AvatarURL     string `json:"avatar_url"`
+	CountryCode   string `json:"country_code"`
+	DefaultGroup  string `json:"default_group"`
 
 	LastVisit time.Time `json:"last_visit" db:"last_visit"`
 	JoinDate  time.Time `json:"join_date" db:"created_at"`
@@ -39,6 +50,8 @@ func LoginByPassword(username string, password string) (BaseUser, error) {
 		log.Debug().Msg("password uncorrect")
 		return BaseUser{}, pkg.NewHTTPError(http.StatusUnauthorized, "user_login_error", "The user credentials were incorrect.")
 	}
+
+	baseUser.IsOnline = pkg.Rb.SIsMember("online_users", baseUser.ID).Val()
 
 	return baseUser, nil
 }

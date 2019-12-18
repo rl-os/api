@@ -8,23 +8,18 @@ import (
 type CurrentUser struct {
 	BaseUser
 
-	Country                          Country             `json:"country"`
-	AvatarURL                        string              `json:"avatar_url"`
-	IsSupporter                      bool                `json:"is_supporter"`
-	HasSupported                     bool                `json:"has_supported"`
-	IsGmt                            bool                `json:"is_gmt"`
-	IsNat                            bool                `json:"is_nat"`
-	IsBng                            bool                `json:"is_bng"`
-	IsFullBn                         bool                `json:"is_full_bn"`
-	IsLimitedBn                      bool                `json:"is_limited_bn"`
-	IsBot                            bool                `json:"is_bot"`
-	IsActive                         bool                `json:"is_active"`
+	// computed
+	IsGmt       bool `json:"is_gmt"`
+	IsNat       bool `json:"is_nat"`
+	IsBng       bool `json:"is_bng"`
+	IsFullBn    bool `json:"is_full_bn"`
+	IsLimitedBn bool `json:"is_limited_bn"`
+
 	CanModerate                      bool                `json:"can_moderate"`
 	Interests                        interface{}         `json:"interests"`
 	Occupation                       string              `json:"occupation"`
 	Title                            interface{}         `json:"title"`
 	Location                         interface{}         `json:"location"`
-	IsOnline                         bool                `json:"is_online"`
 	Twitter                          string              `json:"twitter"`
 	Lastfm                           interface{}         `json:"lastfm"`
 	Skype                            interface{}         `json:"skype"`
@@ -32,7 +27,6 @@ type CurrentUser struct {
 	Discord                          string              `json:"discord"`
 	Playstyle                        []string            `json:"playstyle"`
 	Playmode                         string              `json:"playmode"`
-	PmFriendsOnly                    bool                `json:"pm_friends_only"`
 	PostCount                        int                 `json:"post_count"`
 	ProfileColour                    interface{}         `json:"profile_colour"`
 	ProfileOrder                     []string            `json:"profile_order"`
@@ -55,7 +49,6 @@ type CurrentUser struct {
 	ReplaysWatchedCounts             []interface{}       `json:"replays_watched_counts"`
 	ScoresFirstCount                 int                 `json:"scores_first_count"`
 	Statistics                       Statistics          `json:"statistics"`
-	SupportLevel                     int                 `json:"support_level"`
 	UnrankedBeatmapsetCount          int                 `json:"unranked_beatmapset_count"`
 	UserAchievements                 []UserAchievements  `json:"user_achievements"`
 	RankHistory                      RankHistory         `json:"rankHistory"`
