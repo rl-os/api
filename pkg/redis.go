@@ -10,7 +10,7 @@ var Rb *redis.Client
 
 // InitializeDB database connection
 func InitializeRedis() {
-	Rb = redis.NewClient(&redis.Options{
+	conn := redis.NewClient(&redis.Options{
 		Addr:     config.String("server.redis.host"),
 		Password: config.String("server.redis.password"),
 		DB:       config.Int("server.redis.db"),
@@ -22,6 +22,7 @@ func InitializeRedis() {
 			Msg("redis ping")
 	}
 
+	Rb = conn
 	stats := Rb.PoolStats()
 
 	log.Info().
