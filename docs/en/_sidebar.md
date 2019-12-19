@@ -1,3 +1,3 @@
 * [Home](/)
 * Server
-  * [OAuth](/oauth)
+  * [OAuth](/oauth/)
