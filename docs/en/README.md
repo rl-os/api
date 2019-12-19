@@ -1,4 +1,4 @@
-![](https://i0.wp.com/wp-corp.qoo-app.com/wp-content/uploads/2019/07/1907090708055.jpg)
+![](https://i.imgur.com/0FXGl6P.png)
 
 ## Introduction
 
