@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"time"
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/services/oauth"
 	"github.com/labstack/echo/v4"

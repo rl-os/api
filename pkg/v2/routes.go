@@ -2,6 +2,7 @@ package v2
 
 import (
 	"github.com/deissh/osu-api-server/pkg/middlewares/auth"
+	"github.com/deissh/osu-api-server/pkg/v2/users"
 	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
 )
@@ -32,7 +33,8 @@ func ApplyRoutes(r *echo.Group) {
 		v2.GET("/users/:user/scores/:type", empty)
 		v2.GET("/users/:user/beatmapsets/:type", empty)
 		v2.GET("/users/:user/recent_activity", empty)
-		v2.GET("/users/:user/:mode", empty)
+		v2.GET("/users/:user/:mode", users.GetUserById)
+		v2.GET("/users/:user", users.GetUserById)
 
 		// === Beatmaps ===
 		v2.GET("/beatmaps/lookup", empty)
