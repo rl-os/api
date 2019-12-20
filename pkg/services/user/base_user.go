@@ -68,11 +68,26 @@ func Register(username string, email string, password string) (BaseUser, error) 
 		return BaseUser{}, pkg.NewHTTPError(http.StatusInternalServerError, "internal_error", "Getting hash from password error.")
 	}
 
-	err = pkg.Db.Get(
-		&baseUser,
-		`INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *`,
-		username, email, hashed,
-	)
+	tx := pkg.Db.MustBegin()
+	{
+		err = tx.Get(
+			&baseUser,
+			`INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *`,
+			username, email, hashed,
+		)
+		if err != nil {
+			return BaseUser{}, pkg.NewHTTPError(http.StatusBadRequest, "create_user_error", "Registration info is are incorrect.")
+		}
+
+		_, err = tx.Exec(
+			`INSERT INTO user_details ("user_id") VALUES ($1)`,
+			baseUser.ID,
+		)
+		if err != nil {
+			return BaseUser{}, pkg.NewHTTPError(http.StatusBadRequest, "create_user_error", "Registration info is are incorrect.")
+		}
+	}
+	err = tx.Commit()
 	if err != nil {
 		return BaseUser{}, pkg.NewHTTPError(http.StatusBadRequest, "create_user_error", "Registration info is are incorrect.")
 	}
