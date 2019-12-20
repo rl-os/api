@@ -1,28 +1,29 @@
 package user
 
 import (
-	"database/sql"
+	"github.com/deissh/osu-api-server/pkg/utils"
+	"github.com/lib/pq"
 	"time"
 )
 
 // Detail data structure
 type Detail struct {
-	CanModerate  bool           `json:"can_moderate" db:"can_moderate"`
-	Interests    sql.NullString `json:"interests" db:"interests"`
-	Occupation   string         `json:"occupation" db:"occupation"`
-	Title        sql.NullString `json:"title" db:"title"`
-	Location     sql.NullString `json:"location" db:"location"`
-	Twitter      sql.NullString `json:"twitter" db:"twitter"`
-	Lastfm       sql.NullString `json:"lastfm" db:"lastfm"`
-	Skype        sql.NullString `json:"skype" db:"skype"`
-	Website      sql.NullString `json:"website" db:"website"`
-	Discord      sql.NullString `json:"discord" db:"discord"`
-	Playstyle    []string       `json:"playstyle" db:"playstyle"`
-	Playmode     string         `json:"playmode" db:"playmode"`
-	ProfileOrder []string       `json:"profile_order" db:"profile_order"`
-	CoverURL     string         `json:"cover_url" db:"cover_url"`
-	MaxBlocks    int            `json:"max_blocks" db:"max_blocks"`
-	MaxFriends   int            `json:"max_friends" db:"max_friends"`
+	CanModerate  bool                 `json:"can_moderate" db:"can_moderate"`
+	Interests    utils.JsonNullString `json:"interests" db:"interests"`
+	Occupation   string               `json:"occupation" db:"occupation"`
+	Title        utils.JsonNullString `json:"title" db:"title"`
+	Location     utils.JsonNullString `json:"location" db:"location"`
+	Twitter      utils.JsonNullString `json:"twitter" db:"twitter"`
+	Lastfm       utils.JsonNullString `json:"lastfm" db:"lastfm"`
+	Skype        utils.JsonNullString `json:"skype" db:"skype"`
+	Website      utils.JsonNullString `json:"website" db:"website"`
+	Discord      utils.JsonNullString `json:"discord" db:"discord"`
+	Playstyle    pq.StringArray       `json:"playstyle" db:"playstyle"`
+	Playmode     string               `json:"playmode" db:"playmode"`
+	ProfileOrder pq.StringArray       `json:"profile_order" db:"profile_order"`
+	CoverURL     string               `json:"cover_url" db:"cover_url"`
+	MaxBlocks    int                  `json:"max_blocks" db:"max_blocks"`
+	MaxFriends   int                  `json:"max_friends" db:"max_friends"`
 
 	Cover         Cover       `json:"cover"`
 	Kudosu        Kudosu      `json:"kudosu"`
