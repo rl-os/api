@@ -201,7 +201,16 @@ CREATE TABLE public.users (
     email character varying NOT NULL,
     password_hash character varying NOT NULL,
     last_visit timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    is_bot boolean DEFAULT false NOT NULL,
+    is_active boolean DEFAULT true NOT NULL,
+    is_supporter boolean DEFAULT false NOT NULL,
+    has_supported boolean DEFAULT false NOT NULL,
+    support_level integer DEFAULT 0 NOT NULL,
+    pm_friends_only boolean DEFAULT false NOT NULL,
+    avatar_url character varying DEFAULT ''::character varying NOT NULL,
+    country_code character varying DEFAULT ''::character varying NOT NULL,
+    default_group character varying DEFAULT 'osu'::character varying NOT NULL
 );
 
 
@@ -274,6 +283,14 @@ ALTER TABLE ONLY public.countries
 
 ALTER TABLE ONLY public.oauth_client
     ADD CONSTRAINT oauth_client_pk PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_token oauth_token_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_token
+    ADD CONSTRAINT oauth_token_pk PRIMARY KEY (id);
 
 
 --

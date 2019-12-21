@@ -56,7 +56,10 @@ func CreateTokenHandler(c echo.Context) (err error) {
 			return err
 		}
 	} else if params.GrantType == "refresh_token" {
-		token = oauthService.Token{}
+		token, err = oauthService.RefreshOAuthToken(params.RefreshToken, params.ClientID, params.ClientSecret, params.Scope)
+		if err != nil {
+			return err
+		}
 	} else {
 		return pkg.NewHTTPError(http.StatusBadRequest, "request_validate_error", "Invalid grand_type")
 	}

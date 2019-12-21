@@ -11,7 +11,7 @@ import (
 func Middleware(requireScopes []string, requireRoles []string) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			extractor := keyFromHeader("Authorization")
+			extractor := keyFromHeader(echo.HeaderAuthorization)
 
 			key, err := extractor(c)
 			if err != nil {
@@ -35,6 +35,7 @@ func Middleware(requireScopes []string, requireRoles []string) echo.MiddlewareFu
 func keyFromHeader(header string) func(echo.Context) (string, error) {
 	return func(c echo.Context) (string, error) {
 		auth := c.Request().Header.Get(header)
+		c.Logger().Info(auth)
 		if auth == "" {
 			return "", errors.New("missing key in request header")
 		}

@@ -22,19 +22,20 @@ func ApplyRoutes(r *echo.Group) {
 		v2.GET("/ping", empty)
 
 		// === Me ===
-		v2.GET("/me/:mode", empty, auth.Middleware([]string{}, []string{}))
-		v2.GET("/me/download-quota-check", empty)
+		v2.GET("/me/", users.GetUserByToken, auth.Middleware([]string{}, []string{}))
+		v2.GET("/me/:mode", users.GetUserByToken, auth.Middleware([]string{}, []string{}))
+		v2.GET("/me/download-quota-check", empty, auth.Middleware([]string{}, []string{}))
 
 		// === Friends ===
-		v2.GET("/friends", empty)
+		v2.GET("/friends", empty, auth.Middleware([]string{}, []string{}))
 
 		// === Users ===
 		v2.GET("/users/:user/kudosu", empty)
 		v2.GET("/users/:user/scores/:type", empty)
 		v2.GET("/users/:user/beatmapsets/:type", empty)
 		v2.GET("/users/:user/recent_activity", empty)
-		v2.GET("/users/:user/:mode", users.GetUserById)
-		v2.GET("/users/:user", users.GetUserById)
+		v2.GET("/users/:user/:mode", users.GetUserByID)
+		v2.GET("/users/:user", users.GetUserByID)
 
 		// === Beatmaps ===
 		v2.GET("/beatmaps/lookup", empty)

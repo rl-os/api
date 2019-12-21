@@ -20,6 +20,7 @@ type Token struct {
 	RefreshToken string `db:"refresh_token" json:"refresh_token"`
 	Scopes       string `db:"scopes" json:"scopes"`
 	Revoked      bool   `db:"revoked" json:"revoked" json:"revoked"`
+	ExpiresIn    int    `json:"expires_in"`
 
 	ExpiresAt time.Time `db:"expires_at" json:"expires_at"`
 	CreatedAt time.Time `db:"created_at" json:"created_at"`
@@ -64,6 +65,7 @@ func CreateOAuthToken(userID uint, clientID uint, clientSecret string, scopes st
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 		Scopes:       scopes,
+		ExpiresIn:    int(expireAt.Sub(now).Seconds()),
 		ExpiresAt:    expireAt,
 	}
 	err = pkg.Db.Get(
@@ -118,6 +120,20 @@ func ValidateOAuthToken(accessToken string) (Token, error) {
 }
 
 // RefreshOAuthToken create new access_token and return it
-func RefreshOAuthToken(refreshToken string) (OAuthToken, err error) {
-	return nil, nil
+func RefreshOAuthToken(refreshToken string, clientID uint, clientSecret string, scopes string) (Token, error) {
+	var token Token
+	err := pkg.Db.Get(
+		&token,
+		`UPDATE oauth_token
+			SET revoked = true
+			WHERE refresh_token = $1 AND revoked = false
+			RETURNING *`,
+		refreshToken,
+	)
+	if err != nil {
+		return Token{}, pkg.NewHTTPError(400, "oauth_token_not_exist", "Refresh token not exist or already revoked")
+	}
+
+	token, err = CreateOAuthToken(token.UserID, clientID, clientSecret, scopes)
+	return token, err
 }
