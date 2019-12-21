@@ -26,7 +26,7 @@ func GetDetailedUser(id uint) (DetailedUser, error) {
 		id,
 	)
 	if err != nil {
-		return DetailedUser{}, pkg.NewHTTPError(http.StatusUnauthorized, "user_not_founded", "User not founded.")
+		return DetailedUser{}, pkg.NewHTTPError(http.StatusNotFound, "user_not_founded", "User not founded.")
 	}
 
 	err = user.Compute()
