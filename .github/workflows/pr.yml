@@ -16,6 +16,12 @@ jobs:
         go-version: ${{ matrix.go-version }}
       id: go
 
+    - name: Setup env
+      run: |
+        echo "::set-env name=GOPATH::$(go env GOPATH)"
+        echo "::add-path::$(go env GOPATH)/bin"
+      shell: bash
+
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
 
