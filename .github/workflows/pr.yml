@@ -3,7 +3,11 @@ on: [pull_request]
 jobs:
   lint:
     name: Lint code
-    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        go-version: [1.13.x]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
     steps:
     - name: Set up Go 1.13
       uses: actions/setup-go@v1
@@ -58,11 +62,11 @@ jobs:
 
     - uses: actions/cache@v1
       with:
-        path: ~/go/pkg/mod
+        path: $(go env GOPATH)/pkg/mod
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
-
+        
     - name: Get dependencies
       run: ./scripts/install.sh
 
