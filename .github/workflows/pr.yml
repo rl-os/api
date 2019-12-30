@@ -1,6 +1,35 @@
-name: Go
+name: Pull Request workflow
 on: [pull_request]
 jobs:
+  lint:
+    name: Lint code
+    runs-on: [ubuntu-latest]
+    steps:
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: ${{ matrix.go-version }}
+      id: go
+
+    - name: Setup env
+      run: |
+        echo "::set-env name=GOPATH::$(go env GOPATH)"
+        echo "::add-path::$(go env GOPATH)/bin"
+      shell: bash
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+
+    - uses: actions/cache@v1
+      with:
+        path: $(go env GOPATH)/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Lint
+      run: ./scripts/lint.sh
+    
   test:
     name: Unit test
     strategy:
@@ -34,12 +63,9 @@ jobs:
     - name: Get dependencies
       run: ./scripts/install.sh
 
-    - name: Lint
-      run: ./scripts/lint.sh
-
     - name: Build
       run: go build cmd/www/main.go
     
-    - name: Test
+    - name: Run tests
       timeout-minutes: 10
       run: go test ./...
