@@ -26,7 +26,7 @@ jobs:
 
     - uses: actions/cache@v1
       with:
-        path: $(go env GOPATH)/pkg/mod
+        path: ~/go/pkg/mod
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
@@ -62,7 +62,7 @@ jobs:
 
     - uses: actions/cache@v1
       with:
-        path: $(go env GOPATH)/pkg/mod
+        path: ~/go/pkg/mod
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
