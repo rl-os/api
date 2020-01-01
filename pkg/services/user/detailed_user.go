@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/deissh/osu-api-server/pkg"
+	"github.com/rs/zerolog/log"
 	"net/http"
 )
 
@@ -11,8 +12,13 @@ type DetailedUser struct {
 }
 
 // GetDetailedUser and compute some fields
-func GetDetailedUser(id uint) (DetailedUser, error) {
+func GetDetailedUser(id uint, mode string) (DetailedUser, error) {
 	var user DetailedUser
+
+	log.Debug().
+		Uint("id", id).
+		Str("mode", mode).
+		Msg("Get detailed user")
 
 	err := pkg.Db.Get(
 		&user,
@@ -28,6 +34,11 @@ func GetDetailedUser(id uint) (DetailedUser, error) {
 	if err != nil {
 		return DetailedUser{}, pkg.NewHTTPError(http.StatusNotFound, "user_not_founded", "User not founded.")
 	}
+
+	// todo: getting stats by mode
+
+	log.Debug().
+		Msg("Computing user fields")
 
 	err = user.Compute()
 	if err != nil {

@@ -22,12 +22,12 @@ func ApplyRoutes(r *echo.Group) {
 		v2.GET("/ping", empty)
 
 		// === Me ===
-		v2.GET("/me/", users.GetUserByToken, auth.Middleware([]string{}, []string{}))
-		v2.GET("/me/:mode", users.GetUserByToken, auth.Middleware([]string{}, []string{}))
-		v2.GET("/me/download-quota-check", empty, auth.Middleware([]string{}, []string{}))
+		v2.GET("/me/", users.GetUserByToken, auth.Middleware([]string{"profile"}))
+		v2.GET("/me/:mode", users.GetUserByToken, auth.Middleware([]string{"profile"}))
+		v2.GET("/me/download-quota-check", empty, auth.Middleware([]string{"profile"}))
 
 		// === Friends ===
-		v2.GET("/friends", empty, auth.Middleware([]string{}, []string{}))
+		v2.GET("/friends", empty, auth.Middleware([]string{"friends"}))
 
 		// === Users ===
 		v2.GET("/users/:user/kudosu", empty)
@@ -60,15 +60,15 @@ func ApplyRoutes(r *echo.Group) {
 		v2.PUT("/rooms/:room/playlist/:playlist/scores/:score", empty)
 
 		// === Chats ===
-		v2.POST("/chat/new", empty)
-		v2.GET("/chat/updates", empty)
-		v2.GET("/chat/presence", empty) // ???
-		v2.GET("/chat/channels", empty)
-		v2.GET("/chat/channels/:channel/messages", empty)
-		v2.POST("/chat/channels/:channel/messages", empty)
-		v2.PUT("/chat/channels/:channel/users/:user", empty)
-		v2.DELETE("/chat/channels/:channel/users/:user", empty)
-		v2.PUT("/chat/channels/:channel/mark-as-read/:message", empty)
+		v2.POST("/chat/new", empty, auth.Middleware([]string{"chat"}))
+		v2.GET("/chat/updates", empty, auth.Middleware([]string{"chat"}))
+		v2.GET("/chat/presence", empty, auth.Middleware([]string{"chat"})) // ???
+		v2.GET("/chat/channels", empty, auth.Middleware([]string{"chat"}))
+		v2.GET("/chat/channels/:channel/messages", empty, auth.Middleware([]string{"chat"}))
+		v2.POST("/chat/channels/:channel/messages", empty, auth.Middleware([]string{"chat"}))
+		v2.PUT("/chat/channels/:channel/users/:user", empty, auth.Middleware([]string{"chat"}))
+		v2.DELETE("/chat/channels/:channel/users/:user", empty, auth.Middleware([]string{"chat"}))
+		v2.PUT("/chat/channels/:channel/mark-as-read/:message", empty, auth.Middleware([]string{"chat"}))
 
 		// === Comments ===
 		v2.GET("/comments", empty)

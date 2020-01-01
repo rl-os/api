@@ -8,7 +8,7 @@ import (
 )
 
 // Middleware check access_token
-func Middleware(requireScopes []string, requireRoles []string) echo.MiddlewareFunc {
+func Middleware(requireScopes []string) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			extractor := keyFromHeader(echo.HeaderAuthorization)

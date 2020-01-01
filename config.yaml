@@ -27,7 +27,7 @@ server:
 
   database:
     driver: ${SERVER__DATABASE__DRIVER|postgres}
-    dsn: ${SERVER__DATABASE__DSN|postgres://postgres:postgres@/osuserver}
+    dsn: ${SERVER__DATABASE__DSN|postgres://postgres:postgres@/osuserver?sslmode=disable}
 
   redis:
     host: ${SERVER__REDIS__HOST|127.0.0.1:6379}
