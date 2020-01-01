@@ -37,9 +37,6 @@ func GetDetailedUser(id uint, mode string) (DetailedUser, error) {
 
 	// todo: getting stats by mode
 
-	log.Debug().
-		Msg("Computing user fields")
-
 	err = user.Compute()
 	if err != nil {
 		return DetailedUser{}, err

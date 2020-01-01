@@ -2,9 +2,11 @@ package auth
 
 import (
 	"errors"
+	"fmt"
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/services/oauth"
 	"github.com/labstack/echo/v4"
+	"time"
 )
 
 // Middleware check access_token
@@ -23,7 +25,7 @@ func Middleware(requireScopes []string) echo.MiddlewareFunc {
 				return err
 			}
 
-			pkg.Rb.SAdd("online_users", token.UserID)
+			pkg.Rb.Set(fmt.Sprintf("online_users::%d", token.ID), true, time.Minute*15)
 
 			c.Set("uset_token", token)
 			return next(c)

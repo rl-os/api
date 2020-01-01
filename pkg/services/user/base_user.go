@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/utils"
 	"github.com/rs/zerolog/log"
@@ -32,7 +33,13 @@ type BaseUser struct {
 
 // Compute fields and return error if not successful
 func (this *BaseUser) Compute() error {
-	this.IsOnline = pkg.Rb.SIsMember("online_users", this.ID).Val()
+	log.Debug().
+		Msg("Computing user fields")
+
+	err := pkg.Rb.Get(fmt.Sprintf("online_users::%d", this.ID)).Err()
+	if err == nil {
+		this.IsOnline = true
+	}
 
 	return nil
 }
