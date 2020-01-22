@@ -43,26 +43,42 @@ func main() {
 		).With().Caller().Logger()
 	}
 
+	log.Debug().
+		Msg("Loaded configuration and logger")
+
+	log.Debug().
+		Msg("Start initialize database and redis")
+
 	pkg.InitializeDB()
 	pkg.InitializeRedis()
+
+	log.Debug().
+		Msg("Initialize database and redis successful done")
 
 	// Seting up Echo
 	app := echo.New()
 	app.HideBanner = true
 	app.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
 
+	log.Debug().
+		Msg("Setting up Echo middleware")
+
 	app.Use(middleware.RequestID())
 	// app.Use(middleware.Recover())
 	app.Use(customlogger.Middleware())
 
 	if config.Bool("server.cors.enable") {
+		log.Info().
+			Msg("Enabled build-in CORS")
+
 		app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 			AllowOrigins: config.Strings("server.cors.allow_origins"),
 			AllowHeaders: config.Strings("server.cors.allow_headers"),
 		}))
 	}
 
-	// Mount routes
+	log.Debug().
+		Msg("Mounting Echo routes")
 	root := app.Group("")
 	{
 		oauth.ApplyRoutes(root)
@@ -73,10 +89,15 @@ func main() {
 		v2.ApplyRoutes(api)
 	}
 
+	log.Debug().
+		Msg("Running HTTP server")
 	// Graceful start and stop HTTP server
 	go func() {
-		if err := app.Start(config.String("server.host") + ":" + config.String("server.port")); err != nil {
-			log.Info().Msg("shutting down the server")
+		err := app.Start(config.String("server.host") + ":" + config.String("server.port"))
+		if err != nil {
+			log.Error().
+				Err(err).
+				Msg("shutting down the server")
 		}
 	}()
 
