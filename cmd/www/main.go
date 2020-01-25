@@ -46,7 +46,6 @@ func main() {
 
 	log.Debug().
 		Msg("Loaded configuration and logger")
-
 	log.Debug().
 		Msg("Start initialize database and redis")
 
