@@ -27,7 +27,7 @@ func GetUserByID(c echo.Context) (err error) {
 		return pkg.NewHTTPError(http.StatusBadRequest, "request_validate_error", "Failed validate")
 	}
 
-	user, err = userService.GetDetailedUser(uint(userID), mode)
+	user, err = userService.GetUser(uint(userID), mode)
 	if err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func GetUserByToken(c echo.Context) (err error) {
 		return pkg.NewHTTPError(http.StatusBadRequest, "request_validate_error", "Failed validate")
 	}
 
-	user, err = userService.GetDetailedUser(token.UserID, mode)
+	user, err = userService.GetUser(token.UserID, mode)
 	if err != nil {
 		return err
 	}

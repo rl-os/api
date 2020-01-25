@@ -5,7 +5,6 @@ import (
 	"github.com/deissh/osu-api-server/pkg/middlewares/customerror"
 	"github.com/deissh/osu-api-server/pkg/middlewares/customlogger"
 	"github.com/deissh/osu-api-server/pkg/oauth"
-	"github.com/deissh/osu-api-server/pkg/v1"
 	"github.com/deissh/osu-api-server/pkg/v2"
 	"github.com/gookit/config/v2"
 	"github.com/gookit/config/v2/yaml"
@@ -85,7 +84,6 @@ func main() {
 	}
 	api := app.Group("/api")
 	{
-		v1.ApplyRoutes(api)
 		v2.ApplyRoutes(api)
 	}
 

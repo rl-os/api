@@ -1,4 +1,4 @@
-package user
+package entity
 
 import (
 	"github.com/deissh/osu-api-server/pkg/utils"
@@ -6,8 +6,10 @@ import (
 	"time"
 )
 
-// Detail data structure
-type Detail struct {
+// User data structure
+type User struct {
+	UserShort
+
 	CanModerate  bool                 `json:"can_moderate" db:"can_moderate"`
 	Interests    utils.JsonNullString `json:"interests" db:"interests"`
 	Occupation   string               `json:"occupation" db:"occupation"`
