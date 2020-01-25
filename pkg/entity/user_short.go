@@ -34,8 +34,7 @@ func (u *UserShort) Compute() error {
 	log.Debug().
 		Msg("Computing user fields")
 
-	err := pkg.Rb.Get(fmt.Sprintf("online_users::%d", u.ID)).Err()
-	if err == nil {
+	if err := pkg.Rb.Get(fmt.Sprintf("online_users::%d", u.ID)).Err(); err == nil {
 		u.IsOnline = true
 	}
 
