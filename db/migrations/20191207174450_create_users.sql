@@ -15,7 +15,22 @@ create table users
     pm_friends_only bool      default false             not null,
     avatar_url      varchar   default ''                not null,
     country_code    varchar   default ''                not null,
-    default_group   varchar   default 'osu'             not null
+    default_group   varchar   default 'osu'             not null,
+    can_moderate    bool      default false             not null,
+    interests       varchar   default                   null,
+    occupation      varchar   default ''                not null,
+    title           varchar   default                   null,
+    location        varchar   default                   null,
+    twitter         varchar   default                   null,
+    lastfm          varchar   default                   null,
+    skype           varchar   default                   null,
+    website         varchar   default                   null,
+    discord         varchar   default                   null,
+    playstyle       varchar   array default '{}'        not null,
+    playmode        varchar   default ''                not null,
+    cover_url       varchar   default ''                not null,
+    max_blocks      int       default 50                not null,
+    max_friends     int       default 100               not null
 );
 alter table users
     owner to postgres;
@@ -25,6 +40,9 @@ create unique index users_id_uindex
 
 create unique index users_username_uindex
     on users (username);
+
+create unique index users_email_uindex
+    on users (email);
 
 -- migrate:down
 

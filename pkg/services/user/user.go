@@ -24,7 +24,6 @@ func GetUser(id uint, mode string) (*entity.User, error) {
        					interests, occupation,title, location, twitter, lastfm, skype, website, discord, playmode,
        					playstyle, cover_url, max_blocks, max_friends
 				FROM users
-    			INNER JOIN user_details ON users.id = user_details.user_id
 				WHERE users.id = $1`,
 		id,
 	)

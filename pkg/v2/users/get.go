@@ -15,8 +15,6 @@ var modes = []string{"std", "mania", "catch", "taiko"}
 
 // GetUserByID handler
 func GetUserByID(c echo.Context) (err error) {
-	var user userService.DetailedUser
-
 	mode := c.Param("mode")
 	if !utils.ContainsString(modes, mode) {
 		mode = "std"
@@ -27,7 +25,7 @@ func GetUserByID(c echo.Context) (err error) {
 		return pkg.NewHTTPError(http.StatusBadRequest, "request_validate_error", "Failed validate")
 	}
 
-	user, err = userService.GetUser(uint(userID), mode)
+	user, err := userService.GetUser(uint(userID), mode)
 	if err != nil {
 		return err
 	}
@@ -36,10 +34,7 @@ func GetUserByID(c echo.Context) (err error) {
 }
 
 // GetUserByToken handler
-func GetUserByToken(c echo.Context) (err error) {
-	var user userService.DetailedUser
-
-	mode := c.Param("mode")
+func GetUserByToken(c echo.Context) (err error) {mode := c.Param("mode")
 	if !utils.ContainsString(modes, mode) {
 		mode = "std"
 	}
@@ -54,7 +49,7 @@ func GetUserByToken(c echo.Context) (err error) {
 		return pkg.NewHTTPError(http.StatusBadRequest, "request_validate_error", "Failed validate")
 	}
 
-	user, err = userService.GetUser(token.UserID, mode)
+	user, err := userService.GetUser(token.UserID, mode)
 	if err != nil {
 		return err
 	}
