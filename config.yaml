@@ -19,7 +19,9 @@ server:
       - Content-Type
       - Accept
 
-  sentry_dsn: ${SERVER__SENTRY_DSN}
+  sentry:
+    enable: ${SERVER__SENTRY__ENABLE|true}
+    dsn: ${SERVER__SENTRY__DSN}
 
   jwt:
     secret: ${SERVER__JWT_SECRET}

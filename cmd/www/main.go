@@ -6,6 +6,8 @@ import (
 	"github.com/deissh/osu-api-server/pkg/middlewares/customlogger"
 	"github.com/deissh/osu-api-server/pkg/oauth"
 	"github.com/deissh/osu-api-server/pkg/v2"
+	"github.com/getsentry/sentry-go"
+	sentryEcho "github.com/getsentry/sentry-go/echo"
 	"github.com/gookit/config/v2"
 	"github.com/gookit/config/v2/yaml"
 	"github.com/labstack/echo/v4"
@@ -76,19 +78,32 @@ func main() {
 		}))
 	}
 
-	log.Debug().
-		Msg("Mounting Echo routes")
-	root := app.Group("")
-	{
-		oauth.ApplyRoutes(root)
-	}
-	api := app.Group("/api")
-	{
-		v2.ApplyRoutes(api)
+	if config.Bool("server.sentry.enable") {
+		log.Debug().
+			Msg("Start initialize Sentry")
+
+		err = sentry.Init(sentry.ClientOptions{
+			Dsn: config.String("server.sentry.dsn"),
+		})
+		if err != nil {
+			log.Error().Err(err).Msg("Sentry initialization failed")
+		}
+
+		app.Use(sentryEcho.New(sentryEcho.Options{}))
+
+		log.Debug().
+			Msg("Initialize Sentry successful done")
 	}
 
 	log.Debug().
+		Msg("Mounting Echo routes")
+
+	oauth.ApplyRoutes(app.Group(""))
+	v2.ApplyRoutes(app.Group("/api"))
+
+	log.Debug().
 		Msg("Running HTTP server")
+
 	// Graceful start and stop HTTP server
 	go func() {
 		err := app.Start(config.String("server.host") + ":" + config.String("server.port"))
