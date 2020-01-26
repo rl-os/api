@@ -42,11 +42,11 @@ func GlobalMiddleware() echo.MiddlewareFunc {
 					return err
 				}
 
-				pkg.Rb.Set(fmt.Sprintf("online_users::%d", token.ID), true, time.Minute*15)
+				pkg.Rb.Set(fmt.Sprintf("online_users::%d", token.UserID), true, time.Minute*15)
 
-				current, err := user.GetUser(token.ID, "std")
+				current, err := user.GetUser(token.UserID, "std")
 				if err != nil {
-					return pkg.NewHTTPError(401, "auth_token_required", "Invalid token or current")
+					return pkg.NewHTTPError(401, "auth_token_required", "Invalid token or user")
 				}
 
 				c.Set("current_user", current)
