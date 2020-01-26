@@ -4,6 +4,7 @@ import (
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/middlewares/customerror"
 	"github.com/deissh/osu-api-server/pkg/middlewares/customlogger"
+	"github.com/deissh/osu-api-server/pkg/middlewares/permission"
 	"github.com/deissh/osu-api-server/pkg/oauth"
 	"github.com/deissh/osu-api-server/pkg/v2"
 	"github.com/getsentry/sentry-go"
@@ -66,6 +67,7 @@ func main() {
 	app.Use(middleware.RequestID())
 	// app.Use(middleware.Recover())
 	app.Use(customlogger.Middleware())
+	app.Use(permission.GlobalMiddleware())
 
 	if config.Bool("server.cors.enable") {
 		log.Info().
