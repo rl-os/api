@@ -50,7 +50,7 @@ func GlobalMiddleware() echo.MiddlewareFunc {
 				}
 
 				c.Set("current_user", current)
-				//c.Set("current_user_token", token)
+				c.Set("current_user_token", token)
 			}
 
 			return next(c)

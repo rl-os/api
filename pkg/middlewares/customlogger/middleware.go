@@ -34,7 +34,7 @@ func Middleware() echo.MiddlewareFunc {
 			evt := logger.Info()
 
 			// getting token information if present
-			data := c.Get("uset_token")
+			data := c.Get("current_user_token")
 			if userToken, ok := data.(*oauth.Token); ok {
 				evt.Uint("user_id", userToken.UserID)
 				evt.Str("user_scopes", userToken.Scopes)
