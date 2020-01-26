@@ -19,41 +19,7 @@ func GetUser(id uint, mode string) (*entity.User, error) {
 
 	err := pkg.Db.Get(
 		&user,
-		`SELECT users.id, username, email, last_visit, created_at, is_bot, is_active, is_supporter, has_supported,
-       					support_level, pm_friends_only, avatar_url, country_code, default_group, can_moderate,
-       					interests, occupation,title, location, twitter, lastfm, skype, website, discord, playmode,
-       					playstyle, cover_url, max_blocks, max_friends
-				FROM users
-				WHERE users.id = $1`,
-		id,
-	)
-	if err != nil {
-		return nil, pkg.NewHTTPError(http.StatusNotFound, "user_not_founded", "User not founded.")
-	}
-
-	// todo: getting stats by mode
-
-	err = user.Compute()
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, nil
-}
-
-// GetUser and compute some fields
-func GetUserShort(id uint, mode string) (*entity.UserShort, error) {
-	var user entity.UserShort
-
-	log.Debug().
-		Uint("id", id).
-		Str("mode", mode).
-		Msg("Get detailed user")
-
-	err := pkg.Db.Get(
-		&user,
-		`SELECT users.id, username, email, last_visit, created_at, is_bot, is_active, is_supporter, has_supported,
-       					support_level, pm_friends_only, avatar_url, country_code, default_group, last_visit, created_at
+		`SELECT *
 				FROM users
 				WHERE users.id = $1`,
 		id,
@@ -74,24 +40,26 @@ func GetUserShort(id uint, mode string) (*entity.UserShort, error) {
 
 // LoginByPassword and return user data such ID
 func LoginByPassword(username string, password string) (*entity.UserShort, error) {
-	var baseUser entity.UserShort
+	var user entity.User
 
 	err := pkg.Db.Get(
-		&baseUser,
+		&user,
 		`SELECT * FROM users WHERE username = $1 OR email = $1`,
 		username,
 	)
 	if err != nil {
-		log.Debug().Msg("login uncorrect")
+		log.Debug().
+			Err(err).
+			Msg("login uncorrect")
 		return nil, pkg.NewHTTPError(http.StatusUnauthorized, "user_login_error", "The user credentials were incorrect.")
 	}
 
-	if ok := utils.CompareHash(baseUser.PasswordHash, password); !ok {
+	if ok := utils.CompareHash(user.PasswordHash, password); !ok {
 		log.Debug().Msg("password uncorrect")
 		return nil, pkg.NewHTTPError(http.StatusUnauthorized, "user_login_error", "The user credentials were incorrect.")
 	}
 
-	return &baseUser, nil
+	return user.GetShort(), nil
 }
 
 // Register and return new user

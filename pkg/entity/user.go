@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"database/sql"
+	"github.com/deissh/osu-api-server/pkg/utils"
 	"github.com/lib/pq"
 	"time"
 )
@@ -10,22 +10,22 @@ import (
 type User struct {
 	UserShort
 
-	CanModerate  bool           `json:"can_moderate" db:"can_moderate"`
-	Interests    sql.NullString `json:"interests" db:"interests"`
-	Occupation   string         `json:"occupation" db:"occupation"`
-	Title        sql.NullString `json:"title" db:"title"`
-	Location     sql.NullString `json:"location" db:"location"`
-	Twitter      sql.NullString `json:"twitter" db:"twitter"`
-	Lastfm       sql.NullString `json:"lastfm" db:"lastfm"`
-	Skype        sql.NullString `json:"skype" db:"skype"`
-	Website      sql.NullString `json:"website" db:"website"`
-	Discord      sql.NullString `json:"discord" db:"discord"`
-	Playstyle    pq.StringArray `json:"playstyle" db:"playstyle"`
-	Playmode     string         `json:"playmode" db:"playmode"`
-	ProfileOrder pq.StringArray `json:"profile_order" db:"profile_order"`
-	CoverURL     string         `json:"cover_url" db:"cover_url"`
-	MaxBlocks    int            `json:"max_blocks" db:"max_blocks"`
-	MaxFriends   int            `json:"max_friends" db:"max_friends"`
+	CanModerate  bool             `json:"can_moderate" db:"can_moderate"`
+	Interests    utils.NullString `json:"interests" db:"interests"`
+	Occupation   string           `json:"occupation" db:"occupation"`
+	Title        utils.NullString `json:"title" db:"title"`
+	Location     utils.NullString `json:"location" db:"location"`
+	Twitter      utils.NullString `json:"twitter" db:"twitter"`
+	Lastfm       utils.NullString `json:"lastfm" db:"lastfm"`
+	Skype        utils.NullString `json:"skype" db:"skype"`
+	Website      utils.NullString `json:"website" db:"website"`
+	Discord      utils.NullString `json:"discord" db:"discord"`
+	Playstyle    pq.StringArray   `json:"playstyle" db:"playstyle"`
+	Playmode     string           `json:"playmode" db:"playmode"`
+	ProfileOrder pq.StringArray   `json:"profile_order" db:"profile_order"`
+	CoverURL     string           `json:"cover_url" db:"cover_url"`
+	MaxBlocks    int              `json:"max_blocks" db:"max_blocks"`
+	MaxFriends   int              `json:"max_friends" db:"max_friends"`
 
 	Cover         Cover       `json:"cover"`
 	Kudosu        Kudosu      `json:"kudosu"`
@@ -142,8 +142,8 @@ type RankHistory struct {
 }
 
 // GetShort version of user
-func (u *User) GetShort() UserShort {
-	return UserShort{
+func (u *User) GetShort() *UserShort {
+	return &UserShort{
 		ID:            u.ID,
 		Username:      u.Username,
 		Email:         u.Email,

@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 )
 
-type JsonNullString struct {
+type NullString struct {
 	sql.NullString
 }
 
-func (v JsonNullString) MarshalJSON() ([]byte, error) {
+func (v NullString) MarshalJSON() ([]byte, error) {
 	if v.Valid {
 		return json.Marshal(v.String)
 	} else {
@@ -17,7 +17,7 @@ func (v JsonNullString) MarshalJSON() ([]byte, error) {
 	}
 }
 
-func (v *JsonNullString) UnmarshalJSON(data []byte) error {
+func (v *NullString) UnmarshalJSON(data []byte) error {
 	// Unmarshalling into a pointer will let us detect null
 	var x *string
 	if err := json.Unmarshal(data, &x); err != nil {
