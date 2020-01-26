@@ -1,4 +1,4 @@
-debug: true
+debug: ${DEBUG|true}
 
 # External services
 services:
@@ -19,7 +19,9 @@ server:
       - Content-Type
       - Accept
 
-  sentry_dsn: ${SERVER__SENTRY_DSN}
+  sentry:
+    enable: ${SERVER__SENTRY__ENABLE|true}
+    dsn: ${SERVER__SENTRY__DSN}
 
   jwt:
     secret: ${SERVER__JWT_SECRET}
@@ -27,7 +29,7 @@ server:
 
   database:
     driver: ${SERVER__DATABASE__DRIVER|postgres}
-    dsn: ${SERVER__DATABASE__DSN|postgres://postgres:postgres@/osuserver}
+    dsn: ${SERVER__DATABASE__DSN|postgres://postgres:postgres@/osuserver?sslmode=disable}
 
   redis:
     host: ${SERVER__REDIS__HOST|127.0.0.1:6379}

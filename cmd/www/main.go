@@ -5,8 +5,9 @@ import (
 	"github.com/deissh/osu-api-server/pkg/middlewares/customerror"
 	"github.com/deissh/osu-api-server/pkg/middlewares/customlogger"
 	"github.com/deissh/osu-api-server/pkg/oauth"
-	"github.com/deissh/osu-api-server/pkg/v1"
 	"github.com/deissh/osu-api-server/pkg/v2"
+	"github.com/getsentry/sentry-go"
+	sentryEcho "github.com/getsentry/sentry-go/echo"
 	"github.com/gookit/config/v2"
 	"github.com/gookit/config/v2/yaml"
 	"github.com/labstack/echo/v4"
@@ -43,40 +44,72 @@ func main() {
 		).With().Caller().Logger()
 	}
 
+	log.Debug().
+		Msg("Loaded configuration and logger")
+	log.Debug().
+		Msg("Start initialize database and redis")
+
 	pkg.InitializeDB()
 	pkg.InitializeRedis()
+
+	log.Debug().
+		Msg("Initialize database and redis successful done")
 
 	// Seting up Echo
 	app := echo.New()
 	app.HideBanner = true
 	app.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
 
+	log.Debug().
+		Msg("Setting up Echo middleware")
+
 	app.Use(middleware.RequestID())
 	// app.Use(middleware.Recover())
 	app.Use(customlogger.Middleware())
 
 	if config.Bool("server.cors.enable") {
+		log.Info().
+			Msg("Enabled build-in CORS")
+
 		app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 			AllowOrigins: config.Strings("server.cors.allow_origins"),
 			AllowHeaders: config.Strings("server.cors.allow_headers"),
 		}))
 	}
 
-	// Mount routes
-	root := app.Group("")
-	{
-		oauth.ApplyRoutes(root)
+	if config.Bool("server.sentry.enable") {
+		log.Debug().
+			Msg("Start initialize Sentry")
+
+		err = sentry.Init(sentry.ClientOptions{
+			Dsn: config.String("server.sentry.dsn"),
+		})
+		if err != nil {
+			log.Error().Err(err).Msg("Sentry initialization failed")
+		}
+
+		app.Use(sentryEcho.New(sentryEcho.Options{}))
+
+		log.Debug().
+			Msg("Initialize Sentry successful done")
 	}
-	api := app.Group("/api")
-	{
-		v1.ApplyRoutes(api)
-		v2.ApplyRoutes(api)
-	}
+
+	log.Debug().
+		Msg("Mounting Echo routes")
+
+	oauth.ApplyRoutes(app.Group(""))
+	v2.ApplyRoutes(app.Group("/api"))
+
+	log.Debug().
+		Msg("Running HTTP server")
 
 	// Graceful start and stop HTTP server
 	go func() {
-		if err := app.Start(config.String("server.host") + ":" + config.String("server.port")); err != nil {
-			log.Info().Msg("shutting down the server")
+		err := app.Start(config.String("server.host") + ":" + config.String("server.port"))
+		if err != nil {
+			log.Error().
+				Err(err).
+				Msg("shutting down the server")
 		}
 	}()
 

@@ -9,23 +9,9 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: countries; Type: TABLE; Schema: public; Owner: -
@@ -147,51 +133,6 @@ CREATE TABLE public.schema_migrations (
 
 
 --
--- Name: user_details; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.user_details (
-    id integer NOT NULL,
-    user_id integer NOT NULL,
-    can_moderate boolean DEFAULT false NOT NULL,
-    interests character varying,
-    occupation character varying DEFAULT ''::character varying NOT NULL,
-    title character varying,
-    location character varying,
-    twitter character varying,
-    lastfm character varying,
-    skype character varying,
-    website character varying,
-    discord character varying,
-    playstyle character varying[] DEFAULT '{}'::character varying[],
-    playmode character varying DEFAULT ''::character varying NOT NULL,
-    cover_url character varying DEFAULT ''::character varying,
-    max_blocks integer DEFAULT 50 NOT NULL,
-    max_friends integer DEFAULT 100
-);
-
-
---
--- Name: user_details_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.user_details_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: user_details_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.user_details_id_seq OWNED BY public.user_details.id;
-
-
---
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -208,9 +149,24 @@ CREATE TABLE public.users (
     has_supported boolean DEFAULT false NOT NULL,
     support_level integer DEFAULT 0 NOT NULL,
     pm_friends_only boolean DEFAULT false NOT NULL,
-    avatar_url character varying DEFAULT ''::character varying NOT NULL,
-    country_code character varying DEFAULT ''::character varying NOT NULL,
-    default_group character varying DEFAULT 'osu'::character varying NOT NULL
+    avatar_url character varying DEFAULT 'https://301222.selcdn.ru/akasi/avatars/1.png'::character varying NOT NULL,
+    country_code character varying DEFAULT '-'::character varying NOT NULL,
+    default_group character varying DEFAULT 'osu'::character varying NOT NULL,
+    can_moderate boolean DEFAULT false NOT NULL,
+    interests character varying,
+    occupation character varying DEFAULT ''::character varying NOT NULL,
+    title character varying,
+    location character varying,
+    twitter character varying,
+    lastfm character varying,
+    skype character varying,
+    website character varying,
+    discord character varying,
+    playstyle character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    playmode character varying DEFAULT ''::character varying NOT NULL,
+    cover_url character varying DEFAULT 'https://301222.selcdn.ru/akasi/bg/1.jpg'::character varying NOT NULL,
+    max_blocks integer DEFAULT 50 NOT NULL,
+    max_friends integer DEFAULT 100 NOT NULL
 );
 
 
@@ -256,13 +212,6 @@ ALTER TABLE ONLY public.oauth_token ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- Name: user_details id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_details ALTER COLUMN id SET DEFAULT nextval('public.user_details_id_seq'::regclass);
-
-
---
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -299,14 +248,6 @@ ALTER TABLE ONLY public.oauth_token
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
-
-
---
--- Name: user_details user_details_pk; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_details
-    ADD CONSTRAINT user_details_pk PRIMARY KEY (id);
 
 
 --
@@ -353,17 +294,10 @@ CREATE UNIQUE INDEX oauth_token_id_uindex ON public.oauth_token USING btree (id)
 
 
 --
--- Name: user_details_id_uindex; Type: INDEX; Schema: public; Owner: -
+-- Name: users_email_uindex; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX user_details_id_uindex ON public.user_details USING btree (id);
-
-
---
--- Name: user_details_user_id_uindex; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX user_details_user_id_uindex ON public.user_details USING btree (user_id);
+CREATE UNIQUE INDEX users_email_uindex ON public.users USING btree (email);
 
 
 --
@@ -378,14 +312,6 @@ CREATE UNIQUE INDEX users_id_uindex ON public.users USING btree (id);
 --
 
 CREATE UNIQUE INDEX users_username_uindex ON public.users USING btree (username);
-
-
---
--- Name: user_details user_details_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_details
-    ADD CONSTRAINT user_details_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
@@ -404,5 +330,4 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20191207174450'),
     ('20191207194321'),
     ('20191207194641'),
-    ('20191219081947'),
-    ('20191219114442');
+    ('20191219081947');

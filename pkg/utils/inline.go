@@ -33,3 +33,24 @@ func FirstNonNil(values ...interface{}) interface{} {
 	}
 	return nil
 }
+
+// ContainsString returns true if a string is present in a iteratee.
+func ContainsString(s []string, v string) bool {
+	for _, vv := range s {
+		if vv == v {
+			return true
+		}
+	}
+	return false
+}
+
+// ContainsStrings returns true if a strings is present in a iteratee.
+func ContainsStrings(s []string, v []string) bool {
+	count := 0
+	for _, v1 := range s {
+		if ContainsString(v, v1) {
+			count++
+		}
+	}
+	return count == len(v)
+}
