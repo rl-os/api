@@ -140,3 +140,25 @@ type RankHistory struct {
 	Mode string `json:"mode"`
 	Data []int  `json:"data"`
 }
+
+// GetShort version of user
+func (u *User) GetShort() UserShort {
+	return UserShort{
+		ID:            u.ID,
+		Username:      u.Username,
+		Email:         u.Email,
+		PasswordHash:  u.PasswordHash,
+		IsBot:         u.IsBot,
+		IsActive:      u.IsActive,
+		IsSupporter:   u.IsSupporter,
+		HasSupported:  u.HasSupported,
+		SupportLevel:  u.SupportLevel,
+		PmFriendsOnly: u.PmFriendsOnly,
+		AvatarURL:     u.AvatarURL,
+		CountryCode:   u.CountryCode,
+		DefaultGroup:  u.DefaultGroup,
+		LastVisit:     u.LastVisit,
+		JoinDate:      u.JoinDate,
+		IsOnline:      u.IsOnline,
+	}
+}

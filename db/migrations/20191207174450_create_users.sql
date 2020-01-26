@@ -13,8 +13,8 @@ create table users
     has_supported   bool      default false             not null,
     support_level   int       default 0                 not null,
     pm_friends_only bool      default false             not null,
-    avatar_url      varchar   default ''                not null,
-    country_code    varchar   default ''                not null,
+    avatar_url      varchar   default 'https://301222.selcdn.ru/akasi/avatars/1.png' not null,
+    country_code    varchar   default '-'               not null,
     default_group   varchar   default 'osu'             not null,
     can_moderate    bool      default false             not null,
     interests       varchar   default                   null,
@@ -28,7 +28,7 @@ create table users
     discord         varchar   default                   null,
     playstyle       varchar   array default '{}'        not null,
     playmode        varchar   default ''                not null,
-    cover_url       varchar   default ''                not null,
+    cover_url       varchar   default 'https://301222.selcdn.ru/akasi/bg/1.jpg' not null,
     max_blocks      int       default 50                not null,
     max_friends     int       default 100               not null
 );

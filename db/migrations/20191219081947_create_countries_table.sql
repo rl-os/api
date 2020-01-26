@@ -90,6 +90,7 @@ INSERT INTO countries (code, name) VALUES ('ZA', 'South Africa');
 INSERT INTO countries (code, name) VALUES ('AU', 'Australia');
 INSERT INTO countries (code, name) VALUES ('CA', 'Canada');
 INSERT INTO countries (code, name) VALUES ('US', 'United States');
+INSERT INTO countries (code, name) VALUES ('-', 'None');
 
 -- migrate:down
 drop index countries_code_uindex;
