@@ -166,7 +166,8 @@ CREATE TABLE public.users (
     playmode character varying DEFAULT ''::character varying NOT NULL,
     cover_url character varying DEFAULT 'https://301222.selcdn.ru/akasi/bg/1.jpg'::character varying NOT NULL,
     max_blocks integer DEFAULT 50 NOT NULL,
-    max_friends integer DEFAULT 100 NOT NULL
+    max_friends integer DEFAULT 100 NOT NULL,
+    support_expired_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -330,4 +331,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20191207174450'),
     ('20191207194321'),
     ('20191207194641'),
-    ('20191219081947');
+    ('20191219081947'),
+    ('20200127085610');

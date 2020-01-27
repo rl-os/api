@@ -36,9 +36,9 @@ func TestCreateOAuthToken(t *testing.T) {
 func TestRefreshOAuthToken(t *testing.T) {
 	type args struct {
 		refreshToken string
-		clientID uint
-		secretID string
-		scopes   string
+		clientID     uint
+		secretID     string
+		scopes       string
 	}
 	tests := []struct {
 		name           string
