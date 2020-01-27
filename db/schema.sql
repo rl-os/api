@@ -14,6 +14,39 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: channels; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.channels (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    description character varying NOT NULL,
+    type character varying NOT NULL,
+    icon character varying
+);
+
+
+--
+-- Name: channels_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.channels_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: channels_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.channels_id_seq OWNED BY public.channels.id;
+
+
+--
 -- Name: countries; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -133,6 +166,37 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: user_channels; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_channels (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    channel_id integer NOT NULL
+);
+
+
+--
+-- Name: user_channels_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_channels_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_channels_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_channels_id_seq OWNED BY public.user_channels.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -192,6 +256,13 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: channels id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.channels ALTER COLUMN id SET DEFAULT nextval('public.channels_id_seq'::regclass);
+
+
+--
 -- Name: countries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -213,10 +284,25 @@ ALTER TABLE ONLY public.oauth_token ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: user_channels id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_channels ALTER COLUMN id SET DEFAULT nextval('public.user_channels_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: channels channels_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.channels
+    ADD CONSTRAINT channels_pk PRIMARY KEY (id);
 
 
 --
@@ -252,11 +338,26 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: user_channels user_channels_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_channels
+    ADD CONSTRAINT user_channels_pk PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pk; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pk PRIMARY KEY (id);
+
+
+--
+-- Name: channels_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX channels_id_index ON public.channels USING btree (id);
 
 
 --
@@ -295,6 +396,27 @@ CREATE UNIQUE INDEX oauth_token_id_uindex ON public.oauth_token USING btree (id)
 
 
 --
+-- Name: table_name_name_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX table_name_name_index ON public.channels USING btree (name);
+
+
+--
+-- Name: user_channels_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX user_channels_id_uindex ON public.user_channels USING btree (id);
+
+
+--
+-- Name: user_channels_user_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX user_channels_user_id_index ON public.user_channels USING btree (user_id);
+
+
+--
 -- Name: users_email_uindex; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -316,6 +438,22 @@ CREATE UNIQUE INDEX users_username_uindex ON public.users USING btree (username)
 
 
 --
+-- Name: user_channels user_channels_channels_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_channels
+    ADD CONSTRAINT user_channels_channels_id_fk FOREIGN KEY (channel_id) REFERENCES public.channels(id) ON DELETE CASCADE;
+
+
+--
+-- Name: user_channels user_channels_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_channels
+    ADD CONSTRAINT user_channels_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -332,4 +470,8 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20191207194321'),
     ('20191207194641'),
     ('20191219081947'),
-    ('20200127085610');
+    ('20200127085610'),
+    ('20200127091253'),
+    ('20200127092843'),
+    ('20200127093220'),
+    ('20200127094841');

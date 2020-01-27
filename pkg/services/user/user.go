@@ -79,6 +79,7 @@ func Register(username string, email string, password string) (*entity.User, err
 			username, email, hashed,
 		)
 		if err != nil {
+			log.Err(err).Send()
 			return nil, pkg.NewHTTPError(http.StatusBadRequest, "create_user_error", "Registration info is are incorrect.")
 		}
 	}

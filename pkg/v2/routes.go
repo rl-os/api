@@ -2,6 +2,7 @@ package v2
 
 import (
 	"github.com/deissh/osu-api-server/pkg/middlewares/permission"
+	"github.com/deissh/osu-api-server/pkg/v2/channels"
 	"github.com/deissh/osu-api-server/pkg/v2/users"
 	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
@@ -60,10 +61,12 @@ func ApplyRoutes(r *echo.Group) {
 		v2.PUT("/rooms/:room/playlist/:playlist/scores/:score", empty)
 
 		// === Chats ===
+		// TODO: use subgroups with permission.MustLogin
 		v2.POST("/chat/new", empty, permission.MustLogin)
 		v2.GET("/chat/updates", empty, permission.MustLogin)
 		v2.GET("/chat/presence", empty, permission.MustLogin) // ???
-		v2.GET("/chat/channels", empty, permission.MustLogin)
+		v2.GET("/chat/channels", channels.GetAll)
+		v2.GET("/chat/channels/joined", channels.GetJoinedAll, permission.MustLogin)
 		v2.GET("/chat/channels/:channel/messages", empty, permission.MustLogin)
 		v2.POST("/chat/channels/:channel/messages", empty, permission.MustLogin)
 		v2.PUT("/chat/channels/:channel/users/:user", empty, permission.MustLogin)
