@@ -11,4 +11,5 @@ echo "  >  Installing unnessosory packages"
 go get -u golang.org/x/lint/golint
 go get -u github.com/fzipp/gocyclo
 go get -u golang.org/x/tools/cmd/goimports
+go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
 wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.15.0
