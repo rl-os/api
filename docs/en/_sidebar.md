@@ -3,8 +3,8 @@
 * [Changelog](/changelog/)
 * API
   * [OAuth](/oauth/)
-  * [Current user](/oauth/)
-  * [Users](/oauth/)
+  * [Current user](/me/)
+  * [Users](/users/)
   * [Beatmaps](/beatmaps/)
   * [Scores](/scores/)
   * [Chats](/chat/)
