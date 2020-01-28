@@ -1,3 +1,14 @@
 * [Home](/)
-* Server
+* [Versions](/versions/)
+* [Changelog](/changelog/)
+* API
   * [OAuth](/oauth/)
+  * [Current user](/oauth/)
+  * [Users](/oauth/)
+  * [Beatmaps](/beatmaps/)
+  * [Scores](/scores/)
+  * [Chats](/chat/)
+  * [Rooms](/rooms/)
+  * [Comments](/comments/)
+  * [Notifications](/notifications/)
+  * [Misc](/misc/)
