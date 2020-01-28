@@ -1,6 +1,9 @@
 package entity
 
-import "time"
+import (
+	"github.com/jmoiron/sqlx/types"
+	"time"
+)
 
 type ChatMessage struct {
 	ID        uint      `json:"message_id" db:"id"`
@@ -10,5 +13,5 @@ type ChatMessage struct {
 	Content   string    `json:"content" db:"content"`
 	IsAction  bool      `json:"is_action" db:"is_action"`
 
-	Sender *UserShort `json:"sender"`
+	Sender types.JSONText `json:"sender"`
 }

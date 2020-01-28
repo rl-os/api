@@ -2,7 +2,6 @@ package v2
 
 import (
 	"github.com/deissh/osu-api-server/pkg/middlewares/permission"
-	"github.com/deissh/osu-api-server/pkg/v2/channels"
 	"github.com/deissh/osu-api-server/pkg/v2/chats"
 	"github.com/deissh/osu-api-server/pkg/v2/users"
 	"github.com/gin-gonic/gin"
@@ -37,7 +36,7 @@ func ApplyRoutes(r *echo.Group) {
 		v2.GET("/users/:user/beatmapsets/:type", empty)
 		v2.GET("/users/:user/recent_activity", empty)
 		v2.GET("/users/:user/:mode", users.GetUserByID)
-		v2.GET("/users/:user", users.GetUserByID)
+		v2.GET("/users/:user/", users.GetUserByID)
 
 		// === Beatmaps ===
 		v2.GET("/beatmaps/lookup", empty)
@@ -62,14 +61,14 @@ func ApplyRoutes(r *echo.Group) {
 		v2.PUT("/rooms/:room/playlist/:playlist/scores/:score", empty)
 
 		// === Chats ===
-		v2Chat := v2.Group("/chat")
+		v2Chat := v2.Group("/chat", permission.MustLogin)
 		{
 			v2Chat.POST("/new", empty)
-			v2Chat.GET("/updates", empty)
+			v2Chat.GET("/updates", chats.ChannelUpdatesHandler)
 			v2Chat.GET("/presence", empty) // ???
-			v2Chat.GET("/channels", channels.GetAll)
-			v2Chat.GET("/channels/joined", channels.GetJoinedAll)
-			v2Chat.GET("/channels/:channel/messages", empty)
+			v2Chat.GET("/channels", chats.GetAll)
+			v2Chat.GET("/channels/joined", chats.GetJoinedAll)
+			v2Chat.GET("/channels/:channel/messages", chats.GetAllMessages)
 			v2Chat.POST("/channels/:channel/messages", chats.ChannelSendHandler)
 			v2Chat.PUT("/channels/:channel/users/:user", empty)
 			v2Chat.DELETE("/channels/:channel/users/:user", empty)

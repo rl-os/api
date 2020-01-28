@@ -1,4 +1,4 @@
-package channels
+package chats
 
 import (
 	"github.com/deissh/osu-api-server/pkg"

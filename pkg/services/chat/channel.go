@@ -3,10 +3,30 @@ package chat
 import (
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/entity"
-	"github.com/deissh/osu-api-server/pkg/services/user"
 	"github.com/rs/zerolog/log"
 	"net/http"
 )
+
+// GetChannels of all joinable public channels
+func GetChannel(id uint) (*entity.Channel, error) {
+	var channel entity.Channel
+
+	err := pkg.Db.Get(
+		&channel,
+		`SELECT channels.id, name, description, type, icon
+				FROM channels
+				WHERE id = $1`,
+		id,
+	)
+	if err != nil {
+		log.Debug().
+			Err(err).
+			Msg("public channels not found")
+		return nil, pkg.NewHTTPError(http.StatusNotFound, "chat_channels", "Channel not found.")
+	}
+
+	return &channel, nil
+}
 
 // GetChannels of all joinable public channels
 func GetChannels() (*[]entity.Channel, error) {
@@ -40,7 +60,7 @@ func GetChannels() (*[]entity.Channel, error) {
 
 // GetChannels of all user channels
 func GetUserChannels(userId uint) (*[]entity.Channel, error) {
-	var defaultChannels []entity.Channel
+	defaultChannels := make([]entity.Channel, 0)
 
 	err := pkg.Db.Select(
 		&defaultChannels,
@@ -60,32 +80,28 @@ func GetUserChannels(userId uint) (*[]entity.Channel, error) {
 	return &defaultChannels, nil
 }
 
-func SendMessage(senderId uint, channelId uint, content string, IsAction bool) (*entity.ChatMessage, error) {
-	var message entity.ChatMessage
-
-	err := pkg.Db.Get(
-		&message,
-		`INSERT INTO message (sender_id, channel_id, content, is_action)
-				VALUES ($1, $2, $3, $4)
-				RETURNING *`,
-		senderId,
-		channelId,
-		content,
-		IsAction,
-	)
-	if err != nil {
-		log.Debug().
-			Err(err).
-			Msg("message not send")
-		return nil, pkg.NewHTTPError(http.StatusBadRequest, "channel_message", "Message not send.")
+// GetUpdates from *since* in channel_id
+func GetUpdates(userId uint, since uint, channelId uint, limit uint) (*entity.ChannelUpdates, error) {
+	var updates entity.ChannelUpdates
+	if limit <= 0 || limit > 50 {
+		limit = 25
 	}
 
-	res, err := user.GetUser(message.SenderId, "")
+	if channelId == 0 {
+		channels, err := GetUserChannels(userId)
+		if err != nil {
+			return nil, err
+		}
+
+		updates.Presence = *channels
+	}
+
+
+	messages, err := GetMessagesAll(userId, since)
 	if err != nil {
 		return nil, err
 	}
+	updates.Messages = *messages
 
-	message.Sender = res.GetShort()
-
-	return &message, nil
+	return &updates, nil
 }
