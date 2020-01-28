@@ -13,7 +13,9 @@ type Channel struct {
 	Name        string           `json:"name" db:"name"`
 	Description string           `json:"description" db:"description"`
 	Type        string           `json:"type" db:"type"`
-	Icon        utils.NullString `json:"icon"`
+	Icon        utils.NullString `json:"icon" db:"icon"`
+
+	Users []uint `json:"users" db:"user_id"`
 }
 
 func (c *Channel) Check() error {
@@ -22,11 +24,4 @@ func (c *Channel) Check() error {
 	}
 
 	return nil
-}
-
-// ChannelWithUsers data struct but with user ids
-type ChannelWithUsers struct {
-	Channel
-
-	Users []uint `json:"users" db:"user_id"`
 }
