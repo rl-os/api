@@ -3,6 +3,7 @@ package v2
 import (
 	"github.com/deissh/osu-api-server/pkg/middlewares/permission"
 	"github.com/deissh/osu-api-server/pkg/v2/channels"
+	"github.com/deissh/osu-api-server/pkg/v2/chats"
 	"github.com/deissh/osu-api-server/pkg/v2/users"
 	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
@@ -61,27 +62,32 @@ func ApplyRoutes(r *echo.Group) {
 		v2.PUT("/rooms/:room/playlist/:playlist/scores/:score", empty)
 
 		// === Chats ===
-		// TODO: use subgroups with permission.MustLogin
-		v2.POST("/chat/new", empty, permission.MustLogin)
-		v2.GET("/chat/updates", empty, permission.MustLogin)
-		v2.GET("/chat/presence", empty, permission.MustLogin) // ???
-		v2.GET("/chat/channels", channels.GetAll)
-		v2.GET("/chat/channels/joined", channels.GetJoinedAll, permission.MustLogin)
-		v2.GET("/chat/channels/:channel/messages", empty, permission.MustLogin)
-		v2.POST("/chat/channels/:channel/messages", empty, permission.MustLogin)
-		v2.PUT("/chat/channels/:channel/users/:user", empty, permission.MustLogin)
-		v2.DELETE("/chat/channels/:channel/users/:user", empty, permission.MustLogin)
-		v2.PUT("/chat/channels/:channel/mark-as-read/:message", empty, permission.MustLogin)
+		v2Chat := v2.Group("/chat")
+		{
+			v2Chat.POST("/new", empty)
+			v2Chat.GET("/updates", empty)
+			v2Chat.GET("/presence", empty) // ???
+			v2Chat.GET("/channels", channels.GetAll)
+			v2Chat.GET("/channels/joined", channels.GetJoinedAll)
+			v2Chat.GET("/channels/:channel/messages", empty)
+			v2Chat.POST("/channels/:channel/messages", chats.ChannelSendHandler)
+			v2Chat.PUT("/channels/:channel/users/:user", empty)
+			v2Chat.DELETE("/channels/:channel/users/:user", empty)
+			v2Chat.PUT("/channels/:channel/mark-as-read/:message", empty)
+		}
 
 		// === Comments ===
-		v2.GET("/comments", empty)
-		v2.POST("/comments", empty)
-		v2.GET("/comments/:comment", empty)
-		v2.PUT("/comments/:comment", empty)
-		v2.PATCH("/comments/:comment", empty)
-		v2.DELETE("/comments/:comment", empty)
-		v2.POST("/comments/:comment/vote", empty)
-		v2.DELETE("/comments/:comment/vote", empty)
+		v2Comments := v2.Group("/comments")
+		{
+			v2Comments.GET("/", empty)
+			v2Comments.POST("/", empty)
+			v2Comments.GET("/:comment", empty)
+			v2Comments.PUT("/:comment", empty)
+			v2Comments.PATCH("/:comment", empty)
+			v2Comments.DELETE("/:comment", empty)
+			v2Comments.POST("/:comment/vote", empty)
+			v2Comments.DELETE("/:comment/vote", empty)
+		}
 
 		// === Notifications ===
 		v2.GET("/notifications", empty)
