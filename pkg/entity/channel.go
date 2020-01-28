@@ -3,6 +3,7 @@ package entity
 import (
 	"errors"
 	"github.com/deissh/osu-api-server/pkg/utils"
+	"github.com/lib/pq"
 )
 
 var allowedTypes = []string{"PUBLIC", "PRIVATE", "MULTIPLAYER", "SPECTATOR", "TEMPORARY", "PM", "GROUP"}
@@ -13,7 +14,9 @@ type Channel struct {
 	Name        string           `json:"name" db:"name"`
 	Description string           `json:"description" db:"description"`
 	Type        string           `json:"type" db:"type"`
-	Icon        utils.NullString `json:"icon"`
+	Icon        utils.NullString `json:"icon,omitempty" db:"icon"`
+
+	Users pq.Int64Array `json:"users,omitempty" db:"users"`
 }
 
 func (c *Channel) Check() error {
@@ -22,11 +25,4 @@ func (c *Channel) Check() error {
 	}
 
 	return nil
-}
-
-// ChannelWithUsers data struct but with user ids
-type ChannelWithUsers struct {
-	Channel
-
-	Users []uint `json:"users" db:"user_id"`
 }

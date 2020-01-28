@@ -85,6 +85,40 @@ ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
 
 
 --
+-- Name: message; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.message (
+    id integer NOT NULL,
+    sender_id integer NOT NULL,
+    channel_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    content character varying NOT NULL,
+    is_action boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: message_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.message_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: message_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.message_id_seq OWNED BY public.message.id;
+
+
+--
 -- Name: oauth_client; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -270,6 +304,13 @@ ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.co
 
 
 --
+-- Name: message id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.message ALTER COLUMN id SET DEFAULT nextval('public.message_id_seq'::regclass);
+
+
+--
 -- Name: oauth_client id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -311,6 +352,14 @@ ALTER TABLE ONLY public.channels
 
 ALTER TABLE ONLY public.countries
     ADD CONSTRAINT countries_pk PRIMARY KEY (id);
+
+
+--
+-- Name: message message_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.message
+    ADD CONSTRAINT message_pk PRIMARY KEY (id);
 
 
 --
@@ -382,6 +431,27 @@ CREATE UNIQUE INDEX countries_name_uindex ON public.countries USING btree (name)
 
 
 --
+-- Name: message_channel_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX message_channel_id_index ON public.message USING btree (channel_id);
+
+
+--
+-- Name: message_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX message_id_uindex ON public.message USING btree (id);
+
+
+--
+-- Name: message_sender_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX message_sender_id_index ON public.message USING btree (sender_id);
+
+
+--
 -- Name: oauth_client_id_uindex; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -438,6 +508,22 @@ CREATE UNIQUE INDEX users_username_uindex ON public.users USING btree (username)
 
 
 --
+-- Name: message message_channels_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.message
+    ADD CONSTRAINT message_channels_id_fk FOREIGN KEY (channel_id) REFERENCES public.channels(id);
+
+
+--
+-- Name: message message_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.message
+    ADD CONSTRAINT message_users_id_fk FOREIGN KEY (sender_id) REFERENCES public.users(id);
+
+
+--
 -- Name: user_channels user_channels_channels_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -474,4 +560,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200127091253'),
     ('20200127092843'),
     ('20200127093220'),
-    ('20200127094841');
+    ('20200127094841'),
+    ('20200128070351');
