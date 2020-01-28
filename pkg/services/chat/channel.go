@@ -13,9 +13,14 @@ func GetChannels() (*[]entity.Channel, error) {
 
 	err := pkg.Db.Select(
 		&defaultChannels,
-		`SELECT channels.id, channels.name, channels.description, channels.type, channels.icon
+		`SELECT
+       				channels.id, channels.name, channels.description,
+       				channels.type, channels.icon,
+       				array_remove(array_agg(uc.user_id), null) as users
 				FROM channels
-				WHERE channels.type = 'PUBLIC';`,
+				FULL OUTER JOIN user_channels uc on channels.id = uc.channel_id
+				WHERE channels.type = 'PUBLIC'
+				GROUP BY channels.id, uc.user_id;`,
 	)
 	if err != nil {
 		log.Debug().
