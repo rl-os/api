@@ -98,7 +98,7 @@ func GetMessagesAll(userId uint, since uint) (*[]entity.ChatMessage, error) {
 				INNER JOIN user_channels uc on uc.channel_id = message.channel_id
 				INNER JOIN users u on message.sender_id = u.id
 				INNER JOIN channels c on message.channel_id = c.id
-			WHERE (uc.user_id = $1 OR c.type = 'PUBLIC') AND message.id >= $2
+			WHERE uc.user_id = $1 AND message.id >= $2
 			GROUP BY message.id, u.id
 			ORDER BY message.id`,
 		userId,

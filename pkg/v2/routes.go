@@ -70,8 +70,8 @@ func ApplyRoutes(r *echo.Group) {
 			v2Chat.GET("/channels/joined", chats.GetJoinedAll)
 			v2Chat.GET("/channels/:channel/messages", chats.GetAllMessages)
 			v2Chat.POST("/channels/:channel/messages", chats.ChannelSendHandler)
-			v2Chat.PUT("/channels/:channel/users/:user", empty)
-			v2Chat.DELETE("/channels/:channel/users/:user", empty)
+			v2Chat.PUT("/channels/:channel/users/:user", chats.Join)
+			v2Chat.DELETE("/channels/:channel/users/:user", chats.Leave)
 			v2Chat.PUT("/channels/:channel/mark-as-read/:message", empty)
 		}
 

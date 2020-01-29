@@ -13,9 +13,19 @@ func GetChannel(id uint) (*entity.Channel, error) {
 
 	err := pkg.Db.Get(
 		&channel,
-		`SELECT channels.id, name, description, type, icon
-				FROM channels
-				WHERE id = $1`,
+		`SELECT
+       				channels.id, channels.name, channels.description,
+       				channels.type, channels.icon,
+       				array_remove(array_agg(uc.user_id), null) as users
+				FROM user_channels AS uc
+				FULL OUTER JOIN (SELECT
+					cu.channel_id
+				  	FROM user_channels AS cu
+				  	ORDER BY channel_id DESC
+				) as uc2 ON uc.id = uc2.channel_id
+				FULL OUTER JOIN channels on uc.channel_id = channels.id
+				WHERE channels.id = $1
+				GROUP BY channels.id;`,
 		id,
 	)
 	if err != nil {
@@ -96,7 +106,6 @@ func GetUpdates(userId uint, since uint, channelId uint, limit uint) (*entity.Ch
 		updates.Presence = *channels
 	}
 
-
 	messages, err := GetMessagesAll(userId, since)
 	if err != nil {
 		return nil, err
@@ -104,4 +113,45 @@ func GetUpdates(userId uint, since uint, channelId uint, limit uint) (*entity.Ch
 	updates.Messages = *messages
 
 	return &updates, nil
+}
+
+// Join user to channel
+func Join(userId uint, channelId uint) (*entity.Channel, error) {
+	_, err := pkg.Db.Exec(
+		`INSERT INTO user_channels (user_id, channel_id)
+				VALUES ($1, $2)`,
+		userId,
+		channelId,
+	)
+	if err != nil {
+		log.Debug().
+			Err(err).
+			Uint("channel_id", channelId).
+			Uint("user_id", userId).
+			Msg("user not joined to channel")
+		return nil, pkg.NewHTTPError(http.StatusBadRequest, "chat_channels", "User not joined to channel.")
+	}
+
+	channel, err := GetChannel(channelId)
+	return channel, nil
+}
+
+// Leave user to channel
+func Leave(userId uint, channelId uint) error {
+	_, err := pkg.Db.Exec(
+		`DELETE FROM user_channels
+    			WHERE user_id = $1 AND channel_id = $2`,
+		userId,
+		channelId,
+	)
+	if err != nil {
+		log.Debug().
+			Err(err).
+			Uint("channel_id", channelId).
+			Uint("user_id", userId).
+			Msg("user not leave from channel")
+		return pkg.NewHTTPError(http.StatusBadRequest, "chat_channels", "User not leaved to channel.")
+	}
+
+	return nil
 }
