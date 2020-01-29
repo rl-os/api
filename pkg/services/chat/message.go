@@ -50,8 +50,12 @@ func SendMessage(senderId uint, channelId uint, content string, IsAction bool) (
 	return &message, nil
 }
 
-func GetMessages(channelId uint) (*[]entity.ChatMessage, error) {
-	var messages []entity.ChatMessage
+func GetMessages(channelId uint, limit uint) (*[]entity.ChatMessage, error) {
+	messages := make([]entity.ChatMessage, 0)
+
+	if limit <= 0 || limit > 50 {
+		limit = 25
+	}
 
 	err := pkg.Db.Select(
 		&messages,
@@ -63,8 +67,11 @@ func GetMessages(channelId uint) (*[]entity.ChatMessage, error) {
 			    'is_supporter', u.is_supporter, 'is_online', false) as sender
 		FROM message
 		INNER JOIN users u on message.sender_id = u.id
-		WHERE message.channel_id = $1`,
+		WHERE message.channel_id = $1
+		ORDER BY message.id
+		LIMIT $2`,
 		channelId,
+		limit,
 	)
 	if err != nil {
 		log.Debug().
@@ -82,15 +89,18 @@ func GetMessagesAll(userId uint, since uint) (*[]entity.ChatMessage, error) {
 	err := pkg.Db.Select(
 		&messages,
 		`SELECT
-			message.id, message.sender_id, message.channel_id,
-			message.created_at, message.content, message.is_action,
-			json_build_object('id', u.id, 'username', u.username, 'avatar_url', u.avatar_url,
-			    'country_code', u.country_code, 'is_active', u.is_active, 'is_bot', u.is_bot,
-			    'is_supporter', u.is_supporter, 'is_online', false) as sender
-		FROM message
-		INNER JOIN user_channels uc on message.channel_id = uc.id
-		INNER JOIN users u on message.sender_id = u.id
-		WHERE message.sender_id = $1 AND message.id >= $2`,
+				message.id, message.sender_id, message.channel_id,
+				message.created_at, message.content, message.is_action,
+				json_build_object('id', u.id, 'username', u.username, 'avatar_url', u.avatar_url,
+								  'country_code', u.country_code, 'is_active', u.is_active, 'is_bot', u.is_bot,
+								  'is_supporter', u.is_supporter, 'is_online', false) as sender
+			FROM message
+				INNER JOIN user_channels uc on uc.channel_id = message.channel_id
+				INNER JOIN users u on message.sender_id = u.id
+				INNER JOIN channels c on message.channel_id = c.id
+			WHERE (uc.user_id = $1 OR c.type = 'PUBLIC') AND message.id >= $2
+			GROUP BY message.id, u.id
+			ORDER BY message.id`,
 		userId,
 		since,
 	)
