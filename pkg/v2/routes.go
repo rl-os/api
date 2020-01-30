@@ -69,7 +69,7 @@ func ApplyRoutes(r *echo.Group) {
 		// === Chats ===
 		v2Chat := v2.Group("/chat", permission.MustLogin)
 		{
-			v2Chat.POST("/new", empty)
+			v2Chat.POST("/new", chats.NewPm)
 			v2Chat.GET("/updates", chats.ChannelUpdatesHandler)
 			v2Chat.GET("/presence", empty) // ???
 			v2Chat.GET("/channels", chats.GetAll)

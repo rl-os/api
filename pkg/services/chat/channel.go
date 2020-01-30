@@ -3,6 +3,7 @@ package chat
 import (
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/entity"
+	"github.com/deissh/osu-api-server/pkg/services/user"
 	"github.com/rs/zerolog/log"
 	"net/http"
 )
@@ -74,10 +75,19 @@ func GetUserChannels(userId uint) (*[]entity.Channel, error) {
 
 	err := pkg.Db.Select(
 		&defaultChannels,
-		`SELECT channels.id, name, description, type, icon
-				FROM channels
-				INNER JOIN user_channels uc on channels.id = uc.channel_id
-				WHERE type = 'PUBLIC' AND user_id = $1`,
+		`SELECT
+			channels.id, channels.name, channels.description,
+			channels.type, channels.icon,
+			array_remove(array_agg(uc.user_id), null) as users
+		FROM user_channels AS uc
+				 FULL OUTER JOIN (SELECT
+									  cu.channel_id
+								  FROM user_channels AS cu
+								  ORDER BY channel_id DESC
+		) as uc2 ON uc.id = uc2.channel_id
+				 FULL OUTER JOIN channels on uc.channel_id = channels.id
+		WHERE uc.user_id = $1 OR uc.channel_id = channels.id
+		GROUP BY channels.id;`,
 		userId,
 	)
 	if err != nil {
@@ -154,4 +164,63 @@ func Leave(userId uint, channelId uint) error {
 	}
 
 	return nil
+}
+
+// GetPm channel or create new if not exist
+func GetPm(userId uint, secondId uint) (*entity.Channel, error) {
+	var channel entity.Channel
+
+	secondUser, err := user.GetUser(secondId, "")
+	if err != nil {
+		return nil, err
+	}
+
+	err = pkg.Db.Get(
+		&channel,
+		`INSERT INTO channels (name, description, type, icon)
+				VALUES ($1, '-', 'PM', DEFAULT)
+				RETURNING *`,
+		secondUser.Username,
+	)
+	if err != nil {
+		log.Debug().
+			Err(err).
+			Msg("pm channels not created")
+		return nil, pkg.NewHTTPError(http.StatusBadRequest, "chat_channels", "Pm channels not created.")
+	}
+
+	_, err = Join(userId, channel.ID)
+	if err != nil {
+		return nil, err
+	}
+	_, err = Join(secondId, channel.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &channel, err
+}
+
+// NewPm between two users
+func NewPm(userId uint, targetId uint, content string, isAction bool) (*entity.ChannelNewPm, error) {
+	channel, err := GetPm(userId, targetId)
+	if err != nil {
+		return nil, err
+	}
+
+	message, err := SendMessage(userId, channel.ID, content, isAction)
+	if err != nil {
+		return nil, err
+	}
+
+	presence, err := GetUserChannels(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &entity.ChannelNewPm{
+		Id:       channel.ID,
+		Messages: *message,
+		Presence: *presence,
+	}, nil
 }
