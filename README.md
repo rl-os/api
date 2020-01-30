@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="http://pre00.deviantart.net/141d/th/pre/f/2016/115/a/8/osu__logo_by_shadowthegod-da05j13.png" alt="logo" width="400" />
+  <img src="https://i.imgur.com/BDMASne.png" alt="logo" width="400" />
 </p>
 
 <h1 align="center"></h1>
