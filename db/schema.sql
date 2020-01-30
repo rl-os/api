@@ -573,7 +573,7 @@ CREATE UNIQUE INDEX users_username_uindex ON public.users USING btree (username)
 --
 
 ALTER TABLE ONLY public.message
-    ADD CONSTRAINT message_channels_id_fk FOREIGN KEY (channel_id) REFERENCES public.channels(id);
+    ADD CONSTRAINT message_channels_id_fk FOREIGN KEY (channel_id) REFERENCES public.channels(id) ON DELETE CASCADE;
 
 
 --
@@ -639,4 +639,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200127093220'),
     ('20200127094841'),
     ('20200128070351'),
-    ('20200130072128');
+    ('20200130072128'),
+    ('20200130133637');

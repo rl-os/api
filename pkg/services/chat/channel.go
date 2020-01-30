@@ -149,6 +149,15 @@ func Join(userId uint, channelId uint) (*entity.Channel, error) {
 // Leave user to channel
 func Leave(userId uint, channelId uint) error {
 	_, err := pkg.Db.Exec(
+		`DELETE FROM channels
+    			WHERE id = $1 AND type = 'PM'`,
+		channelId,
+	)
+	if err != nil {
+		return pkg.NewHTTPError(http.StatusBadRequest, "chat_channels", "User not leaved to channel.")
+	}
+
+	_, err = pkg.Db.Exec(
 		`DELETE FROM user_channels
     			WHERE user_id = $1 AND channel_id = $2`,
 		userId,
