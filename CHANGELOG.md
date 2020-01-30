@@ -2,6 +2,29 @@
 ## [Unreleased]
 
 
+<a name="vv0.1.0"></a>
+## [vv0.1.0] - 2020-01-30
+### Feat
+- add PM and loading private channels
+- add user relations and getting friends
+- add chat updates and getting message history
+- sending message and fix users in channels
+- add show users in channel
+- add CreateMessageTable migration
+- add git chglog generator
+
+### Fix
+- README.md logo
+- message channel id and leaving from channels
+- test running
+
+### Refactor
+- change entity struct
+
+### Pull Requests
+- Merge pull request [#23](https://github.com/deissh/osu-api-server/issues/23) from deissh/next
+
+
 <a name="v0.0.1"></a>
 ## v0.0.1 - 2020-01-28
 ### Chore
@@ -71,4 +94,5 @@
 - Merge pull request [#18](https://github.com/deissh/osu-api-server/issues/18) from deissh/feature/ci
 
 
-[Unreleased]: https://github.com/deissh/osu-api-server/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/deissh/osu-api-server/compare/vv0.1.0...HEAD
+[vv0.1.0]: https://github.com/deissh/osu-api-server/compare/v0.0.1...vv0.1.0
