@@ -8,14 +8,15 @@ import (
 	"net/http"
 )
 
+var modes = []string{"std", "mania", "catch", "taiko"}
+
 // GetUser and compute some fields
 func GetUser(id uint, mode string) (*entity.User, error) {
 	var user entity.User
 
-	log.Debug().
-		Uint("id", id).
-		Str("mode", mode).
-		Msg("Get detailed user")
+	if !utils.ContainsString(modes, mode) {
+		mode = "std"
+	}
 
 	err := pkg.Db.Get(
 		&user,

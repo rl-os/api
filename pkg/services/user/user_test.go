@@ -33,33 +33,6 @@ func TestGetUser(t *testing.T) {
 	}
 }
 
-func TestGetUserShort(t *testing.T) {
-	type args struct {
-		id   uint
-		mode string
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *entity.UserShort
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := GetUserShort(tt.args.id, tt.args.mode)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GetUserShort() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetUserShort() got = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestLoginByPassword(t *testing.T) {
 	type args struct {
 		username string

@@ -3,7 +3,6 @@ package entity
 import (
 	"fmt"
 	"github.com/deissh/osu-api-server/pkg"
-	"github.com/rs/zerolog/log"
 	"time"
 )
 
@@ -32,9 +31,6 @@ type UserShort struct {
 
 // Compute fields and return error if not successful
 func (u *UserShort) Compute() error {
-	log.Debug().
-		Msg("Computing user fields")
-
 	if err := pkg.Rb.Get(fmt.Sprintf("online_users::%d", u.ID)).Err(); err == nil {
 		u.IsOnline = true
 	}

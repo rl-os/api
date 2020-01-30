@@ -20,7 +20,7 @@ server:
       - Accept
 
   sentry:
-    enable: ${SERVER__SENTRY__ENABLE|true}
+    enable: ${SERVER__SENTRY__ENABLE|false}
     dsn: ${SERVER__SENTRY__DSN}
 
   jwt:
