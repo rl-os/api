@@ -231,6 +231,38 @@ ALTER SEQUENCE public.user_channels_id_seq OWNED BY public.user_channels.id;
 
 
 --
+-- Name: user_relation; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_relation (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    target_id integer NOT NULL,
+    friend boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: user_relation_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_relation_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_relation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_relation_id_seq OWNED BY public.user_relation.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -332,6 +364,13 @@ ALTER TABLE ONLY public.user_channels ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: user_relation id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_relation ALTER COLUMN id SET DEFAULT nextval('public.user_relation_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -392,6 +431,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 ALTER TABLE ONLY public.user_channels
     ADD CONSTRAINT user_channels_pk PRIMARY KEY (id);
+
+
+--
+-- Name: user_relation user_relation_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_relation
+    ADD CONSTRAINT user_relation_pk PRIMARY KEY (id);
 
 
 --
@@ -487,6 +534,20 @@ CREATE INDEX user_channels_user_id_index ON public.user_channels USING btree (us
 
 
 --
+-- Name: user_relation_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX user_relation_id_uindex ON public.user_relation USING btree (id);
+
+
+--
+-- Name: user_relation_user_id_target_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX user_relation_user_id_target_id_index ON public.user_relation USING btree (user_id, target_id);
+
+
+--
 -- Name: users_email_uindex; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -540,6 +601,22 @@ ALTER TABLE ONLY public.user_channels
 
 
 --
+-- Name: user_relation user_relation_target_id_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_relation
+    ADD CONSTRAINT user_relation_target_id_id_fk FOREIGN KEY (target_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: user_relation user_relation_users_id_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_relation
+    ADD CONSTRAINT user_relation_users_id_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -561,4 +638,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200127092843'),
     ('20200127093220'),
     ('20200127094841'),
-    ('20200128070351');
+    ('20200128070351'),
+    ('20200130072128');

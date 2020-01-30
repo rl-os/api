@@ -3,6 +3,7 @@ package v2
 import (
 	"github.com/deissh/osu-api-server/pkg/middlewares/permission"
 	"github.com/deissh/osu-api-server/pkg/v2/chats"
+	"github.com/deissh/osu-api-server/pkg/v2/friends"
 	"github.com/deissh/osu-api-server/pkg/v2/users"
 	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
@@ -28,7 +29,12 @@ func ApplyRoutes(r *echo.Group) {
 		v2.GET("/me/download-quota-check", empty, permission.MustLogin)
 
 		// === Friends ===
-		v2.GET("/friends", empty, permission.MustLogin)
+		v2Friends := v2.Group("/friends", permission.MustLogin)
+		{
+			v2Friends.GET("", friends.Get)
+			v2Friends.PUT("", friends.Put)
+			v2Friends.DELETE("", empty)
+		}
 
 		// === Users ===
 		v2.GET("/users/:user/kudosu", empty)
