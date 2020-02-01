@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/deissh/osu-api-server/pkg/common/utils"
 	"github.com/lib/pq"
+	"time"
 )
 
 var allowedTypes = []string{"PUBLIC", "PRIVATE", "MULTIPLAYER", "SPECTATOR", "TEMPORARY", "PM", "GROUP"}
@@ -15,8 +16,10 @@ type Channel struct {
 	Description string           `json:"description" db:"description"`
 	Type        string           `json:"type" db:"type"`
 	Icon        utils.NullString `json:"icon,omitempty" db:"icon"`
+	CreatedAt   time.Time        `json:"-" db:"created_at"`
 
-	Users pq.Int64Array `json:"users,omitempty" db:"users"`
+	Users       pq.Int64Array `json:"users,omitempty" db:"users"`
+	ActiveUsers pq.Int64Array `json:"-" db:"active_users"`
 }
 
 func (c *Channel) Check() error {

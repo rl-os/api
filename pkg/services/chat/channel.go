@@ -3,12 +3,11 @@ package chat
 import (
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/entity"
-	"github.com/deissh/osu-api-server/pkg/services/user"
 	"github.com/rs/zerolog/log"
 	"net/http"
 )
 
-// GetChannels of all joinable public channels
+// GetChannel by id
 func GetChannel(id uint) (*entity.Channel, error) {
 	var channel entity.Channel
 
@@ -16,17 +15,9 @@ func GetChannel(id uint) (*entity.Channel, error) {
 		&channel,
 		`SELECT
        				channels.id, channels.name, channels.description,
-       				channels.type, channels.icon,
-       				array_remove(array_agg(uc.user_id), null) as users
-				FROM user_channels AS uc
-				FULL OUTER JOIN (SELECT
-					cu.channel_id
-				  	FROM user_channels AS cu
-				  	ORDER BY channel_id DESC
-				) as uc2 ON uc.id = uc2.channel_id
-				FULL OUTER JOIN channels on uc.channel_id = channels.id
-				WHERE channels.id = $1
-				GROUP BY channels.id;`,
+       				channels.type, channels.icon, channels.active_users, channels.users
+				FROM channels
+				WHERE channels.id = $1;`,
 		id,
 	)
 	if err != nil {
@@ -47,17 +38,10 @@ func GetChannels() (*[]entity.Channel, error) {
 		&defaultChannels,
 		`SELECT
        				channels.id, channels.name, channels.description,
-       				channels.type, channels.icon,
-       				array_remove(array_agg(uc.user_id), null) as users
-				FROM user_channels AS uc
-				FULL OUTER JOIN (SELECT
-					cu.channel_id
-				  	FROM user_channels AS cu
-				  	ORDER BY channel_id DESC
-				) as uc2 ON uc.id = uc2.channel_id
-				FULL OUTER JOIN channels on uc.channel_id = channels.id
+       				channels.type, channels.icon, channels.active_users, channels.users
+				FROM channels
 				WHERE channels.type = 'PUBLIC'
-				GROUP BY channels.id;`,
+				ORDER BY channels.created_at;`,
 	)
 	if err != nil {
 		log.Debug().
@@ -76,18 +60,11 @@ func GetUserChannels(userId uint) (*[]entity.Channel, error) {
 	err := pkg.Db.Select(
 		&defaultChannels,
 		`SELECT
-			channels.id, channels.name, channels.description,
-			channels.type, channels.icon,
-			array_remove(array_agg(uc.user_id), null) as users
-		FROM user_channels AS uc
-				 FULL OUTER JOIN (SELECT
-									  cu.channel_id
-								  FROM user_channels AS cu
-								  ORDER BY channel_id DESC
-		) as uc2 ON uc.id = uc2.channel_id
-				 FULL OUTER JOIN channels on uc.channel_id = channels.id
-		WHERE uc.user_id = $1 OR uc.channel_id = channels.id
-		GROUP BY channels.id;`,
+       				channels.id, channels.name, channels.description,
+       				channels.type, channels.icon, channels.active_users, channels.users
+				FROM channels
+				WHERE channels.active_users @> ARRAY[$1]::int[]
+				ORDER BY channels.created_at;`,
 		userId,
 	)
 	if err != nil {
@@ -128,8 +105,10 @@ func GetUpdates(userId uint, since uint, channelId uint, limit uint) (*entity.Ch
 // Join user to channel
 func Join(userId uint, channelId uint) (*entity.Channel, error) {
 	_, err := pkg.Db.Exec(
-		`INSERT INTO user_channels (user_id, channel_id)
-				VALUES ($1, $2)`,
+		`UPDATE channels
+				SET users = array_append(array_remove(users, $1), $1),
+				    active_users = array_append(array_remove(active_users, $1), $1)
+				WHERE channels.id = $2;`,
 		userId,
 		channelId,
 	)
@@ -149,26 +128,13 @@ func Join(userId uint, channelId uint) (*entity.Channel, error) {
 // Leave user to channel
 func Leave(userId uint, channelId uint) error {
 	_, err := pkg.Db.Exec(
-		`DELETE FROM channels
-    			WHERE id = $1 AND type = 'PM'`,
-		channelId,
-	)
-	if err != nil {
-		return pkg.NewHTTPError(http.StatusBadRequest, "chat_channels", "User not leaved to channel.")
-	}
-
-	_, err = pkg.Db.Exec(
-		`DELETE FROM user_channels
-    			WHERE user_id = $1 AND channel_id = $2`,
+		`UPDATE channels
+				SET active_users = array_remove(active_users, $1)
+				WHERE channels.id = $2;`,
 		userId,
 		channelId,
 	)
 	if err != nil {
-		log.Debug().
-			Err(err).
-			Uint("channel_id", channelId).
-			Uint("user_id", userId).
-			Msg("user not leave from channel")
 		return pkg.NewHTTPError(http.StatusBadRequest, "chat_channels", "User not leaved to channel.")
 	}
 
@@ -179,32 +145,19 @@ func Leave(userId uint, channelId uint) error {
 func GetPm(userId uint, secondId uint) (*entity.Channel, error) {
 	var channel entity.Channel
 
-	secondUser, err := user.GetUser(secondId, "")
-	if err != nil {
-		return nil, err
-	}
-
-	err = pkg.Db.Get(
+	err := pkg.Db.Get(
 		&channel,
-		`INSERT INTO channels (name, description, type, icon)
-				VALUES ($1, '-', 'PM', DEFAULT)
+		`INSERT INTO channels (name, description, type, icon, users, active_users)
+				VALUES ('PM', '-', 'PM', DEFAULT, ARRAY[$1, $2]::int[], ARRAY[$1, $2]::int[])
 				RETURNING *`,
-		secondUser.Username,
+		userId,
+		secondId,
 	)
 	if err != nil {
 		log.Debug().
 			Err(err).
 			Msg("pm channels not created")
 		return nil, pkg.NewHTTPError(http.StatusBadRequest, "chat_channels", "Pm channels not created.")
-	}
-
-	_, err = Join(userId, channel.ID)
-	if err != nil {
-		return nil, err
-	}
-	_, err = Join(secondId, channel.ID)
-	if err != nil {
-		return nil, err
 	}
 
 	return &channel, err
