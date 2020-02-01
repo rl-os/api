@@ -2,7 +2,7 @@ package entity
 
 import (
 	"errors"
-	"github.com/deissh/osu-api-server/pkg/utils"
+	"github.com/deissh/osu-api-server/pkg/common/utils"
 	"github.com/lib/pq"
 )
 

@@ -2,7 +2,7 @@ package oauth
 
 import (
 	"github.com/deissh/osu-api-server/pkg"
-	"github.com/deissh/osu-api-server/pkg/utils"
+	"github.com/deissh/osu-api-server/pkg/common/utils"
 	"time"
 )
 
@@ -27,7 +27,7 @@ func CreateOAuthClient(userID uint, name string, redirect string) (client Client
 	err = pkg.Db.Get(
 		&client,
 		`INSERT INTO oauth_client (user_id, name, secret, redirect)
-				VALUES ($1, $2, $3)
+				VALUES ($1, $2, $3, $4)
 				RETURNING *`,
 		userID, name, secret, redirect,
 	)

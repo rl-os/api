@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/deissh/osu-api-server/pkg"
-	"github.com/deissh/osu-api-server/pkg/middlewares/customerror"
-	"github.com/deissh/osu-api-server/pkg/middlewares/customlogger"
-	"github.com/deissh/osu-api-server/pkg/middlewares/permission"
-	"github.com/deissh/osu-api-server/pkg/oauth"
-	"github.com/deissh/osu-api-server/pkg/v2"
+	"github.com/deissh/osu-api-server/pkg/common/middlewares/customerror"
+	"github.com/deissh/osu-api-server/pkg/common/middlewares/customlogger"
+	"github.com/deissh/osu-api-server/pkg/common/middlewares/permission"
+	"github.com/deissh/osu-api-server/pkg/controllers/oauth"
+	"github.com/deissh/osu-api-server/pkg/controllers/v2"
 	"github.com/getsentry/sentry-go"
 	sentryEcho "github.com/getsentry/sentry-go/echo"
 	"github.com/gookit/config/v2"
@@ -97,7 +97,7 @@ func main() {
 	}
 
 	log.Debug().
-		Msg("Mounting Echo routes")
+		Msg("Mounting Echo controllers")
 
 	oauth.ApplyRoutes(app.Group(""))
 	v2.ApplyRoutes(app.Group("/api"))

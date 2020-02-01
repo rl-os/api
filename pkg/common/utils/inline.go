@@ -45,6 +45,7 @@ func ContainsString(s []string, v string) bool {
 }
 
 // ContainsStrings returns true if a strings is present in a iteratee.
+// noinspection GoUnusedExportedFunction
 func ContainsStrings(s []string, v []string) bool {
 	count := 0
 	for _, v1 := range s {

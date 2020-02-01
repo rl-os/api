@@ -2,8 +2,8 @@ package user
 
 import (
 	"github.com/deissh/osu-api-server/pkg"
+	"github.com/deissh/osu-api-server/pkg/common/utils"
 	"github.com/deissh/osu-api-server/pkg/entity"
-	"github.com/deissh/osu-api-server/pkg/utils"
 	"github.com/rs/zerolog/log"
 	"net/http"
 )

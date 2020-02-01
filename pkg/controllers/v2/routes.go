@@ -1,10 +1,10 @@
 package v2
 
 import (
-	"github.com/deissh/osu-api-server/pkg/middlewares/permission"
-	"github.com/deissh/osu-api-server/pkg/v2/chats"
-	"github.com/deissh/osu-api-server/pkg/v2/friends"
-	"github.com/deissh/osu-api-server/pkg/v2/users"
+	"github.com/deissh/osu-api-server/pkg/common/middlewares/permission"
+	"github.com/deissh/osu-api-server/pkg/controllers/v2/chats"
+	"github.com/deissh/osu-api-server/pkg/controllers/v2/friends"
+	"github.com/deissh/osu-api-server/pkg/controllers/v2/users"
 	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
 )
@@ -33,7 +33,7 @@ func ApplyRoutes(r *echo.Group) {
 		{
 			v2Friends.GET("", friends.Get)
 			v2Friends.PUT("", friends.Put)
-			v2Friends.DELETE("", empty)
+			v2Friends.DELETE("", friends.Delete)
 		}
 
 		// === Users ===

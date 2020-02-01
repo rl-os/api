@@ -2,7 +2,7 @@ package oauth
 
 import (
 	"github.com/deissh/osu-api-server/pkg"
-	"github.com/deissh/osu-api-server/pkg/utils"
+	"github.com/deissh/osu-api-server/pkg/common/utils"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gookit/config/v2"
 	"github.com/labstack/echo/v4"
