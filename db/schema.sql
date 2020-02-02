@@ -9,6 +9,19 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: check_online(timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.check_online(val timestamp without time zone) RETURNS boolean
+    LANGUAGE plpgsql IMMUTABLE
+    AS $$
+BEGIN
+    RETURN (val > (CURRENT_TIMESTAMP - (10 ||' minutes')::interval));
+END;
+$$;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -269,7 +282,8 @@ CREATE TABLE public.users (
     cover_url character varying DEFAULT 'https://301222.selcdn.ru/akasi/bg/1.jpg'::character varying NOT NULL,
     max_blocks integer DEFAULT 50 NOT NULL,
     max_friends integer DEFAULT 100 NOT NULL,
-    support_expired_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    support_expired_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    is_online boolean GENERATED ALWAYS AS (public.check_online(last_visit)) STORED
 );
 
 
@@ -569,4 +583,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200130072128'),
     ('20200130133637'),
     ('20200201131358'),
-    ('20200201135712');
+    ('20200201135712'),
+    ('20200202081814');

@@ -6,6 +6,7 @@ import (
 	"github.com/deissh/osu-api-server/pkg/entity"
 	"github.com/rs/zerolog/log"
 	"net/http"
+	"time"
 )
 
 var modes = []string{"std", "mania", "catch", "taiko"}
@@ -45,7 +46,9 @@ func LoginByPassword(username string, password string) (*entity.UserShort, error
 
 	err := pkg.Db.Get(
 		&user,
-		`SELECT * FROM users WHERE username = $1 OR email = $1`,
+		`SELECT *
+		FROM users
+		WHERE username = $1 OR email = $1`,
 		username,
 	)
 	if err != nil {
@@ -76,7 +79,9 @@ func Register(username string, email string, password string) (*entity.User, err
 	{
 		err = tx.Get(
 			&baseUser,
-			`INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *`,
+			`INSERT INTO users (username, email, password_hash)
+			VALUES ($1, $2, $3)
+			RETURNING *`,
 			username, email, hashed,
 		)
 		if err != nil {
@@ -90,4 +95,22 @@ func Register(username string, email string, password string) (*entity.User, err
 	}
 
 	return &baseUser, nil
+}
+
+// UpdateLastVisit and set current time
+func UpdateLastVisit(userId uint) (*entity.User, error) {
+	var user entity.User
+	currentTime := time.Now()
+
+	err := pkg.Db.Get(
+		&user,
+		`UPDATE users
+		SET last_visit = $1
+		WHERE id = $2
+		RETURNING *`,
+		currentTime,
+		userId,
+	)
+
+	return &user, err
 }

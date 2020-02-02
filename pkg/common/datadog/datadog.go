@@ -52,7 +52,7 @@ func SetPrefix(value string) {
 }
 
 // RunGaugeTask every duration and send value as Gauge
-func RunGaugeTask(name string, duration time.Duration, exec func() (float64, error)) {
+func RunGaugeTask(name string, duration time.Duration, tags Tags, exec func() (float64, error)) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -68,7 +68,7 @@ func RunGaugeTask(name string, duration time.Duration, exec func() (float64, err
 				break
 			}
 
-			Gauge(name, value)
+			Gauge(name, value, tags)
 		}
 	}()
 }

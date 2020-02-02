@@ -62,19 +62,18 @@ func main() {
 	log.Info().
 		Msg("Creating datadog tasks")
 
-	datadog.RunGaugeTask("user_online", time.Minute, func() (f float64, err error) {
-		val, err := pkg.Rb.Keys("online_users::*").Result()
-
-		return float64(len(val)), err
-	})
-	datadog.RunGaugeTask("users", time.Hour, func() (f float64, err error) {
-		var count int
-		err = pkg.Db.
-			QueryRow("SELECT count('id') FROM users WHERE is_active = true").
-			Scan(&count)
-
-		return float64(count), err
-	})
+	datadog.RunGaugeTask(
+		"user_online",
+		time.Minute,
+		datadog.Tags{},
+		GetUsersOnline,
+	)
+	datadog.RunGaugeTask(
+		"users",
+		time.Hour,
+		datadog.Tags{},
+		GetActiveUsers,
+	)
 
 	datadog.Start()
 }
