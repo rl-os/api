@@ -21,7 +21,7 @@ func GetUser(id uint, mode string) (*entity.User, error) {
 
 	err := pkg.Db.Get(
 		&user,
-		`SELECT *
+		`SELECT *, check_online(last_visit)
 				FROM users
 				WHERE users.id = $1`,
 		id,
@@ -46,7 +46,7 @@ func LoginByPassword(username string, password string) (*entity.UserShort, error
 
 	err := pkg.Db.Get(
 		&user,
-		`SELECT *
+		`SELECT *, check_online(last_visit)
 		FROM users
 		WHERE username = $1 OR email = $1`,
 		username,
@@ -81,7 +81,7 @@ func Register(username string, email string, password string) (*entity.User, err
 			&baseUser,
 			`INSERT INTO users (username, email, password_hash)
 			VALUES ($1, $2, $3)
-			RETURNING *`,
+			RETURNING *, check_online(last_visit)`,
 			username, email, hashed,
 		)
 		if err != nil {
@@ -107,7 +107,7 @@ func UpdateLastVisit(userId uint) (*entity.User, error) {
 		`UPDATE users
 		SET last_visit = $1
 		WHERE id = $2
-		RETURNING *`,
+		RETURNING *, check_online(last_visit)`,
 		currentTime,
 		userId,
 	)

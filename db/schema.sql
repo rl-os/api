@@ -282,8 +282,7 @@ CREATE TABLE public.users (
     cover_url character varying DEFAULT 'https://301222.selcdn.ru/akasi/bg/1.jpg'::character varying NOT NULL,
     max_blocks integer DEFAULT 50 NOT NULL,
     max_friends integer DEFAULT 100 NOT NULL,
-    support_expired_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    is_online boolean GENERATED ALWAYS AS (public.check_online(last_visit)) STORED
+    support_expired_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 

@@ -6,11 +6,6 @@ END;
 $$
 LANGUAGE PLPGSQL;
 
-alter table users
-    add is_online bool GENERATED ALWAYS AS(check_online(last_visit)) STORED;
 
 -- migrate:down
 drop function check_online;
-
-alter table users
-    drop column is_online;
