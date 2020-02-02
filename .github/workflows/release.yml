@@ -1,10 +1,9 @@
 name: Create Release
 on:
-  push:
-    branches:
-      - master
+  create:
     tags:
-      - 'v*'
+      - v*
+
 jobs:
   lint:
     name: Lint code
