@@ -38,7 +38,7 @@ jobs:
       - name: Lint
         run: make lint
 
-    unit-test:
+    test:
       name: Unit test
       runs-on: ubuntu-latest
       steps:
