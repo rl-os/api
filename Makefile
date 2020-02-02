@@ -127,7 +127,7 @@ help: message
 ## Generate CHANGELOG.md based on git
 .PHONY: chglog
 chglog:
-	@git-chglog --output CHANGELOG.md
+	git-chglog -o CHANGELOG.md $(shell git describe --tags $(shell git rev-list --tags --max-count=1))
 
 .PHONY: message
 message:
