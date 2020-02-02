@@ -16,7 +16,8 @@ func GetFriends(userId uint) (*[]entity.UserShort, error) {
 		`SELECT u.id, u.username, u.email, u.is_bot, u.is_active,
        				u.is_supporter, u.has_supported, u.support_level,
        				u.pm_friends_only, u.avatar_url, u.country_code,
-       				u.default_group, u.last_visit, u.created_at, u.support_expired_at
+       				u.default_group, u.last_visit, u.created_at,
+       				u.support_expired_at, u.is_online
 				FROM user_relation
 				INNER JOIN users u on user_relation.target_id = u.id
 				WHERE user_id = $1`,

@@ -12,6 +12,7 @@ type UserShort struct {
 	Username         string    `json:"username" db:"username"`
 	Email            string    `json:"email" db:"email"`
 	PasswordHash     string    `json:"-" db:"password_hash"`
+	IsOnline         bool      `json:"is_online" db:"is_online"`
 	IsBot            bool      `json:"is_bot" db:"is_bot"`
 	IsActive         bool      `json:"is_active" db:"is_active"`
 	IsSupporter      bool      `json:"is_supporter" db:"is_supporter"`
@@ -24,9 +25,6 @@ type UserShort struct {
 	LastVisit        time.Time `json:"last_visit" db:"last_visit"`
 	JoinDate         time.Time `json:"join_date" db:"created_at"`
 	SupportExpiredAt time.Time `json:"-" db:"support_expired_at"`
-
-	// computed
-	IsOnline bool `json:"is_online"`
 }
 
 // Compute fields and return error if not successful

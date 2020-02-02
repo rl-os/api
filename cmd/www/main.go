@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/deissh/osu-api-server/pkg"
-	"github.com/deissh/osu-api-server/pkg/middlewares/customerror"
-	"github.com/deissh/osu-api-server/pkg/middlewares/customlogger"
-	"github.com/deissh/osu-api-server/pkg/middlewares/permission"
-	"github.com/deissh/osu-api-server/pkg/oauth"
-	"github.com/deissh/osu-api-server/pkg/v2"
+	"github.com/deissh/osu-api-server/pkg/common/middlewares/customerror"
+	"github.com/deissh/osu-api-server/pkg/common/middlewares/customlogger"
+	"github.com/deissh/osu-api-server/pkg/common/middlewares/permission"
+	"github.com/deissh/osu-api-server/pkg/controllers/oauth"
+	"github.com/deissh/osu-api-server/pkg/controllers/v2"
 	"github.com/getsentry/sentry-go"
 	sentryEcho "github.com/getsentry/sentry-go/echo"
 	"github.com/gookit/config/v2"
@@ -21,6 +21,11 @@ import (
 	"os/signal"
 	"time"
 )
+
+var Version string
+var Commit string
+var Branch string
+var BuildTimestamp string
 
 func main() {
 	// loading configuration
@@ -44,6 +49,13 @@ func main() {
 			},
 		).With().Caller().Logger()
 	}
+
+	log.Info().
+		Str("version", Version).
+		Str("branch", Branch).
+		Str("commit", Commit).
+		Str("build_timestamp", BuildTimestamp).
+		Msg("Starting API")
 
 	log.Debug().
 		Msg("Loaded configuration and logger")
@@ -97,7 +109,7 @@ func main() {
 	}
 
 	log.Debug().
-		Msg("Mounting Echo routes")
+		Msg("Mounting Echo controllers")
 
 	oauth.ApplyRoutes(app.Group(""))
 	v2.ApplyRoutes(app.Group("/api"))

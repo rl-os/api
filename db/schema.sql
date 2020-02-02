@@ -9,6 +9,19 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: check_online(timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.check_online(val timestamp without time zone) RETURNS boolean
+    LANGUAGE plpgsql IMMUTABLE
+    AS $$
+BEGIN
+    RETURN (val > (CURRENT_TIMESTAMP - (10 ||' minutes')::interval));
+END;
+$$;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -22,7 +35,10 @@ CREATE TABLE public.channels (
     name character varying NOT NULL,
     description character varying NOT NULL,
     type character varying NOT NULL,
-    icon character varying
+    icon character varying,
+    users integer[] DEFAULT '{}'::integer[] NOT NULL,
+    active_users integer[] DEFAULT '{}'::integer[] NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -200,37 +216,6 @@ CREATE TABLE public.schema_migrations (
 
 
 --
--- Name: user_channels; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.user_channels (
-    id integer NOT NULL,
-    user_id integer NOT NULL,
-    channel_id integer NOT NULL
-);
-
-
---
--- Name: user_channels_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.user_channels_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: user_channels_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.user_channels_id_seq OWNED BY public.user_channels.id;
-
-
---
 -- Name: user_relation; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -297,7 +282,8 @@ CREATE TABLE public.users (
     cover_url character varying DEFAULT 'https://301222.selcdn.ru/akasi/bg/1.jpg'::character varying NOT NULL,
     max_blocks integer DEFAULT 50 NOT NULL,
     max_friends integer DEFAULT 100 NOT NULL,
-    support_expired_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    support_expired_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    is_online boolean GENERATED ALWAYS AS (public.check_online(last_visit)) STORED
 );
 
 
@@ -354,13 +340,6 @@ ALTER TABLE ONLY public.oauth_client ALTER COLUMN id SET DEFAULT nextval('public
 --
 
 ALTER TABLE ONLY public.oauth_token ALTER COLUMN id SET DEFAULT nextval('public.oauth_token_id_seq'::regclass);
-
-
---
--- Name: user_channels id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_channels ALTER COLUMN id SET DEFAULT nextval('public.user_channels_id_seq'::regclass);
 
 
 --
@@ -423,14 +402,6 @@ ALTER TABLE ONLY public.oauth_token
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
-
-
---
--- Name: user_channels user_channels_pk; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_channels
-    ADD CONSTRAINT user_channels_pk PRIMARY KEY (id);
 
 
 --
@@ -520,20 +491,6 @@ CREATE INDEX table_name_name_index ON public.channels USING btree (name);
 
 
 --
--- Name: user_channels_id_uindex; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX user_channels_id_uindex ON public.user_channels USING btree (id);
-
-
---
--- Name: user_channels_user_id_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX user_channels_user_id_index ON public.user_channels USING btree (user_id);
-
-
---
 -- Name: user_relation_id_uindex; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -585,22 +542,6 @@ ALTER TABLE ONLY public.message
 
 
 --
--- Name: user_channels user_channels_channels_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_channels
-    ADD CONSTRAINT user_channels_channels_id_fk FOREIGN KEY (channel_id) REFERENCES public.channels(id) ON DELETE CASCADE;
-
-
---
--- Name: user_channels user_channels_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_channels
-    ADD CONSTRAINT user_channels_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
-
-
---
 -- Name: user_relation user_relation_target_id_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -640,4 +581,7 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200127094841'),
     ('20200128070351'),
     ('20200130072128'),
-    ('20200130133637');
+    ('20200130133637'),
+    ('20200201131358'),
+    ('20200201135712'),
+    ('20200202081814');

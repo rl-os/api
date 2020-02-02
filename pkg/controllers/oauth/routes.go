@@ -2,12 +2,12 @@ package oauth
 
 import (
 	"github.com/deissh/osu-api-server/pkg"
-	"github.com/deissh/osu-api-server/pkg/oauth/token"
-	"github.com/deissh/osu-api-server/pkg/oauth/user"
+	"github.com/deissh/osu-api-server/pkg/controllers/oauth/token"
+	"github.com/deissh/osu-api-server/pkg/controllers/oauth/user"
 	"github.com/labstack/echo/v4"
 )
 
-func empty(c echo.Context) (err error) {
+func empty(_ echo.Context) (err error) {
 	return pkg.NewHTTPError(400, "invalid_credentials", "The user credentials were incorrect.")
 }
 

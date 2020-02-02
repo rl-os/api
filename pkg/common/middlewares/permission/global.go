@@ -2,12 +2,10 @@ package permission
 
 import (
 	"errors"
-	"fmt"
 	"github.com/deissh/osu-api-server/pkg"
 	"github.com/deissh/osu-api-server/pkg/services/oauth"
 	"github.com/deissh/osu-api-server/pkg/services/user"
 	"github.com/labstack/echo/v4"
-	"time"
 )
 
 // keyFromHeader returns a `keyExtractor` that extracts key from the request header.
@@ -42,9 +40,7 @@ func GlobalMiddleware() echo.MiddlewareFunc {
 					return err
 				}
 
-				pkg.Rb.Set(fmt.Sprintf("online_users::%d", token.UserID), true, time.Minute*15)
-
-				current, err := user.GetUser(token.UserID, "std")
+				current, err := user.UpdateLastVisit(token.UserID)
 				if err != nil {
 					return pkg.NewHTTPError(401, "auth_token_required", "Invalid token or user")
 				}

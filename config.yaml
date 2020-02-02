@@ -23,6 +23,11 @@ server:
     enable: ${SERVER__SENTRY__ENABLE|false}
     dsn: ${SERVER__SENTRY__DSN}
 
+  datadog:
+    enable: ${SERVER__DATADOG__ENABLE|true}
+    prefix: lazer.
+    statsd_host: ${SERVER__DATADOG__STATSD_HOST|127.0.0.1:8126}
+
   jwt:
     secret: ${SERVER__JWT_SECRET}
     hours_before_revoke: 24

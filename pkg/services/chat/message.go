@@ -34,7 +34,7 @@ func SendMessage(senderId uint, channelId uint, content string, IsAction bool) (
 			message.created_at, message.content, message.is_action,
 			json_build_object('id', u.id, 'username', u.username, 'avatar_url', u.avatar_url,
 			    'country_code', u.country_code, 'is_active', u.is_active, 'is_bot', u.is_bot,
-			    'is_supporter', u.is_supporter, 'is_online', false) as sender
+			    'is_supporter', u.is_supporter, 'is_online', u.is_online) as sender
 		FROM message
 		INNER JOIN users u on message.sender_id = u.id
 		WHERE message.id = $1`,
@@ -64,7 +64,7 @@ func GetMessages(channelId uint, limit uint) (*[]entity.ChatMessage, error) {
 			message.created_at, message.content, message.is_action,
 			json_build_object('id', u.id, 'username', u.username, 'avatar_url', u.avatar_url,
 			    'country_code', u.country_code, 'is_active', u.is_active, 'is_bot', u.is_bot,
-			    'is_supporter', u.is_supporter, 'is_online', false) as sender
+			    'is_supporter', u.is_supporter, 'is_online', u.is_online) as sender
 		FROM message
 		INNER JOIN users u on message.sender_id = u.id
 		WHERE message.channel_id = $1
@@ -89,18 +89,17 @@ func GetMessagesAll(userId uint, since uint) (*[]entity.ChatMessage, error) {
 	err := pkg.Db.Select(
 		&messages,
 		`SELECT
-				message.id, message.sender_id, message.channel_id,
-				message.created_at, message.content, message.is_action,
-				json_build_object('id', u.id, 'username', u.username, 'avatar_url', u.avatar_url,
-								  'country_code', u.country_code, 'is_active', u.is_active, 'is_bot', u.is_bot,
-								  'is_supporter', u.is_supporter, 'is_online', false) as sender
-			FROM message
-				INNER JOIN user_channels uc on uc.channel_id = message.channel_id
-				INNER JOIN users u on message.sender_id = u.id
-				INNER JOIN channels c on message.channel_id = c.id
-			WHERE uc.user_id = $1 AND message.id >= $2
-			GROUP BY message.id, u.id
-			ORDER BY message.id`,
+			message.id, message.sender_id, message.channel_id,
+			message.created_at, message.content, message.is_action,
+			json_build_object('id', u.id, 'username', u.username, 'avatar_url', u.avatar_url,
+							  'country_code', u.country_code, 'is_active', u.is_active, 'is_bot', u.is_bot,
+							  'is_supporter', u.is_supporter, 'is_online', u.is_online) as sender
+		FROM message
+				 INNER JOIN users u on message.sender_id = u.id
+				 INNER JOIN channels c on message.channel_id = c.id
+		WHERE message.id >= $2 AND c.active_users @> ARRAY[$1]::int[]
+		GROUP BY message.id, u.id
+		ORDER BY message.id`,
 		userId,
 		since,
 	)
