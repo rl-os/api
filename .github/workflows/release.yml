@@ -73,6 +73,9 @@ jobs:
   build:
     name: Build cmds
     runs-on: ubuntu-latest
+    needs:
+      - test
+      - lint
     steps:
       - name: Set up Go 1.13
         uses: actions/setup-go@v1
@@ -127,8 +130,8 @@ jobs:
 
       - name: Create Release Asset
         run: |
-          - cp config.yaml bin/
-          - zip release.zip bin/*
+          cp config.yaml bin/
+          zip release.zip bin/*
 
       - name: Upload Release Asset
         id: upload-release-asset
