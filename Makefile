@@ -44,6 +44,7 @@ GOFLAGS = -ldflags "$(GOLDFLAGS)"
 
 # ===============================================
 GO = go
+.DEFAULT_GOAL := help
 MAKE_ENV += PACKAGE VERSION DOCKER_IMAGE DOCKER_IMAGE_DOMAIN
 SHELL_EXPORT := $(foreach v,$(MAKE_ENV),$(v)='$($(v))' )
 # check requeres commands
@@ -52,22 +53,27 @@ _ := $(foreach exec,$(EXECUTABLES),\
         $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
 # ===============================================
 
+## Clear bin folder
 .PHONY: clear
 clear:
 	@rm -rf bin
 
+## Set impotants flags and then build all commands in cmd folder
 .PHONY: build
 build: clear
 	@(cd cmd ; for CMD in *; do $(GOBUILD) $(GOFLAGS) -o $(BIN_DIR)/$$CMD $$CMD/*.go && echo "$$CMD build done" || exit 1; done;)
 
+## Run all checks
 .PHONY: lint
 lint: vet fmt-check
 	@for PKG in $(PACKAGES); do golint -set_exit_status $$PKG || exit 1; done;
 	@$(GOIMPORT) -d $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 	@$(GOCYCLO) -over 55 $(shell find . -iname '*.go' -type f | grep -v /vendor/)
 
+## Install missing dependencies
+## Also setup unnessosory packages that using in CI
 .PHONY: install
-install: message
+install:
 	@echo ">  Checking if there is any missing dependencies..."
 	@$(GOMOD) download
 	@$(GOGET) -u github.com/amacneil/dbmate
@@ -78,25 +84,69 @@ install: message
 	$(GOGET) -u github.com/git-chglog/git-chglog/cmd/git-chglog
 	wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.15.0
 
+
+## This help message
+## Which can also be multiline
+.PHONY: help
+help: message
+	@printf "Usage\n";
+
+	@awk '{ \
+			if ($$0 ~ /^.PHONY: [a-zA-Z\-\_0-9]+$$/) { \
+				helpCommand = substr($$0, index($$0, ":") + 2); \
+				if (helpMessage) { \
+					printf "\033[36m%-20s\033[0m %s\n", \
+						helpCommand, helpMessage; \
+					helpMessage = ""; \
+				} \
+			} else if ($$0 ~ /^[a-zA-Z\-\_0-9.]+:/) { \
+				helpCommand = substr($$0, 0, index($$0, ":")); \
+				if (helpMessage) { \
+					printf "\033[36m%-20s\033[0m %s\n", \
+						helpCommand, helpMessage; \
+					helpMessage = ""; \
+				} \
+			} else if ($$0 ~ /^##/) { \
+				if (helpMessage) { \
+					helpMessage = helpMessage"\n                     "substr($$0, 3); \
+				} else { \
+					helpMessage = substr($$0, 3); \
+				} \
+			} else { \
+				if (helpMessage) { \
+					print "\n                     "helpMessage"\n" \
+				} \
+				helpMessage = ""; \
+			} \
+		}' \
+		$(MAKEFILE_LIST)
+
+
+## -- Utils --
+
+## Generate CHANGELOG.md based on git
 .PHONY: chglog
 chglog:
 	@git-chglog --output CHANGELOG.md
 
-# ======================
-# ==== help scripts ====
-# ======================
 .PHONY: message
 message:
 	@echo -e "\n        _.====.._                                 ___                _ \n     ,:.         ~-_                             / _ \   ___  _  _  | |\n         \`\        ~-_                          | (_) | (_-< | || | |_|\n           |          \`.                         \___/  /__/  \_,_| (_)\n         ,/             ~-_                                lazer server\n-..__..-''                 ~~--..__...----...--.....---.....--....---...\n\n                               GitHub: github.com/deissh/osu-api-server\n\n\n                                                    © 2019-2020, deissh.\n\n"
 
+
+## -- Go commands --
+
+## Run go vet on current project
 .PHONY: vet
 vet:
 	$(GOVET) ./...
 
+## Run go fmt on current project
 .PHONY: fmt
 fmt:
 	$(GOFMT) -s -w $(GOFILES)
 
+## Run check fmt and show message if not all ok
 .PHONY: fmt-check
 fmt-check:
 	@diff=$$($(GOFMT) -s -d $(GOFILES)); \
@@ -106,10 +156,12 @@ fmt-check:
 		exit 1; \
 	fi;
 
+## Run go test on current project
 .PHONY: test
 test:
 	$(GOTEST) ./...
 
+## Generate coverage report and then show
 .PHONY: view-covered
 view-covered:
 	$(GOTEST) -coverprofile=cover.out ./...

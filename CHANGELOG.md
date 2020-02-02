@@ -1,9 +1,18 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+### Feat
+- add github action release.yml and update pr.yml
+- add Makefile and remove scripts folder
+- rewrite is_online flag + datadog create task
+- rewrite channels + fix PMs
+- add users stats
+- add datadog metrics + move out common code
+- update changelog
 
-<a name="vv0.1.0"></a>
-## [vv0.1.0] - 2020-01-30
+
+<a name="v.0.1.0"></a>
+## [v.0.1.0] - 2020-01-30
 ### Feat
 - add PM and loading private channels
 - add user relations and getting friends
@@ -94,5 +103,5 @@
 - Merge pull request [#18](https://github.com/deissh/osu-api-server/issues/18) from deissh/feature/ci
 
 
-[Unreleased]: https://github.com/deissh/osu-api-server/compare/vv0.1.0...HEAD
-[vv0.1.0]: https://github.com/deissh/osu-api-server/compare/v0.0.1...vv0.1.0
+[Unreleased]: https://github.com/deissh/osu-api-server/compare/v.0.1.0...HEAD
+[v.0.1.0]: https://github.com/deissh/osu-api-server/compare/v0.0.1...v.0.1.0
