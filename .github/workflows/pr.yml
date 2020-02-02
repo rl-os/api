@@ -32,10 +32,10 @@ jobs:
           ${{ runner.os }}-go-
 
     - name: Get dependencies
-      run: ./scripts/install.sh
+      run: make install
 
     - name: Lint
-      run: ./scripts/lint.sh
+      run: make lint
     
   test:
     name: Unit test
@@ -68,11 +68,11 @@ jobs:
           ${{ runner.os }}-go-
         
     - name: Get dependencies
-      run: ./scripts/install.sh
+      run: make install
 
     - name: Build
-      run: go build cmd/www/main.go
+      run: make build
     
     - name: Run tests
       timeout-minutes: 10
-      run: go test ./...
+      run: make test

@@ -22,6 +22,11 @@ import (
 	"time"
 )
 
+var Version string
+var Commit string
+var Branch string
+var BuildTimestamp string
+
 func main() {
 	// loading configuration
 	config.WithOptions(config.ParseEnv, config.Readonly)
@@ -44,6 +49,13 @@ func main() {
 			},
 		).With().Caller().Logger()
 	}
+
+	log.Info().
+		Str("version", Version).
+		Str("branch", Branch).
+		Str("commit", Commit).
+		Str("build_timestamp", BuildTimestamp).
+		Msg("Starting API")
 
 	log.Debug().
 		Msg("Loaded configuration and logger")
