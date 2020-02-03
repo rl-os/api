@@ -1,5 +1,5 @@
-name: Pull Request workflow
-on: [pull_request]
+name: Lint & Build
+on: [pull_request, push]
 jobs:
   lint:
     name: Lint code
