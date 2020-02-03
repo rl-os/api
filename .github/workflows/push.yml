@@ -1,5 +1,5 @@
-name: Lint & Build
-on: [pull_request, push]
+name: Push
+on: [push]
 jobs:
   lint:
     name: Lint code
