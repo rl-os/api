@@ -5,7 +5,7 @@
 <h1 align="center"></h1>
 
 <p align="center">
-  <a href="https://github.com/deissh/osu-api-server/actions"><img src="https://github.com/deissh/osu-api-server/workflows/Pull%20Request%20workflow/badge.svg"></a>
+  <a href="https://github.com/deissh/osu-api-server/actions"><img src="https://github.com/deissh/osu-api-server/workflows/Push/badge.svg"></a>
   <br />
   <a href="https://github.com/deissh/osu-api-server/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/deissh/osu-api-server"></a>
   <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/deissh/osu-api-server">
