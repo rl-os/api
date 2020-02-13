@@ -12,7 +12,7 @@ jobs:
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     env:
-      working-directory: ./api
+      working-directory: ~/work/osu-lazer/osu-lazer/api
     steps:
     - name: Set up Go 1.13
       uses: actions/setup-go@v1
