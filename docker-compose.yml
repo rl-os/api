@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_DB: ${DB_NAME:-osu-server}
     volumes:
-      - /var/lib/postgresql/osu-api-server:/var/lib/postgresql/data
+      - /var/lib/postgresql/osu-lazer:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
 
@@ -17,12 +17,12 @@ services:
     image: redis:5-alpine
     restart: unless-stopped
     volumes:
-      - /var/lib/redis/osu-api-server:/var/lib/redis/data
+      - /var/lib/redis/osu-lazer:/var/lib/redis/data
     healthcheck:
       test: ["CMD", "redis-cli", "-h", "localhost", "ping"]
 
   backend:
-    image: deissh/osu-api-server:${BACKEND_TAG:-latest}
+    image: deissh/osu-lazer:${BACKEND_TAG:-latest}
     restart: unless-stopped
     build:
       context: .

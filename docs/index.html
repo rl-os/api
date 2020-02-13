@@ -15,7 +15,7 @@
   <script>
     window.$docsify = {
       name: 'API Documentation',
-      repo: 'https://github.com/deissh/osu-api-server',
+      repo: 'https://github.com/deissh/osu-lazer',
       
       loadSidebar: true,
       coverpage: false,
@@ -29,7 +29,7 @@
       alias: {
         '/ru/(.*)': 'ru/$1',
         '/(.*)': 'en/$1',
-        '/changelog/': 'https://raw.githubusercontent.com/deissh/osu-api-server/master/CHANGELOG.md',
+        '/changelog/': 'https://raw.githubusercontent.com/deissh/osu-lazer/master/CHANGELOG.md',
       },
       search: {
         noData: {
@@ -58,7 +58,7 @@
                 .replace('raw.githubusercontent.com', 'github.com')
                 .replace(/\/master/, '/blob/master')
             } else {
-              url = 'https://github.com/deissh/osu-api-server/blob/master/docs/' + vm.route.file
+              url = 'https://github.com/deissh/osu-lazer/blob/master/docs/' + vm.route.file
             }
             var editHtml = '[:memo: Edit Document](' + url + ')\n'
             return editHtml + html
