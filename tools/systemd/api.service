@@ -4,5 +4,5 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/bin/sh -c 'cd ${go env GOPATH}/src/github.com/deissh/osu-api-server && ./bin/www'
+ExecStart=/bin/sh -c 'cd ${go env GOPATH}/src/github.com/deissh/osu-lazer && ./bin/www'
 Restart=always

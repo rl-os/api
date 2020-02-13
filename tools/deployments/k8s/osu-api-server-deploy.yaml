@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: osu-api-server
+  name: osu-lazer
   labels:
-    app: osu-api-server
+    app: osu-lazer
     component: service
     version: "1.0.0"
 spec:
@@ -11,16 +11,16 @@ spec:
     - name: http
       port: 80
   selector:
-    app: osu-api-server
+    app: osu-lazer
     component: service
     version: latest
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: osu-api-server
+  name: osu-lazer
   labels:
-    app: osu-api-server
+    app: osu-lazer
     component: service
     version: latest
 spec:
@@ -29,21 +29,21 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: osu-api-server
+      app: osu-lazer
       component: service
       version: latest
   template:
     metadata:
       labels:
-        app: osu-api-server
+        app: osu-lazer
         component: service
         version: latest
       annotations:
         sidecar.istio.io/inject: "true"
     spec:
       containers:
-        - name: osu-api-server
-          image: deissh/osu-api-server:latest
+        - name: osu-lazer
+          image: deissh/osu-lazer:latest
           resources:
           # requests:
           #   memory: 100M

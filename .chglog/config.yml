@@ -2,7 +2,7 @@ style: github
 template: CHANGELOG.tpl.md
 info:
   title: CHANGELOG
-  repository_url: https://github.com/deissh/osu-api-server
+  repository_url: https://github.com/deissh/osu-lazer
 options:
   commits:
     # filters:
@@ -12,11 +12,11 @@ options:
     #     - perf
     #     - refactor
   commit_groups:
-    # title_maps:
-    #   feat: Features
-    #   fix: Bug Fixes
-    #   perf: Performance Improvements
-    #   refactor: Code Refactoring
+     title_maps:
+       feat: Features
+       fix: Bug Fixes
+       perf: Performance Improvements
+       refactor: Code Refactoring
   header:
     pattern: "^(\\w*)\\:\\s(.*)$"
     pattern_maps:

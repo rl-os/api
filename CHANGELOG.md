@@ -33,8 +33,8 @@
 - change entity struct
 
 ### Pull Requests
-- Merge pull request [#23](https://github.com/deissh/osu-api-server/issues/23) from deissh/next
+- Merge pull request [#23](https://github.com/deissh/osu-lazer/issues/23) from deissh/next
 
 
-[Unreleased]: https://github.com/deissh/osu-api-server/compare/v0.1.0...HEAD
-[v0.1.0]: https://github.com/deissh/osu-api-server/compare/v0.0.1...v0.1.0
+[Unreleased]: https://github.com/deissh/osu-lazer/compare/v0.1.0...HEAD
+[v0.1.0]: https://github.com/deissh/osu-lazer/compare/v0.0.1...v0.1.0
