@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'api/*'
+      - '.github/workflows/*'
 jobs:
   lint:
     name: Lint code
