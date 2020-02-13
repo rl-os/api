@@ -36,3 +36,5 @@ $ DATABASE_URL="postgres://postgres@127.0.0.1:5432/osuserver?sslmode=disable" db
 -->
 
 ## Screenshots and videos
+
+[![asciicast](https://asciinema.org/a/MH9APy0jEf59Cc6MweZ5Amaej.svg)](https://asciinema.org/a/MH9APy0jEf59Cc6MweZ5Amaej)
