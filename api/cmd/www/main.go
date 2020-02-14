@@ -70,6 +70,7 @@ func main() {
 
 	// Seting up Echo
 	app := echo.New()
+	app.HidePort = true
 	app.HideBanner = true
 	app.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
 
@@ -114,7 +115,7 @@ func main() {
 	oauth.ApplyRoutes(app.Group(""))
 	v2.ApplyRoutes(app.Group("/api"))
 
-	log.Debug().
+	log.Info().
 		Msg("Running HTTP server")
 
 	// Graceful start and stop HTTP server

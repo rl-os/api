@@ -166,3 +166,6 @@ test:
 view-covered:
 	$(GOTEST) -coverprofile=cover.out ./...
 	$(GOCMD) tool cover -html=cover.out
+
+.PHONY: load-config
+load-config:
