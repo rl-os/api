@@ -40,7 +40,7 @@ GOLDFLAGS += -X main.Version=$(VERSION)
 GOLDFLAGS += -X main.Commit=$(COMMIT)
 GOLDFLAGS += -X main.Branch=$(GIT_BRANCH_CLEAN)
 GOLDFLAGS += -X main.BuildTimestamp=$(BUILDTIME)
-GOFLAGS = -ldflags "$(GOLDFLAGS)"
+GOBUILDFLAGS = -ldflags "-s -w $(GOLDFLAGS)"
 
 # ===============================================
 GO = go
@@ -61,7 +61,7 @@ clear:
 ## Set impotants flags and then build all commands in cmd folder
 .PHONY: build
 build: clear
-	@(cd cmd ; for CMD in *; do $(GOBUILD) $(GOFLAGS) -o $(BIN_DIR)/$$CMD $$CMD/*.go && echo "$$CMD build done" || exit 1; done;)
+	@(cd cmd ; for CMD in *; do $(GOBUILD) $(GOBUILDFLAGS) -o $(BIN_DIR)/$$CMD $$CMD/*.go && echo "$$CMD build done" || exit 1; done;)
 
 ## Run all checks
 .PHONY: lint
@@ -131,7 +131,7 @@ chglog:
 
 .PHONY: message
 message:
-	@echo -e "\n        _.====.._                                 ___                _ \n     ,:.         ~-_                             / _ \   ___  _  _  | |\n         \`\        ~-_                          | (_) | (_-< | || | |_|\n           |          \`.                         \___/  /__/  \_,_| (_)\n         ,/             ~-_                                lazer server\n-..__..-''                 ~~--..__...----...--.....---.....--....---...\n\n                               GitHub: github.com/deissh/osu-lazer\n\n\n                                                    © 2019-2020, deissh.\n\n"
+	@echo -e "\n        _.====.._                                 ___                _ \n     ,:.         ~-_                             / _ \   ___  _  _  | |\n         \`\        ~-_                          | (_) | (_-< | || | |_|\n           |          \`.                         \___/  /__/  \_,_| (_)\n         ,/             ~-_                                lazer server\n-..__..-''                 ~~--..__...----...--.....---.....--....---...\n\n                                   GitHub: github.com/deissh/osu-lazer\n                                                     2019-2020, deissh\n\n"
 
 
 ## -- Go commands --
