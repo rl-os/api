@@ -1,0 +1,15 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:latest",
+        "tslint-react"
+    ],
+    "jsRules": {},
+    "rules": {},
+    "rulesDirectory": [],
+    "plugins": [
+        {
+            "name": "typescript-tslint-plugin"
+        }
+    ]
+}
