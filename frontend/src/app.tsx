@@ -1,4 +1,4 @@
-import react, { useRef } from 'react';
+import React, { useRef } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { hot } from 'react-hot-loader/root';
@@ -7,11 +7,13 @@ import { useAsync } from './utils/hooks';
 import { SecureRoute } from './components/secure-route';
 
 import { HomePage } from './pages/home';
+import { LoginPage } from "./pages/login";
 
 const content = (store: Store) => {
   return <StoreContext.Provider value={store}>
     <BrowserRouter>
       <SecureRoute exact={true} path="/" component={HomePage}/>
+      <SecureRoute exact={true} path="/login" component={LoginPage}/>
     </BrowserRouter>
   </StoreContext.Provider>;
 };
@@ -20,16 +22,13 @@ const App = observer(() => {
   const storeRef = useRef<Store>();
   let store: Store;
 
-  if (storeRef.current === undefined || Object.getPrototypeOf(storeRef.current) !== Store.prototype) {
+  if (storeRef.current === undefined || Object.getPrototypeOf(storeRef.current) !== Store.prototype)
     storeRef.current = store = new Store();
-  }
-  else {
-    store = storeRef.current;
-  }
+  else store = storeRef.current;
 
   return useAsync({
     dependencies: [store],
-    init: async () => {},
+    init: async () => {/* feature */},
     loading: () => <div>Loading</div>,
     failed: (e) => <div>{e.toString()}</div>,
     success: () => content(store),
