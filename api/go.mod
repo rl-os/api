@@ -22,6 +22,7 @@ require (
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.17.2
+	github.com/stretchr/testify v1.4.0
 	github.com/tsuyoshiwada/go-gitcmd v0.0.0-20180205145712-5f1f5f9475df // indirect
 	github.com/urfave/cli v1.22.2 // indirect
 	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
