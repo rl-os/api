@@ -52,7 +52,7 @@ func LoginByPassword(username string, password string) (*entity.UserShort, error
 		username,
 	)
 	if err != nil {
-		log.Debug().
+		log.Error().
 			Err(err).
 			Msg("login uncorrect")
 		return nil, pkg.NewHTTPError(http.StatusUnauthorized, "user_login_error", "The user credentials were incorrect.")
@@ -85,7 +85,7 @@ func Register(username string, email string, password string) (*entity.User, err
 			username, email, hashed,
 		)
 		if err != nil {
-			log.Err(err).Send()
+			log.Error().Err(err).Send()
 			return nil, pkg.NewHTTPError(http.StatusBadRequest, "create_user_error", "Registration info is are incorrect.")
 		}
 	}

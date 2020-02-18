@@ -16,7 +16,7 @@ func Get(c echo.Context) (err error) {
 		return pkg.NewHTTPError(401, "auth_token_required", "Need auth token in headers")
 	}
 
-	users, err := userService.GetFriends(current.ID)
+	users, err := userService.GetSubscriptions(current.ID)
 	if err != nil {
 		return err
 	}
