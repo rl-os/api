@@ -25,6 +25,8 @@
 * [Screenshots and videos](https://github.com/deissh/osu-lazer/blob/master/README.md#screenshots)
 
 
+![](https://i.imgur.com/mpbT7cd.jpg)
+
 ## Setup
 
 <!-- todo
