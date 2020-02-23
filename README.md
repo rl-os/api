@@ -26,19 +26,5 @@
 
 
 <p align="center">
-  <img src="https://i.imgur.com/7fndVIg.jpg" alt="logo2" width="auto" />
+  <img src="https://i.imgur.com/azTASY0.jpg" alt="logo2" width="auto" />
 </p>
-
-## Setup
-
-<!-- todo
-Up database
-```bash
-$ DATABASE_URL="postgres://postgres@127.0.0.1:5432/osuserver?sslmode=disable" dbmate up
-```
-
--->
-
-## Screenshots and videos
-
-[![asciicast](https://asciinema.org/a/MH9APy0jEf59Cc6MweZ5Amaej.svg)](https://asciinema.org/a/MH9APy0jEf59Cc6MweZ5Amaej)
