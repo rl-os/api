@@ -82,16 +82,6 @@ func main() {
 	app.Use(customlogger.Middleware())
 	app.Use(permission.GlobalMiddleware())
 
-	if config.Bool("server.cors.enable") {
-		log.Info().
-			Msg("Enabled build-in CORS")
-
-		app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-			AllowOrigins: config.Strings("server.cors.allow_origins"),
-			AllowHeaders: config.Strings("server.cors.allow_headers"),
-		}))
-	}
-
 	if config.Bool("server.sentry.enable") {
 		log.Debug().
 			Msg("Start initialize Sentry")
