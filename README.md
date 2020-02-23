@@ -25,7 +25,9 @@
 * [Screenshots and videos](https://github.com/deissh/osu-lazer/blob/master/README.md#screenshots)
 
 
-![](https://i.imgur.com/mpbT7cd.jpg)
+<p align="center">
+  <img src="https://i.imgur.com/7fndVIg.jpg" alt="logo2" width="auto" />
+</p>
 
 ## Setup
 
