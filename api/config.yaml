@@ -10,14 +10,6 @@ services:
 server:
   host: ${SERVER__HOST|127.0.0.1}
   port: ${SERVER__PORT|2100}
-  cors:
-    enable: false
-    allow_origins:
-      - localhost
-    allow_headers:
-      - Origin
-      - Content-Type
-      - Accept
 
   sentry:
     enable: ${SERVER__SENTRY__ENABLE|false}

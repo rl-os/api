@@ -4,11 +4,16 @@ import (
 	"github.com/deissh/osu-lazer/api/pkg"
 	"github.com/deissh/osu-lazer/api/pkg/controllers/oauth/token"
 	"github.com/deissh/osu-lazer/api/pkg/controllers/oauth/user"
+	oauthService "github.com/deissh/osu-lazer/api/pkg/services/oauth"
 	"github.com/labstack/echo/v4"
 )
 
 func empty(_ echo.Context) (err error) {
 	return pkg.NewHTTPError(400, "invalid_credentials", "The user credentials were incorrect.")
+}
+
+func scopes(c echo.Context) (err error) {
+	return c.JSON(200, oauthService.Scopes)
 }
 
 // ApplyRoutes applies router to the gin Engine
@@ -21,7 +26,7 @@ func ApplyRoutes(r *echo.Group) {
 		oauth.POST("/token", token.CreateTokenHandler) // https://laravel.com/docs/5.7/passport#refreshing-tokens
 
 		// Managing Tokens
-		oauth.GET("/scopes", empty)
+		oauth.GET("/scopes", scopes)
 
 		// Managing Clients
 		oauth.GET("/clients", empty)

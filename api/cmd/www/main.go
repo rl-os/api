@@ -70,6 +70,7 @@ func main() {
 
 	// Seting up Echo
 	app := echo.New()
+	app.HidePort = true
 	app.HideBanner = true
 	app.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
 
@@ -80,16 +81,6 @@ func main() {
 	// app.Use(middleware.Recover())
 	app.Use(customlogger.Middleware())
 	app.Use(permission.GlobalMiddleware())
-
-	if config.Bool("server.cors.enable") {
-		log.Info().
-			Msg("Enabled build-in CORS")
-
-		app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-			AllowOrigins: config.Strings("server.cors.allow_origins"),
-			AllowHeaders: config.Strings("server.cors.allow_headers"),
-		}))
-	}
 
 	if config.Bool("server.sentry.enable") {
 		log.Debug().
@@ -114,7 +105,7 @@ func main() {
 	oauth.ApplyRoutes(app.Group(""))
 	v2.ApplyRoutes(app.Group("/api"))
 
-	log.Debug().
+	log.Info().
 		Msg("Running HTTP server")
 
 	// Graceful start and stop HTTP server

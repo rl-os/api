@@ -95,8 +95,11 @@ func ApplyRoutes(r *echo.Group) {
 		}
 
 		// === Notifications ===
-		v2.GET("/notifications", empty)
-		v2.POST("/notifications/mark-read", empty)
+		v2Notif := v2.Group("/Notifications", permission.MustLogin)
+		{
+			v2Notif.GET("/", empty)
+			v2Notif.POST("/mark-read", empty)
+		}
 
 		// === Misc ===
 		v2.POST("/reports", empty)

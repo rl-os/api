@@ -32,7 +32,8 @@ func Put(c echo.Context) (err error) {
 		return pkg.NewHTTPError(http.StatusBadRequest, "request_validate_error", "Failed validate")
 	}
 
-	users, err := userService.SetFriend(current.ID, params.TargetId)
+	err = userService.SetFriend(current.ID, params.TargetId)
+	users, err := userService.GetSubscriptions(current.ID)
 	if err != nil {
 		return err
 	}

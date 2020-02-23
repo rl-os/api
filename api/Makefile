@@ -5,6 +5,7 @@ SHELL := /bin/bash
 export GO111MODULE := on
 export PATH := bin:$(PATH)
 
+PACKAGE				   = api
 VERSION       	       ?= $(shell git describe --tags --always --dirty --match="v*" 2> /dev/null || cat $(CURDIR)/.version 2> /dev/null || echo v1.0.0)
 COMMIT                 ?= $(shell git rev-parse HEAD)
 GIT_BRANCH             := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
@@ -17,6 +18,7 @@ DOCKER_IMAGE           ?= $(DOCKER_REGISTRY_PATH)/$(PACKAGE):$(VERSION)
 DOCKER_IMAGE_DOMAIN    ?= $(DOCKER_REGISTRY_DOMAIN)/$(DOCKER_IMAGE)
 
 # ===============================================
+DOCKERCMD				= docker
 GOCMD                   = go
 GOLINT				   := $(shell which golint)
 GOIMPORT			   := $(shell which goimports)
@@ -40,7 +42,7 @@ GOLDFLAGS += -X main.Version=$(VERSION)
 GOLDFLAGS += -X main.Commit=$(COMMIT)
 GOLDFLAGS += -X main.Branch=$(GIT_BRANCH_CLEAN)
 GOLDFLAGS += -X main.BuildTimestamp=$(BUILDTIME)
-GOFLAGS = -ldflags "$(GOLDFLAGS)"
+GOBUILDFLAGS = -ldflags "-s -w $(GOLDFLAGS)"
 
 # ===============================================
 GO = go
@@ -61,7 +63,17 @@ clear:
 ## Set impotants flags and then build all commands in cmd folder
 .PHONY: build
 build: clear
-	@(cd cmd ; for CMD in *; do $(GOBUILD) $(GOFLAGS) -o $(BIN_DIR)/$$CMD $$CMD/*.go && echo "$$CMD build done" || exit 1; done;)
+	@(cd cmd ; for CMD in *; do $(GOBUILD) $(GOBUILDFLAGS) -o $(BIN_DIR)/$$CMD $$CMD/*.go && echo "$$CMD build done" || exit 1; done;)
+
+## Build all commands in cmd folder as prod-like
+.PHONY: build-prod
+build-prod: clear
+	@(cd cmd ; for CMD in *; do CGO_ENABLED=0 $(GOBUILD) $(GOBUILDFLAGS) -a -installsuffix nocgo -o $(BIN_DIR)/$$CMD $$CMD/*.go && echo "$$CMD build done" || exit 1; done;)
+
+.PHONY: docker-build
+docker-build: message test
+	$(DOCKERCMD) build --tag $(DOCKER_IMAGE_DOMAIN) --file Dockerfile .
+
 
 ## Run all checks
 .PHONY: lint
@@ -131,7 +143,7 @@ chglog:
 
 .PHONY: message
 message:
-	@echo -e "\n        _.====.._                                 ___                _ \n     ,:.         ~-_                             / _ \   ___  _  _  | |\n         \`\        ~-_                          | (_) | (_-< | || | |_|\n           |          \`.                         \___/  /__/  \_,_| (_)\n         ,/             ~-_                                lazer server\n-..__..-''                 ~~--..__...----...--.....---.....--....---...\n\n                               GitHub: github.com/deissh/osu-lazer\n\n\n                                                    © 2019-2020, deissh.\n\n"
+	@echo -e "\n        _.====.._                                 ___                _ \n     ,:.         ~-_                             / _ \   ___  _  _  | |\n         \`\        ~-_                          | (_) | (_-< | || | |_|\n           |          \`.                         \___/  /__/  \_,_| (_)\n         ,/             ~-_                                lazer server\n-..__..-''                 ~~--..__...----...--.....---.....--....---...\n\n                                   GitHub: github.com/deissh/osu-lazer\n                                                     2019-2020, deissh\n\n"
 
 
 ## -- Go commands --
@@ -166,3 +178,6 @@ test:
 view-covered:
 	$(GOTEST) -coverprofile=cover.out ./...
 	$(GOCMD) tool cover -html=cover.out
+
+.PHONY: load-config
+load-config:
