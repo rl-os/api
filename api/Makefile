@@ -5,6 +5,7 @@ SHELL := /bin/bash
 export GO111MODULE := on
 export PATH := bin:$(PATH)
 
+PACKAGE				   = api
 VERSION       	       ?= $(shell git describe --tags --always --dirty --match="v*" 2> /dev/null || cat $(CURDIR)/.version 2> /dev/null || echo v1.0.0)
 COMMIT                 ?= $(shell git rev-parse HEAD)
 GIT_BRANCH             := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
@@ -17,6 +18,7 @@ DOCKER_IMAGE           ?= $(DOCKER_REGISTRY_PATH)/$(PACKAGE):$(VERSION)
 DOCKER_IMAGE_DOMAIN    ?= $(DOCKER_REGISTRY_DOMAIN)/$(DOCKER_IMAGE)
 
 # ===============================================
+DOCKERCMD				= docker
 GOCMD                   = go
 GOLINT				   := $(shell which golint)
 GOIMPORT			   := $(shell which goimports)
@@ -62,6 +64,16 @@ clear:
 .PHONY: build
 build: clear
 	@(cd cmd ; for CMD in *; do $(GOBUILD) $(GOBUILDFLAGS) -o $(BIN_DIR)/$$CMD $$CMD/*.go && echo "$$CMD build done" || exit 1; done;)
+
+## Build all commands in cmd folder as prod-like
+.PHONY: build-prod
+build-prod: clear
+	@(cd cmd ; for CMD in *; do CGO_ENABLED=0 $(GOBUILD) $(GOBUILDFLAGS) -a -installsuffix nocgo -o $(BIN_DIR)/$$CMD $$CMD/*.go && echo "$$CMD build done" || exit 1; done;)
+
+.PHONY: docker-build
+docker-build: message test
+	$(DOCKERCMD) build --tag $(DOCKER_IMAGE_DOMAIN) --file Dockerfile .
+
 
 ## Run all checks
 .PHONY: lint
