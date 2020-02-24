@@ -44,16 +44,6 @@ func ApplyRoutes(r *echo.Group) {
 		v2.GET("/users/:user/:mode", users.GetUserByID)
 		v2.GET("/users/:user/", users.GetUserByID)
 
-		// === Beatmaps ===
-		v2.GET("/beatmaps/lookup", empty)
-		v2.GET("/beatmaps/:beatmap", empty)
-		v2.GET("/beatmaps/:beatmap/scores", empty)
-		v2.GET("/beatmapsets/lookup", empty)
-		v2.GET("/beatmapsets/search/:filters", empty)
-		v2.GET("/beatmapsets/:beatmapset", empty)
-		v2.GET("/beatmapsets/:beatmapset/download", empty, permission.IsSupporter)
-		v2.GET("/beatmapsets/:beatmapset/favourites", empty)
-
 		// === Scores ===
 		v2.GET("/scores/:mode/:score/download", empty)
 
