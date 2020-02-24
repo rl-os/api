@@ -3,6 +3,7 @@ package entity
 import (
 	"github.com/deissh/osu-lazer/api/pkg"
 	"github.com/deissh/osu-lazer/api/pkg/common/utils"
+	"github.com/jmoiron/sqlx/types"
 	"github.com/lib/pq"
 	"github.com/rs/zerolog/log"
 	"time"
@@ -15,6 +16,7 @@ type User struct {
 	// internal field
 	Mode string `json:"-" db:"-"`
 
+	Country      types.JSONText   `json:"country" db:"country"` // == Country
 	CanModerate  bool             `json:"can_moderate" db:"can_moderate"`
 	Interests    utils.NullString `json:"interests" db:"interests"`
 	Occupation   string           `json:"occupation" db:"occupation"`

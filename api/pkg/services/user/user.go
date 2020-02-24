@@ -23,12 +23,15 @@ func GetUser(id uint, mode string) (*entity.User, error) {
 
 	err := pkg.Db.Get(
 		&user,
-		`SELECT *, check_online(last_visit)
-				FROM users
-				WHERE users.id = $1`,
+		`SELECT u.*, check_online(last_visit),
+				json_build_object('code', c.code, 'name', c.name) as country
+			FROM users u
+			INNER JOIN countries c ON c.code = u.country_code
+			WHERE u.id = $1`,
 		id,
 	)
 	if err != nil {
+		log.Error().Err(err).Send()
 		return nil, pkg.NewHTTPError(http.StatusNotFound, "user_not_founded", "User not founded.")
 	}
 
