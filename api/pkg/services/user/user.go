@@ -19,6 +19,7 @@ func GetUser(id uint, mode string) (*entity.User, error) {
 	if !utils.ContainsString(modes, mode) {
 		mode = "std"
 	}
+	user.Mode = mode
 
 	err := pkg.Db.Get(
 		&user,
@@ -31,12 +32,7 @@ func GetUser(id uint, mode string) (*entity.User, error) {
 		return nil, pkg.NewHTTPError(http.StatusNotFound, "user_not_founded", "User not founded.")
 	}
 
-	// todo: getting stats by mode
-
-	err = user.Compute()
-	if err != nil {
-		return nil, err
-	}
+	user.Compute()
 
 	return &user, nil
 }
