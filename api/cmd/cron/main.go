@@ -62,7 +62,9 @@ func main() {
 	c := cron.New()
 
 	// every 30 mins
-	_, _ = c.AddFunc("* * * * *", ExpireSupporter)
+	_, _ = c.AddFunc("*/30 * * * *", ExpireSupporter)
+	// every month
+	_, _ = c.AddFunc("1 0 1 * *", NewMonthPlaycount)
 
 	c.Run()
 }
