@@ -43,7 +43,7 @@ func CreateTokenHandler(c echo.Context) (err error) {
 		return pkg.NewHTTPError(http.StatusBadRequest, "request_validate_error", "Failed validate")
 	}
 
-	var token oauthService.Token
+	var token *oauthService.Token
 
 	if params.GrantType == "password" {
 		user, err := userService.LoginByPassword(params.Username, params.Password)

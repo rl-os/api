@@ -10,7 +10,7 @@ import (
 )
 
 // Required scopes
-func Required(required ...oauth.Scope) func(next echo.HandlerFunc) echo.HandlerFunc {
+func Required(required ...string) func(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			data := c.Get("current_user_token")
@@ -26,7 +26,7 @@ func Required(required ...oauth.Scope) func(next echo.HandlerFunc) echo.HandlerF
 
 			scopes := strings.SplitN(token.Scopes, ",", -1)
 
-			if !utils.ContainsStrings(scopes, utils.ToStringSlice(required)) {
+			if utils.ContainsStrings(scopes, required) != true {
 				return pkg.NewHTTPError(401, "oauth", fmt.Sprint("Required %a scopes, but received %a", required, scopes))
 			}
 

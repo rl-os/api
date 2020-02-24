@@ -1,13 +1,11 @@
 package oauth
 
-type Scope string
+var ProfileScope string = "profile"
+var ChatsScope string = "chats"
+var FriendsScope string = "friends"
+var RoomsScope string = "rooms"
+var CommentsScope string = "comments"
+var ScoresScope string = "scores"
+var NotifsScope string = "notifs"
 
-var ProfileScope Scope = "profile"
-var ChatsScope Scope = "chats"
-var FriendsScope Scope = "friends"
-var RoomsScope Scope = "rooms"
-var CommentsScope Scope = "comments"
-var ScoresScope Scope = "scores"
-var NotifsScope Scope = "notifs"
-
-var Scopes = []Scope{ProfileScope, ChatsScope, FriendsScope, RoomsScope, CommentsScope, ScoresScope, NotifsScope}
+var Scopes = []string{ProfileScope, ChatsScope, FriendsScope, RoomsScope, CommentsScope, ScoresScope, NotifsScope}
