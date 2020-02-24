@@ -79,7 +79,7 @@ func CreateOAuthToken(userID uint, clientID uint, clientSecret string, scopes st
 	}
 
 	err = pkg.Db.Get(
-		&token,
+		token,
 		`INSERT INTO oauth_token (user_id, client_id, access_token, refresh_token, scopes, expires_at)
 				VALUES ($1, $2, $3, $4, $5, $6)
 				RETURNING *`,

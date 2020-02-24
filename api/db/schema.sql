@@ -216,6 +216,45 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: user_month_playcount; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_month_playcount (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    playcount integer NOT NULL,
+    year_month character varying NOT NULL
+);
+
+
+--
+-- Name: COLUMN user_month_playcount.year_month; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.user_month_playcount.year_month IS '{year}-{month}-01';
+
+
+--
+-- Name: user_month_playcount_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_month_playcount_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_month_playcount_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_month_playcount_id_seq OWNED BY public.user_month_playcount.id;
+
+
+--
 -- Name: user_relation; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -342,6 +381,13 @@ ALTER TABLE ONLY public.oauth_token ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: user_month_playcount id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_month_playcount ALTER COLUMN id SET DEFAULT nextval('public.user_month_playcount_id_seq'::regclass);
+
+
+--
 -- Name: user_relation id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -401,6 +447,14 @@ ALTER TABLE ONLY public.oauth_token
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: user_month_playcount user_month_playcount_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_month_playcount
+    ADD CONSTRAINT user_month_playcount_pk PRIMARY KEY (id);
 
 
 --
@@ -490,6 +544,13 @@ CREATE INDEX table_name_name_index ON public.channels USING btree (name);
 
 
 --
+-- Name: user_month_playcount_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX user_month_playcount_id_uindex ON public.user_month_playcount USING btree (id);
+
+
+--
 -- Name: user_relation_id_uindex; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -541,6 +602,14 @@ ALTER TABLE ONLY public.message
 
 
 --
+-- Name: user_month_playcount user_month_playcount_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_month_playcount
+    ADD CONSTRAINT user_month_playcount_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
 -- Name: user_relation user_relation_target_id_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -583,4 +652,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200130133637'),
     ('20200201131358'),
     ('20200201135712'),
-    ('20200202081814');
+    ('20200202081814'),
+    ('20200224085752');

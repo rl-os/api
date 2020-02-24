@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"github.com/deissh/osu-lazer/api/pkg"
 	"github.com/deissh/osu-lazer/api/pkg/common/utils"
 	"github.com/deissh/osu-lazer/api/pkg/entity"
@@ -70,6 +71,8 @@ func LoginByPassword(username string, password string) (*entity.UserShort, error
 func Register(username string, email string, password string) (*entity.User, error) {
 	var baseUser entity.User
 
+	now := time.Now()
+
 	hashed, err := utils.GetHash(password)
 	if err != nil {
 		return nil, pkg.NewHTTPError(http.StatusInternalServerError, "internal_error", "Getting hash from password error.")
@@ -88,6 +91,13 @@ func Register(username string, email string, password string) (*entity.User, err
 			log.Error().Err(err).Send()
 			return nil, pkg.NewHTTPError(http.StatusBadRequest, "create_user_error", "Registration info is are incorrect.")
 		}
+
+		tx.MustExec(
+			`INSERT INTO user_month_playcount (user_id, playcount, year_month)
+			VALUES ($1, 0, $2)`,
+			baseUser.ID,
+			fmt.Sprintf("%02d-%02d-01", now.Year()%100, now.Month()),
+		)
 	}
 	err = tx.Commit()
 	if err != nil {

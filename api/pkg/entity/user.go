@@ -1,8 +1,10 @@
 package entity
 
 import (
+	"github.com/deissh/osu-lazer/api/pkg"
 	"github.com/deissh/osu-lazer/api/pkg/common/utils"
 	"github.com/lib/pq"
+	"github.com/rs/zerolog/log"
 	"time"
 )
 
@@ -80,8 +82,8 @@ type Kudosu struct {
 
 // MonthlyPlaycounts record
 type MonthlyPlaycounts struct {
-	StartDate string `json:"start_date"`
-	Count     int    `json:"count"`
+	StartDate string `json:"start_date" db:"year_month"`
+	Count     int    `json:"count" db:"playcount"`
 }
 
 // Page customization
@@ -139,6 +141,25 @@ type UserAchievements struct {
 type RankHistory struct {
 	Mode string `json:"mode"`
 	Data []int  `json:"data"`
+}
+
+// Compute fields and return error if not successful
+func (u *User) Compute() error {
+	// =========================
+	// getting MonthlyPlayCounts
+	plays := make([]MonthlyPlaycounts, 0)
+	err := pkg.Db.Select(
+		&plays,
+		`SELECT playcount, year_month FROM user_month_playcount WHERE user_id = $1`,
+		u.ID,
+	)
+	if err != nil {
+		log.Error().Err(err)
+	}
+	u.MonthlyPlaycounts = plays
+	// =========================
+
+	return nil
 }
 
 // GetShort version of user

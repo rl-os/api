@@ -1,8 +1,6 @@
 package entity
 
 import (
-	"fmt"
-	"github.com/deissh/osu-lazer/api/pkg"
 	"time"
 )
 
@@ -25,13 +23,4 @@ type UserShort struct {
 	LastVisit        time.Time `json:"last_visit" db:"last_visit"`
 	JoinDate         time.Time `json:"join_date" db:"created_at"`
 	SupportExpiredAt time.Time `json:"-" db:"support_expired_at"`
-}
-
-// Compute fields and return error if not successful
-func (u *UserShort) Compute() error {
-	if err := pkg.Rb.Get(fmt.Sprintf("online_users::%d", u.ID)).Err(); err == nil {
-		u.IsOnline = true
-	}
-
-	return nil
 }
