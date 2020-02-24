@@ -31,7 +31,7 @@ func GetUserByID(c echo.Context) (err error) {
 func GetUserByToken(c echo.Context) error {
 	mode := c.Param("mode")
 
-	token, ok := c.Get("current_user_token").(oauthService.Token)
+	token, ok := c.Get("current_user_token").(*oauthService.Token)
 	log.Debug().Interface("token", token).Send()
 	if ok != true {
 		return pkg.NewHTTPError(http.StatusBadRequest, "request_validate_error", "Failed validate")

@@ -1,14 +1,19 @@
 package entity
 
 import (
+	"github.com/deissh/osu-lazer/api/pkg"
 	"github.com/deissh/osu-lazer/api/pkg/common/utils"
 	"github.com/lib/pq"
+	"github.com/rs/zerolog/log"
 	"time"
 )
 
 // User data structure
 type User struct {
 	UserShort
+
+	// internal field
+	Mode string `json:"-" db:"-"`
 
 	CanModerate  bool             `json:"can_moderate" db:"can_moderate"`
 	Interests    utils.NullString `json:"interests" db:"interests"`
@@ -80,8 +85,8 @@ type Kudosu struct {
 
 // MonthlyPlaycounts record
 type MonthlyPlaycounts struct {
-	StartDate string `json:"start_date"`
-	Count     int    `json:"count"`
+	StartDate string `json:"start_date" db:"year_month"`
+	Count     int    `json:"count" db:"playcount"`
 }
 
 // Page customization
@@ -139,6 +144,34 @@ type UserAchievements struct {
 type RankHistory struct {
 	Mode string `json:"mode"`
 	Data []int  `json:"data"`
+}
+
+// Compute fields in user struct
+func (u *User) Compute() {
+	// =========================
+	// getting MonthlyPlayCounts
+	plays := make([]MonthlyPlaycounts, 0)
+	err := pkg.Db.Select(
+		&plays,
+		`SELECT playcount, year_month FROM user_month_playcount WHERE user_id = $1`,
+		u.ID,
+	)
+	if err != nil {
+		log.Error().Err(err)
+	}
+	u.MonthlyPlaycounts = plays
+	// =========================
+	// getting RankHistory
+	//ranks := make([]int, 50)
+
+	u.RankHistory = RankHistory{
+		Mode: u.Mode,
+		// todo: https://github.com/ppy/osu-web/blob/7d14d741454e2c8ef5c90b9bfa90213f61020b06/app/Models/RankHistory.php#L119
+		// очень странный формат, но нужно как разобраться
+		// сейчас оставил так, когда будет время исправить
+		Data: []int{1, 1, 2, 3, 1, 1, 1, 1, 4, 4, 5, 1, 1, 1, 1, 1, 11, 1, 1, 1, 2, 1, 1, 1},
+	}
+	// =========================
 }
 
 // GetShort version of user
