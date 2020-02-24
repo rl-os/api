@@ -27,6 +27,43 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: achievements; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.achievements (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    description character varying NOT NULL,
+    enabled boolean DEFAULT true NOT NULL,
+    "grouping" character varying NOT NULL,
+    image character varying,
+    mode character varying DEFAULT 'osu'::character varying,
+    quest_instructions character varying,
+    slug character varying NOT NULL
+);
+
+
+--
+-- Name: achievements_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.achievements_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: achievements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.achievements_id_seq OWNED BY public.achievements.id;
+
+
+--
 -- Name: channels; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -216,6 +253,38 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: user_achievements; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_achievements (
+    id integer NOT NULL,
+    achievement_id integer NOT NULL,
+    user_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+--
+-- Name: user_achievements_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_achievements_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_achievements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_achievements_id_seq OWNED BY public.user_achievements.id;
+
+
+--
 -- Name: user_month_playcount; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -346,6 +415,13 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: achievements id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.achievements ALTER COLUMN id SET DEFAULT nextval('public.achievements_id_seq'::regclass);
+
+
+--
 -- Name: channels id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -381,6 +457,13 @@ ALTER TABLE ONLY public.oauth_token ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: user_achievements id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_achievements ALTER COLUMN id SET DEFAULT nextval('public.user_achievements_id_seq'::regclass);
+
+
+--
 -- Name: user_month_playcount id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -399,6 +482,14 @@ ALTER TABLE ONLY public.user_relation ALTER COLUMN id SET DEFAULT nextval('publi
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: achievements achievements_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.achievements
+    ADD CONSTRAINT achievements_pk PRIMARY KEY (id);
 
 
 --
@@ -450,6 +541,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: user_achievements user_achievements_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_achievements
+    ADD CONSTRAINT user_achievements_pk PRIMARY KEY (id);
+
+
+--
 -- Name: user_month_playcount user_month_playcount_pk; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -471,6 +570,20 @@ ALTER TABLE ONLY public.user_relation
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pk PRIMARY KEY (id);
+
+
+--
+-- Name: achievements_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX achievements_id_uindex ON public.achievements USING btree (id);
+
+
+--
+-- Name: achievements_slug_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX achievements_slug_uindex ON public.achievements USING btree (slug);
 
 
 --
@@ -544,6 +657,20 @@ CREATE INDEX table_name_name_index ON public.channels USING btree (name);
 
 
 --
+-- Name: user_achievements_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX user_achievements_id_uindex ON public.user_achievements USING btree (id);
+
+
+--
+-- Name: user_achievements_user_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX user_achievements_user_id_index ON public.user_achievements USING btree (user_id);
+
+
+--
 -- Name: user_month_playcount_id_uindex; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -602,6 +729,22 @@ ALTER TABLE ONLY public.message
 
 
 --
+-- Name: user_achievements user_achievements_achievements_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_achievements
+    ADD CONSTRAINT user_achievements_achievements_fk FOREIGN KEY (achievement_id) REFERENCES public.achievements(id) ON DELETE CASCADE;
+
+
+--
+-- Name: user_achievements user_achievements_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_achievements
+    ADD CONSTRAINT user_achievements_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
 -- Name: user_month_playcount user_month_playcount_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -653,4 +796,6 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200201131358'),
     ('20200201135712'),
     ('20200202081814'),
-    ('20200224085752');
+    ('20200224085752'),
+    ('20200224101725'),
+    ('20200224101740');

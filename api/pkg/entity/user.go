@@ -136,8 +136,8 @@ type Statistics struct {
 
 // UserAchievements with datetime
 type UserAchievements struct {
-	AchievedAt    time.Time `json:"achieved_at"`
-	AchievementID int       `json:"achievement_id"`
+	AchievedAt    time.Time `json:"achieved_at" db:"created_at"`
+	AchievementID int       `json:"achievement_id" db:"achievement_id"`
 }
 
 // RankHistory recor
@@ -150,20 +150,19 @@ type RankHistory struct {
 func (u *User) Compute() {
 	// =========================
 	// getting MonthlyPlayCounts
-	plays := make([]MonthlyPlaycounts, 0)
+	u.MonthlyPlaycounts = make([]MonthlyPlaycounts, 0)
 	err := pkg.Db.Select(
-		&plays,
+		&u.MonthlyPlaycounts,
 		`SELECT playcount, year_month FROM user_month_playcount WHERE user_id = $1`,
 		u.ID,
 	)
 	if err != nil {
-		log.Error().Err(err)
+		log.Error().Err(err).Send()
 	}
-	u.MonthlyPlaycounts = plays
+
 	// =========================
 	// getting RankHistory
 	//ranks := make([]int, 50)
-
 	u.RankHistory = RankHistory{
 		Mode: u.Mode,
 		// todo: https://github.com/ppy/osu-web/blob/7d14d741454e2c8ef5c90b9bfa90213f61020b06/app/Models/RankHistory.php#L119
@@ -171,7 +170,18 @@ func (u *User) Compute() {
 		// сейчас оставил так, когда будет время исправить
 		Data: []int{1, 1, 2, 3, 1, 1, 1, 1, 4, 4, 5, 1, 1, 1, 1, 1, 11, 1, 1, 1, 2, 1, 1, 1},
 	}
+
 	// =========================
+	// getting UserAchievements
+	u.UserAchievements = make([]UserAchievements, 0)
+	err = pkg.Db.Select(
+		&u.UserAchievements,
+		`SELECT achievement_id, created_at FROM user_achievements WHERE user_id = $1`,
+		u.ID,
+	)
+	if err != nil {
+		log.Error().Err(err).Send()
+	}
 }
 
 // GetShort version of user
