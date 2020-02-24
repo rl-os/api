@@ -14,12 +14,19 @@ func TestGenerateRandomBytes(t *testing.T) {
 		want    []byte
 		wantErr bool
 	}{
-		{name: "random 6 bytes", args: args{n: 6}},
-		{name: "random 256 bytes", args: args{n: 256}},
+		{name: "random 6 bytes", args: args{n: 6}, wantErr: false},
+		{name: "random 256 bytes", args: args{n: 256}, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, _ = GenerateRandomBytes(tt.args.n)
+			bytes, err := GenerateRandomBytes(tt.args.n)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GenerateRandomBytes() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if len(bytes) != tt.args.n {
+				t.Errorf("GenerateRandomBytes len = %v, want %v", len(bytes), tt.args.n)
+			}
 		})
 	}
 }
