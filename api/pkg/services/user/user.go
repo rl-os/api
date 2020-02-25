@@ -92,10 +92,13 @@ func Register(username string, email string, password string) (*entity.User, err
 		}
 
 		tx.MustExec(
-			`INSERT INTO user_month_playcount (user_id, playcount, year_month)
-			VALUES ($1, 0, $2)`,
+			`INSERT INTO user_month_playcount (user_id, playcount, year_month) VALUES ($1, 0, $2)`,
 			baseUser.ID,
 			fmt.Sprintf("%02d-%02d-01", now.Year()%100, now.Month()),
+		)
+		tx.MustExec(
+			`INSERT INTO user_statistics (user_id) VALUES ($1)`,
+			baseUser.ID,
 		)
 	}
 	err = tx.Commit()
