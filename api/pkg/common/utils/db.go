@@ -2,7 +2,10 @@ package utils
 
 import (
 	"database/sql"
+	"database/sql/driver"
 	"encoding/json"
+	"errors"
+	"github.com/mitchellh/mapstructure"
 )
 
 type NullString struct {
@@ -30,4 +33,24 @@ func (v *NullString) UnmarshalJSON(data []byte) error {
 		v.Valid = false
 	}
 	return nil
+}
+
+func ValueOfStruct(dest interface{}) (driver.Value, error) {
+	return json.Marshal(dest)
+}
+
+// Make the Attrs struct implement the sql.Scanner interface. This method
+// simply decodes a JSON-encoded value into the struct fields.
+func ScanToStruct(dest interface{}, value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	var data map[string]interface{}
+	if err := json.Unmarshal(b, &data); err != nil {
+		return err
+	}
+
+	return mapstructure.Decode(data, dest)
 }

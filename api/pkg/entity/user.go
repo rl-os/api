@@ -1,9 +1,9 @@
 package entity
 
 import (
+	"database/sql/driver"
 	"github.com/deissh/osu-lazer/api/pkg"
 	"github.com/deissh/osu-lazer/api/pkg/common/utils"
-	"github.com/jmoiron/sqlx/types"
 	"github.com/lib/pq"
 	"github.com/rs/zerolog/log"
 	"time"
@@ -16,7 +16,7 @@ type User struct {
 	// internal field
 	Mode string `json:"-" db:"-"`
 
-	Country      types.JSONText   `json:"country" db:"country"` // == Country
+	Country      Country          `json:"country" db:"country"`
 	CanModerate  bool             `json:"can_moderate" db:"can_moderate"`
 	Interests    utils.NullString `json:"interests" db:"interests"`
 	Occupation   string           `json:"occupation" db:"occupation"`
@@ -71,6 +71,9 @@ type Country struct {
 	Code string `json:"code"`
 	Name string `json:"name"`
 }
+
+func (c Country) Value() (driver.Value, error)  { return utils.ValueOfStruct(c) }
+func (c *Country) Scan(value interface{}) error { return utils.ScanToStruct(c, value) }
 
 // Cover file url
 type Cover struct {
