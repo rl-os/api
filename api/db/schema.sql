@@ -356,6 +356,53 @@ ALTER SEQUENCE public.user_relation_id_seq OWNED BY public.user_relation.id;
 
 
 --
+-- Name: user_statistics; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_statistics (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    level_current integer DEFAULT 1 NOT NULL,
+    level_progress integer DEFAULT 0 NOT NULL,
+    pp double precision DEFAULT 0.0 NOT NULL,
+    ranked_score integer DEFAULT 0 NOT NULL,
+    hit_accuracy double precision DEFAULT 0.0 NOT NULL,
+    play_count integer DEFAULT 0 NOT NULL,
+    play_time integer DEFAULT 0 NOT NULL,
+    total_score integer DEFAULT 0 NOT NULL,
+    total_hits integer DEFAULT 0 NOT NULL,
+    maximum_combo integer DEFAULT 0 NOT NULL,
+    replays_watched_by_others integer DEFAULT 0 NOT NULL,
+    is_ranked boolean DEFAULT true NOT NULL,
+    grade_counts_ss integer DEFAULT 0 NOT NULL,
+    grade_counts_ssh integer DEFAULT 0 NOT NULL,
+    grade_counts_s integer DEFAULT 0 NOT NULL,
+    grade_counts_sh integer DEFAULT 0 NOT NULL,
+    grade_counts_a integer DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: user_statistics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_statistics_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_statistics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_statistics_id_seq OWNED BY public.user_statistics.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -478,6 +525,13 @@ ALTER TABLE ONLY public.user_relation ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: user_statistics id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_statistics ALTER COLUMN id SET DEFAULT nextval('public.user_statistics_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -562,6 +616,14 @@ ALTER TABLE ONLY public.user_month_playcount
 
 ALTER TABLE ONLY public.user_relation
     ADD CONSTRAINT user_relation_pk PRIMARY KEY (id);
+
+
+--
+-- Name: user_statistics user_statistics_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_statistics
+    ADD CONSTRAINT user_statistics_pk PRIMARY KEY (id);
 
 
 --
@@ -692,6 +754,20 @@ CREATE INDEX user_relation_user_id_target_id_index ON public.user_relation USING
 
 
 --
+-- Name: user_statistics_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX user_statistics_id_uindex ON public.user_statistics USING btree (id);
+
+
+--
+-- Name: user_statistics_user_id_is_ranked_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX user_statistics_user_id_is_ranked_index ON public.user_statistics USING btree (user_id, is_ranked);
+
+
+--
 -- Name: users_email_uindex; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -769,6 +845,14 @@ ALTER TABLE ONLY public.user_relation
 
 
 --
+-- Name: user_statistics user_statistics_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_statistics
+    ADD CONSTRAINT user_statistics_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -798,4 +882,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200202081814'),
     ('20200224085752'),
     ('20200224101725'),
-    ('20200224101740');
+    ('20200224101740'),
+    ('20200225094357');
