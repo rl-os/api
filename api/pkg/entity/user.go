@@ -123,18 +123,15 @@ func (c *GradeCounts) Scan(value interface{}) error { return utils.ScanToStruct(
 
 // Rank in world and in the user country
 type Rank struct {
-	Global  int `json:"global"`
-	Country int `json:"country"`
+	Global  int `json:"global" db:"global"`
+	Country int `json:"country" db:"country"`
 }
-
-func (r Rank) Value() (driver.Value, error)  { return utils.ValueOfStruct(r) }
-func (r *Rank) Scan(value interface{}) error { return utils.ScanToStruct(r, value) }
 
 // Statistics in profile
 type Statistics struct {
 	Level                  Level       `json:"level" db:"level"`
 	Pp                     float64     `json:"pp" db:"pp"`
-	PpRank                 int         `json:"pp_rank" db:"pp_rank"`
+	PpRank                 int         `json:"pp_rank" db:"-"`
 	RankedScore            int         `json:"ranked_score" db:"ranked_score"`
 	HitAccuracy            float64     `json:"hit_accuracy" db:"hit_accuracy"`
 	PlayCount              int         `json:"play_count" db:"play_count"`
@@ -145,7 +142,7 @@ type Statistics struct {
 	ReplaysWatchedByOthers int         `json:"replays_watched_by_others" db:"replays_watched_by_others"`
 	IsRanked               bool        `json:"is_ranked" db:"is_ranked"`
 	GradeCounts            GradeCounts `json:"grade_counts" db:"grade_counts"`
-	Rank                   Rank        `json:"rank" db:"rank"`
+	Rank                   Rank        `json:"rank" db:"-"`
 }
 
 // UserAchievements with datetime
@@ -176,7 +173,7 @@ func (u *User) Compute() {
 
 	// =========================
 	// getting RankHistory
-	//ranks := make([]int, 50)
+	// ranks := make([]int, 50)
 	u.RankHistory = RankHistory{
 		Mode: u.Mode,
 		// todo: https://github.com/ppy/osu-web/blob/7d14d741454e2c8ef5c90b9bfa90213f61020b06/app/Models/RankHistory.php#L119
@@ -203,10 +200,9 @@ func (u *User) Compute() {
 		&u.Statistics,
 		`SELECT
        		json_build_object('current', level_current, 'progress', level_progress) as level,
-       		json_build_object('global', 1, 'country', 1) as rank,
        		json_build_object('ss', grade_counts_ss, 'ssh', grade_counts_ssh, 'sh', grade_counts_sh,
        		    			  's', grade_counts_s, 'a', grade_counts_a) as grade_counts,
-       		pp, 0 as pp_rank, ranked_score, hit_accuracy, play_count, play_time, total_score,
+       		pp, ranked_score, hit_accuracy, play_count, play_time, total_score,
        		total_hits, maximum_combo, replays_watched_by_others, is_ranked
 		FROM user_statistics
 		WHERE user_id = $1`,
@@ -215,6 +211,27 @@ func (u *User) Compute() {
 	if err != nil {
 		log.Error().Err(err).Send()
 	}
+
+	// =========================
+	// getting UserRank
+	err = pkg.Db.Get(
+		&u.Statistics.Rank,
+		`SELECT country, global
+		FROM (
+				 SELECT rank() over (PARTITION BY t.country_code ORDER BY t.pp DESC) as country,
+						rank() over (ORDER BY t.pp DESC) as global,
+				        t.user_id
+				 FROM (SELECT us.user_id, us.pp, u.country_code
+						FROM user_statistics us
+						JOIN users u on us.user_id = u.id) as t
+			 ) as rt
+		WHERE rt.user_id = $1;`,
+		u.ID,
+	)
+	if err != nil {
+		log.Error().Err(err).Send()
+	}
+	u.Statistics.PpRank = u.Statistics.Rank.Global
 }
 
 // GetShort version of user
