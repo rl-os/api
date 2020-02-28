@@ -1,0 +1,10 @@
+debug: ${DEBUG|true}
+
+# API server configuration
+server:
+  host: ${SERVER__HOST|127.0.0.1}
+  port: ${SERVER__PORT|2400}
+
+  database:
+    driver: ${SERVER__DATABASE__DRIVER|postgres}
+    dsn: ${SERVER__DATABASE__DSN|postgres://postgres:postgres@/osuserver?sslmode=disable}
