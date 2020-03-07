@@ -49,7 +49,7 @@ func (s *App) Start() error {
 
 	log.Info().Msg("Starting App...")
 
-	addr := config.String("server.host") + ":" + config.String("server.port")
+	addr := config.String("host") + ":" + config.String("port")
 
 	// Graceful start and stop HTTP server
 	go func() {

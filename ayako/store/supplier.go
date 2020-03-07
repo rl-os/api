@@ -29,7 +29,7 @@ func Init() Store {
 }
 
 func (ss *Supplier) initConnection() {
-	conn, err := sqlx.Connect(config.String("server.database.driver"), config.String("server.database.dsn"))
+	conn, err := sqlx.Connect(config.String("database.driver"), config.String("database.dsn"))
 	if err != nil {
 		log.Fatal().
 			Err(err).
@@ -46,7 +46,7 @@ func (ss *Supplier) initConnection() {
 
 	stats := ss.master.Stats()
 	log.Info().
-		Str("driver", config.String("server.database.driver")).
+		Str("driver", config.String("database.driver")).
 		Int("open_connections", stats.OpenConnections).
 		Int("max_open_connections", stats.MaxOpenConnections).
 		Int("idle", stats.Idle).

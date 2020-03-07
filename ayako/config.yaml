@@ -1,10 +1,28 @@
 debug: ${DEBUG|true}
 
 # API server configuration
-server:
-  host: ${SERVER__HOST|127.0.0.1}
-  port: ${SERVER__PORT|2400}
+host: ${SERVER__HOST|127.0.0.1}
+port: ${SERVER__PORT|2400}
 
-  database:
-    driver: ${SERVER__DATABASE__DRIVER|postgres}
-    dsn: ${SERVER__DATABASE__DSN|postgres://postgres:postgres@/osuserver?sslmode=disable}
+database:
+  driver: ${SERVER__DATABASE__DRIVER|postgres}
+  dsn: ${SERVER__DATABASE__DSN|postgres://postgres:postgres@/osuserver?sslmode=disable}
+
+
+# Slave database configuration
+mirror:
+  bancho:
+    using_refresh_token: true
+
+    # using by oauth
+    # public information
+    client_id: 5
+    client_secret: 'FGc9GAtyHzeQDshWP5Ah7dega8hJACAJpQtw6OXk'
+
+    username: test
+    password: tset
+
+  s3:
+    secret_id: 123
+    secret_key: 321
+    bucket: beatmaps
