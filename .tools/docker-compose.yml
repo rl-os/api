@@ -21,16 +21,15 @@ services:
     healthcheck:
       test: ["CMD", "redis-cli", "-h", "localhost", "ping"]
 
-  backend:
-    image: deissh/osu-lazer:${BACKEND_TAG:-latest}
+  api:
+    image: deissh/osu-lazer-api:${BACKEND_TAG:-latest}
     restart: unless-stopped
-    build:
-      context: .
     depends_on:
       - db
       - redis
+      - ayako
     environment:
-      DEBUG: false
+      DEBUG: true
       SERVER__DATABASE__DRIVER: postgres
       SERVER__DATABASE__DSN: postgres://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db/${DB_NAME:-osu-server}
       SERVER__REDIS__HOST: redis:6379
@@ -39,3 +38,19 @@ services:
       SERVER__JWT_SECRET: ${DB_USER:-notset}
     ports:
       - 2100:2100
+
+  ayako:
+    image: deissh/osu-lazer-ayako:${BACKEND_TAG:-latest}
+      restart: unless-stopped
+      depends_on:
+        - db
+        - redis
+      environment:
+        DEBUG: true
+        SERVER__DATABASE__DRIVER: postgres
+        SERVER__DATABASE__DSN: postgres://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db/${DB_NAME:-osu-server}
+        SERVER__REDIS__HOST: redis:6379
+        SERVER__HOST: 0.0.0.0
+        SERVER__PORT: 2400
+      ports:
+        - 2400:2400
