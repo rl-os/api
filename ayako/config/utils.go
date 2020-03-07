@@ -28,13 +28,13 @@ func (e *UnmatchedTomlKeysError) Error() string {
 }
 
 func (c *Config) getENVPrefix(config interface{}) string {
-	if c.Config.ENVPrefix == "" {
+	if c.ENVPrefix == "" {
 		if prefix := os.Getenv("Config_ENV_PREFIX"); prefix != "" {
 			return prefix
 		}
 		return "c"
 	}
-	return c.Config.ENVPrefix
+	return c.ENVPrefix
 }
 
 func getConfigurationFileWithENVPrefix(file, env string) (string, time.Time, error) {
@@ -59,7 +59,7 @@ func (c *Config) getConfigurationFiles(watchMode bool, files ...string) ([]strin
 	var resultKeys []string
 	var results = map[string]time.Time{}
 
-	if !watchMode && (c.Config.Debug) {
+	if !watchMode && (os.Getenv("DEBUG") == "true") {
 		fmt.Printf("Current environment: '%v'\n", c.GetEnvironment())
 	}
 
@@ -211,7 +211,7 @@ func (c *Config) processTags(config interface{}, prefixes ...string) error {
 		// Load From Shell ENV
 		for _, env := range envNames {
 			if value := os.Getenv(env); value != "" {
-				if c.Config.Debug {
+				if os.Getenv("DEBUG") == "true" {
 					fmt.Printf("Loading configuration for struct `%v`'s field `%v` from env %v...\n", configType.Name(), fieldStruct.Name, env)
 				}
 
@@ -291,7 +291,7 @@ func (c *Config) processTags(config interface{}, prefixes ...string) error {
 
 func (c *Config) load(config interface{}, watchMode bool, files ...string) (err error, changed bool) {
 	defer func() {
-		if c.Config.Debug {
+		if os.Getenv("DEBUG") == "true" {
 			if err != nil {
 				fmt.Printf("Failed to load configuration from %v, got %v\n", files, err)
 			}
@@ -318,7 +318,7 @@ func (c *Config) load(config interface{}, watchMode bool, files ...string) (err 
 	}
 
 	for _, file := range configFiles {
-		if c.Config.Debug {
+		if os.Getenv("DEBUG") == "true" {
 			fmt.Printf("Loading configurations from file '%v'...\n", file)
 		}
 		if err = processFile(config, file, c.GetErrorOnUnmatchedKeys()); err != nil {
