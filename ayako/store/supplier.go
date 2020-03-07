@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/gookit/config/v2"
+	"github.com/deissh/osu-lazer/ayako/config"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/rs/zerolog/log"
@@ -20,16 +20,16 @@ type Supplier struct {
 
 // Init new store
 // Using with DI
-func Init() Store {
+func Init(cfg *config.Config) Store {
 	supplier := &Supplier{}
 
-	supplier.initConnection()
+	supplier.initConnection(cfg)
 
 	return &supplier.stores
 }
 
-func (ss *Supplier) initConnection() {
-	conn, err := sqlx.Connect(config.String("database.driver"), config.String("database.dsn"))
+func (ss *Supplier) initConnection(cfg *config.Config) {
+	conn, err := sqlx.Connect(cfg.Database.Driver, cfg.Database.DSN)
 	if err != nil {
 		log.Fatal().
 			Err(err).
@@ -46,7 +46,7 @@ func (ss *Supplier) initConnection() {
 
 	stats := ss.master.Stats()
 	log.Info().
-		Str("driver", config.String("database.driver")).
+		Str("driver", cfg.Database.Driver).
 		Int("open_connections", stats.OpenConnections).
 		Int("max_open_connections", stats.MaxOpenConnections).
 		Int("idle", stats.Idle).

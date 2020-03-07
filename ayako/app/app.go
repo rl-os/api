@@ -3,8 +3,8 @@ package app
 import (
 	"context"
 	"github.com/deissh/osu-lazer/ayako/api"
+	"github.com/deissh/osu-lazer/ayako/config"
 	"github.com/deissh/osu-lazer/ayako/store"
-	"github.com/gookit/config/v2"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
@@ -14,8 +14,9 @@ import (
 )
 
 type App struct {
-	Store *store.Store
-	Echo  *echo.Echo
+	Config *config.Config
+	Store  *store.Store
+	Echo   *echo.Echo
 
 	goroutineCount      int32
 	goroutineExitSignal chan struct{}
@@ -23,7 +24,7 @@ type App struct {
 
 // NewApp with DI
 // expect store.Store
-func NewApp(store store.Store) *App {
+func NewApp(cfg *config.Config, store store.Store) *App {
 	app := echo.New()
 	app.HidePort = true
 	app.HideBanner = true
@@ -33,8 +34,9 @@ func NewApp(store store.Store) *App {
 	api.New(store, app.Group("/v2"))
 
 	return &App{
-		Store: nil,
-		Echo:  app,
+		Store:  &store,
+		Echo:   app,
+		Config: cfg,
 	}
 }
 
@@ -49,7 +51,7 @@ func (s *App) Start() error {
 
 	log.Info().Msg("Starting App...")
 
-	addr := config.String("host") + ":" + config.String("port")
+	addr := s.Config.Server.Host + ":" + s.Config.Server.Host
 
 	// Graceful start and stop HTTP server
 	go func() {
