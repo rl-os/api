@@ -9,6 +9,18 @@
   <link rel="icon" href="https://docs.ppy.sh/images/logo.png">
   <!-- Theme: Simple Dark -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+  <style>
+    .cover .mask {
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-image: url(https://66.media.tumblr.com/ae90a490ba260713d9204a86350b2e37/tumblr_p22l00OAt51tleiqgo2_1280.jpg);
+      background-size: cover;
+      filter: blur(5px);
+      -webkit-filter: blur(5px);
+      visibility: inherit;
+    }
+  </style>
 </head>
 <body>
   <div id="app"></div>
@@ -18,7 +30,7 @@
       repo: 'https://github.com/deissh/osu-lazer',
       
       loadSidebar: true,
-      coverpage: false,
+      coverpage: true,
       loadNavbar: true,
       autoHeader: true,
 
