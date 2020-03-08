@@ -53,16 +53,16 @@
       plugins: [
         function (hook, vm) {
           hook.beforeEach(function (html) {
+            let url;
             if (/githubusercontent\.com/.test(vm.route.file)) {
               url = vm.route.file
-                .replace('raw.githubusercontent.com', 'github.com')
-                .replace(/\/master/, '/blob/master')
+                      .replace('raw.githubusercontent.com', 'github.com')
+                      .replace(/\/master/, '/blob/master');
             } else {
-              url = 'https://github.com/deissh/osu-lazer/blob/master/docs/' + vm.route.file
+              url = 'https://github.com/deissh/osu-lazer/blob/master/docs/' + vm.route.file;
             }
-            var editHtml = '[:memo: Edit Document](' + url + ')\n'
-            return editHtml + html
-          })
+            return '[:memo: Edit Document](' + url + ')\n' + html;
+          });
         },
       ]
     }
@@ -76,9 +76,9 @@
   <script src="//unpkg.com/docsify-tabs@1"></script>
 
   <!-- language highlight -->
+  <script src="//unpkg.com/prismjs/components/prism-json.min.js"></script>
   <script src="//unpkg.com/prismjs/components/prism-go.min.js"></script>
   <script src="//unpkg.com/prismjs/components/prism-bash.min.js"></script>
-  <script src="//unpkg.com/prismjs/components/prism-js.min.js"></script>
   <script src="//unpkg.com/prismjs/components/prism-python.min.js"></script>
 </body>
 </html>
