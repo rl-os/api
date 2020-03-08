@@ -51,7 +51,7 @@ func (s *App) Start() error {
 
 	log.Info().Msg("Starting App...")
 
-	addr := s.Config.Server.Host + ":" + s.Config.Server.Host
+	addr := s.Config.Server.Host + ":" + s.Config.Server.Port
 
 	// Graceful start and stop HTTP server
 	go func() {

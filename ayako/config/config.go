@@ -10,8 +10,6 @@ type Config struct {
 	// This field will be ignored when compiled with go versions lower than 1.10.
 	ErrorOnUnmatchedKeys bool
 
-	Environment        string
-	ENVPrefix          string
 	AutoReload         bool
 	AutoReloadInterval time.Duration
 	AutoReloadCallback func(config interface{})
@@ -19,25 +17,25 @@ type Config struct {
 
 	// Configurations
 	Server struct {
-		Host string `json:"host"`
-		Port string `json:"port"`
+		Host string `default:"0.0.0.0"`
+		Port string `default:"2400"`
 	}
 	Database struct {
-		DSN    string `json:"dsn"`
-		Driver string `json:"driver"`
+		DSN    string `default:"postgres://postgres:postgres@/osuserver?sslmode=disable"`
+		Driver string `default:"postgres"`
 	}
 	Mirror struct {
 		S3 struct {
-			SecretKey int64  `json:"secret_key"`
-			Bucket    string `json:"bucket"`
-			SecretID  int64  `json:"secret_id"`
+			SecretKey int64
+			Bucket    string
+			SecretID  int64
 		}
 		Bancho struct {
-			Username          string `json:"username"`
-			ClientSecret      string `json:"client_secret"`
-			Password          string `json:"password"`
-			UsingRefreshToken bool   `json:"using_refresh_token"`
-			ClientID          int64  `json:"client_id"`
+			Username          string
+			ClientSecret      string
+			Password          string
+			UsingRefreshToken bool
+			ClientID          int64
 		}
 	}
 }

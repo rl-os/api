@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"gopkg.in/yaml.v2"
 	"io"
 	"io/ioutil"
@@ -27,14 +28,12 @@ func (e *UnmatchedTomlKeysError) Error() string {
 	return fmt.Sprintf("There are keys in the config file that do not match any field in the given struct: %v", e.Keys)
 }
 
-func (c *Config) getENVPrefix(config interface{}) string {
-	if c.ENVPrefix == "" {
-		if prefix := os.Getenv("Config_ENV_PREFIX"); prefix != "" {
-			return prefix
-		}
-		return "c"
+func (c *Config) getENVPrefix() string {
+	if prefix := os.Getenv("ENV_PREFIX"); prefix != "" {
+		return prefix
 	}
-	return c.ENVPrefix
+
+	return "CONFIG"
 }
 
 func getConfigurationFileWithENVPrefix(file, env string) (string, time.Time, error) {
@@ -59,8 +58,8 @@ func (c *Config) getConfigurationFiles(watchMode bool, files ...string) ([]strin
 	var resultKeys []string
 	var results = map[string]time.Time{}
 
-	if !watchMode && (os.Getenv("DEBUG") == "true") {
-		fmt.Printf("Current environment: '%v'\n", c.GetEnvironment())
+	if !watchMode {
+		log.Debug().Msgf("Current environment: '%v'", c.GetEnvironment())
 	}
 
 	for i := len(files) - 1; i >= 0; i-- {
@@ -139,16 +138,6 @@ func processFile(config interface{}, file string, errorOnUnmatchedKeys bool) err
 	}
 }
 
-// GetStringTomlKeys returns a string array of the names of the keys that are passed in as args
-func GetStringTomlKeys(list []toml.Key) []string {
-	arr := make([]string, len(list))
-
-	for index, key := range list {
-		arr[index] = key.String()
-	}
-	return arr
-}
-
 func unmarshalToml(data []byte, config interface{}, errorOnUnmatchedKeys bool) error {
 	metadata, err := toml.Decode(string(data), config)
 	if err == nil && len(metadata.Undecoded()) > 0 && errorOnUnmatchedKeys {
@@ -202,8 +191,8 @@ func (c *Config) processTags(config interface{}, prefixes ...string) error {
 		}
 
 		if envName == "" {
-			envNames = append(envNames, strings.Join(append(prefixes, fieldStruct.Name), "_"))                  // Config_DB_Name
-			envNames = append(envNames, strings.ToUpper(strings.Join(append(prefixes, fieldStruct.Name), "_"))) // Config_DB_NAME
+			envNames = append(envNames, strings.Join(append(prefixes, fieldStruct.Name), "__"))                  // CONFIG__DB__Name
+			envNames = append(envNames, strings.ToUpper(strings.Join(append(prefixes, fieldStruct.Name), "__"))) // CONFIG__DB__NAME
 		} else {
 			envNames = []string{envName}
 		}
@@ -211,9 +200,10 @@ func (c *Config) processTags(config interface{}, prefixes ...string) error {
 		// Load From Shell ENV
 		for _, env := range envNames {
 			if value := os.Getenv(env); value != "" {
-				if os.Getenv("DEBUG") == "true" {
-					fmt.Printf("Loading configuration for struct `%v`'s field `%v` from env %v...\n", configType.Name(), fieldStruct.Name, env)
-				}
+				log.Debug().Msgf("Loading configuration field `%v` from env %v...",
+					fieldStruct.Name,
+					env,
+				)
 
 				switch reflect.Indirect(field).Kind() {
 				case reflect.Bool:
@@ -289,15 +279,13 @@ func (c *Config) processTags(config interface{}, prefixes ...string) error {
 	return nil
 }
 
-func (c *Config) load(config interface{}, watchMode bool, files ...string) (err error, changed bool) {
+func (c *Config) load(config *Config, watchMode bool, files ...string) (err error, changed bool) {
 	defer func() {
-		if os.Getenv("DEBUG") == "true" {
-			if err != nil {
-				fmt.Printf("Failed to load configuration from %v, got %v\n", files, err)
-			}
-
-			fmt.Printf("Configuration:\n  %#v\n", config)
+		if err != nil {
+			log.Debug().Msgf("Failed to load configuration from %v, got %v", files, err)
 		}
+
+		log.Debug().Msgf("Configuration: %+v", config)
 	}()
 
 	configFiles, configModTimeMap := c.getConfigurationFiles(watchMode, files...)
@@ -318,16 +306,14 @@ func (c *Config) load(config interface{}, watchMode bool, files ...string) (err 
 	}
 
 	for _, file := range configFiles {
-		if os.Getenv("DEBUG") == "true" {
-			fmt.Printf("Loading configurations from file '%v'...\n", file)
-		}
+		log.Debug().Msgf("Loading configurations from file '%v'...", file)
 		if err = processFile(config, file, c.GetErrorOnUnmatchedKeys()); err != nil {
 			return err, true
 		}
 	}
 	c.configModTimes = configModTimeMap
 
-	if prefix := c.getENVPrefix(config); prefix == "-" {
+	if prefix := c.getENVPrefix(); prefix == "-" {
 		err = c.processTags(config)
 	} else {
 		err = c.processTags(config, prefix)

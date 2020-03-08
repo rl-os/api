@@ -21,27 +21,24 @@ var BuildTimestamp string
 func main() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-
-	if os.Getenv("DEBUG") == "true" {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
-		log.Logger = log.Output(
-			zerolog.ConsoleWriter{
-				Out:     os.Stderr,
-				NoColor: false,
-			},
-		).With().Caller().Logger()
-	}
+	zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	log.Logger = log.Output(
+		zerolog.ConsoleWriter{
+			Out:     os.Stderr,
+			NoColor: false,
+		},
+	).With().Caller().Logger()
 
 	log.Info().
 		Str("version", Version).
 		Str("branch", Branch).
 		Str("commit", Commit).
 		Str("build_timestamp", BuildTimestamp).
-		Msg("Starting API")
+		Send()
 
 	log.Debug().Msg("Start initialize dependencies")
 
-	app := Injector()
+	app := Injector("config.yaml")
 
 	log.Debug().Msg("Initialize dependencies successful done")
 
@@ -50,7 +47,7 @@ func main() {
 	}
 }
 
-func Injector() *app.App {
+func Injector(configPath string) *app.App {
 	wire.Build(
 		config.Init,
 		store.Init,
