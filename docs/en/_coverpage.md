@@ -6,5 +6,5 @@
 
 Open source game server for osu!lazer.
 
-[GitHub](https://github.com/docsifyjs/docsify/)
+[GitHub](https://github.com/deissh/osu-lazer)
 [Get Started](#introduction)
