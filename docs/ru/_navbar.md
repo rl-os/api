@@ -1,3 +1,0 @@
-- Перевод
-  - [:uk: English](/)
-  - [:ru: Russian](/ru/)
