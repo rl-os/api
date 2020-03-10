@@ -5,4 +5,4 @@ This is combined with the base endpoint to determine where requests should be se
 | Version	| Status |
 | --- | --- |
 | v2	| current (not yet public, consider unstable and expect breaking changes) |
-| v1	| legacy api provided by the old site, ***deprecated*** |
+| v1	| legacy API provided by the old site, ***deprecated*** |

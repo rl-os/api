@@ -39,17 +39,20 @@
         '/files/.*'
       ],
       alias: {
+        '/ro/(.*)': 'ro/$1',
         '/ru/(.*)': 'ru/$1',
         '/(.*)': 'en/$1',
         '/changelog/': 'https://raw.githubusercontent.com/deissh/osu-lazer/master/CHANGELOG.md',
       },
       search: {
         noData: {
+          '/ro/': 'Nici un rezultat!',
           '/ru/': 'Не найдено',
-          '/': 'Not results!'
+          '/': 'No results!'
         },
         paths: 'auto',
         placeholder: {
+          '/ro/': 'Căutare',
           '/ru/': 'Поиск',
           '/': 'Search'
         }
