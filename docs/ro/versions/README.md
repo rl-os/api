@@ -5,4 +5,4 @@ Acesta este combinat cu endpoint-ul de bază pentru a determina unde ar trebui t
 | Versiune	| Status |
 | --- | --- |
 | v2	| current (incă nu este public, considerat instabil cu posibilitatea de schimbări majore) |
-| v1	| api învechit găsit pe site-ul vechi, ***depreciat*** |
+| v1	| API învechit găsit pe site-ul vechi, ***depreciat*** |
