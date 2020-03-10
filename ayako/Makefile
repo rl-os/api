@@ -18,11 +18,16 @@ DOCKER_IMAGE           ?= $(DOCKER_REGISTRY_PATH)/$(PACKAGE):$(VERSION)
 DOCKER_IMAGE_DOMAIN    ?= $(DOCKER_REGISTRY_DOMAIN)/$(DOCKER_IMAGE)
 
 # ===============================================
+DOCKER                  = docker
+DOCKERBUILD            := $(DOCKER) build
+DOCKERPUSH             := $(docker) push
+# ===============================================
 GOCMD                   = go
 GOLINT				   := $(shell which golint)
 GOIMPORT			   := $(shell which goimports)
 GOFMT				   := $(shell which gofmt)
 GOCYCLO				   := $(shell which gocyclo)
+GOGENERATE 			   := $(GOCMD) generate
 GOBUILD				   := $(GOCMD) build
 GOCLEAN				   := $(GOCMD) clean
 GOTEST				   := $(GOCMD) test
@@ -57,12 +62,26 @@ _ := $(foreach exec,$(EXECUTABLES),\
 ## Clear bin folder
 .PHONY: clear
 clear:
+	@echo -e "\e[1;34m> Cleaning stage\e[0m"
 	@rm -rf bin
 
 ## Set impotants flags and then build all commands in cmd folder
 .PHONY: build
-build: clear
-	@(cd cmd ; for CMD in *; do $(GOBUILD) $(GOBUILDFLAGS) -o $(BIN_DIR)/$$CMD $$CMD/*.go && echo "$$CMD build done" || exit 1; done;)
+build: clear generate
+	@echo -e "\e[1;34m> Building stage\e[0m"
+	@cd cmd ; for CMD in *; do \
+		$(GOBUILD) $(GOBUILDFLAGS) -o $(BIN_DIR)/$$CMD ./$$CMD/ ; \
+		echo "$$CMD build done" || exit 1; \
+	done
+
+## Build all commands in cmd folder as prod-like
+.PHONY: build-prod
+build-prod: clear generate
+	@echo -e "\e[1;34m> Building stage\e[0m"
+	@cd cmd ; for CMD in *; do \
+		CGO_ENABLED=0 $(GOBUILD) $(GOBUILDFLAGS) -a -installsuffix nocgo -o $(BIN_DIR)/$$CMD ./$$CMD/ ; \
+		echo "$$CMD build done" || exit 1; \
+	done
 
 ## Run all checks
 .PHONY: lint
@@ -75,10 +94,10 @@ lint: vet fmt-check
 ## Also setup unnessosory packages that using in CI
 .PHONY: install
 install:
-	@echo ">  Checking if there is any missing dependencies..."
-	@$(GOMOD) download
-	@$(GOGET) -u github.com/amacneil/dbmate
-	@echo ">  Installing unnessosory packages"
+	@echo -e "\e[1;34m> Checking if there is any missing dependencies...\e[0m"
+	$(GOMOD) download
+	$(GOGET) -u github.com/google/wire/cmd/wire
+	@echo -e "\e[1;34m> Installing unnessosory packages\e[0m"
 	$(GOGET) -u golang.org/x/lint/golint
 	$(GOGET) -u github.com/fzipp/gocyclo
 	$(GOGET) -u golang.org/x/tools/cmd/goimports
@@ -123,6 +142,18 @@ help: message
 		$(MAKEFILE_LIST)
 
 
+## -- Docker --
+
+## Build docker container
+.PHONY: docker-build
+docker-build:
+	@$(DOCKERBUILD) -t $(DOCKER_IMAGE_DOMAIN) -f Dockerfile ..
+
+## Push docker container to registry
+.PHONY: docker-push
+docker-push:
+	@$(DOCKERPUSH) -t $(DOCKER_IMAGE_DOMAIN)
+
 ## -- Utils --
 
 ## Generate CHANGELOG.md based on git
@@ -132,24 +163,34 @@ chglog:
 
 .PHONY: message
 message:
-	@echo -e "\n        _.====.._                                 ___                _ \n     ,:.         ~-_                             / _ \   ___  _  _  | |\n         \`\        ~-_                          | (_) | (_-< | || | |_|\n           |          \`.                         \___/  /__/  \_,_| (_)\n         ,/             ~-_                                lazer server\n-..__..-''                 ~~--..__...----...--.....---.....--....---...\n\n                                   GitHub: github.com/deissh/osu-lazer\n                                                     2019-2020, deissh\n\n"
+	@clear
+	@echo -e "\033[36m\n                                        \033[0m _                   _         \033[36m\n        _.====.._                    \033[0m   /_\    _  _   __ _  | |__  ___ \033[36m\n     ,:.         ~-_                 \033[0m  / _ \  | || | / _\` | | / / / _ \ \033[36m\n         \`\        ~-_               \033[0m /_/ \_\  \_, | \__,_| |_\_\ \___/\033[36m\n           |          \`.              \033[0m         |__/                    \033[36m\n         ,/             ~-_          \033[0mBeatmap slave database and storage\033[36m\n-..__..-''                 ~~--..__...----...--.....---.....--....---..\033[0m\n\n                                                      https://risu.life\n                                    https://github.com/deissh/osu-lazer\n\n                                                      2019-2020, deissh\n\n"
 
 
 ## -- Go commands --
 
+## Run go generate on current project
+.PHONY: generate
+generate:
+	@echo -e "\e[1;34m> Go generate\e[0m"
+	@$(GOGENERATE) ./...
+
 ## Run go vet on current project
 .PHONY: vet
 vet:
+	@echo -e "\e[1;34m> Go vet\e[0m"
 	$(GOVET) ./...
 
 ## Run go fmt on current project
 .PHONY: fmt
 fmt:
+	@echo -e "\e[1;34m> Go fmt\e[0m"
 	$(GOFMT) -s -w $(GOFILES)
 
 ## Run check fmt and show message if not all ok
 .PHONY: fmt-check
 fmt-check:
+	@echo -e "\e[1;34m> Go fmt-check\e[0m"
 	@diff=$$($(GOFMT) -s -d $(GOFILES)); \
 	if [ -n "$$diff" ]; then \
 		echo "Please run 'make fmt' and commit the result:"; \
@@ -160,13 +201,12 @@ fmt-check:
 ## Run go test on current project
 .PHONY: test
 test:
+	@echo -e "\e[1;34m> Go test\e[0m"
 	$(GOTEST) ./...
 
 ## Generate coverage report and then show
 .PHONY: view-covered
 view-covered:
+	@echo -e "\e[1;34m> Go test with coverage\e[0m"
 	$(GOTEST) -coverprofile=cover.out ./...
 	$(GOCMD) tool cover -html=cover.out
-
-.PHONY: load-config
-load-config:

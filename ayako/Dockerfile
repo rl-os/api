@@ -2,17 +2,25 @@ FROM golang:1.13-alpine3.10 AS builder
 
 ENV GO111MODULE="on"
 
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash make git
 
 # Copy the code from the host and compile it
+WORKDIR $GOPATH/src/github.com/deissh/osu-lazer/ayako
+COPY ./ayako/go.mod ./ayako/go.sum ./ayako/Makefile ./
+RUN make install
+
+# Copy .git folder (using to get versions and last commit id)
 WORKDIR $GOPATH/src/github.com/deissh/osu-lazer
-COPY .. ./
-RUN ./scripts/install.sh
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /server .
+COPY .git .git
+
+WORKDIR $GOPATH/src/github.com/deissh/osu-lazer/ayako
+COPY ./ayako .
+RUN make build-prod && mv bin/* /
 
 FROM scratch
-COPY --from=builder /server ./server
-COPY config.yaml config.yaml
+WORKDIR /root/
+COPY --from=builder /ayako ./server
+COPY ./ayako/config.yaml .
 
-EXPOSE 2100
-ENTRYPOINT ["./server"]
+EXPOSE 2400
+CMD ["/root/server"]
