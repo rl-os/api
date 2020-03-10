@@ -1,5 +1,5 @@
 
-For a full list of changes, see the [changelog file](https://github.com/deissh/osu-lazer/blob/master/CHANGELOG.md)
+For a full list of changes, see the [changelog](https://github.com/deissh/osu-lazer/blob/master/CHANGELOG.md)
 
 ## Breaking Changes
 

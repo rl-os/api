@@ -1,3 +1,4 @@
 - Translations
   - [:uk: English](/)
+  - [:ro: Romanian](/ro/)
   - [:ru: Russian](/ru/)

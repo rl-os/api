@@ -1,0 +1,17 @@
+* [Acasă](/)
+* [Versiuni](/versions/)
+* [Modificări](/changelog/)
+* Ayako
+  * [Beatmap-uri și Set-uri](/ayako/)
+  * [Structura Obiectelor](/ayako/structures.md)
+* Server
+  * [OAuth](/server/oauth/)
+  * [Utilizatorul Curent](/server/me/)
+  * [Utilizatori](/server/users/)
+  * [Beatmap-uri](/server/beatmaps/)
+  * [Scoruri](/server/scores/)
+  * [Chat-uri](/server/chat/)
+  * [Rooms](/server/rooms/)
+  * [Comentarii](/server/comments/)
+  * [Notificari](/server/notifications/)
+  * [Altele](/server/misc/)

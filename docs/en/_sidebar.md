@@ -2,11 +2,11 @@
 * [Versions](/versions/)
 * [Changelog](/changelog/)
 * Ayako
-  * [Beatmaps and sets](/ayako/)
+  * [Beatmaps and Sets](/ayako/)
   * [Object Structures](/ayako/structures.md)
 * Server
   * [OAuth](/server/oauth/)
-  * [Current user](/server/me/)
+  * [Current User](/server/me/)
   * [Users](/server/users/)
   * [Beatmaps](/server/beatmaps/)
   * [Scores](/server/scores/)
