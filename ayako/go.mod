@@ -21,7 +21,7 @@ require (
 	github.com/urfave/cli v1.22.3 // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
-	golang.org/x/tools v0.0.0-20200309202150-20ab64c0d93f // indirect
+	golang.org/x/tools v0.0.0-20200312194400-c312e98713c2 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8 // indirect
 	gopkg.in/kyokomi/emoji.v1 v1.5.1 // indirect

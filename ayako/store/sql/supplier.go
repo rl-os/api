@@ -1,15 +1,16 @@
-package store
+package sql
 
 import (
 	"github.com/deissh/osu-lazer/ayako/config"
+	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/rs/zerolog/log"
 )
 
 type SupplierStores struct {
-	beatmap    Beatmap
-	beatmapSet BeatmapSet
+	beatmap    store.Beatmap
+	beatmapSet store.BeatmapSet
 }
 
 type Supplier struct {
@@ -20,12 +21,15 @@ type Supplier struct {
 
 // Init new store
 // Using with DI
-func Init(cfg *config.Config) Store {
+func Init(cfg *config.Config) store.Store {
 	supplier := &Supplier{}
 
 	supplier.initConnection(cfg)
 
-	return &supplier.stores
+	supplier.stores.beatmap = newSqlBeatmapStore(supplier)
+	supplier.stores.beatmapSet = newSqlBeatmapSetStore(supplier)
+
+	return supplier
 }
 
 func (ss *Supplier) initConnection(cfg *config.Config) {
@@ -54,5 +58,5 @@ func (ss *Supplier) initConnection(cfg *config.Config) {
 		Msg("master database connected")
 }
 
-func (s *SupplierStores) Beatmap() Beatmap       { return s.beatmap }
-func (s *SupplierStores) BeatmapSet() BeatmapSet { return s.beatmapSet }
+func (ss *Supplier) Beatmap() store.Beatmap       { return ss.stores.beatmap }
+func (ss *Supplier) BeatmapSet() store.BeatmapSet { return ss.stores.beatmapSet }

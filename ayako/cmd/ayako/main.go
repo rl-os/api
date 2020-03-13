@@ -4,13 +4,14 @@
 package main
 
 import (
+	"os"
+
 	"github.com/deissh/osu-lazer/ayako/app"
 	"github.com/deissh/osu-lazer/ayako/config"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/osu-lazer/ayako/store/sql"
 	"github.com/google/wire"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"os"
 )
 
 var Version string
@@ -50,7 +51,7 @@ func main() {
 func Injector(configPath string) *app.App {
 	wire.Build(
 		config.Init,
-		store.Init,
+		sql.Init,
 		app.ProviderSet,
 	)
 

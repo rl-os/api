@@ -8,7 +8,7 @@ package main
 import (
 	"github.com/deissh/osu-lazer/ayako/app"
 	"github.com/deissh/osu-lazer/ayako/config"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/osu-lazer/ayako/store/sql"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"
@@ -18,8 +18,8 @@ import (
 
 func Injector(configPath string) *app.App {
 	configConfig := config.Init(configPath)
-	storeStore := store.Init(configConfig)
-	appApp := app.NewApp(configConfig, storeStore)
+	store := sql.Init(configConfig)
+	appApp := app.NewApp(configConfig, store)
 	return appApp
 }
 
