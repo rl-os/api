@@ -7,7 +7,7 @@ type Beatmap struct {
 	BeatmapsetID     int64     `json:"beatmapset_id"`
 	Mode             Mode      `json:"mode"`
 	ModeInt          int64     `json:"mode_int"`
-	Convert          *bool     `json:"convert"`
+	Convert          bool      `json:"convert"`
 	DifficultyRating float64   `json:"difficulty_rating"`
 	Version          string    `json:"version"`
 	TotalLength      int64     `json:"total_length"`

@@ -1,22 +1,25 @@
 package store
 
+import "github.com/deissh/osu-lazer/ayako/entity"
+
 type Store interface {
 	Beatmap() Beatmap
 	BeatmapSet() BeatmapSet
 }
 
 type Beatmap interface {
-	GetBeatmap(id uint) interface{}
-	GetAllBeatmap(page int, limit int) []interface{}
-	CreateBeatmap(from interface{}) interface{}
-	UpdateBeatmap(id uint, from interface{}) interface{}
-	DeleteBeatmap(id uint)
+	GetBeatmap(id uint) (*entity.Beatmap, error)
+
+	CreateBeatmap(from interface{}) (*entity.Beatmap, error)
+	UpdateBeatmap(id uint, from interface{}) (*entity.Beatmap, error)
+	DeleteBeatmap(id uint) error
 }
 
 type BeatmapSet interface {
-	Get(id uint) interface{}
-	GetAll(page int, limit int) []interface{}
-	Create(from interface{}) interface{}
-	Update(id uint, from interface{}) interface{}
-	Delete(id uint)
+	GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error)
+	GetAllBeatmapSets(page int, limit int) (*[]entity.BeatmapSet, error)
+
+	CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error)
+	UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error)
+	DeleteBeatmapSet(id uint) error
 }

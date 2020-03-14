@@ -1,6 +1,9 @@
 package sql
 
-import "github.com/deissh/osu-lazer/ayako/store"
+import (
+	"github.com/deissh/osu-lazer/ayako/entity"
+	"github.com/deissh/osu-lazer/ayako/store"
+)
 
 type SqlBeatmapSetStore struct {
 	SqlStore
@@ -10,22 +13,22 @@ func newSqlBeatmapSetStore(sqlStore SqlStore) store.BeatmapSet {
 	return &SqlBeatmapSetStore{sqlStore}
 }
 
-func (s SqlBeatmapSetStore) Get(id uint) interface{} {
+func (s SqlBeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) {
 	panic("implement me")
 }
 
-func (s SqlBeatmapSetStore) GetAll(page int, limit int) []interface{} {
+func (s SqlBeatmapSetStore) GetAllBeatmapSets(page int, limit int) (*[]entity.BeatmapSet, error) {
 	panic("implement me")
 }
 
-func (s SqlBeatmapSetStore) Create(from interface{}) interface{} {
+func (s SqlBeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error) {
 	panic("implement me")
 }
 
-func (s SqlBeatmapSetStore) Update(id uint, from interface{}) interface{} {
+func (s SqlBeatmapSetStore) UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error) {
 	panic("implement me")
 }
 
-func (s SqlBeatmapSetStore) Delete(id uint) {
+func (s SqlBeatmapSetStore) DeleteBeatmapSet(id uint) error {
 	panic("implement me")
 }

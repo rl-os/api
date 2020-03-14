@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/deissh/osu-lazer/ayako/api"
 	"github.com/deissh/osu-lazer/ayako/config"
+	"github.com/deissh/osu-lazer/ayako/middlewares/customlogger"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -30,6 +31,7 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 	app.HideBanner = true
 
 	app.Use(middleware.RequestID())
+	app.Use(customlogger.Middleware())
 
 	api.New(store, app.Group("/v2"))
 

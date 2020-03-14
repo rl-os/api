@@ -64,6 +64,80 @@ ALTER SEQUENCE public.achievements_id_seq OWNED BY public.achievements.id;
 
 
 --
+-- Name: ayako_beatmap_set; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ayako_beatmap_set (
+    id integer NOT NULL,
+    title character varying DEFAULT ''::character varying NOT NULL,
+    artist character varying DEFAULT ''::character varying NOT NULL,
+    play_count integer DEFAULT 0 NOT NULL,
+    favourite_count integer DEFAULT 0 NOT NULL,
+    has_favourited boolean DEFAULT false,
+    submitted_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    last_updated timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    ranked_date timestamp with time zone,
+    creator character varying DEFAULT ''::character varying NOT NULL,
+    user_id integer NOT NULL,
+    bpm integer DEFAULT 150 NOT NULL,
+    source character varying NOT NULL,
+    covers json DEFAULT json_build_object() NOT NULL,
+    preview_url character varying NOT NULL,
+    tags character varying NOT NULL,
+    video boolean DEFAULT false NOT NULL,
+    storyboard boolean DEFAULT false NOT NULL,
+    ranked boolean DEFAULT false NOT NULL,
+    status character varying NOT NULL,
+    is_scoreable boolean DEFAULT true NOT NULL,
+    discussion_enabled boolean DEFAULT true NOT NULL,
+    discussion_locked boolean DEFAULT false NOT NULL,
+    can_be_hyped boolean DEFAULT true NOT NULL,
+    availability json DEFAULT json_build_object() NOT NULL,
+    hype json DEFAULT json_build_object() NOT NULL,
+    nominations json DEFAULT json_build_object() NOT NULL,
+    legacy_thread_url character varying DEFAULT ''::character varying NOT NULL,
+    description json DEFAULT json_build_object('description', '') NOT NULL,
+    genre json DEFAULT json_build_object('id', 1, 'name', 'None'),
+    language json DEFAULT json_build_object('id', 1, 'name', 'None') NOT NULL,
+    "user" json DEFAULT json_build_object() NOT NULL
+);
+
+
+--
+-- Name: COLUMN ayako_beatmap_set.has_favourited; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ayako_beatmap_set.has_favourited IS 'TODO THIS';
+
+
+--
+-- Name: COLUMN ayako_beatmap_set.user_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ayako_beatmap_set.user_id IS 'user in original bancho';
+
+
+--
+-- Name: ayako_beatmap_set_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ayako_beatmap_set_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ayako_beatmap_set_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ayako_beatmap_set_id_seq OWNED BY public.ayako_beatmap_set.id;
+
+
+--
 -- Name: channels; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -469,6 +543,13 @@ ALTER TABLE ONLY public.achievements ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- Name: ayako_beatmap_set id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ayako_beatmap_set ALTER COLUMN id SET DEFAULT nextval('public.ayako_beatmap_set_id_seq'::regclass);
+
+
+--
 -- Name: channels id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -544,6 +625,14 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 ALTER TABLE ONLY public.achievements
     ADD CONSTRAINT achievements_pk PRIMARY KEY (id);
+
+
+--
+-- Name: ayako_beatmap_set beatmap_set_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ayako_beatmap_set
+    ADD CONSTRAINT beatmap_set_pk PRIMARY KEY (id);
 
 
 --
@@ -646,6 +735,13 @@ CREATE UNIQUE INDEX achievements_id_uindex ON public.achievements USING btree (i
 --
 
 CREATE UNIQUE INDEX achievements_slug_uindex ON public.achievements USING btree (slug);
+
+
+--
+-- Name: beatmap_set_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX beatmap_set_id_uindex ON public.ayako_beatmap_set USING btree (id);
 
 
 --
@@ -883,4 +979,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200224085752'),
     ('20200224101725'),
     ('20200224101740'),
-    ('20200225094357');
+    ('20200225094357'),
+    ('20200313155053');

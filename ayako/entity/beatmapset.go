@@ -3,43 +3,49 @@ package entity
 import "time"
 
 type BeatmapSet struct {
-	ID                    int64                 `json:"id"`
-	Title                 string                `json:"title"`
-	Artist                string                `json:"artist"`
-	PlayCount             int64                 `json:"play_count"`
-	FavouriteCount        int64                 `json:"favourite_count"`
-	HasFavourited         bool                  `json:"has_favourited"`
-	SubmittedDate         time.Time             `json:"submitted_date"`
-	LastUpdated           time.Time             `json:"last_updated"`
-	RankedDate            time.Time             `json:"ranked_date"`
-	Creator               string                `json:"creator"`
-	UserID                int64                 `json:"user_id"`
-	BPM                   int64                 `json:"bpm"`
-	Source                string                `json:"source"`
-	Covers                Covers                `json:"covers"`
-	PreviewURL            string                `json:"preview_url"`
-	Tags                  string                `json:"tags"`
-	Video                 bool                  `json:"video"`
-	Storyboard            bool                  `json:"storyboard"`
-	Ranked                int64                 `json:"ranked"`
-	Status                Status                `json:"status"`
-	IsScoreable           bool                  `json:"is_scoreable"`
-	DiscussionEnabled     bool                  `json:"discussion_enabled"`
-	DiscussionLocked      bool                  `json:"discussion_locked"`
-	CanBeHyped            bool                  `json:"can_be_hyped"`
-	Availability          Availability          `json:"availability"`
-	Hype                  Hype                  `json:"hype"`
-	Nominations           Hype                  `json:"nominations"`
-	LegacyThreadURL       string                `json:"legacy_thread_url"`
-	Beatmaps              []Beatmap             `json:"beatmaps"`
-	Converts              []Beatmap             `json:"converts"`
-	CurrentUserAttributes CurrentUserAttributes `json:"current_user_attributes"`
-	Description           Description           `json:"description"`
-	Genre                 Genre                 `json:"genre"`
-	Language              Genre                 `json:"language"`
-	Ratings               []int64               `json:"ratings"`
+	ID                int64        `json:"id"`
+	Title             string       `json:"title"`
+	Artist            string       `json:"artist"`
+	PlayCount         int64        `json:"play_count"`
+	FavouriteCount    int64        `json:"favourite_count"`
+	HasFavourited     bool         `json:"has_favourited"`
+	SubmittedDate     time.Time    `json:"submitted_date"`
+	LastUpdated       time.Time    `json:"last_updated"`
+	RankedDate        time.Time    `json:"ranked_date"`
+	Creator           string       `json:"creator"`
+	UserID            int64        `json:"user_id"`
+	BPM               int64        `json:"bpm"`
+	Source            string       `json:"source"`
+	Covers            Covers       `json:"covers"`
+	PreviewURL        string       `json:"preview_url"`
+	Tags              string       `json:"tags"`
+	Video             bool         `json:"video"`
+	Storyboard        bool         `json:"storyboard"`
+	Ranked            int64        `json:"ranked"`
+	Status            Status       `json:"status"`
+	IsScoreable       bool         `json:"is_scoreable"`
+	DiscussionEnabled bool         `json:"discussion_enabled"`
+	DiscussionLocked  bool         `json:"discussion_locked"`
+	CanBeHyped        bool         `json:"can_be_hyped"`
+	Availability      Availability `json:"availability"`
+	Hype              Hype         `json:"hype"`
+	Nominations       Hype         `json:"nominations"`
+	LegacyThreadURL   string       `json:"legacy_thread_url"`
+	Description       Description  `json:"description"`
+	Genre             Genre        `json:"genre"`
+	Language          Genre        `json:"language"`
+	User              User         `json:"user"`
+
+	Beatmaps []Beatmap `json:"beatmaps"`
+}
+
+type BeatmapSetFull struct {
+	BeatmapSet
+
 	RecentFavourites      []User                `json:"recent_favourites"`
-	User                  User                  `json:"user"`
+	CurrentUserAttributes CurrentUserAttributes `json:"current_user_attributes"`
+	Ratings               []int64               `json:"ratings"`
+	Converts              []Beatmap             `json:"converts"`
 }
 
 type Availability struct {

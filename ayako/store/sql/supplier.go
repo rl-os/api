@@ -22,6 +22,7 @@ type Supplier struct {
 // Init new store
 // Using with DI
 func Init(cfg *config.Config) store.Store {
+	log.Debug().Msg("Creating new SQL store")
 	supplier := &Supplier{}
 
 	supplier.initConnection(cfg)
@@ -57,6 +58,8 @@ func (ss *Supplier) initConnection(cfg *config.Config) {
 		Int("in_use", stats.InUse).
 		Msg("master database connected")
 }
+
+func (ss *Supplier) GetMaster() *sqlx.DB { return ss.master }
 
 func (ss *Supplier) Beatmap() store.Beatmap       { return ss.stores.beatmap }
 func (ss *Supplier) BeatmapSet() store.BeatmapSet { return ss.stores.beatmapSet }

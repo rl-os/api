@@ -16,7 +16,7 @@ func (api *Routes) InitBeatmaps(store store.Store) {
 }
 
 func (h *BeatmapHandlers) LookUp(c echo.Context) error {
-	h.Store.BeatmapSet()
+	beatmaps, _ := h.Store.Beatmap().GetBeatmap(1)
 
-	return c.JSON(200, "ok")
+	return c.JSON(200, beatmaps)
 }
