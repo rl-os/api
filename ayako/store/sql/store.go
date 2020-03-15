@@ -9,4 +9,5 @@ type SqlStore interface {
 	GetMaster() *sqlx.DB
 
 	Beatmap() store.Beatmap
+	BeatmapSet() store.BeatmapSet
 }
