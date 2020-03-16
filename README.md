@@ -8,6 +8,7 @@
   <a href="https://github.com/deissh/osu-lazer/actions?query=workflow%3A%22API+workflow%22"><img src="https://github.com/deissh/osu-lazer/workflows/API%20workflow/badge.svg"></a>
   <a href="https://github.com/deissh/osu-lazer/actions?query=workflow%3A%22Ayako+workflow%22"><img src="https://github.com/deissh/osu-lazer/workflows/Ayako%20workflow/badge.svg"></a>
   <br />
+  <a href=""><img alt="goreport" src="https://goreportcard.com/badge/github.com/deissh/osu-lazer"></a>
   <a href="https://github.com/deissh/osu-lazer/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/deissh/osu-lazer"></a>
   <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/deissh/osu-lazer">
   <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/w/deissh/osu-lazer">
