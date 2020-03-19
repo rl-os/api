@@ -1,5 +1,5 @@
 -- migrate:up
-create table ayako_beatmap_set
+create table beatmap_set
 (
     id serial not null,
     title varchar default '' not null,
@@ -35,16 +35,16 @@ create table ayako_beatmap_set
     "user" json default json_build_object() not null
 );
 
-comment on column ayako_beatmap_set.has_favourited is 'TODO THIS';
+comment on column beatmap_set.has_favourited is 'TODO THIS';
 
-comment on column ayako_beatmap_set.user_id is 'user in original bancho';
+comment on column beatmap_set.user_id is 'user in original bancho';
 
 create unique index beatmap_set_id_uindex
-    on ayako_beatmap_set (id);
+    on beatmap_set (id);
 
-alter table ayako_beatmap_set
+alter table beatmap_set
     add constraint beatmap_set_pk
         primary key (id);
 
 -- migrate:down
-drop table ayako_beatmap_set;
+drop table beatmap_set;

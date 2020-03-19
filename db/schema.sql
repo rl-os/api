@@ -64,10 +64,10 @@ ALTER SEQUENCE public.achievements_id_seq OWNED BY public.achievements.id;
 
 
 --
--- Name: ayako_beatmap_set; Type: TABLE; Schema: public; Owner: -
+-- Name: beatmap_set; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.ayako_beatmap_set (
+CREATE TABLE public.beatmap_set (
     id integer NOT NULL,
     title character varying DEFAULT ''::character varying NOT NULL,
     artist character varying DEFAULT ''::character varying NOT NULL,
@@ -104,24 +104,24 @@ CREATE TABLE public.ayako_beatmap_set (
 
 
 --
--- Name: COLUMN ayako_beatmap_set.has_favourited; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN beatmap_set.has_favourited; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ayako_beatmap_set.has_favourited IS 'TODO THIS';
-
-
---
--- Name: COLUMN ayako_beatmap_set.user_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.ayako_beatmap_set.user_id IS 'user in original bancho';
+COMMENT ON COLUMN public.beatmap_set.has_favourited IS 'TODO THIS';
 
 
 --
--- Name: ayako_beatmap_set_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: COLUMN beatmap_set.user_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.ayako_beatmap_set_id_seq
+COMMENT ON COLUMN public.beatmap_set.user_id IS 'user in original bancho';
+
+
+--
+-- Name: beatmap_set_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.beatmap_set_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -131,10 +131,10 @@ CREATE SEQUENCE public.ayako_beatmap_set_id_seq
 
 
 --
--- Name: ayako_beatmap_set_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: beatmap_set_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.ayako_beatmap_set_id_seq OWNED BY public.ayako_beatmap_set.id;
+ALTER SEQUENCE public.beatmap_set_id_seq OWNED BY public.beatmap_set.id;
 
 
 --
@@ -543,10 +543,10 @@ ALTER TABLE ONLY public.achievements ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- Name: ayako_beatmap_set id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: beatmap_set id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.ayako_beatmap_set ALTER COLUMN id SET DEFAULT nextval('public.ayako_beatmap_set_id_seq'::regclass);
+ALTER TABLE ONLY public.beatmap_set ALTER COLUMN id SET DEFAULT nextval('public.beatmap_set_id_seq'::regclass);
 
 
 --
@@ -628,10 +628,10 @@ ALTER TABLE ONLY public.achievements
 
 
 --
--- Name: ayako_beatmap_set beatmap_set_pk; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: beatmap_set beatmap_set_pk; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.ayako_beatmap_set
+ALTER TABLE ONLY public.beatmap_set
     ADD CONSTRAINT beatmap_set_pk PRIMARY KEY (id);
 
 
@@ -741,7 +741,7 @@ CREATE UNIQUE INDEX achievements_slug_uindex ON public.achievements USING btree 
 -- Name: beatmap_set_id_uindex; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX beatmap_set_id_uindex ON public.ayako_beatmap_set USING btree (id);
+CREATE UNIQUE INDEX beatmap_set_id_uindex ON public.beatmap_set USING btree (id);
 
 
 --

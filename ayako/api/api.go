@@ -17,4 +17,5 @@ func New(store store.Store, prefix *echo.Group) {
 	api.BeatmapSets = prefix.Group("/beatmapsets")
 
 	api.InitBeatmaps(store)
+	api.InitBeatmapSet(store)
 }
