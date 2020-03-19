@@ -9,7 +9,6 @@ type Store struct {
 	mock.Mock
 }
 
-
 // Beatmap provides a mocks function with given fields:
 func (_m *Store) Beatmap() store.Beatmap {
 	ret := _m.Called()

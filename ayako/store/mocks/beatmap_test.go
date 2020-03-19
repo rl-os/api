@@ -25,15 +25,15 @@ func testCreateBeatmap(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "Creating new Beatmap",
-			args: args{from: entity.Beatmap{Convert:true}},
-			want: &entity.Beatmap{Convert:true},
+			name:    "Creating new Beatmap",
+			args:    args{from: entity.Beatmap{Convert: true}},
+			want:    &entity.Beatmap{Convert: true},
 			wantErr: false,
 		},
 		{
-			name: "Creating new Beatmap with error",
-			args: args{from: entity.Beatmap{Convert:true}},
-			want: &entity.Beatmap{Convert:true},
+			name:    "Creating new Beatmap with error",
+			args:    args{from: entity.Beatmap{Convert: true}},
+			want:    &entity.Beatmap{Convert: true},
 			wantErr: true,
 		},
 	}
