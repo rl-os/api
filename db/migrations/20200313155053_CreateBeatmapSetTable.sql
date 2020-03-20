@@ -19,7 +19,7 @@ create table beatmap_set
     tags varchar not null,
     video bool default false not null,
     storyboard bool default false not null,
-    ranked bool default false not null,
+    ranked int default 0 not null,
     status varchar not null,
     is_scoreable bool default true not null,
     discussion_enabled bool default true not null,

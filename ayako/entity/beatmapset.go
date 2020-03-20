@@ -25,7 +25,7 @@ type BeatmapSet struct {
 	Tags              string       `json:"tags" db:"tags"`
 	Video             bool         `json:"video" db:"video"`
 	Storyboard        bool         `json:"storyboard" db:"storyboard"`
-	Ranked            bool         `json:"ranked" db:"ranked"`
+	Ranked            int64        `json:"ranked" db:"ranked"`
 	Status            Status       `json:"status" db:"status"`
 	IsScoreable       bool         `json:"is_scoreable" db:"is_scoreable"`
 	DiscussionEnabled bool         `json:"discussion_enabled" db:"discussion_enabled"`

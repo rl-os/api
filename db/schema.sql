@@ -86,7 +86,7 @@ CREATE TABLE public.beatmap_set (
     tags character varying NOT NULL,
     video boolean DEFAULT false NOT NULL,
     storyboard boolean DEFAULT false NOT NULL,
-    ranked boolean DEFAULT false NOT NULL,
+    ranked integer DEFAULT 0 NOT NULL,
     status character varying NOT NULL,
     is_scoreable boolean DEFAULT true NOT NULL,
     discussion_enabled boolean DEFAULT true NOT NULL,
