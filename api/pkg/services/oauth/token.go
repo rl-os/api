@@ -2,8 +2,8 @@ package oauth
 
 import (
 	"fmt"
+	"github.com/deissh/go-utils"
 	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/common/utils"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gookit/config/v2"
 	"github.com/labstack/echo/v4"

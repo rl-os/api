@@ -2,8 +2,8 @@ package scopes
 
 import (
 	"fmt"
+	"github.com/deissh/go-utils"
 	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/common/utils"
 	"github.com/deissh/osu-lazer/api/pkg/services/oauth"
 	"github.com/labstack/echo/v4"
 	"strings"

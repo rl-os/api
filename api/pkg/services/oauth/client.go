@@ -1,8 +1,8 @@
 package oauth
 
 import (
+	"github.com/deissh/go-utils"
 	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/common/utils"
 	"time"
 )
 

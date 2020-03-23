@@ -2,7 +2,7 @@ package entity
 
 import (
 	"errors"
-	"github.com/deissh/osu-lazer/api/pkg/common/utils"
+	"github.com/deissh/go-utils"
 	"github.com/lib/pq"
 	"time"
 )

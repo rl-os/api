@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/deissh/datadog-client v1.0.0
+	github.com/deissh/go-utils v1.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/getsentry/sentry-go v0.4.0
 	github.com/gin-gonic/gin v1.5.0
@@ -17,11 +18,8 @@ require (
 	github.com/mattn/go-colorable v0.1.4 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
-	github.com/mitchellh/mapstructure v1.1.2
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.18.0
-	github.com/stretchr/testify v1.5.1
-	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
 	golang.org/x/sys v0.0.0-20200219091948-cb0a6d8edb6c // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/redis.v5 v5.2.9
