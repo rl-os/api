@@ -1,8 +1,8 @@
 package main
 
 import (
+	"github.com/deissh/datadog-client"
 	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/common/datadog"
 	"github.com/gookit/config/v2"
 	"github.com/gookit/config/v2/yaml"
 	"github.com/rs/zerolog"
@@ -78,14 +78,32 @@ func main() {
 		"user_online",
 		time.Minute,
 		datadog.Tags{},
-		GetUsersOnline,
+		getUsersOnline,
 	)
 	datadog.RunGaugeTask(
 		"users",
 		time.Hour,
 		datadog.Tags{},
-		GetActiveUsers,
+		getActiveUsers,
 	)
 
 	datadog.Start()
+}
+
+func getUsersOnline() (f float64, err error) {
+	var count int
+	err = pkg.Db.
+		QueryRow("SELECT count('id') FROM users WHERE check_online(last_visit) = true").
+		Scan(&count)
+
+	return float64(count), err
+}
+
+func getActiveUsers() (f float64, err error) {
+	var count int
+	err = pkg.Db.
+		QueryRow("SELECT count('id') FROM users WHERE is_active = true").
+		Scan(&count)
+
+	return float64(count), err
 }
