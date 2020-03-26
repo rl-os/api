@@ -105,12 +105,13 @@ func main() {
 	oauth.ApplyRoutes(app.Group(""))
 	v2.ApplyRoutes(app.Group("/api"))
 
+	host := config.String("server.host") + ":" + config.String("server.port")
 	log.Info().
-		Msg("Running HTTP server")
+		Msg("Running HTTP server on " + host)
 
 	// Graceful start and stop HTTP server
 	go func() {
-		err := app.Start(config.String("server.host") + ":" + config.String("server.port"))
+		err := app.Start(host)
 		if err != nil {
 			log.Error().
 				Err(err).

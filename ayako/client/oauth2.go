@@ -1,8 +1,9 @@
 package client
 
 import (
+	"bytes"
 	"github.com/pkg/errors"
-	"gopkg.in/h2non/gentleman.v2/plugins/multipart"
+	"mime/multipart"
 )
 
 type Oauth2API struct {
@@ -19,21 +20,25 @@ type Oauth2Token struct {
 func (b *Oauth2API) TokenRenew(scope string, refreshToken string) (*Oauth2Token, error) {
 	json := Oauth2Token{}
 
-	form := multipart.FormData{
-		Data: map[string]multipart.Values{
-			"refresh_token": []string{refreshToken},
-			"scope":         []string{scope},
-			"grant_type":    []string{"refresh_token"},
-			"client_id":     []string{b.clientId},
-			"client_secret": []string{b.clientSecret},
-		},
+	payload := &bytes.Buffer{}
+	writer := multipart.NewWriter(payload)
+
+	_ = writer.WriteField("client_id", b.clientId)
+	_ = writer.WriteField("client_secret", b.clientSecret)
+	_ = writer.WriteField("scope", scope)
+	_ = writer.WriteField("grant_type", "refresh_token")
+	_ = writer.WriteField("refresh_token", refreshToken)
+	if err := writer.Close(); err != nil {
+		return nil, errors.Wrap(err, "setting up form data")
 	}
 
 	req := b.client.
 		Request().
 		Method("POST").
 		Path("/oauth/token").
-		Form(form)
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Content-Type", writer.FormDataContentType()).
+		Body(payload)
 
 	res, err := req.Send()
 	if err != nil {
