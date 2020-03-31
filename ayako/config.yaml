@@ -10,15 +10,8 @@ database:
 # Slave database configuration
 mirror:
   bancho:
-    using_refresh_token: true
-
-    # using by oauth
-    # public information
-    client_id: 5
-    client_secret: 'FGc9GAtyHzeQDshWP5Ah7dega8hJACAJpQtw6OXk'
-
-    username: test
-    password: tset
+    access_token: token
+    refresh_token: token
 
   s3:
     secret_id: 123

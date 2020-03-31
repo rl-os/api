@@ -4,6 +4,7 @@
 package main
 
 import (
+	"github.com/deissh/osu-lazer/ayako/services"
 	"os"
 
 	"github.com/deissh/osu-lazer/ayako/app"
@@ -53,6 +54,7 @@ func Injector(configPath string) *app.App {
 		config.Init,
 		sql.Init,
 		app.ProviderSet,
+		services.ProviderSet,
 	)
 
 	return nil

@@ -31,11 +31,8 @@ type Config struct {
 			SecretID  int64
 		}
 		Bancho struct {
-			Username          string
-			ClientSecret      string
-			Password          string
-			UsingRefreshToken bool
-			ClientID          int64
+			AccessToken  string
+			RefreshToken string
 		}
 	}
 }
