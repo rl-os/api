@@ -1,4 +1,4 @@
-# How to contribute to RisuLife (?)
+# How to contribute to Risu.life (?)
 
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍
 
