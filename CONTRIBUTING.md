@@ -20,4 +20,5 @@ todo
 todo
 
 ## Setup development enviroment
-todo
+
+However instructions on how to set it up are available [here](https://github.com/deissh/osu-lazer/new/master#local-installation).
