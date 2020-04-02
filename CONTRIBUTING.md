@@ -1,4 +1,4 @@
-# How to contribute to Risu.life (?)
+# How to contribute to Risu.life
 
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍
 
@@ -21,4 +21,4 @@ todo
 
 ## Setup development enviroment
 
-However instructions on how to set it up are available [here](https://github.com/deissh/osu-lazer/new/master#local-installation).
+However instructions on how to set it up are available [here](https://github.com/deissh/osu-lazer/blob/master/SETUP.md).
