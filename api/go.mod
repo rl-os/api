@@ -8,7 +8,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/getsentry/sentry-go v0.4.0
 	github.com/gin-gonic/gin v1.5.0
-	github.com/go-playground/validator/v10 v10.0.1
+	github.com/go-playground/validator/v10 v10.2.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gookit/config/v2 v2.0.12
 	github.com/imdario/mergo v0.3.8 // indirect
