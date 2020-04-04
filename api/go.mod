@@ -8,12 +8,12 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/getsentry/sentry-go v0.4.0
 	github.com/gin-gonic/gin v1.5.0
-	github.com/go-playground/validator/v10 v10.0.1
+	github.com/go-playground/validator/v10 v10.2.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gookit/config/v2 v2.0.13
 	github.com/imdario/mergo v0.3.8 // indirect
 	github.com/jmoiron/sqlx v1.2.0
-	github.com/labstack/echo/v4 v4.1.11
+	github.com/labstack/echo/v4 v4.1.16
 	github.com/lib/pq v1.3.0
 	github.com/mattn/go-colorable v0.1.4 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
