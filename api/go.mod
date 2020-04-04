@@ -10,7 +10,7 @@ require (
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-playground/validator/v10 v10.0.1
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/gookit/config/v2 v2.0.12
+	github.com/gookit/config/v2 v2.0.13
 	github.com/imdario/mergo v0.3.8 // indirect
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/labstack/echo/v4 v4.1.11
