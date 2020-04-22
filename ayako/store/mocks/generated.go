@@ -11,18 +11,18 @@ import (
 	reflect "reflect"
 )
 
-// MockedStore is a mock of MockedStore interface
+// MockStore is a mock of Store interface
 type MockStore struct {
 	ctrl     *gomock.Controller
 	recorder *MockStoreMockRecorder
 }
 
-// MockStoreMockRecorder is the mock recorder for MockedStore
+// MockStoreMockRecorder is the mock recorder for MockStore
 type MockStoreMockRecorder struct {
 	mock *MockStore
 }
 
-// InitStore creates a new mock instance
+// NewMockStore creates a new mock instance
 func NewMockStore(ctrl *gomock.Controller) *MockStore {
 	mock := &MockStore{ctrl: ctrl}
 	mock.recorder = &MockStoreMockRecorder{mock}
