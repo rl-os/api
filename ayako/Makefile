@@ -97,6 +97,7 @@ install:
 	@echo -e "\e[1;34m> Checking if there is any missing dependencies...\e[0m"
 	$(GOMOD) download
 	$(GOGET) -u github.com/google/wire/cmd/wire
+	$(GOGET) -u github.com/golang/mock/mockgen@latest
 	@echo -e "\e[1;34m> Installing unnessosory packages\e[0m"
 	$(GOGET) -u golang.org/x/lint/golint
 	$(GOGET) -u github.com/fzipp/gocyclo
