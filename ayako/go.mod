@@ -6,6 +6,7 @@ require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/deissh/go-utils v1.0.0
 	github.com/deissh/osu-go-client v1.1.0
+	github.com/golang/mock v1.4.3
 	github.com/google/wire v0.4.0
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/labstack/echo/v4 v4.1.14

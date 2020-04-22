@@ -1,6 +1,10 @@
 package store
 
-import "github.com/deissh/osu-lazer/ayako/entity"
+//go:generate mockgen -destination=./mocks/generated.go . Beatmap,BeatmapSet
+
+import (
+	"github.com/deissh/osu-lazer/ayako/entity"
+)
 
 type Store interface {
 	Beatmap() Beatmap
