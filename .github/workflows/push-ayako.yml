@@ -4,7 +4,6 @@ on:
     paths:
       - 'ayako/*'
       - '.github/workflows/*'
-
 jobs:
   test:
     name: Lint, test and try build docker
