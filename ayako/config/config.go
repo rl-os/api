@@ -12,13 +12,18 @@ type Config struct {
 
 	AutoReload         bool
 	AutoReloadInterval time.Duration
-	AutoReloadCallback func(config interface{})
+	AutoReloadCallback func(config *Config)
 	configModTimes     map[string]time.Time
 
 	// Configurations
 	Server struct {
 		Host string `default:"0.0.0.0"`
 		Port string `default:"2400"`
+
+		EnableJobs bool `default:"true"`
+	}
+	Service struct {
+		EnableSecurityFixAlert bool `default:"true"`
 	}
 	Database struct {
 		DSN    string `default:"postgres://postgres:postgres@/osuserver?sslmode=disable"`

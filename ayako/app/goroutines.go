@@ -27,6 +27,9 @@ func (s *App) Go(f func()) {
 
 // WaitForGoroutines blocks until all goroutines created by App.Go exit.
 func (s *App) WaitForGoroutines() {
+	log.Debug().
+		Int32("total", s.goroutineCount).
+		Msg("waiting goroutines before exit app")
 	for atomic.LoadInt32(&s.goroutineCount) != 0 {
 		<-s.goroutineExitSignal
 	}

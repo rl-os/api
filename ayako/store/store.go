@@ -22,4 +22,6 @@ type BeatmapSet interface {
 	CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error)
 	UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error)
 	DeleteBeatmapSet(id uint) error
+
+	Fetch(id uint, merge bool) (*entity.BeatmapSetFull, error)
 }

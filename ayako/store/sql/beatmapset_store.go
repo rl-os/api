@@ -6,15 +6,15 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type SqlBeatmapSetStore struct {
+type BeatmapSetStore struct {
 	SqlStore
 }
 
 func newSqlBeatmapSetStore(sqlStore SqlStore) store.BeatmapSet {
-	return &SqlBeatmapSetStore{sqlStore}
+	return &BeatmapSetStore{sqlStore}
 }
 
-func (s SqlBeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) {
 	var set entity.BeatmapSetFull
 
 	err := s.GetMaster().Get(
@@ -41,18 +41,33 @@ func (s SqlBeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, erro
 	return &set, nil
 }
 
-func (s SqlBeatmapSetStore) GetAllBeatmapSets(page int, limit int) (*[]entity.BeatmapSet, error) {
+func (s BeatmapSetStore) GetAllBeatmapSets(page int, limit int) (*[]entity.BeatmapSet, error) {
 	panic("implement me")
 }
 
-func (s SqlBeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error) {
 	panic("implement me")
 }
 
-func (s SqlBeatmapSetStore) UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error) {
 	panic("implement me")
 }
 
-func (s SqlBeatmapSetStore) DeleteBeatmapSet(id uint) error {
+func (s BeatmapSetStore) DeleteBeatmapSet(id uint) error {
 	panic("implement me")
+}
+
+func (s BeatmapSetStore) Fetch(id uint, merge bool) (*entity.BeatmapSetFull, error) {
+	data, err := s.GetOsuClient().BeatmapSet.Get(id)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Debug().
+		Int64("id", data.ID).
+		Str("name", data.Title).
+		Str("updated_at", data.LastUpdated.String()).
+		Send()
+
+	return nil, nil
 }
