@@ -1,6 +1,9 @@
 package app
 
-import "github.com/rs/zerolog/log"
+import (
+	"github.com/rs/zerolog/log"
+	"time"
+)
 
 func (s *App) DoBeatmapSetUpdateMark() {
 	log.Info().
@@ -11,8 +14,7 @@ func (s *App) DoBeatmapSetUpdateMark() {
 		Str("job", "DoBeatmapSetUpdateMark").
 		Msg("start update 1 beatmapset")
 
-	// todo
-	_, err := s.Store.BeatmapSet().Fetch(80200, true)
+	data, err := s.Store.BeatmapSet().Fetch(23416, true)
 	if err != nil {
 		log.Error().
 			Err(err).
@@ -21,5 +23,15 @@ func (s *App) DoBeatmapSetUpdateMark() {
 			Msg("fetching beatmapset")
 		return
 	}
-	// todo
+
+	data.LastUpdated = time.Now()
+	_, err = s.Store.BeatmapSet().CreateBeatmapSet(*data)
+	if err != nil {
+		log.Error().
+			Err(err).
+			Str("job", "DoBeatmapSetUpdateMark").
+			Uint("beatmapset_id", 1).
+			Msg("creating beatmapset")
+		return
+	}
 }
