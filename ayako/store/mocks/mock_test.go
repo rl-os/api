@@ -14,7 +14,7 @@ func TestNewMockStore(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		mocked := NewMockStore(ctrl)
+		mocked := InitStore(ctrl)
 		mocked.BeatmapExpect().
 			GetBeatmap(gomock.Any()).
 			Return(&entity.Beatmap{ID: 123321}, nil)
@@ -34,7 +34,7 @@ func TestNewMockStore(t *testing.T) {
 
 		defError := errors.New("some internal error")
 
-		mocked := NewMockStore(ctrl)
+		mocked := InitStore(ctrl)
 		mocked.BeatmapExpect().
 			GetBeatmap(gomock.Any()).
 			Return(nil, defError)

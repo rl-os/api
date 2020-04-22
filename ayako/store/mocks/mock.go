@@ -5,23 +5,26 @@ import (
 	"github.com/golang/mock/gomock"
 )
 
-type MockStore struct {
+// Interface assertion
+var _ store.Store = (*MockedStore)(nil)
+
+type MockedStore struct {
 	ctrl *gomock.Controller
 
 	beatmap    *MockBeatmap
 	beatmapSet *MockBeatmapSet
 }
 
-func NewMockStore(ctrl *gomock.Controller) MockStore {
-	return MockStore{
+func InitStore(ctrl *gomock.Controller) MockedStore {
+	return MockedStore{
 		ctrl:       ctrl,
 		beatmap:    NewMockBeatmap(ctrl),
 		beatmapSet: NewMockBeatmapSet(ctrl),
 	}
 }
 
-func (ss MockStore) Beatmap() store.Beatmap       { return ss.beatmap }
-func (ss MockStore) BeatmapSet() store.BeatmapSet { return ss.beatmapSet }
+func (ss MockedStore) Beatmap() store.Beatmap       { return ss.beatmap }
+func (ss MockedStore) BeatmapSet() store.BeatmapSet { return ss.beatmapSet }
 
-func (ss MockStore) BeatmapExpect() *MockBeatmapMockRecorder       { return ss.beatmap.EXPECT() }
-func (ss MockStore) BeatmapSetExpect() *MockBeatmapSetMockRecorder { return ss.beatmapSet.EXPECT() }
+func (ss MockedStore) BeatmapExpect() *MockBeatmapMockRecorder       { return ss.beatmap.EXPECT() }
+func (ss MockedStore) BeatmapSetExpect() *MockBeatmapSetMockRecorder { return ss.beatmapSet.EXPECT() }

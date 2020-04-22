@@ -1,6 +1,6 @@
 package store
 
-//go:generate mockgen -destination=./mocks/generated.go . Beatmap,BeatmapSet
+//go:generate mockgen -destination=./mocks/generated.go -source=store.go
 
 import (
 	"github.com/deissh/osu-lazer/ayako/entity"
