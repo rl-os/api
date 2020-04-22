@@ -203,12 +203,10 @@ fmt-check:
 .PHONY: test
 test:
 	@echo -e "\e[1;34m> Go test\e[0m"
-	$(GOTEST) -race -cover $(shell go list ./... | grep -v mocks | tr '\n' ' ')
+	$(GOTEST) -v -race -coverprofile=coverage.txt -cover -coverpkg=$(shell go list ./... | grep -v mocks | tr '\n' ',') ./...
 
 ## Generate coverage report and then show
 .PHONY: view-covered
 view-covered:
-	@echo -e "\e[1;34m> Go test with coverage\e[0m"
-	@CVPKG=$(go list ./... | grep -v mocks | tr '\n' ',')
-	$(GOTEST) -race -cover -coverprofile=cover.out $(shell go list ./... | grep -v mocks | tr '\n' ' ')
-	$(GOCMD) tool cover -html=cover.out
+	@echo -e "\e[1;34m> Opening coverage\e[0m"
+	$(GOCMD) tool cover -html=coverage.txt
