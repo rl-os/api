@@ -2,8 +2,8 @@ name: Ayako workflow
 on:
   push:
     paths:
-      - 'ayako/*'
-      - '.github/workflows/*'
+      - 'ayako/**'
+      - '.github/workflows/**'
 jobs:
   test:
     name: Lint, test and try build docker
