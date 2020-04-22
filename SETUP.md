@@ -58,7 +58,26 @@ Example GoLand configuration. For other cmds, the configuration will be similar
 
 #### Ayako
 
-> todo
+Ayako tries to hold a replica of the osu! database as updated as possible.
+
+All commands are executed in the `ayako` directory.
+```bash
+$ cd ayako
+$ make install
+```
+
+For the server to work, you need to fill out the config.yaml file or setup env: `SERVER__DATABASE__DSN`, `SERVER__REDIS__HOST` and etc.
+
+```bash
+$ vim config.yaml
+```
+
+To run a specific command you need to run.
+
+```bash
+$ make build
+$ ./bin/ayako
+```
 
 #### Frontend
 
