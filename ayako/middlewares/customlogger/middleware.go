@@ -18,10 +18,6 @@ func Middleware() echo.MiddlewareFunc {
 
 			id := req.Header.Get(echo.HeaderXRequestID)
 
-			if id == "" {
-				id = res.Header().Get(echo.HeaderXRequestID)
-			}
-
 			logger := log.Logger
 
 			if err = next(c); err != nil {

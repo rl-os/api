@@ -10,8 +10,11 @@ import (
 func Init(configPath string) *Config {
 	config := &Config{}
 
-	if config.AutoReload && config.AutoReloadInterval == 0 {
-		config.AutoReloadInterval = time.Second
+	if config.AutoReload {
+		config.AutoReloadInterval = time.Second * 10
+		log.Info().
+			Dur("auto_reload_interval", config.AutoReloadInterval).
+			Msg("enabled auto reload")
 	}
 
 	if err := config.Load(configPath); err != nil {

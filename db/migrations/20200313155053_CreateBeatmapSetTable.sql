@@ -2,6 +2,7 @@
 create table beatmap_set
 (
     id serial not null,
+    last_checked timestamptz default current_timestamp not null,
     title varchar default '' not null,
     artist varchar default '' not null,
     play_count int default 0 not null,

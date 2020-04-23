@@ -16,7 +16,7 @@ import (
 
 type App struct {
 	Config *config.Config
-	Store  *store.Store
+	Store  store.Store
 	Echo   *echo.Echo
 
 	goroutineCount      int32
@@ -26,20 +26,35 @@ type App struct {
 // NewApp with DI
 // expect store.Store
 func NewApp(cfg *config.Config, store store.Store) *App {
-	app := echo.New()
-	app.HidePort = true
-	app.HideBanner = true
+	e := echo.New()
+	e.HidePort = true
+	e.HideBanner = true
 
-	app.Use(middleware.RequestID())
-	app.Use(customlogger.Middleware())
+	e.Use(middleware.RequestID())
+	e.Use(customlogger.Middleware())
 
-	api.New(store, app.Group("/v2"))
+	api.New(store, e.Group("/v2"))
 
-	return &App{
-		Store:  &store,
-		Echo:   app,
+	s := &App{
+		Store:  store,
+		Echo:   e,
 		Config: cfg,
 	}
+	s.Config.AutoReloadCallback = s.OnConfigReload
+
+	if cfg.Server.EnableJobs {
+		s.Go(func() {
+			runSecurityJob(s)
+		})
+		s.Go(func() {
+			runUpdateCheck(s)
+		})
+		s.Go(func() {
+			runSearchNew(s)
+		})
+	}
+
+	return s
 }
 
 // Start http server and setup graceful shutdown
@@ -74,7 +89,43 @@ func (s *App) Start() error {
 	<-quit
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	defer func() {
+		cancel()
+		s.WaitForGoroutines()
+	}()
 
 	return s.Echo.Shutdown(ctx)
+}
+
+func runSecurityJob(s *App) {
+	doSecurity(s)
+	CreateRecurringTask("Security", func() {
+		doSecurity(s)
+	}, time.Hour*6)
+}
+
+func runUpdateCheck(s *App) {
+	doUpdateCheck(s)
+	CreateRecurringTask("UpdateCheck", func() {
+		doUpdateCheck(s)
+	}, time.Hour)
+}
+
+func runSearchNew(s *App) {
+	doSearchNew(s)
+	CreateRecurringTask("UpdateCheck", func() {
+		doUpdateCheck(s)
+	}, time.Hour*4)
+}
+
+func doSecurity(s *App) {
+	s.DoSecurityUpdateCheck()
+}
+
+func doUpdateCheck(s *App) {
+	s.DoBeatmapSetUpdate()
+}
+
+func doSearchNew(s *App) {
+	s.DoBeatmapSetSearchNew()
 }

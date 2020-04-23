@@ -8,6 +8,7 @@ import (
 
 type BeatmapSet struct {
 	ID                int64        `json:"id" db:"id"`
+	LastChecked       time.Time    `json:"last_checked" db:"last_checked"`
 	Title             string       `json:"title" db:"title"`
 	Artist            string       `json:"artist" db:"artist"`
 	PlayCount         int64        `json:"play_count" db:"play_count"`
