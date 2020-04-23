@@ -5,33 +5,34 @@ import (
 	"time"
 )
 
-func (s *App) DoBeatmapSetUpdateMark() {
+func (s *App) DoBeatmapSetUpdate() {
 	log.Info().
-		Str("job", "DoBeatmapSetUpdateMark").
+		Str("job", "DoBeatmapSetUpdate").
+		Uint("batch_size", 100).
 		Msg("start beatmapset update check")
 
 	ids, err := s.Store.BeatmapSet().GetBeatmapSetIdForUpdate(100)
 	if err != nil {
 		log.Error().
 			Err(err).
-			Str("job", "DoBeatmapSetUpdateMark").
+			Str("job", "DoBeatmapSetUpdate").
 			Msg("getting ids for update")
 		return
 	}
 
 	for _, id := range ids {
-		log.Info().
-			Str("job", "DoBeatmapSetUpdateMark").
+		log.Debug().
+			Str("job", "DoBeatmapSetUpdate").
 			Uint("beatmap_set_id", id).
-			Msg("start update beatmapset")
+			Msg("fetching")
 
 		data, err := s.Store.BeatmapSet().Fetch(id)
 		if err != nil {
 			log.Error().
 				Err(err).
-				Str("job", "DoBeatmapSetUpdateMark").
-				Uint("beatmapset_id", 1).
-				Msg("fetching beatmapset")
+				Str("job", "DoBeatmapSetUpdate").
+				Uint("beatmap_set_id", id).
+				Msg("not fetched")
 			return
 		}
 
@@ -41,10 +42,15 @@ func (s *App) DoBeatmapSetUpdateMark() {
 		if err != nil {
 			log.Error().
 				Err(err).
-				Str("job", "DoBeatmapSetUpdateMark").
-				Uint("beatmapset_id", 1).
-				Msg("creating/updating beatmapset")
+				Str("job", "DoBeatmapSetUpdate").
+				Uint("beatmap_set_id", id).
+				Msg("not updated")
 			return
 		}
+
+		log.Debug().
+			Str("job", "DoBeatmapSetUpdate").
+			Uint("beatmap_set_id", id).
+			Msg("updated")
 	}
 }

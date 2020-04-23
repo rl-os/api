@@ -113,5 +113,5 @@ func doSecurity(s *App) {
 }
 
 func doUpdateCheck(s *App) {
-	s.DoBeatmapSetUpdateMark()
+	s.DoBeatmapSetUpdate()
 }
