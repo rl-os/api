@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"database/sql"
 	"encoding/json"
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/store"
@@ -32,16 +33,19 @@ func (s BeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) 
 		WHERE id = $1;`,
 		id,
 	)
-	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.GetBeatmapSet")
 
-		//todo: error wrap
-		return nil, err
+	switch err {
+	case sql.ErrNoRows:
+		log.Info().
+			Msg("beatmapset not found, fetching from osu!a api")
+		data, err := s.Fetch(id)
+		if err != nil {
+			return nil, err
+		}
+		return s.CreateBeatmapSet(data)
+	default:
+		return &set, err
 	}
-
-	return &set, nil
 }
 
 func (s BeatmapSetStore) GetAllBeatmapSets(page int, limit int) (*[]entity.BeatmapSet, error) {
@@ -166,7 +170,7 @@ func (s BeatmapSetStore) GetBeatmapSetIdForUpdate(limit int) ([]uint, error) {
 		order by last_checked
 		limit $3`,
 		now.Truncate(time.Hour*24*7),
-		now.Truncate(time.Hour),
+		now.Truncate(time.Minute*30),
 		limit,
 	)
 	return ids, err
