@@ -24,6 +24,7 @@ type BeatmapSet interface {
 	GetAllBeatmapSets(page int, limit int) (*[]entity.BeatmapSet, error)
 	GetBeatmapSetIdForUpdate(limit int) ([]uint, error)
 
+	GetLatestBeatmapId() (uint, error)
 	CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error)
 	UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error)
 	DeleteBeatmapSet(id uint) error

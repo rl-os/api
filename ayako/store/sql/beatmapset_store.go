@@ -101,7 +101,7 @@ func (s BeatmapSetStore) UpdateBeatmapSet(id uint, from interface{}) (*entity.Be
 		return nil, err
 	}
 
-	// update only required files from json
+	// update only required fields from json
 	// easy to change
 	err = s.GetMaster().Get(
 		&set,
@@ -174,4 +174,17 @@ func (s BeatmapSetStore) GetBeatmapSetIdForUpdate(limit int) ([]uint, error) {
 		limit,
 	)
 	return ids, err
+}
+
+func (s BeatmapSetStore) GetLatestBeatmapId() (uint, error) {
+	var id uint
+
+	err := s.GetMaster().Get(&id, `select id from beatmap_set order by id desc`)
+
+	switch err {
+	case sql.ErrNoRows:
+		return 0, nil
+	default:
+		return id, err
+	}
 }

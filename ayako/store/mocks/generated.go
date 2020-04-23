@@ -212,6 +212,21 @@ func (mr *MockBeatmapSetMockRecorder) GetBeatmapSetIdForUpdate(limit interface{}
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBeatmapSetIdForUpdate", reflect.TypeOf((*MockBeatmapSet)(nil).GetBeatmapSetIdForUpdate), limit)
 }
 
+// GetLatestBeatmapId mocks base method
+func (m *MockBeatmapSet) GetLatestBeatmapId() (uint, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLatestBeatmapId")
+	ret0, _ := ret[0].(uint)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetLatestBeatmapId indicates an expected call of GetLatestBeatmapId
+func (mr *MockBeatmapSetMockRecorder) GetLatestBeatmapId() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLatestBeatmapId", reflect.TypeOf((*MockBeatmapSet)(nil).GetLatestBeatmapId))
+}
+
 // CreateBeatmapSet mocks base method
 func (m *MockBeatmapSet) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error) {
 	m.ctrl.T.Helper()

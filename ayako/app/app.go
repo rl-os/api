@@ -49,6 +49,9 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 		s.Go(func() {
 			runUpdateCheck(s)
 		})
+		s.Go(func() {
+			runSearchNew(s)
+		})
 	}
 
 	return s
@@ -108,10 +111,21 @@ func runUpdateCheck(s *App) {
 	}, time.Hour)
 }
 
+func runSearchNew(s *App) {
+	doSearchNew(s)
+	CreateRecurringTask("UpdateCheck", func() {
+		doUpdateCheck(s)
+	}, time.Hour*4)
+}
+
 func doSecurity(s *App) {
 	s.DoSecurityUpdateCheck()
 }
 
 func doUpdateCheck(s *App) {
 	s.DoBeatmapSetUpdate()
+}
+
+func doSearchNew(s *App) {
+	s.DoBeatmapSetSearchNew()
 }
