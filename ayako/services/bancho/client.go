@@ -3,12 +3,17 @@ package bancho
 import (
 	osu "github.com/deissh/osu-go-client"
 	"github.com/deissh/osu-lazer/ayako/config"
+	"github.com/rs/zerolog/log"
 )
 
 func Init(cfg *config.Config) *osu.OsuAPI {
-	client := osu.WithAccessToken(
-		cfg.Mirror.Bancho.AccessToken,
-		cfg.Mirror.Bancho.RefreshToken,
+	client, err := osu.WithBasicAuth(
+		cfg.Mirror.Bancho.Username,
+		cfg.Mirror.Bancho.Password,
 	)
-	return &client
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
+
+	return client
 }

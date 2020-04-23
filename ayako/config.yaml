@@ -11,8 +11,8 @@ database:
 # Slave database configuration
 mirror:
   bancho:
-    access_token: 'none'
-    refresh_token: 'none'
+    username: 'none'
+    password: 'none'
 
   s3:
     secret_id: 123

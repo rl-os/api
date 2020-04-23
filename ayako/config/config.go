@@ -36,8 +36,8 @@ type Config struct {
 			SecretID  int64
 		}
 		Bancho struct {
-			AccessToken  string `yaml:"access_token"`
-			RefreshToken string `yaml:"refresh_token"`
+			Username string
+			Password string
 		}
 	}
 }
