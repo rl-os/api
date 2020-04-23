@@ -22,10 +22,11 @@ type Beatmap interface {
 type BeatmapSet interface {
 	GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error)
 	GetAllBeatmapSets(page int, limit int) (*[]entity.BeatmapSet, error)
+	GetBeatmapSetIdForUpdate(limit int) ([]uint, error)
 
 	CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error)
 	UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error)
 	DeleteBeatmapSet(id uint) error
 
-	Fetch(id uint, merge bool) (*entity.BeatmapSetFull, error)
+	Fetch(id uint) (*entity.BeatmapSetFull, error)
 }

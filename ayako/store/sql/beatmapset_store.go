@@ -6,6 +6,7 @@ import (
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/jinzhu/copier"
 	"github.com/rs/zerolog/log"
+	"time"
 )
 
 type BeatmapSetStore struct {
@@ -62,7 +63,7 @@ func (s BeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetF
 	err = s.GetMaster().Get(
 		&set,
 		`insert into beatmap_set
-		select id, title, artist, play_count, favourite_count,
+		select id, last_checked, title, artist, play_count, favourite_count,
 			has_favourited, submitted_date, last_updated, ranked_date,
 		   creator, user_id, bpm, source, covers, preview_url, tags, video,
 		   storyboard, ranked, status, is_scoreable, discussion_enabled,
@@ -85,24 +86,60 @@ func (s BeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetF
 }
 
 func (s BeatmapSetStore) UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error) {
-	panic("implement me")
+	var set entity.BeatmapSetFull
+
+	b, err := json.Marshal(&from)
+	if err != nil {
+		log.Error().
+			Err(err).
+			Msg("store.CreateBeatmapSet")
+
+		return nil, err
+	}
+
+	// update only required files from json
+	// easy to change
+	err = s.GetMaster().Get(
+		&set,
+		`update beatmap_set set
+			last_checked = sq.last_checked, last_updated = sq.last_updated,
+            title = sq.title, artist = sq.artist, submitted_date = sq.submitted_date,
+            ranked_date = sq.ranked_date, bpm = sq.bpm, source = sq.source, covers = sq.covers,
+            preview_url = sq.preview_url, tags = sq.tags, video = sq.video,
+            storyboard = sq.storyboard, ranked = sq.ranked, status = sq.status,
+            description = sq.description, genre = sq.genre, language = sq.language
+		from (
+		    select last_checked, last_updated, title, artist, submitted_date, ranked_date,
+		           bpm, source, covers, preview_url, tags, video,
+		           storyboard, ranked, status, description, genre, language
+		    from json_populate_record(null::beatmap_set, $2)
+		) as sq
+		where id = $1
+		returning *`,
+		id,
+		string(b),
+	)
+	if err != nil {
+		log.Error().
+			Err(err).
+			Msg("store.UpdateBeatmapSet")
+
+		return nil, err
+	}
+
+	return &set, nil
 }
 
 func (s BeatmapSetStore) DeleteBeatmapSet(id uint) error {
 	panic("implement me")
 }
 
-func (s BeatmapSetStore) Fetch(id uint, merge bool) (*entity.BeatmapSetFull, error) {
+// Fetch beatmapset from original api
+func (s BeatmapSetStore) Fetch(id uint) (*entity.BeatmapSetFull, error) {
 	data, err := s.GetOsuClient().BeatmapSet.Get(id)
 	if err != nil {
 		return nil, err
 	}
-
-	log.Debug().
-		Int64("id", data.ID).
-		Str("name", data.Title).
-		Str("updated_at", data.LastUpdated.String()).
-		Send()
 
 	var out entity.BeatmapSetFull
 	if err := copier.Copy(&out, &data); err != nil {
@@ -114,4 +151,23 @@ func (s BeatmapSetStore) Fetch(id uint, merge bool) (*entity.BeatmapSetFull, err
 	}
 
 	return &out, nil
+}
+
+// GetBeatmapSetIdForUpdate and return list of ids
+func (s BeatmapSetStore) GetBeatmapSetIdForUpdate(limit int) ([]uint, error) {
+	ids := make([]uint, 0)
+	now := time.Now()
+
+	err := s.GetMaster().Select(
+		&ids,
+		`select id
+		from beatmap_set
+		where (last_checked <= $1) or (last_checked <= $2 and status in ('pending', 'wip', 'qualified'))
+		order by last_checked
+		limit $3`,
+		now.Truncate(time.Hour*24*7),
+		now.Truncate(time.Hour),
+		limit,
+	)
+	return ids, err
 }

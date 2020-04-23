@@ -69,6 +69,7 @@ ALTER SEQUENCE public.achievements_id_seq OWNED BY public.achievements.id;
 
 CREATE TABLE public.beatmap_set (
     id integer NOT NULL,
+    last_checked timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     title character varying DEFAULT ''::character varying NOT NULL,
     artist character varying DEFAULT ''::character varying NOT NULL,
     play_count integer DEFAULT 0 NOT NULL,
