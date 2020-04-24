@@ -49,7 +49,7 @@ services:
         condition: on-failure
 
   ayako:
-    image: docker.pkg.github.com/deissh/ayako:latest
+    image: docker.pkg.github.com/deissh/osu-lazer/ayako:latest
     depends_on:
       - db
       - redis
