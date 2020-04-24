@@ -13,7 +13,7 @@ GIT_BRANCH_CLEAN       := $(shell echo $(GIT_BRANCH) | sed -e "s/[^[:alnum:]]/-/
 BUILDTIME              := $(shell date -u '+%Y-%m-%dT%H:%M:%SZ')
 
 DOCKER_REGISTRY_DOMAIN ?= docker.pkg.github.com
-DOCKER_REGISTRY_PATH   ?= deissh
+DOCKER_REGISTRY_PATH   ?= deissh/osu-lazer
 DOCKER_IMAGE           ?= $(DOCKER_REGISTRY_PATH)/$(PACKAGE):$(VERSION)
 DOCKER_IMAGE_DOMAIN    ?= $(DOCKER_REGISTRY_DOMAIN)/$(DOCKER_IMAGE)
 

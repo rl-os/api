@@ -43,15 +43,21 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 	s.Config.AutoReloadCallback = s.OnConfigReload
 
 	if cfg.Server.EnableJobs {
-		s.Go(func() {
-			runSecurityJob(s)
-		})
-		s.Go(func() {
-			runUpdateCheck(s)
-		})
-		s.Go(func() {
-			runSearchNew(s)
-		})
+		if cfg.Service.EnableSecurityFixAlert {
+			s.Go(func() {
+				runSecurityJob(s)
+			})
+		}
+		if cfg.Service.EnableUpdater {
+			s.Go(func() {
+				runUpdateCheck(s)
+			})
+		}
+		if cfg.Service.EnableSearch {
+			s.Go(func() {
+				runSearchNew(s)
+			})
+		}
 	}
 
 	return s
@@ -113,7 +119,7 @@ func runUpdateCheck(s *App) {
 
 func runSearchNew(s *App) {
 	doSearchNew(s)
-	CreateRecurringTask("UpdateCheck", func() {
+	CreateRecurringTask("SearchNew", func() {
 		doUpdateCheck(s)
 	}, time.Hour*4)
 }
