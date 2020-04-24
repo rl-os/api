@@ -48,8 +48,8 @@ services:
       restart_policy:
         condition: on-failure
 
-  ayako: docker.pkg.github.com/deissh/ayako:latest
-    image:
+  ayako:
+    image: docker.pkg.github.com/deissh/ayako:latest
     depends_on:
       - db
       - redis
