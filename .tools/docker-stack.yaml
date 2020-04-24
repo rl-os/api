@@ -41,14 +41,14 @@ services:
     volumes:
       - /var/lib/redis/osu-lazer:/var/lib/redis/data
     healthcheck:
-      test: ["CMD", "redis-cli", "-h", "localhost", "ping"]\
+      test: ["CMD", "redis-cli", "-h", "localhost", "ping"]
     deploy:
       mode: replicated
       replicas: 1
       restart_policy:
         condition: on-failure
 
-  ayako: docker.pkg.github.com/deissh/ayako
+  ayako: docker.pkg.github.com/deissh/ayako:latest
     image:
     depends_on:
       - db
