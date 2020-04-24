@@ -6,7 +6,7 @@ export GO111MODULE := on
 export PATH := bin:$(PATH)
 
 PACKAGE				   = ayako
-VERSION       	       ?= $(shell git describe --tags --always --dirty --match="v*" 2> /dev/null || cat $(CURDIR)/.version 2> /dev/null || echo v1.0.0)
+VERSION       	       ?= $(shell git describe --tags --always --match="v*" 2> /dev/null || cat $(CURDIR)/.version 2> /dev/null || echo v1.0.0)
 COMMIT                 ?= $(shell git rev-parse HEAD)
 GIT_BRANCH             := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
 GIT_BRANCH_CLEAN       := $(shell echo $(GIT_BRANCH) | sed -e "s/[^[:alnum:]]/-/g")

@@ -1,0 +1,74 @@
+version: '3.5'
+networks:
+  traefik_proxy:
+    external: true
+  lonet:
+    driver: overlay
+
+volumes:
+  database_data:
+
+services:
+  db:
+    image: postgres:11
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_DB: ${DB_NAME:-osuserver}
+    networks:
+      - lonet
+    volumes:
+      - /var/lib/postgresql/osu-lazer:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  redis:
+    image: redis:5-alpine
+    restart: unless-stopped
+    networks:
+      - lonet
+    volumes:
+      - /var/lib/redis/osu-lazer:/var/lib/redis/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "localhost", "ping"]\
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  ayako: docker.pkg.github.com/deissh/ayako
+    image:
+    depends_on:
+      - db
+      - redis
+    networks:
+      - traefik_proxy
+      - lonet
+    environment:
+      DEBUG: true
+      CONFIG__SERVER__PORT: 9000
+      CONFIG__DATABASE__DSN: postgres://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db/${DB_NAME:-osuserver}?sslmode=disable
+      CONFIG__MIRROR__BANCHO__USERNAME: somename
+      CONFIG__MIRROR__BANCHO__PASSWORD: somepwd
+    deploy:
+      mode: replicated
+      replicas: 1
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik_proxy
+      - traefik.http.routers.ayako.rule=Host(`risu.life`) && (PathPrefix(`/beatmapsets`) || PathPrefix(`/beatmaps`))
+      - traefik.http.routers.ayako.entrypoints=https
+      - traefik.http.routers.ayako.tls.certresolver=myresolver
+      - traefik.http.services.ayako-svc.loadbalancer.server.port=9000
