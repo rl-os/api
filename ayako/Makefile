@@ -20,7 +20,7 @@ DOCKER_IMAGE_DOMAIN    ?= $(DOCKER_REGISTRY_DOMAIN)/$(DOCKER_IMAGE)
 # ===============================================
 DOCKER                  = docker
 DOCKERBUILD            := $(DOCKER) build
-DOCKERPUSH             := $(docker) push
+DOCKERPUSH             := $(DOCKER) push
 # ===============================================
 GOCMD                   = go
 GOLINT				   := $(shell which golint)
@@ -153,7 +153,7 @@ docker-build:
 ## Push docker container to registry
 .PHONY: docker-push
 docker-push:
-	@$(DOCKERPUSH) -t $(DOCKER_IMAGE_DOMAIN)
+	@$(DOCKERPUSH) $(DOCKER_IMAGE_DOMAIN)
 
 ## -- Utils --
 
