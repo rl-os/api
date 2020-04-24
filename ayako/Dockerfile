@@ -17,10 +17,10 @@ WORKDIR $GOPATH/src/github.com/deissh/osu-lazer/ayako
 COPY ./ayako .
 RUN make build-prod && mv bin/* /
 
-FROM scratch
-WORKDIR /root/
+FROM alpine:3
+WORKDIR /
 COPY --from=builder /ayako ./server
 COPY ./ayako/config.yaml .
 
 EXPOSE 2400
-CMD ["/root/server"]
+CMD ["/server"]
