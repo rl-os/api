@@ -12,7 +12,7 @@ type Store interface {
 }
 
 type Beatmap interface {
-	GetBeatmap(id uint) (*entity.Beatmap, error)
+	GetBeatmap(id uint) (*entity.SingleBeatmap, error)
 	GetBeatmapsBySet(beatmapsetId uint) []entity.Beatmap
 
 	CreateBeatmap(from interface{}) (*entity.Beatmap, error)

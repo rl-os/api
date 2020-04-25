@@ -25,7 +25,7 @@ func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 
 	beatmaps, err := h.Store.BeatmapSet().GetBeatmapSet(uint(beatmapsetID))
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Please provide valid credentials")
+		return echo.NewHTTPError(http.StatusNotFound, "Beatmapset not found")
 	}
 
 	return c.JSON(200, beatmaps)

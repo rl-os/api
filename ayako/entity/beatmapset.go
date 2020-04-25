@@ -40,8 +40,6 @@ type BeatmapSet struct {
 	Genre             Genre        `json:"genre" db:"genre"`
 	Language          Genre        `json:"language" db:"language"`
 	User              User         `json:"user" db:"user"`
-
-	Beatmaps []Beatmap `json:"beatmaps" db:"-"`
 }
 
 type BeatmapSetFull struct {
@@ -49,6 +47,7 @@ type BeatmapSetFull struct {
 
 	RecentFavourites      []User                `json:"recent_favourites"`
 	CurrentUserAttributes CurrentUserAttributes `json:"current_user_attributes"`
+	Beatmaps              []Beatmap             `json:"beatmaps" db:"-"`
 	Ratings               []int64               `json:"ratings"`
 	Converts              []Beatmap             `json:"converts"`
 }

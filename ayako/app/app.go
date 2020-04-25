@@ -33,7 +33,7 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 	e.Use(middleware.RequestID())
 	e.Use(customlogger.Middleware())
 
-	api.New(store, e.Group("/v2"))
+	api.New(store, e.Group("/api/v2"))
 
 	s := &App{
 		Store:  store,

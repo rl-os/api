@@ -86,10 +86,10 @@ func (m *MockBeatmap) EXPECT() *MockBeatmapMockRecorder {
 }
 
 // GetBeatmap mocks base method
-func (m *MockBeatmap) GetBeatmap(id uint) (*entity.Beatmap, error) {
+func (m *MockBeatmap) GetBeatmap(id uint) (*entity.SingleBeatmap, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetBeatmap", id)
-	ret0, _ := ret[0].(*entity.Beatmap)
+	ret0, _ := ret[0].(*entity.SingleBeatmap)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

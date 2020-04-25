@@ -15,8 +15,35 @@ func newSqlBeatmapStore(sqlStore SqlStore) store.Beatmap {
 	return &BeatmapStore{sqlStore}
 }
 
-func (s BeatmapStore) GetBeatmap(id uint) (*entity.Beatmap, error) {
-	var beatmap entity.Beatmap
+func (s BeatmapStore) GetBeatmap(id uint) (*entity.SingleBeatmap, error) {
+	var beatmap entity.SingleBeatmap
+
+	err := s.GetMaster().Get(
+		&beatmap,
+		`select id, beatmapset_id, mode, mode_int, convert,
+       	  difficulty_rating, version, total_length, hit_length,
+          bpm, cs, drain, accuracy, ar, playcount, passcount,
+          count_circles, count_sliders, count_spinners, count_total,
+          is_scoreable, last_updated, ranked, status, url, deleted_at, max_combo
+		from beatmaps
+		where id = $1`,
+		id,
+	)
+	if err != nil {
+		log.Error().
+			Err(err).
+			Msg("store.GetBeatmap")
+		return nil, err
+	}
+	set, err := s.BeatmapSet().GetBeatmapSet(uint(beatmap.BeatmapsetID))
+	if err != nil {
+		log.Error().
+			Err(err).
+			Msg("store.GetBeatmap")
+		return nil, err
+	}
+
+	beatmap.Beatmapset = set.BeatmapSet
 
 	return &beatmap, nil
 }
