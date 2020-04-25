@@ -19,7 +19,7 @@ func newSqlBeatmapSetStore(sqlStore SqlStore) store.BeatmapSet {
 }
 
 func (s BeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) {
-	var set entity.BeatmapSetFull
+	set := entity.BeatmapSetFull{}
 
 	err := s.GetMaster().Get(
 		&set,
@@ -44,8 +44,17 @@ func (s BeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) 
 		}
 		return s.CreateBeatmapSet(data)
 	default:
-		return &set, err
+		return s.ComputeBeatmapSet(set)
 	}
+}
+
+func (s BeatmapSetStore) ComputeBeatmapSet(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
+	set.RecentFavourites = []entity.User{}
+	set.Ratings = make([]int64, 11)
+	set.Converts = []entity.Beatmap{}
+	set.Beatmaps = []entity.Beatmap{}
+
+	return &set, nil
 }
 
 func (s BeatmapSetStore) GetAllBeatmapSets(page int, limit int) (*[]entity.BeatmapSet, error) {

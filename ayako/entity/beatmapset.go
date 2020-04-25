@@ -62,14 +62,15 @@ func (c Availability) Value() (driver.Value, error)  { return utils.ValueOfStruc
 func (c *Availability) Scan(value interface{}) error { return utils.ScanToStruct(c, value) }
 
 type Covers struct {
-	Cover       string `json:"cover"`
-	Cover2X     string `json:"cover@2x"`
-	Card        string `json:"card"`
-	Card2X      string `json:"card@2x"`
-	List        string `json:"list"`
-	List2X      string `json:"list@2x"`
-	Slimcover   string `json:"slimcover"`
-	Slimcover2X string `json:"slimcover@2x"`
+	Cover     string `json:"cover"`
+	Slimcover string `json:"slimcover"`
+	List      string `json:"list"`
+	Card      string `json:"card"`
+
+	Cover2X     string `json:"cover@2x" mapstructure:"cover@2x"`
+	Card2X      string `json:"card@2x" mapstructure:"card@2x"`
+	List2X      string `json:"list@2x" mapstructure:"list@2x"`
+	Slimcover2X string `json:"slimcover@2x"  mapstructure:"slimcover@2x"`
 }
 
 func (c Covers) Value() (driver.Value, error)  { return utils.ValueOfStruct(c) }
@@ -114,15 +115,15 @@ func (c *Hype) Scan(value interface{}) error { return utils.ScanToStruct(c, valu
 type User struct {
 	ID            int64        `json:"id"`
 	Username      string       `json:"username"`
-	ProfileColour interface{}  `json:"profile_colour"`
-	AvatarURL     string       `json:"avatar_url"`
-	CountryCode   string       `json:"country_code"`
+	ProfileColour interface{}  `json:"profile_colour" mapstructure:"profile_colour"`
+	AvatarURL     string       `json:"avatar_url" mapstructure:"avatar_url"`
+	CountryCode   string       `json:"country_code" mapstructure:"country_code"`
 	DefaultGroup  DefaultGroup `json:"default_group"`
 	IsActive      bool         `json:"is_active"`
 	IsBot         bool         `json:"is_bot"`
 	IsOnline      bool         `json:"is_online"`
 	IsSupporter   bool         `json:"is_supporter"`
-	LastVisit     *string      `json:"last_visit"`
+	LastVisit     *string      `json:"last_visit" mapstructure:"last_visit"`
 	PmFriendsOnly bool         `json:"pm_friends_only"`
 }
 

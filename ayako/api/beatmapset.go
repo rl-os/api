@@ -18,12 +18,12 @@ func (api *Routes) InitBeatmapSet(store store.Store) {
 }
 
 func (h *BeatmapSetHandlers) Get(c echo.Context) error {
-	userID, err := strconv.ParseUint(c.Param("beatmapset"), 10, 32)
+	beatmapsetID, err := strconv.ParseUint(c.Param("beatmapset"), 10, 32)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmapset id")
 	}
 
-	beatmaps, err := h.Store.BeatmapSet().GetBeatmapSet(uint(userID))
+	beatmaps, err := h.Store.BeatmapSet().GetBeatmapSet(uint(beatmapsetID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Please provide valid credentials")
 	}
