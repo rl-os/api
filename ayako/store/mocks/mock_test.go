@@ -17,7 +17,7 @@ func TestNewMockStore(t *testing.T) {
 		mocked := InitStore(ctrl)
 		mocked.BeatmapExpect().
 			GetBeatmap(gomock.Any()).
-			Return(&entity.Beatmap{ID: 123321}, nil)
+			Return(&entity.SingleBeatmap{Beatmap: entity.Beatmap{ID: 123321}}, nil)
 
 		var s store.Store
 		s = mocked

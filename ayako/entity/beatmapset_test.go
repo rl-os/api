@@ -2,6 +2,7 @@ package entity
 
 import (
 	"database/sql/driver"
+	"encoding/json"
 	"reflect"
 	"testing"
 )
@@ -103,25 +104,14 @@ func TestAvailability_Value(t *testing.T) {
 }
 
 func TestCovers_Value(t *testing.T) {
-	type fields struct {
-		Cover       string
-		Cover2X     string
-		Card        string
-		Card2X      string
-		List        string
-		List2X      string
-		Slimcover   string
-		Slimcover2X string
-	}
 	tests := []struct {
 		name    string
-		fields  fields
-		want    driver.Value
+		fields  Covers
 		wantErr bool
 	}{
 		{
 			name: "json value",
-			fields: fields{
+			fields: Covers{
 				Cover:       "https://assets.ppy.sh/beatmaps/365924/covers/cover.jpg?0",
 				Cover2X:     "https://assets.ppy.sh/beatmaps/365924/covers/cover@2x.jpg?0",
 				Card:        "https://assets.ppy.sh/beatmaps/365924/covers/card.jpg?0",
@@ -131,7 +121,6 @@ func TestCovers_Value(t *testing.T) {
 				Slimcover:   "https://assets.ppy.sh/beatmaps/365924/covers/slimcover.jpg?0",
 				Slimcover2X: "https://assets.ppy.sh/beatmaps/365924/covers/slimcover@2x.jpg?0",
 			},
-			want:    []byte("{\"cover\":\"https://assets.ppy.sh/beatmaps/365924/covers/cover.jpg?0\",\"cover@2x\":\"https://assets.ppy.sh/beatmaps/365924/covers/cover@2x.jpg?0\",\"card\":\"https://assets.ppy.sh/beatmaps/365924/covers/card.jpg?0\",\"card@2x\":\"https://assets.ppy.sh/beatmaps/365924/covers/card@2x.jpg?0\",\"list\":\"https://assets.ppy.sh/beatmaps/365924/covers/list.jpg?0\",\"list@2x\":\"https://assets.ppy.sh/beatmaps/365924/covers/list@2x.jpg?0\",\"slimcover\":\"https://assets.ppy.sh/beatmaps/365924/covers/slimcover.jpg?0\",\"slimcover@2x\":\"https://assets.ppy.sh/beatmaps/365924/covers/slimcover@2x.jpg?0\"}"),
 			wantErr: false,
 		},
 	}
@@ -152,8 +141,11 @@ func TestCovers_Value(t *testing.T) {
 				t.Errorf("Value() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Value() got = %v, want %v", got, tt.want)
+
+			b, _ := json.Marshal(tt.fields)
+
+			if !reflect.DeepEqual(got, b) {
+				t.Errorf("Value() got = %v, want %v", got, b)
 			}
 		})
 	}
