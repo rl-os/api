@@ -197,19 +197,19 @@ func (mr *MockBeatmapSetMockRecorder) GetAllBeatmapSets(page, limit interface{})
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllBeatmapSets", reflect.TypeOf((*MockBeatmapSet)(nil).GetAllBeatmapSets), page, limit)
 }
 
-// GetBeatmapSetIdForUpdate mocks base method
-func (m *MockBeatmapSet) GetBeatmapSetIdForUpdate(limit int) ([]uint, error) {
+// ComputeBeatmapSet mocks base method
+func (m *MockBeatmapSet) ComputeBeatmapSet(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBeatmapSetIdForUpdate", limit)
-	ret0, _ := ret[0].([]uint)
+	ret := m.ctrl.Call(m, "ComputeBeatmapSet", set)
+	ret0, _ := ret[0].(*entity.BeatmapSetFull)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetBeatmapSetIdForUpdate indicates an expected call of GetBeatmapSetIdForUpdate
-func (mr *MockBeatmapSetMockRecorder) GetBeatmapSetIdForUpdate(limit interface{}) *gomock.Call {
+// ComputeBeatmapSet indicates an expected call of ComputeBeatmapSet
+func (mr *MockBeatmapSetMockRecorder) ComputeBeatmapSet(set interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBeatmapSetIdForUpdate", reflect.TypeOf((*MockBeatmapSet)(nil).GetBeatmapSetIdForUpdate), limit)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ComputeBeatmapSet", reflect.TypeOf((*MockBeatmapSet)(nil).ComputeBeatmapSet), set)
 }
 
 // GetLatestBeatmapId mocks base method
@@ -225,6 +225,21 @@ func (m *MockBeatmapSet) GetLatestBeatmapId() (uint, error) {
 func (mr *MockBeatmapSetMockRecorder) GetLatestBeatmapId() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLatestBeatmapId", reflect.TypeOf((*MockBeatmapSet)(nil).GetLatestBeatmapId))
+}
+
+// GetBeatmapSetIdForUpdate mocks base method
+func (m *MockBeatmapSet) GetBeatmapSetIdForUpdate(limit int) ([]uint, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetBeatmapSetIdForUpdate", limit)
+	ret0, _ := ret[0].([]uint)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetBeatmapSetIdForUpdate indicates an expected call of GetBeatmapSetIdForUpdate
+func (mr *MockBeatmapSetMockRecorder) GetBeatmapSetIdForUpdate(limit interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBeatmapSetIdForUpdate", reflect.TypeOf((*MockBeatmapSet)(nil).GetBeatmapSetIdForUpdate), limit)
 }
 
 // CreateBeatmapSet mocks base method
