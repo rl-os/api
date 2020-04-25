@@ -24,8 +24,8 @@ type Config struct {
 	}
 	Service struct {
 		EnableSecurityFixAlert bool `default:"true"`
-		EnableUpdater bool `default:"true"`
-		EnableSearch bool `default:"true"`
+		EnableUpdater          bool `default:"true"`
+		EnableSearch           bool `default:"true"`
 	}
 	Database struct {
 		DSN    string `default:"postgres://postgres:postgres@/osuserver?sslmode=disable"`
