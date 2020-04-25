@@ -19,10 +19,10 @@ func newSqlBeatmapSetStore(sqlStore SqlStore) store.BeatmapSet {
 }
 
 func (s BeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) {
-	set := entity.BeatmapSetFull{}
+	set := &entity.BeatmapSetFull{}
 
 	err := s.GetMaster().Get(
-		&set,
+		set,
 		`SELECT id, title, artist, play_count, favourite_count,
 			has_favourited, submitted_date, last_updated, ranked_date,
 		   creator, user_id, bpm, source, covers, preview_url, tags, video,
@@ -42,17 +42,21 @@ func (s BeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) 
 		if err != nil {
 			return nil, err
 		}
-		return s.CreateBeatmapSet(data)
-	default:
-		return s.ComputeBeatmapSet(set)
+
+		set, err = s.CreateBeatmapSet(data)
+		if err != nil {
+			return nil, err
+		}
 	}
+
+	return s.ComputeBeatmapSet(*set)
 }
 
 func (s BeatmapSetStore) ComputeBeatmapSet(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
 	set.RecentFavourites = []entity.User{}
 	set.Ratings = make([]int64, 11)
 	set.Converts = []entity.Beatmap{}
-	set.Beatmaps = []entity.Beatmap{}
+	set.Beatmaps = s.Beatmap().GetBeatmapsBySet(uint(set.ID))
 
 	return &set, nil
 }
@@ -91,8 +95,16 @@ func (s BeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetF
 			Err(err).
 			Msg("store.CreateBeatmapSet")
 
-		//todo: error wrap
 		return nil, err
+	}
+
+	// todo: может отказаться от from interface{} ?
+	// тк придется поддерживать все необходимые структуры
+	if m, ok := from.(*entity.BeatmapSetFull); ok {
+		data, err := s.Beatmap().CreateBeatmaps(m.Beatmaps)
+		if err == nil {
+			set.Beatmaps = *data
+		}
 	}
 
 	return &set, nil

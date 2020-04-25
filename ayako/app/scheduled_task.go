@@ -42,6 +42,10 @@ func createTask(name string, function TaskFunc, interval time.Duration, recurrin
 			ticker.Stop()
 		}()
 
+		if task.Recurring {
+			function()
+		}
+
 		for {
 			select {
 			case <-ticker.C:

@@ -19,8 +19,8 @@ func (s *App) DoBeatmapSetSearchNew() {
 		return
 	}
 
-	// trying get 60 beatmaps with id + i
-	for i := 1; i <= 60; i++ {
+	// trying get 10 beatmaps with id + i
+	for i := 1; i <= 10; i++ {
 		data, err := s.Store.BeatmapSet().Fetch(id + uint(i))
 		if err != nil {
 			log.Debug().

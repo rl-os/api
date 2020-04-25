@@ -139,6 +139,61 @@ ALTER SEQUENCE public.beatmap_set_id_seq OWNED BY public.beatmap_set.id;
 
 
 --
+-- Name: beatmaps; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.beatmaps (
+    id integer NOT NULL,
+    beatmapset_id integer NOT NULL,
+    mode character varying DEFAULT 'osu'::character varying NOT NULL,
+    mode_int integer DEFAULT 0 NOT NULL,
+    convert boolean DEFAULT false NOT NULL,
+    difficulty_rating double precision DEFAULT 1.0 NOT NULL,
+    version character varying DEFAULT ''::character varying NOT NULL,
+    total_length integer DEFAULT 100 NOT NULL,
+    hit_length integer DEFAULT 100,
+    bpm integer DEFAULT 100 NOT NULL,
+    cs integer DEFAULT 5 NOT NULL,
+    drain integer DEFAULT 5 NOT NULL,
+    accuracy integer DEFAULT 5 NOT NULL,
+    ar integer DEFAULT 5 NOT NULL,
+    playcount integer DEFAULT 0 NOT NULL,
+    passcount integer DEFAULT 0 NOT NULL,
+    count_circles integer DEFAULT 0 NOT NULL,
+    count_sliders integer DEFAULT 0 NOT NULL,
+    count_spinners integer DEFAULT 0 NOT NULL,
+    count_total integer DEFAULT 0 NOT NULL,
+    is_scoreable boolean DEFAULT true NOT NULL,
+    last_updated timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    ranked integer DEFAULT 0 NOT NULL,
+    status character varying DEFAULT 'ranked'::character varying NOT NULL,
+    url character varying DEFAULT ''::character varying NOT NULL,
+    deleted_at timestamp with time zone,
+    max_combo integer
+);
+
+
+--
+-- Name: beatmaps_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.beatmaps_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: beatmaps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.beatmaps_id_seq OWNED BY public.beatmaps.id;
+
+
+--
 -- Name: channels; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -551,6 +606,13 @@ ALTER TABLE ONLY public.beatmap_set ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: beatmaps id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.beatmaps ALTER COLUMN id SET DEFAULT nextval('public.beatmaps_id_seq'::regclass);
+
+
+--
 -- Name: channels id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -634,6 +696,14 @@ ALTER TABLE ONLY public.achievements
 
 ALTER TABLE ONLY public.beatmap_set
     ADD CONSTRAINT beatmap_set_pk PRIMARY KEY (id);
+
+
+--
+-- Name: beatmaps beatmaps_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.beatmaps
+    ADD CONSTRAINT beatmaps_pk PRIMARY KEY (id);
 
 
 --
@@ -743,6 +813,13 @@ CREATE UNIQUE INDEX achievements_slug_uindex ON public.achievements USING btree 
 --
 
 CREATE UNIQUE INDEX beatmap_set_id_uindex ON public.beatmap_set USING btree (id);
+
+
+--
+-- Name: beatmaps_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX beatmaps_id_uindex ON public.beatmaps USING btree (id);
 
 
 --
@@ -886,6 +963,14 @@ CREATE UNIQUE INDEX users_username_uindex ON public.users USING btree (username)
 
 
 --
+-- Name: beatmaps beatmaps_beatmap_set_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.beatmaps
+    ADD CONSTRAINT beatmaps_beatmap_set_id_fk FOREIGN KEY (beatmapset_id) REFERENCES public.beatmap_set(id);
+
+
+--
 -- Name: message message_channels_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -981,4 +1066,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200224101725'),
     ('20200224101740'),
     ('20200225094357'),
-    ('20200313155053');
+    ('20200313155053'),
+    ('20200425094246');

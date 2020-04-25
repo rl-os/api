@@ -42,24 +42,6 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 	}
 	s.Config.AutoReloadCallback = s.OnConfigReload
 
-	if cfg.Server.EnableJobs {
-		if cfg.Service.EnableSecurityFixAlert {
-			s.Go(func() {
-				runSecurityJob(s)
-			})
-		}
-		if cfg.Service.EnableUpdater {
-			s.Go(func() {
-				runUpdateCheck(s)
-			})
-		}
-		if cfg.Service.EnableSearch {
-			s.Go(func() {
-				runSearchNew(s)
-			})
-		}
-	}
-
 	return s
 }
 
@@ -73,6 +55,18 @@ func (s *App) Start() error {
 	}
 
 	log.Info().Msg("Starting App...")
+
+	if s.Config.Server.EnableJobs {
+		if s.Config.Service.EnableSecurityFixAlert {
+			s.Go(func() { runSecurityJob(s) })
+		}
+		if s.Config.Service.EnableUpdater {
+			s.Go(func() { runUpdateCheck(s) })
+		}
+		if s.Config.Service.EnableSearch {
+			s.Go(func() { runSearchNew(s) })
+		}
+	}
 
 	addr := s.Config.Server.Host + ":" + s.Config.Server.Port
 
@@ -104,24 +98,21 @@ func (s *App) Start() error {
 }
 
 func runSecurityJob(s *App) {
-	doSecurity(s)
 	CreateRecurringTask("Security", func() {
 		doSecurity(s)
 	}, time.Hour*6)
 }
 
 func runUpdateCheck(s *App) {
-	doUpdateCheck(s)
 	CreateRecurringTask("UpdateCheck", func() {
 		doUpdateCheck(s)
-	}, time.Hour)
+	}, time.Minute*30)
 }
 
 func runSearchNew(s *App) {
-	doSearchNew(s)
 	CreateRecurringTask("SearchNew", func() {
-		doUpdateCheck(s)
-	}, time.Hour*4)
+		doSearchNew(s)
+	}, time.Hour)
 }
 
 func doSecurity(s *App) {
