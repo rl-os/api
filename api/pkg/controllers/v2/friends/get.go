@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// Get user friends handler
+// Show user friends handler
 func Get(c echo.Context) (err error) {
 	data := c.Get("current_user")
 

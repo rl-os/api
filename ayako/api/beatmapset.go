@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -15,6 +16,8 @@ func (api *Routes) InitBeatmapSet(store store.Store) {
 	handlers := BeatmapSetHandlers{store}
 
 	api.BeatmapSets.GET("/:beatmapset", handlers.Get)
+	api.BeatmapSets.GET("/lookup", handlers.Lookup)
+	api.BeatmapSets.GET("/search", handlers.Search)
 }
 
 func (h *BeatmapSetHandlers) Get(c echo.Context) error {
@@ -29,4 +32,51 @@ func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 	}
 
 	return c.JSON(200, beatmaps)
+}
+
+func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
+	params := struct {
+		Id uint `query:"beatmap_id"`
+	}{}
+	if err := c.Bind(&params); err != nil {
+		return err
+	}
+
+	beatmap, err := h.Store.Beatmap().GetBeatmap(params.Id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
+	}
+
+	beatmapSet, err := h.Store.BeatmapSet().GetBeatmapSet(uint(beatmap.Beatmapset.ID))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, "BeatmapSet not found")
+	}
+
+	return c.JSON(200, beatmapSet)
+}
+
+func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
+	// todo: this
+	params := struct {
+	}{}
+	if err := c.Bind(&params); err != nil {
+		return err
+	}
+
+	beatmapSets, err := h.Store.BeatmapSet().GetBeatmapSet(1118896)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, "BeatmapSet not found")
+	}
+
+	return c.JSON(200, struct {
+		Beatmapsets           *[]entity.BeatmapSetFull `json:"beatmapsets"`
+		RecommendedDifficulty float32                  `json:"recommended_difficulty"`
+		Error                 error                    `json:"error"`
+		Total                 uint                     `json:"total"`
+	}{
+		&[]entity.BeatmapSetFull{*beatmapSets},
+		3,
+		nil,
+		0,
+	})
 }
