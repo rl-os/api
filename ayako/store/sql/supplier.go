@@ -4,6 +4,7 @@ import (
 	osu "github.com/deissh/osu-go-client"
 	"github.com/deissh/osu-lazer/ayako/config"
 	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/osu-lazer/ayako/store/layers"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/rs/zerolog/log"
@@ -35,7 +36,9 @@ func Init(cfg *config.Config, osuClient *osu.OsuAPI) store.Store {
 	supplier.stores.beatmap = newSqlBeatmapStore(supplier)
 	supplier.stores.beatmapSet = newSqlBeatmapSetStore(supplier)
 
-	return supplier
+	return layers.NewStoreWithLog(
+		supplier,
+	)
 }
 
 func (ss *Supplier) initConnection(cfg *config.Config) {

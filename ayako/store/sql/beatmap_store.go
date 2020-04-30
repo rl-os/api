@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/store"
-	"github.com/rs/zerolog/log"
 )
 
 type BeatmapStore struct {
@@ -30,16 +29,10 @@ func (s BeatmapStore) GetBeatmap(id uint) (*entity.SingleBeatmap, error) {
 		id,
 	)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.GetBeatmap")
 		return nil, err
 	}
 	set, err := s.BeatmapSet().GetBeatmapSet(uint(beatmap.BeatmapsetID))
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.GetBeatmap")
 		return nil, err
 	}
 
@@ -51,7 +44,7 @@ func (s BeatmapStore) GetBeatmap(id uint) (*entity.SingleBeatmap, error) {
 func (s BeatmapStore) GetBeatmapsBySet(beatmapsetId uint) []entity.Beatmap {
 	beatmaps := make([]entity.Beatmap, 0)
 
-	err := s.GetMaster().Select(
+	_ = s.GetMaster().Select(
 		&beatmaps,
 		`select id, beatmapset_id, mode, mode_int, convert,
 		   difficulty_rating, version, total_length,
@@ -64,11 +57,6 @@ func (s BeatmapStore) GetBeatmapsBySet(beatmapsetId uint) []entity.Beatmap {
 		where beatmapset_id = $1`,
 		beatmapsetId,
 	)
-	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.GetBeatmapsBySet")
-	}
 
 	return beatmaps
 }
@@ -82,10 +70,6 @@ func (s BeatmapStore) CreateBeatmap(from interface{}) (*entity.Beatmap, error) {
 
 	b, err := json.Marshal(&from)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.CreateBeatmap")
-
 		return nil, err
 	}
 
@@ -104,10 +88,6 @@ func (s BeatmapStore) CreateBeatmap(from interface{}) (*entity.Beatmap, error) {
 		string(b),
 	)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.CreateBeatmap")
-
 		return nil, err
 	}
 
@@ -119,10 +99,6 @@ func (s BeatmapStore) CreateBeatmaps(from interface{}) (*[]entity.Beatmap, error
 
 	b, err := json.Marshal(&from)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.CreateBeatmap")
-
 		return nil, err
 	}
 
@@ -141,10 +117,6 @@ func (s BeatmapStore) CreateBeatmaps(from interface{}) (*[]entity.Beatmap, error
 		string(b),
 	)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.CreateBeatmaps")
-
 		return nil, err
 	}
 

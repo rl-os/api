@@ -98,6 +98,7 @@ install:
 	$(GOMOD) download
 	$(GOGET) -u github.com/google/wire/cmd/wire
 	$(GOGET) -u github.com/golang/mock/mockgen@latest
+	$(GOGET) -u github.com/hexdigest/gowrap/cmd/gowrap
 	@echo -e "\e[1;34m> Installing unnessosory packages\e[0m"
 	$(GOGET) -u golang.org/x/lint/golint
 	$(GOGET) -u github.com/fzipp/gocyclo

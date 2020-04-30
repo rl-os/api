@@ -6,7 +6,6 @@ import (
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/jinzhu/copier"
-	"github.com/rs/zerolog/log"
 	"time"
 )
 
@@ -36,8 +35,6 @@ func (s BeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) 
 
 	switch err {
 	case sql.ErrNoRows:
-		log.Info().
-			Msg("beatmapset not found, fetching from osu!a api")
 		data, err := s.Fetch(id)
 		if err != nil {
 			return nil, err
@@ -70,10 +67,6 @@ func (s BeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetF
 
 	b, err := json.Marshal(&from)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.CreateBeatmapSet")
-
 		return nil, err
 	}
 
@@ -91,10 +84,6 @@ func (s BeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetF
 		string(b),
 	)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.CreateBeatmapSet")
-
 		return nil, err
 	}
 
@@ -115,10 +104,6 @@ func (s BeatmapSetStore) UpdateBeatmapSet(id uint, from interface{}) (*entity.Be
 
 	b, err := json.Marshal(&from)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.CreateBeatmapSet")
-
 		return nil, err
 	}
 
@@ -145,10 +130,6 @@ func (s BeatmapSetStore) UpdateBeatmapSet(id uint, from interface{}) (*entity.Be
 		string(b),
 	)
 	if err != nil {
-		log.Error().
-			Err(err).
-			Msg("store.UpdateBeatmapSet")
-
 		return nil, err
 	}
 
@@ -168,10 +149,6 @@ func (s BeatmapSetStore) Fetch(id uint) (*entity.BeatmapSetFull, error) {
 
 	var out entity.BeatmapSetFull
 	if err := copier.Copy(&out, &data); err != nil {
-		log.Error().
-			Err(err).
-			Int64("id", data.ID).
-			Msg("scan to entity.BeatmapSetFull")
 		return nil, err
 	}
 
@@ -190,8 +167,8 @@ func (s BeatmapSetStore) GetBeatmapSetIdForUpdate(limit int) ([]uint, error) {
 		where (last_checked <= $1) or (last_checked <= $2 and status in ('pending', 'wip', 'qualified'))
 		order by last_checked
 		limit $3`,
-		now.Truncate(time.Hour*24*7),
-		now.Truncate(time.Minute*30),
+		now.Add(-time.Hour*24*7),
+		now.Add(-time.Minute*30),
 		limit,
 	)
 	return ids, err

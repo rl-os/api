@@ -1,0 +1,46 @@
+import (
+  "io"
+  "github.com/rs/zerolog/log"
+)
+
+{{ $decorator := (or .Vars.DecoratorName (printf "%sWithLog" .Interface.Name)) }}
+
+// {{$decorator}} implements {{.Interface.Type}} that is instrumented with zerolog
+type {{$decorator}} struct {
+  _base {{.Interface.Type}}
+}
+
+{{range $method := .Interface.Methods}}
+  // {{$method.Name}} implements {{$.Interface.Type}}
+  func (_d {{$decorator}}) {{$method.Declaration}} {
+      {{- if $method.HasParams}}
+        log.Debug().
+        {{range $result := $method.Params}}
+          Interface("{{$result.Name}}", {{$result.Name}}).
+        {{end}}
+          Msg("store.{{$method.Name}}: calling")
+      {{else}}
+        log.Debug().Msg("store.{{$method.Name}}: calling")
+      {{end -}}
+      defer func() {
+        {{- if $method.HasResults}}
+          {{- if $method.ReturnsError}}
+            if err != nil {
+              log.Error().Err(err).
+                Msg("store.{{$method.Name}}: returned an error")
+            } else {
+              log.Debug().
+                Msg("store.{{$method.Name}}: finished")
+            }
+          {{else}}
+            log.Debug().
+              Msg("store.{{$method.Name}}: finished")
+          {{end -}}
+        {{else}}
+          log.Debug().
+            Msg("store.{{$method.Name}}: finished")
+        {{end -}}
+      }()
+      {{ $method.Pass "_d._base." }}
+  }
+{{end}}
