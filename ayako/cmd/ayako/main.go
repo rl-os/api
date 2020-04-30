@@ -4,8 +4,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/deissh/osu-lazer/ayako/app"
 	"github.com/deissh/osu-lazer/ayako/config"
 	"github.com/deissh/osu-lazer/ayako/services"
@@ -13,6 +11,8 @@ import (
 	"github.com/google/wire"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"os"
+	"time"
 )
 
 var Version string
@@ -21,15 +21,7 @@ var Branch string
 var BuildTimestamp string
 
 func main() {
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-	zerolog.SetGlobalLevel(zerolog.DebugLevel)
-	log.Logger = log.Output(
-		zerolog.ConsoleWriter{
-			Out:     os.Stderr,
-			NoColor: false,
-		},
-	).With().Caller().Logger()
+	setupLogger()
 
 	log.Info().
 		Str("version", Version).
@@ -47,6 +39,21 @@ func main() {
 	if err := app.Start(); err != nil {
 		log.Fatal().Err(err).Send()
 	}
+}
+
+func setupLogger() {
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	if os.Getenv("env") == "dev" {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	}
+
+	log.Logger = log.Output(
+		zerolog.ConsoleWriter{
+			Out:        os.Stderr,
+			NoColor:    false,
+			TimeFormat: time.RFC3339,
+		},
+	).With().Caller().Logger()
 }
 
 func Injector(configPath string) *app.App {
