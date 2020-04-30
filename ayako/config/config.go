@@ -20,7 +20,7 @@ type Config struct {
 		Host string `default:"0.0.0.0"`
 		Port string `default:"2400"`
 
-		EnableJobs bool `default:"true"`
+		EnableJobs bool `default:"false"`
 	}
 	Service struct {
 		EnableSecurityFixAlert bool `default:"true"`
