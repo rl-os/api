@@ -22,7 +22,7 @@ func (s BeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) 
 
 	err := s.GetMaster().Get(
 		set,
-		`SELECT id, title, artist, play_count, favourite_count,
+		`SELECT id, last_checked, title, artist, play_count, favourite_count,
 			has_favourited, submitted_date, last_updated, ranked_date,
 		   creator, user_id, bpm, source, covers, preview_url, tags, video,
 		   storyboard, ranked, status, is_scoreable, discussion_enabled,
