@@ -15,155 +15,155 @@ type BeatmapSetWithLog struct {
 	_base store.BeatmapSet
 }
 
-// ComputeBeatmapSet implements store.BeatmapSet
-func (_d BeatmapSetWithLog) ComputeBeatmapSet(set entity.BeatmapSetFull) (bp1 *entity.BeatmapSetFull, err error) {
+// ComputeFields implements store.BeatmapSet
+func (_d BeatmapSetWithLog) ComputeFields(set entity.BeatmapSetFull) (bp1 *entity.BeatmapSetFull, err error) {
 	log.Debug().
 		Interface("set", set).
-		Msg("store.ComputeBeatmapSet: calling")
+		Msg("store.ComputeFields: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.ComputeBeatmapSet: returned an error")
+				Msg("store.ComputeFields: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.ComputeBeatmapSet: finished")
+				Msg("store.ComputeFields: finished")
 		}
 	}()
-	return _d._base.ComputeBeatmapSet(set)
+	return _d._base.ComputeFields(set)
 }
 
-// CreateBeatmapSet implements store.BeatmapSet
-func (_d BeatmapSetWithLog) CreateBeatmapSet(from interface{}) (bp1 *entity.BeatmapSetFull, err error) {
+// Create implements store.BeatmapSet
+func (_d BeatmapSetWithLog) Create(from interface{}) (bp1 *entity.BeatmapSetFull, err error) {
 	log.Debug().
 		Interface("from", from).
-		Msg("store.CreateBeatmapSet: calling")
+		Msg("store.Create: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.CreateBeatmapSet: returned an error")
+				Msg("store.Create: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.CreateBeatmapSet: finished")
+				Msg("store.Create: finished")
 		}
 	}()
-	return _d._base.CreateBeatmapSet(from)
+	return _d._base.Create(from)
 }
 
-// DeleteBeatmapSet implements store.BeatmapSet
-func (_d BeatmapSetWithLog) DeleteBeatmapSet(id uint) (err error) {
+// Delete implements store.BeatmapSet
+func (_d BeatmapSetWithLog) Delete(id uint) (err error) {
 	log.Debug().
 		Interface("id", id).
-		Msg("store.DeleteBeatmapSet: calling")
+		Msg("store.Delete: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.DeleteBeatmapSet: returned an error")
+				Msg("store.Delete: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.DeleteBeatmapSet: finished")
+				Msg("store.Delete: finished")
 		}
 	}()
-	return _d._base.DeleteBeatmapSet(id)
+	return _d._base.Delete(id)
 }
 
-// Fetch implements store.BeatmapSet
-func (_d BeatmapSetWithLog) Fetch(id uint) (bp1 *entity.BeatmapSetFull, err error) {
+// FetchFromBancho implements store.BeatmapSet
+func (_d BeatmapSetWithLog) FetchFromBancho(id uint) (bp1 *entity.BeatmapSetFull, err error) {
 	log.Debug().
 		Interface("id", id).
-		Msg("store.Fetch: calling")
+		Msg("store.FetchFromBancho: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.Fetch: returned an error")
+				Msg("store.FetchFromBancho: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.Fetch: finished")
+				Msg("store.FetchFromBancho: finished")
 		}
 	}()
-	return _d._base.Fetch(id)
+	return _d._base.FetchFromBancho(id)
 }
 
-// GetAllBeatmapSets implements store.BeatmapSet
-func (_d BeatmapSetWithLog) GetAllBeatmapSets(page int, limit int) (bap1 *[]entity.BeatmapSet, err error) {
+// Get implements store.BeatmapSet
+func (_d BeatmapSetWithLog) Get(id uint) (bp1 *entity.BeatmapSetFull, err error) {
+	log.Debug().
+		Interface("id", id).
+		Msg("store.Get: calling")
+	defer func() {
+		if err != nil {
+			log.Error().Err(err).
+				Msg("store.Get: returned an error")
+		} else {
+			log.Debug().
+				Msg("store.Get: finished")
+		}
+	}()
+	return _d._base.Get(id)
+}
+
+// GetAll implements store.BeatmapSet
+func (_d BeatmapSetWithLog) GetAll(page int, limit int) (bap1 *[]entity.BeatmapSet, err error) {
 	log.Debug().
 		Interface("page", page).
 		Interface("limit", limit).
-		Msg("store.GetAllBeatmapSets: calling")
+		Msg("store.GetAll: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.GetAllBeatmapSets: returned an error")
+				Msg("store.GetAll: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.GetAllBeatmapSets: finished")
+				Msg("store.GetAll: finished")
 		}
 	}()
-	return _d._base.GetAllBeatmapSets(page, limit)
+	return _d._base.GetAll(page, limit)
 }
 
-// GetBeatmapSet implements store.BeatmapSet
-func (_d BeatmapSetWithLog) GetBeatmapSet(id uint) (bp1 *entity.BeatmapSetFull, err error) {
-	log.Debug().
-		Interface("id", id).
-		Msg("store.GetBeatmapSet: calling")
-	defer func() {
-		if err != nil {
-			log.Error().Err(err).
-				Msg("store.GetBeatmapSet: returned an error")
-		} else {
-			log.Debug().
-				Msg("store.GetBeatmapSet: finished")
-		}
-	}()
-	return _d._base.GetBeatmapSet(id)
-}
-
-// GetBeatmapSetIdForUpdate implements store.BeatmapSet
-func (_d BeatmapSetWithLog) GetBeatmapSetIdForUpdate(limit int) (ua1 []uint, err error) {
+// GetIdsForUpdate implements store.BeatmapSet
+func (_d BeatmapSetWithLog) GetIdsForUpdate(limit int) (ua1 []uint, err error) {
 	log.Debug().
 		Interface("limit", limit).
-		Msg("store.GetBeatmapSetIdForUpdate: calling")
+		Msg("store.GetIdsForUpdate: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.GetBeatmapSetIdForUpdate: returned an error")
+				Msg("store.GetIdsForUpdate: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.GetBeatmapSetIdForUpdate: finished")
+				Msg("store.GetIdsForUpdate: finished")
 		}
 	}()
-	return _d._base.GetBeatmapSetIdForUpdate(limit)
+	return _d._base.GetIdsForUpdate(limit)
 }
 
-// GetLatestBeatmapId implements store.BeatmapSet
-func (_d BeatmapSetWithLog) GetLatestBeatmapId() (u1 uint, err error) {
-	log.Debug().Msg("store.GetLatestBeatmapId: calling")
+// GetLatestId implements store.BeatmapSet
+func (_d BeatmapSetWithLog) GetLatestId() (u1 uint, err error) {
+	log.Debug().Msg("store.GetLatestId: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.GetLatestBeatmapId: returned an error")
+				Msg("store.GetLatestId: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.GetLatestBeatmapId: finished")
+				Msg("store.GetLatestId: finished")
 		}
 	}()
-	return _d._base.GetLatestBeatmapId()
+	return _d._base.GetLatestId()
 }
 
-// UpdateBeatmapSet implements store.BeatmapSet
-func (_d BeatmapSetWithLog) UpdateBeatmapSet(id uint, from interface{}) (bp1 *entity.BeatmapSetFull, err error) {
+// Update implements store.BeatmapSet
+func (_d BeatmapSetWithLog) Update(id uint, from interface{}) (bp1 *entity.BeatmapSetFull, err error) {
 	log.Debug().
 		Interface("id", id).
 		Interface("from", from).
-		Msg("store.UpdateBeatmapSet: calling")
+		Msg("store.Update: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.UpdateBeatmapSet: returned an error")
+				Msg("store.Update: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.UpdateBeatmapSet: finished")
+				Msg("store.Update: finished")
 		}
 	}()
-	return _d._base.UpdateBeatmapSet(id, from)
+	return _d._base.Update(id, from)
 }

@@ -25,7 +25,7 @@ func (h *BeatmapHandlers) Show(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
 	}
 
-	beatmaps, err := h.Store.Beatmap().GetBeatmap(uint(beatmapID))
+	beatmaps, err := h.Store.Beatmap().Get(uint(beatmapID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
 	}
@@ -46,16 +46,16 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 	var beatmap *entity.SingleBeatmap
 	if params.CheckSum != "" {
 		// todo: search by md5
-		beatmap, err = h.Store.Beatmap().GetBeatmap(params.Id)
+		beatmap, err = h.Store.Beatmap().Get(params.Id)
 	}
 
 	if beatmap == nil && params.Id != 0 {
-		beatmap, err = h.Store.Beatmap().GetBeatmap(params.Id)
+		beatmap, err = h.Store.Beatmap().Get(params.Id)
 	}
 
 	if beatmap == nil && params.Filename != "" {
 		// todo: search by filename
-		beatmap, err = h.Store.Beatmap().GetBeatmap(params.Id)
+		beatmap, err = h.Store.Beatmap().Get(params.Id)
 	}
 
 	if err != nil || beatmap == nil {

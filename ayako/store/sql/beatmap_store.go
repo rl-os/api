@@ -14,7 +14,7 @@ func newSqlBeatmapStore(sqlStore SqlStore) store.Beatmap {
 	return &BeatmapStore{sqlStore}
 }
 
-func (s BeatmapStore) GetBeatmap(id uint) (*entity.SingleBeatmap, error) {
+func (s BeatmapStore) Get(id uint) (*entity.SingleBeatmap, error) {
 	var beatmap entity.SingleBeatmap
 
 	err := s.GetMaster().Get(
@@ -31,7 +31,7 @@ func (s BeatmapStore) GetBeatmap(id uint) (*entity.SingleBeatmap, error) {
 	if err != nil {
 		return nil, err
 	}
-	set, err := s.BeatmapSet().GetBeatmapSet(uint(beatmap.BeatmapsetID))
+	set, err := s.BeatmapSet().Get(uint(beatmap.BeatmapsetID))
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (s BeatmapStore) GetBeatmap(id uint) (*entity.SingleBeatmap, error) {
 	return &beatmap, nil
 }
 
-func (s BeatmapStore) GetBeatmapsBySet(beatmapsetId uint) []entity.Beatmap {
+func (s BeatmapStore) GetBySetId(beatmapsetId uint) []entity.Beatmap {
 	beatmaps := make([]entity.Beatmap, 0)
 
 	_ = s.GetMaster().Select(
@@ -61,11 +61,7 @@ func (s BeatmapStore) GetBeatmapsBySet(beatmapsetId uint) []entity.Beatmap {
 	return beatmaps
 }
 
-func (s BeatmapStore) GetAllBeatmap(page int, limit int) (*[]entity.Beatmap, error) {
-	panic("implement me")
-}
-
-func (s BeatmapStore) CreateBeatmap(from interface{}) (*entity.Beatmap, error) {
+func (s BeatmapStore) Create(from interface{}) (*entity.Beatmap, error) {
 	var set entity.Beatmap
 
 	b, err := json.Marshal(&from)
@@ -94,7 +90,7 @@ func (s BeatmapStore) CreateBeatmap(from interface{}) (*entity.Beatmap, error) {
 	return &set, nil
 }
 
-func (s BeatmapStore) CreateBeatmaps(from interface{}) (*[]entity.Beatmap, error) {
+func (s BeatmapStore) CreateBatch(from interface{}) (*[]entity.Beatmap, error) {
 	var sets []entity.Beatmap
 
 	b, err := json.Marshal(&from)
@@ -123,10 +119,10 @@ func (s BeatmapStore) CreateBeatmaps(from interface{}) (*[]entity.Beatmap, error
 	return &sets, nil
 }
 
-func (s BeatmapStore) UpdateBeatmap(id uint, from interface{}) (*entity.Beatmap, error) {
+func (s BeatmapStore) Update(id uint, from interface{}) (*entity.Beatmap, error) {
 	panic("implement me")
 }
 
-func (s BeatmapStore) DeleteBeatmap(id uint) error {
+func (s BeatmapStore) Delete(id uint) error {
 	panic("implement me")
 }

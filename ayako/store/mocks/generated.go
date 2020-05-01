@@ -85,92 +85,92 @@ func (m *MockBeatmap) EXPECT() *MockBeatmapMockRecorder {
 	return m.recorder
 }
 
-// GetBeatmap mocks base method
-func (m *MockBeatmap) GetBeatmap(id uint) (*entity.SingleBeatmap, error) {
+// Get mocks base method
+func (m *MockBeatmap) Get(id uint) (*entity.SingleBeatmap, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBeatmap", id)
+	ret := m.ctrl.Call(m, "Get", id)
 	ret0, _ := ret[0].(*entity.SingleBeatmap)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetBeatmap indicates an expected call of GetBeatmap
-func (mr *MockBeatmapMockRecorder) GetBeatmap(id interface{}) *gomock.Call {
+// Get indicates an expected call of Get
+func (mr *MockBeatmapMockRecorder) Get(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBeatmap", reflect.TypeOf((*MockBeatmap)(nil).GetBeatmap), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockBeatmap)(nil).Get), id)
 }
 
-// GetBeatmapsBySet mocks base method
-func (m *MockBeatmap) GetBeatmapsBySet(beatmapsetId uint) []entity.Beatmap {
+// GetBySetId mocks base method
+func (m *MockBeatmap) GetBySetId(beatmapsetId uint) []entity.Beatmap {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBeatmapsBySet", beatmapsetId)
+	ret := m.ctrl.Call(m, "GetBySetId", beatmapsetId)
 	ret0, _ := ret[0].([]entity.Beatmap)
 	return ret0
 }
 
-// GetBeatmapsBySet indicates an expected call of GetBeatmapsBySet
-func (mr *MockBeatmapMockRecorder) GetBeatmapsBySet(beatmapsetId interface{}) *gomock.Call {
+// GetBySetId indicates an expected call of GetBySetId
+func (mr *MockBeatmapMockRecorder) GetBySetId(beatmapsetId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBeatmapsBySet", reflect.TypeOf((*MockBeatmap)(nil).GetBeatmapsBySet), beatmapsetId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBySetId", reflect.TypeOf((*MockBeatmap)(nil).GetBySetId), beatmapsetId)
 }
 
-// CreateBeatmap mocks base method
-func (m *MockBeatmap) CreateBeatmap(from interface{}) (*entity.Beatmap, error) {
+// Create mocks base method
+func (m *MockBeatmap) Create(from interface{}) (*entity.Beatmap, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateBeatmap", from)
+	ret := m.ctrl.Call(m, "Create", from)
 	ret0, _ := ret[0].(*entity.Beatmap)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateBeatmap indicates an expected call of CreateBeatmap
-func (mr *MockBeatmapMockRecorder) CreateBeatmap(from interface{}) *gomock.Call {
+// Create indicates an expected call of Create
+func (mr *MockBeatmapMockRecorder) Create(from interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateBeatmap", reflect.TypeOf((*MockBeatmap)(nil).CreateBeatmap), from)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockBeatmap)(nil).Create), from)
 }
 
-// CreateBeatmaps mocks base method
-func (m *MockBeatmap) CreateBeatmaps(from interface{}) (*[]entity.Beatmap, error) {
+// CreateBatch mocks base method
+func (m *MockBeatmap) CreateBatch(from interface{}) (*[]entity.Beatmap, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateBeatmaps", from)
+	ret := m.ctrl.Call(m, "CreateBatch", from)
 	ret0, _ := ret[0].(*[]entity.Beatmap)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateBeatmaps indicates an expected call of CreateBeatmaps
-func (mr *MockBeatmapMockRecorder) CreateBeatmaps(from interface{}) *gomock.Call {
+// CreateBatch indicates an expected call of CreateBatch
+func (mr *MockBeatmapMockRecorder) CreateBatch(from interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateBeatmaps", reflect.TypeOf((*MockBeatmap)(nil).CreateBeatmaps), from)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateBatch", reflect.TypeOf((*MockBeatmap)(nil).CreateBatch), from)
 }
 
-// UpdateBeatmap mocks base method
-func (m *MockBeatmap) UpdateBeatmap(id uint, from interface{}) (*entity.Beatmap, error) {
+// Update mocks base method
+func (m *MockBeatmap) Update(id uint, from interface{}) (*entity.Beatmap, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateBeatmap", id, from)
+	ret := m.ctrl.Call(m, "Update", id, from)
 	ret0, _ := ret[0].(*entity.Beatmap)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// UpdateBeatmap indicates an expected call of UpdateBeatmap
-func (mr *MockBeatmapMockRecorder) UpdateBeatmap(id, from interface{}) *gomock.Call {
+// Update indicates an expected call of Update
+func (mr *MockBeatmapMockRecorder) Update(id, from interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateBeatmap", reflect.TypeOf((*MockBeatmap)(nil).UpdateBeatmap), id, from)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockBeatmap)(nil).Update), id, from)
 }
 
-// DeleteBeatmap mocks base method
-func (m *MockBeatmap) DeleteBeatmap(id uint) error {
+// Delete mocks base method
+func (m *MockBeatmap) Delete(id uint) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteBeatmap", id)
+	ret := m.ctrl.Call(m, "Delete", id)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// DeleteBeatmap indicates an expected call of DeleteBeatmap
-func (mr *MockBeatmapMockRecorder) DeleteBeatmap(id interface{}) *gomock.Call {
+// Delete indicates an expected call of Delete
+func (mr *MockBeatmapMockRecorder) Delete(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteBeatmap", reflect.TypeOf((*MockBeatmap)(nil).DeleteBeatmap), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockBeatmap)(nil).Delete), id)
 }
 
 // MockBeatmapSet is a mock of BeatmapSet interface
@@ -196,136 +196,136 @@ func (m *MockBeatmapSet) EXPECT() *MockBeatmapSetMockRecorder {
 	return m.recorder
 }
 
-// GetBeatmapSet mocks base method
-func (m *MockBeatmapSet) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) {
+// Get mocks base method
+func (m *MockBeatmapSet) Get(id uint) (*entity.BeatmapSetFull, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBeatmapSet", id)
+	ret := m.ctrl.Call(m, "Get", id)
 	ret0, _ := ret[0].(*entity.BeatmapSetFull)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetBeatmapSet indicates an expected call of GetBeatmapSet
-func (mr *MockBeatmapSetMockRecorder) GetBeatmapSet(id interface{}) *gomock.Call {
+// Get indicates an expected call of Get
+func (mr *MockBeatmapSetMockRecorder) Get(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBeatmapSet", reflect.TypeOf((*MockBeatmapSet)(nil).GetBeatmapSet), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockBeatmapSet)(nil).Get), id)
 }
 
-// GetAllBeatmapSets mocks base method
-func (m *MockBeatmapSet) GetAllBeatmapSets(page, limit int) (*[]entity.BeatmapSet, error) {
+// GetAll mocks base method
+func (m *MockBeatmapSet) GetAll(page, limit int) (*[]entity.BeatmapSet, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAllBeatmapSets", page, limit)
+	ret := m.ctrl.Call(m, "GetAll", page, limit)
 	ret0, _ := ret[0].(*[]entity.BeatmapSet)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetAllBeatmapSets indicates an expected call of GetAllBeatmapSets
-func (mr *MockBeatmapSetMockRecorder) GetAllBeatmapSets(page, limit interface{}) *gomock.Call {
+// GetAll indicates an expected call of GetAll
+func (mr *MockBeatmapSetMockRecorder) GetAll(page, limit interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllBeatmapSets", reflect.TypeOf((*MockBeatmapSet)(nil).GetAllBeatmapSets), page, limit)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockBeatmapSet)(nil).GetAll), page, limit)
 }
 
-// ComputeBeatmapSet mocks base method
-func (m *MockBeatmapSet) ComputeBeatmapSet(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
+// ComputeFields mocks base method
+func (m *MockBeatmapSet) ComputeFields(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ComputeBeatmapSet", set)
+	ret := m.ctrl.Call(m, "ComputeFields", set)
 	ret0, _ := ret[0].(*entity.BeatmapSetFull)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ComputeBeatmapSet indicates an expected call of ComputeBeatmapSet
-func (mr *MockBeatmapSetMockRecorder) ComputeBeatmapSet(set interface{}) *gomock.Call {
+// ComputeFields indicates an expected call of ComputeFields
+func (mr *MockBeatmapSetMockRecorder) ComputeFields(set interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ComputeBeatmapSet", reflect.TypeOf((*MockBeatmapSet)(nil).ComputeBeatmapSet), set)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ComputeFields", reflect.TypeOf((*MockBeatmapSet)(nil).ComputeFields), set)
 }
 
-// GetLatestBeatmapId mocks base method
-func (m *MockBeatmapSet) GetLatestBeatmapId() (uint, error) {
+// GetLatestId mocks base method
+func (m *MockBeatmapSet) GetLatestId() (uint, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLatestBeatmapId")
+	ret := m.ctrl.Call(m, "GetLatestId")
 	ret0, _ := ret[0].(uint)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetLatestBeatmapId indicates an expected call of GetLatestBeatmapId
-func (mr *MockBeatmapSetMockRecorder) GetLatestBeatmapId() *gomock.Call {
+// GetLatestId indicates an expected call of GetLatestId
+func (mr *MockBeatmapSetMockRecorder) GetLatestId() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLatestBeatmapId", reflect.TypeOf((*MockBeatmapSet)(nil).GetLatestBeatmapId))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLatestId", reflect.TypeOf((*MockBeatmapSet)(nil).GetLatestId))
 }
 
-// GetBeatmapSetIdForUpdate mocks base method
-func (m *MockBeatmapSet) GetBeatmapSetIdForUpdate(limit int) ([]uint, error) {
+// GetIdsForUpdate mocks base method
+func (m *MockBeatmapSet) GetIdsForUpdate(limit int) ([]uint, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBeatmapSetIdForUpdate", limit)
+	ret := m.ctrl.Call(m, "GetIdsForUpdate", limit)
 	ret0, _ := ret[0].([]uint)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetBeatmapSetIdForUpdate indicates an expected call of GetBeatmapSetIdForUpdate
-func (mr *MockBeatmapSetMockRecorder) GetBeatmapSetIdForUpdate(limit interface{}) *gomock.Call {
+// GetIdsForUpdate indicates an expected call of GetIdsForUpdate
+func (mr *MockBeatmapSetMockRecorder) GetIdsForUpdate(limit interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBeatmapSetIdForUpdate", reflect.TypeOf((*MockBeatmapSet)(nil).GetBeatmapSetIdForUpdate), limit)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetIdsForUpdate", reflect.TypeOf((*MockBeatmapSet)(nil).GetIdsForUpdate), limit)
 }
 
-// CreateBeatmapSet mocks base method
-func (m *MockBeatmapSet) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error) {
+// Create mocks base method
+func (m *MockBeatmapSet) Create(from interface{}) (*entity.BeatmapSetFull, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateBeatmapSet", from)
+	ret := m.ctrl.Call(m, "Create", from)
 	ret0, _ := ret[0].(*entity.BeatmapSetFull)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateBeatmapSet indicates an expected call of CreateBeatmapSet
-func (mr *MockBeatmapSetMockRecorder) CreateBeatmapSet(from interface{}) *gomock.Call {
+// Create indicates an expected call of Create
+func (mr *MockBeatmapSetMockRecorder) Create(from interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateBeatmapSet", reflect.TypeOf((*MockBeatmapSet)(nil).CreateBeatmapSet), from)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockBeatmapSet)(nil).Create), from)
 }
 
-// UpdateBeatmapSet mocks base method
-func (m *MockBeatmapSet) UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error) {
+// Update mocks base method
+func (m *MockBeatmapSet) Update(id uint, from interface{}) (*entity.BeatmapSetFull, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateBeatmapSet", id, from)
+	ret := m.ctrl.Call(m, "Update", id, from)
 	ret0, _ := ret[0].(*entity.BeatmapSetFull)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// UpdateBeatmapSet indicates an expected call of UpdateBeatmapSet
-func (mr *MockBeatmapSetMockRecorder) UpdateBeatmapSet(id, from interface{}) *gomock.Call {
+// Update indicates an expected call of Update
+func (mr *MockBeatmapSetMockRecorder) Update(id, from interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateBeatmapSet", reflect.TypeOf((*MockBeatmapSet)(nil).UpdateBeatmapSet), id, from)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockBeatmapSet)(nil).Update), id, from)
 }
 
-// DeleteBeatmapSet mocks base method
-func (m *MockBeatmapSet) DeleteBeatmapSet(id uint) error {
+// Delete mocks base method
+func (m *MockBeatmapSet) Delete(id uint) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteBeatmapSet", id)
+	ret := m.ctrl.Call(m, "Delete", id)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// DeleteBeatmapSet indicates an expected call of DeleteBeatmapSet
-func (mr *MockBeatmapSetMockRecorder) DeleteBeatmapSet(id interface{}) *gomock.Call {
+// Delete indicates an expected call of Delete
+func (mr *MockBeatmapSetMockRecorder) Delete(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteBeatmapSet", reflect.TypeOf((*MockBeatmapSet)(nil).DeleteBeatmapSet), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockBeatmapSet)(nil).Delete), id)
 }
 
-// Fetch mocks base method
-func (m *MockBeatmapSet) Fetch(id uint) (*entity.BeatmapSetFull, error) {
+// FetchFromBancho mocks base method
+func (m *MockBeatmapSet) FetchFromBancho(id uint) (*entity.BeatmapSetFull, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Fetch", id)
+	ret := m.ctrl.Call(m, "FetchFromBancho", id)
 	ret0, _ := ret[0].(*entity.BeatmapSetFull)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Fetch indicates an expected call of Fetch
-func (mr *MockBeatmapSetMockRecorder) Fetch(id interface{}) *gomock.Call {
+// FetchFromBancho indicates an expected call of FetchFromBancho
+func (mr *MockBeatmapSetMockRecorder) FetchFromBancho(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Fetch", reflect.TypeOf((*MockBeatmapSet)(nil).Fetch), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchFromBancho", reflect.TypeOf((*MockBeatmapSet)(nil).FetchFromBancho), id)
 }

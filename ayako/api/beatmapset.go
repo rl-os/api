@@ -26,7 +26,7 @@ func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmapset id")
 	}
 
-	beatmaps, err := h.Store.BeatmapSet().GetBeatmapSet(uint(beatmapsetID))
+	beatmaps, err := h.Store.BeatmapSet().Get(uint(beatmapsetID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "Beatmapset not found")
 	}
@@ -42,12 +42,12 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 		return err
 	}
 
-	beatmap, err := h.Store.Beatmap().GetBeatmap(params.Id)
+	beatmap, err := h.Store.Beatmap().Get(params.Id)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
 	}
 
-	beatmapSet, err := h.Store.BeatmapSet().GetBeatmapSet(uint(beatmap.Beatmapset.ID))
+	beatmapSet, err := h.Store.BeatmapSet().Get(uint(beatmap.Beatmapset.ID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "BeatmapSet not found")
 	}
@@ -63,7 +63,7 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 		return err
 	}
 
-	beatmapSets, err := h.Store.BeatmapSet().GetBeatmapSet(1118896)
+	beatmapSets, err := h.Store.BeatmapSet().Get(1118896)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "BeatmapSet not found")
 	}

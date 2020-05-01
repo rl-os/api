@@ -10,7 +10,7 @@ func (s *App) DoBeatmapSetSearchNew() {
 		Str("job", "DoBeatmapSetSearchNew").
 		Msg("start beatmapset search")
 
-	id, err := s.Store.BeatmapSet().GetLatestBeatmapId()
+	id, err := s.Store.BeatmapSet().GetLatestId()
 	if err != nil {
 		log.Error().
 			Err(err).
@@ -21,7 +21,7 @@ func (s *App) DoBeatmapSetSearchNew() {
 
 	// trying get 10 beatmaps with id + i
 	for i := 1; i <= 10; i++ {
-		data, err := s.Store.BeatmapSet().Fetch(id + uint(i))
+		data, err := s.Store.BeatmapSet().FetchFromBancho(id + uint(i))
 		if err != nil {
 			log.Debug().
 				Err(err).
@@ -30,7 +30,7 @@ func (s *App) DoBeatmapSetSearchNew() {
 		}
 
 		data.LastChecked = time.Now()
-		_, err = s.Store.BeatmapSet().CreateBeatmapSet(data)
+		_, err = s.Store.BeatmapSet().Create(data)
 		if err != nil {
 			log.Error().
 				Err(err).

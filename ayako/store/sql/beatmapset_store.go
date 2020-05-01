@@ -17,7 +17,7 @@ func newSqlBeatmapSetStore(sqlStore SqlStore) store.BeatmapSet {
 	return &BeatmapSetStore{sqlStore}
 }
 
-func (s BeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) Get(id uint) (*entity.BeatmapSetFull, error) {
 	set := &entity.BeatmapSetFull{}
 
 	err := s.GetMaster().Get(
@@ -35,34 +35,34 @@ func (s BeatmapSetStore) GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error) 
 
 	switch err {
 	case sql.ErrNoRows:
-		data, err := s.Fetch(id)
+		data, err := s.FetchFromBancho(id)
 		if err != nil {
 			return nil, err
 		}
 
-		set, err = s.CreateBeatmapSet(data)
+		set, err = s.Create(data)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return s.ComputeBeatmapSet(*set)
+	return s.ComputeFields(*set)
 }
 
-func (s BeatmapSetStore) ComputeBeatmapSet(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) ComputeFields(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
 	set.RecentFavourites = []entity.User{}
 	set.Ratings = make([]int64, 11)
 	set.Converts = []entity.Beatmap{}
-	set.Beatmaps = s.Beatmap().GetBeatmapsBySet(uint(set.ID))
+	set.Beatmaps = s.Beatmap().GetBySetId(uint(set.ID))
 
 	return &set, nil
 }
 
-func (s BeatmapSetStore) GetAllBeatmapSets(page int, limit int) (*[]entity.BeatmapSet, error) {
+func (s BeatmapSetStore) GetAll(page int, limit int) (*[]entity.BeatmapSet, error) {
 	panic("implement me")
 }
 
-func (s BeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) Create(from interface{}) (*entity.BeatmapSetFull, error) {
 	var set entity.BeatmapSetFull
 
 	b, err := json.Marshal(&from)
@@ -90,7 +90,7 @@ func (s BeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetF
 	// todo: может отказаться от from interface{} ?
 	// тк придется поддерживать все необходимые структуры
 	if m, ok := from.(*entity.BeatmapSetFull); ok {
-		data, err := s.Beatmap().CreateBeatmaps(m.Beatmaps)
+		data, err := s.Beatmap().CreateBatch(m.Beatmaps)
 		if err == nil {
 			set.Beatmaps = *data
 		}
@@ -99,7 +99,7 @@ func (s BeatmapSetStore) CreateBeatmapSet(from interface{}) (*entity.BeatmapSetF
 	return &set, nil
 }
 
-func (s BeatmapSetStore) UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) Update(id uint, from interface{}) (*entity.BeatmapSetFull, error) {
 	var set entity.BeatmapSetFull
 
 	b, err := json.Marshal(&from)
@@ -136,12 +136,12 @@ func (s BeatmapSetStore) UpdateBeatmapSet(id uint, from interface{}) (*entity.Be
 	return &set, nil
 }
 
-func (s BeatmapSetStore) DeleteBeatmapSet(id uint) error {
+func (s BeatmapSetStore) Delete(id uint) error {
 	panic("implement me")
 }
 
-// Fetch beatmapset from original api
-func (s BeatmapSetStore) Fetch(id uint) (*entity.BeatmapSetFull, error) {
+// FetchFromBancho beatmapset from original api
+func (s BeatmapSetStore) FetchFromBancho(id uint) (*entity.BeatmapSetFull, error) {
 	data, err := s.GetOsuClient().BeatmapSet.Get(id)
 	if err != nil {
 		return nil, err
@@ -155,8 +155,8 @@ func (s BeatmapSetStore) Fetch(id uint) (*entity.BeatmapSetFull, error) {
 	return &out, nil
 }
 
-// GetBeatmapSetIdForUpdate and return list of ids
-func (s BeatmapSetStore) GetBeatmapSetIdForUpdate(limit int) ([]uint, error) {
+// GetIdsForUpdate and return list of ids
+func (s BeatmapSetStore) GetIdsForUpdate(limit int) ([]uint, error) {
 	ids := make([]uint, 0)
 	now := time.Now()
 
@@ -174,7 +174,7 @@ func (s BeatmapSetStore) GetBeatmapSetIdForUpdate(limit int) ([]uint, error) {
 	return ids, err
 }
 
-func (s BeatmapSetStore) GetLatestBeatmapId() (uint, error) {
+func (s BeatmapSetStore) GetLatestId() (uint, error) {
 	var id uint
 
 	err := s.GetMaster().Get(&id, `select id from beatmap_set order by id desc`)

@@ -16,13 +16,13 @@ func TestNewMockStore(t *testing.T) {
 
 		mocked := InitStore(ctrl)
 		mocked.BeatmapExpect().
-			GetBeatmap(gomock.Any()).
+			Get(gomock.Any()).
 			Return(&entity.SingleBeatmap{Beatmap: entity.Beatmap{ID: 123321}}, nil)
 
 		var s store.Store
 		s = mocked
 
-		data, err := s.Beatmap().GetBeatmap(1)
+		data, err := s.Beatmap().Get(1)
 		assert.Nil(t, err)
 		assert.NotNil(t, data)
 		assert.Equal(t, int64(123321), data.ID)
@@ -36,13 +36,13 @@ func TestNewMockStore(t *testing.T) {
 
 		mocked := InitStore(ctrl)
 		mocked.BeatmapExpect().
-			GetBeatmap(gomock.Any()).
+			Get(gomock.Any()).
 			Return(nil, defError)
 
 		var s store.Store
 		s = mocked
 
-		data, err := s.Beatmap().GetBeatmap(1)
+		data, err := s.Beatmap().Get(1)
 		assert.Equal(t, err, defError)
 		assert.Nil(t, data)
 	})

@@ -15,100 +15,100 @@ type BeatmapWithLog struct {
 	_base store.Beatmap
 }
 
-// CreateBeatmap implements store.Beatmap
-func (_d BeatmapWithLog) CreateBeatmap(from interface{}) (bp1 *entity.Beatmap, err error) {
+// Create implements store.Beatmap
+func (_d BeatmapWithLog) Create(from interface{}) (bp1 *entity.Beatmap, err error) {
 	log.Debug().
 		Interface("from", from).
-		Msg("store.CreateBeatmap: calling")
+		Msg("store.Create: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.CreateBeatmap: returned an error")
+				Msg("store.Create: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.CreateBeatmap: finished")
+				Msg("store.Create: finished")
 		}
 	}()
-	return _d._base.CreateBeatmap(from)
+	return _d._base.Create(from)
 }
 
-// CreateBeatmaps implements store.Beatmap
-func (_d BeatmapWithLog) CreateBeatmaps(from interface{}) (bap1 *[]entity.Beatmap, err error) {
+// CreateBatch implements store.Beatmap
+func (_d BeatmapWithLog) CreateBatch(from interface{}) (bap1 *[]entity.Beatmap, err error) {
 	log.Debug().
 		Interface("from", from).
-		Msg("store.CreateBeatmaps: calling")
+		Msg("store.CreateBatch: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.CreateBeatmaps: returned an error")
+				Msg("store.CreateBatch: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.CreateBeatmaps: finished")
+				Msg("store.CreateBatch: finished")
 		}
 	}()
-	return _d._base.CreateBeatmaps(from)
+	return _d._base.CreateBatch(from)
 }
 
-// DeleteBeatmap implements store.Beatmap
-func (_d BeatmapWithLog) DeleteBeatmap(id uint) (err error) {
+// Delete implements store.Beatmap
+func (_d BeatmapWithLog) Delete(id uint) (err error) {
 	log.Debug().
 		Interface("id", id).
-		Msg("store.DeleteBeatmap: calling")
+		Msg("store.Delete: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.DeleteBeatmap: returned an error")
+				Msg("store.Delete: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.DeleteBeatmap: finished")
+				Msg("store.Delete: finished")
 		}
 	}()
-	return _d._base.DeleteBeatmap(id)
+	return _d._base.Delete(id)
 }
 
-// GetBeatmap implements store.Beatmap
-func (_d BeatmapWithLog) GetBeatmap(id uint) (sp1 *entity.SingleBeatmap, err error) {
+// Get implements store.Beatmap
+func (_d BeatmapWithLog) Get(id uint) (sp1 *entity.SingleBeatmap, err error) {
 	log.Debug().
 		Interface("id", id).
-		Msg("store.GetBeatmap: calling")
+		Msg("store.Get: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.GetBeatmap: returned an error")
+				Msg("store.Get: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.GetBeatmap: finished")
+				Msg("store.Get: finished")
 		}
 	}()
-	return _d._base.GetBeatmap(id)
+	return _d._base.Get(id)
 }
 
-// GetBeatmapsBySet implements store.Beatmap
-func (_d BeatmapWithLog) GetBeatmapsBySet(beatmapsetId uint) (ba1 []entity.Beatmap) {
+// GetBySetId implements store.Beatmap
+func (_d BeatmapWithLog) GetBySetId(beatmapsetId uint) (ba1 []entity.Beatmap) {
 	log.Debug().
 		Interface("beatmapsetId", beatmapsetId).
-		Msg("store.GetBeatmapsBySet: calling")
+		Msg("store.GetBySetId: calling")
 	defer func() {
 		log.Debug().
-			Msg("store.GetBeatmapsBySet: finished")
+			Msg("store.GetBySetId: finished")
 	}()
-	return _d._base.GetBeatmapsBySet(beatmapsetId)
+	return _d._base.GetBySetId(beatmapsetId)
 }
 
-// UpdateBeatmap implements store.Beatmap
-func (_d BeatmapWithLog) UpdateBeatmap(id uint, from interface{}) (bp1 *entity.Beatmap, err error) {
+// Update implements store.Beatmap
+func (_d BeatmapWithLog) Update(id uint, from interface{}) (bp1 *entity.Beatmap, err error) {
 	log.Debug().
 		Interface("id", id).
 		Interface("from", from).
-		Msg("store.UpdateBeatmap: calling")
+		Msg("store.Update: calling")
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.UpdateBeatmap: returned an error")
+				Msg("store.Update: returned an error")
 		} else {
 			log.Debug().
-				Msg("store.UpdateBeatmap: finished")
+				Msg("store.Update: finished")
 		}
 	}()
-	return _d._base.UpdateBeatmap(id, from)
+	return _d._base.Update(id, from)
 }

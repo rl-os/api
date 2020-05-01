@@ -14,25 +14,25 @@ type Store interface {
 }
 
 type Beatmap interface {
-	GetBeatmap(id uint) (*entity.SingleBeatmap, error)
-	GetBeatmapsBySet(beatmapsetId uint) []entity.Beatmap
+	Get(id uint) (*entity.SingleBeatmap, error)
+	GetBySetId(beatmapsetId uint) []entity.Beatmap
 
-	CreateBeatmap(from interface{}) (*entity.Beatmap, error)
-	CreateBeatmaps(from interface{}) (*[]entity.Beatmap, error)
-	UpdateBeatmap(id uint, from interface{}) (*entity.Beatmap, error)
-	DeleteBeatmap(id uint) error
+	Create(from interface{}) (*entity.Beatmap, error)
+	CreateBatch(from interface{}) (*[]entity.Beatmap, error)
+	Update(id uint, from interface{}) (*entity.Beatmap, error)
+	Delete(id uint) error
 }
 
 type BeatmapSet interface {
-	GetBeatmapSet(id uint) (*entity.BeatmapSetFull, error)
-	GetAllBeatmapSets(page int, limit int) (*[]entity.BeatmapSet, error)
-	ComputeBeatmapSet(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error)
+	Get(id uint) (*entity.BeatmapSetFull, error)
+	GetAll(page int, limit int) (*[]entity.BeatmapSet, error)
+	ComputeFields(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error)
 
-	GetLatestBeatmapId() (uint, error)
-	GetBeatmapSetIdForUpdate(limit int) ([]uint, error)
-	CreateBeatmapSet(from interface{}) (*entity.BeatmapSetFull, error)
-	UpdateBeatmapSet(id uint, from interface{}) (*entity.BeatmapSetFull, error)
-	DeleteBeatmapSet(id uint) error
+	GetLatestId() (uint, error)
+	GetIdsForUpdate(limit int) ([]uint, error)
+	Create(from interface{}) (*entity.BeatmapSetFull, error)
+	Update(id uint, from interface{}) (*entity.BeatmapSetFull, error)
+	Delete(id uint) error
 
-	Fetch(id uint) (*entity.BeatmapSetFull, error)
+	FetchFromBancho(id uint) (*entity.BeatmapSetFull, error)
 }
