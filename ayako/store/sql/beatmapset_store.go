@@ -6,6 +6,7 @@ import (
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/jinzhu/copier"
+	"github.com/rs/zerolog/log"
 	"time"
 )
 
@@ -49,15 +50,6 @@ func (s BeatmapSetStore) Get(id uint) (*entity.BeatmapSetFull, error) {
 	return s.ComputeFields(*set)
 }
 
-func (s BeatmapSetStore) ComputeFields(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
-	set.RecentFavourites = []entity.User{}
-	set.Ratings = make([]int64, 11)
-	set.Converts = []entity.Beatmap{}
-	set.Beatmaps = s.Beatmap().GetBySetId(uint(set.ID))
-
-	return &set, nil
-}
-
 func (s BeatmapSetStore) GetAll(page int, limit int) (*[]entity.BeatmapSet, error) {
 	panic("implement me")
 }
@@ -93,6 +85,8 @@ func (s BeatmapSetStore) Create(from interface{}) (*entity.BeatmapSetFull, error
 		data, err := s.Beatmap().CreateBatch(m.Beatmaps)
 		if err == nil {
 			set.Beatmaps = *data
+		} else {
+			log.Error().Err(err).Send()
 		}
 	}
 
@@ -185,4 +179,33 @@ func (s BeatmapSetStore) GetLatestId() (uint, error) {
 	default:
 		return id, err
 	}
+}
+
+func (s BeatmapSetStore) ComputeFields(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
+	set.RecentFavourites = []entity.User{}
+	set.Ratings = make([]int64, 11)
+	set.Converts = []entity.Beatmap{}
+	set.Beatmaps = s.Beatmap().GetBySetId(uint(set.ID))
+
+	for _, b := range set.Beatmaps {
+		if b.Mode != entity.Osu {
+			continue
+		}
+
+		for i, mode := range entity.Modes {
+			if mode == entity.Osu {
+				continue
+			}
+
+			// todo: calculate difficulties
+			conv := b
+			conv.Convert = true
+			conv.Mode = mode
+			conv.ModeInt = int64(i)
+
+			set.Converts = append(set.Converts, conv)
+		}
+	}
+
+	return &set, nil
 }

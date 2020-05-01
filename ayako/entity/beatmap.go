@@ -52,6 +52,8 @@ const (
 	Taiko  Mode = "taiko"
 )
 
+var Modes = []Mode{Osu, Taiko, Fruits, Mania}
+
 type Status string
 
 const (
