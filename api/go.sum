@@ -24,6 +24,8 @@ github.com/deissh/datadog-client v1.0.0 h1:whm3s8CYB+uL26niTY2lL1hDhIhu8c9IQVd6P
 github.com/deissh/datadog-client v1.0.0/go.mod h1:Dkft2mGtDk4d8LE2eixsj4iWnqFMAlSUSCFjOCm4624=
 github.com/deissh/go-utils v1.0.0 h1:N42Pd3EpmdRskPtMuN4RlHCH2sVklW9Jf89KzHlkZlA=
 github.com/deissh/go-utils v1.0.0/go.mod h1:JVjK+ZgEuVaQi8/OPVlpvsJ/sejtO1DbX7pafhd5o3c=
+github.com/deissh/go-utils v1.1.0 h1:7twLI+2qAL+UIXDMiGqOCCYIjUpcpESq2CmrGQ1ZlO0=
+github.com/deissh/go-utils v1.1.0/go.mod h1:JVjK+ZgEuVaQi8/OPVlpvsJ/sejtO1DbX7pafhd5o3c=
 github.com/dgraph-io/badger v1.6.0/go.mod h1:zwt7syl517jmP8s94KqSxTlM6IMsdhYy6psNgSztDR4=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
