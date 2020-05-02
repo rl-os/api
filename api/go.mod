@@ -9,7 +9,7 @@ require (
 	github.com/getsentry/sentry-go v0.5.1
 	github.com/gin-gonic/gin v1.6.2
 	github.com/go-playground/validator/v10 v10.2.0
-	github.com/go-sql-driver/mysql v1.4.0
+	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gookit/config/v2 v2.0.13
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/labstack/echo/v4 v4.1.16
