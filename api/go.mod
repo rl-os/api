@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/deissh/datadog-client v1.0.0
-	github.com/deissh/go-utils v1.0.0
+	github.com/deissh/go-utils v1.1.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/getsentry/sentry-go v0.5.1
 	github.com/gin-gonic/gin v1.6.2
