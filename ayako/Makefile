@@ -143,6 +143,17 @@ help: message
 		}' \
 		$(MAKEFILE_LIST)
 
+## -- Database --
+
+## Create the database (if it does not already exist) and run any pending migrations
+.PHONY: db-migrate
+db-migrate:
+	@dbmate --wait --env CONFIG__DATABASE__DSN --no-dump-schema -d migrations -s schema.sql up
+
+## roll back the most recent migration
+.PHONY: db-rollback
+db-rollback:
+	@dbmate --wait --env CONFIG__DATABASE__DSN rollback
 
 ## -- Docker --
 
