@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dbmate --wait --env CONFIG__DATABASE__DSN --no-dump-schema -d migrations -s schema.sql up || exit 1
+dbmate --wait --env CONFIG__DATABASE__DSN --no-dump-schema -d migrations up || exit 1

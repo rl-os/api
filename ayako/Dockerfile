@@ -28,7 +28,7 @@ RUN chmod +x /bin/dbmate
 
 COPY --from=builder /ayako server
 COPY ./ayako/config.yaml .
-
+COPY ./db/migrations migrations
 COPY ./ayako/docker-init.sh docker-init.sh
 
 EXPOSE 2400
