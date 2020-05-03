@@ -4,3 +4,4 @@ Dockerfile
 go.*
 bin
 Makefile
+docker-init.sh
