@@ -12,7 +12,8 @@ func (s *App) DoBeatmapSetUpdate() {
 		Uint("batch_size", 100).
 		Msg("start beatmapset update check")
 
-	ctx := context.TODO()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	ids, err := s.Store.BeatmapSet().GetIdsForUpdate(ctx, 100)
 	if err != nil {
@@ -23,7 +24,7 @@ func (s *App) DoBeatmapSetUpdate() {
 		return
 	}
 
-	for _, id := range ids {
+	updater := func(id uint) {
 		log.Debug().
 			Str("job", "DoBeatmapSetUpdate").
 			Uint("beatmap_set_id", id).
@@ -55,5 +56,15 @@ func (s *App) DoBeatmapSetUpdate() {
 			Str("job", "DoBeatmapSetUpdate").
 			Uint("beatmap_set_id", id).
 			Msg("updated")
+	}
+
+	for _, id := range ids {
+		select {
+		case <-s.goroutineExitSignal:
+		case <-ctx.Done():
+			break
+		default:
+			updater(id)
+		}
 	}
 }
