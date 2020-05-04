@@ -268,6 +268,38 @@ ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
 
 
 --
+-- Name: favouritemaps; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.favouritemaps (
+    id integer NOT NULL,
+    beatmapset_id integer NOT NULL,
+    user_id integer NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: favouritemaps_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.favouritemaps_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: favouritemaps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.favouritemaps_id_seq OWNED BY public.favouritemaps.id;
+
+
+--
 -- Name: message; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -627,6 +659,13 @@ ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.co
 
 
 --
+-- Name: favouritemaps id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.favouritemaps ALTER COLUMN id SET DEFAULT nextval('public.favouritemaps_id_seq'::regclass);
+
+
+--
 -- Name: message id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -720,6 +759,14 @@ ALTER TABLE ONLY public.channels
 
 ALTER TABLE ONLY public.countries
     ADD CONSTRAINT countries_pk PRIMARY KEY (id);
+
+
+--
+-- Name: favouritemaps favouritemaps_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.favouritemaps
+    ADD CONSTRAINT favouritemaps_pk PRIMARY KEY (id);
 
 
 --
@@ -848,6 +895,20 @@ CREATE UNIQUE INDEX countries_id_uindex ON public.countries USING btree (id);
 --
 
 CREATE UNIQUE INDEX countries_name_uindex ON public.countries USING btree (name);
+
+
+--
+-- Name: favouritemaps_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX favouritemaps_id_uindex ON public.favouritemaps USING btree (id);
+
+
+--
+-- Name: favouritemaps_user_record_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX favouritemaps_user_record_index ON public.favouritemaps USING btree (user_id, beatmapset_id);
 
 
 --
@@ -1067,4 +1128,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200224101740'),
     ('20200225094357'),
     ('20200313155053'),
-    ('20200425094246');
+    ('20200425094246'),
+    ('20200504082514');
