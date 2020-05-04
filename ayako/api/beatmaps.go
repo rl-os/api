@@ -16,6 +16,7 @@ func (api *Routes) InitBeatmaps(store store.Store) {
 	handlers := BeatmapHandlers{store}
 
 	api.Beatmaps.GET("/:id", handlers.Show)
+	api.Beatmaps.GET("/:id/scores", echo.NotFoundHandler)
 	api.Beatmaps.GET("/lookup", handlers.Lookup)
 }
 
@@ -63,4 +64,16 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 	}
 
 	return c.JSON(200, beatmap)
+}
+
+func (h *BeatmapHandlers) Scores(c echo.Context) (err error) {
+	params := struct {
+		Type string `query:"type"`
+		Mode string `query:"mode"`
+	}{}
+	if err := c.Bind(&params); err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, nil)
 }
