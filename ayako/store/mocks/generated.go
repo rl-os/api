@@ -241,6 +241,36 @@ func (mr *MockBeatmapSetMockRecorder) ComputeFields(set interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ComputeFields", reflect.TypeOf((*MockBeatmapSet)(nil).ComputeFields), set)
 }
 
+// SetFavourite mocks base method
+func (m *MockBeatmapSet) SetFavourite(userId, id uint) (uint, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetFavourite", userId, id)
+	ret0, _ := ret[0].(uint)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SetFavourite indicates an expected call of SetFavourite
+func (mr *MockBeatmapSetMockRecorder) SetFavourite(userId, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetFavourite", reflect.TypeOf((*MockBeatmapSet)(nil).SetFavourite), userId, id)
+}
+
+// SetUnFavourite mocks base method
+func (m *MockBeatmapSet) SetUnFavourite(userId, id uint) (uint, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetUnFavourite", userId, id)
+	ret0, _ := ret[0].(uint)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SetUnFavourite indicates an expected call of SetUnFavourite
+func (mr *MockBeatmapSetMockRecorder) SetUnFavourite(userId, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetUnFavourite", reflect.TypeOf((*MockBeatmapSet)(nil).SetUnFavourite), userId, id)
+}
+
 // GetLatestId mocks base method
 func (m *MockBeatmapSet) GetLatestId() (uint, error) {
 	m.ctrl.T.Helper()

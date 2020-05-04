@@ -18,6 +18,53 @@ func newSqlBeatmapSetStore(sqlStore SqlStore) store.BeatmapSet {
 	return &BeatmapSetStore{sqlStore}
 }
 
+func (s BeatmapSetStore) SetFavourite(userId uint, id uint) (uint, error) {
+	_, err := s.GetMaster().Exec(
+		`insert into favouritemaps (beatmapset_id, user_id)
+		select $1, $2
+		where not exists (
+			select id from favouritemaps where beatmapset_id = $1 and user_id = $2
+		)`,
+		id,
+		userId,
+	)
+
+	var total uint
+	err = s.GetMaster().Get(
+		&total,
+		`select count(id) as total from favouritemaps where user_id = $1`,
+		userId,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	return total, nil
+}
+
+func (s BeatmapSetStore) SetUnFavourite(userId uint, id uint) (uint, error) {
+	_, err := s.GetMaster().Exec(
+		`delete from favouritemaps where beatmapset_id = $1 and user_id = $2`,
+		id,
+		userId,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	var total uint
+	err = s.GetMaster().Get(
+		&total,
+		`select count(id) as total from favouritemaps where user_id = $1`,
+		userId,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	return total, nil
+}
+
 func (s BeatmapSetStore) Get(id uint) (*entity.BeatmapSetFull, error) {
 	set := &entity.BeatmapSetFull{}
 
@@ -47,7 +94,7 @@ func (s BeatmapSetStore) Get(id uint) (*entity.BeatmapSetFull, error) {
 		}
 	}
 
-	return s.ComputeFields(*set)
+	return s.BeatmapSet().ComputeFields(*set)
 }
 
 func (s BeatmapSetStore) GetAll(page int, limit int) (*[]entity.BeatmapSet, error) {

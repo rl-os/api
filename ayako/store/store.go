@@ -27,6 +27,8 @@ type BeatmapSet interface {
 	Get(id uint) (*entity.BeatmapSetFull, error)
 	GetAll(page int, limit int) (*[]entity.BeatmapSet, error)
 	ComputeFields(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error)
+	SetFavourite(userId uint, id uint) (uint, error)
+	SetUnFavourite(userId uint, id uint) (uint, error)
 
 	GetLatestId() (uint, error)
 	GetIdsForUpdate(limit int) ([]uint, error)
