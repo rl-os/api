@@ -5,6 +5,7 @@ import (
 	"github.com/deissh/osu-lazer/ayako/api"
 	"github.com/deissh/osu-lazer/ayako/config"
 	"github.com/deissh/osu-lazer/ayako/middlewares/customlogger"
+	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -32,6 +33,7 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 
 	e.Use(middleware.RequestID())
 	e.Use(customlogger.Middleware())
+	e.Use(permission.GlobalMiddleware(cfg))
 
 	api.New(store, e.Group("/api/v2"))
 

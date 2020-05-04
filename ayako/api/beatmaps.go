@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/deissh/osu-lazer/ayako/entity"
+	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -16,7 +17,7 @@ func (api *Routes) InitBeatmaps(store store.Store) {
 	handlers := BeatmapHandlers{store}
 
 	api.Beatmaps.GET("/:id", handlers.Show)
-	api.Beatmaps.GET("/:id/scores", echo.NotFoundHandler)
+	api.Beatmaps.GET("/:id/scores", echo.NotFoundHandler, permission.MustLogin)
 	api.Beatmaps.GET("/lookup", handlers.Lookup)
 }
 

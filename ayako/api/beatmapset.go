@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/deissh/osu-lazer/ayako/entity"
+	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -16,8 +17,8 @@ func (api *Routes) InitBeatmapSet(store store.Store) {
 	handlers := BeatmapSetHandlers{store}
 
 	api.BeatmapSets.GET("/:beatmapset", handlers.Get)
-	api.BeatmapSets.POST("/:beatmapset/favourites", handlers.Favourite)
-	api.BeatmapSets.GET("/:beatmapset/download", handlers.Get)
+	api.BeatmapSets.POST("/:beatmapset/favourites", handlers.Favourite, permission.MustLogin)
+	api.BeatmapSets.GET("/:beatmapset/download", handlers.Get, permission.MustLogin)
 	api.BeatmapSets.GET("/lookup", handlers.Lookup)
 	api.BeatmapSets.GET("/search", handlers.Search)
 }
@@ -96,14 +97,17 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 		return err
 	}
 
+	userId, ok := c.Get("current_user_id").(uint)
+	if !ok {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmapset id")
+	}
+
 	var total uint
 	switch params.Action {
 	case "favourite":
-		//fixme: read from jwt
-		total, err = h.Store.BeatmapSet().SetFavourite(103, uint(beatmapsetID))
+		total, err = h.Store.BeatmapSet().SetFavourite(userId, uint(beatmapsetID))
 	case "unfavourite":
-		//fixme: read from jwt
-		total, err = h.Store.BeatmapSet().SetUnFavourite(103, uint(beatmapsetID))
+		total, err = h.Store.BeatmapSet().SetUnFavourite(userId, uint(beatmapsetID))
 	default:
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid action")
 	}
