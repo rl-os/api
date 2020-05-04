@@ -46,7 +46,7 @@ func NewMonthPlaycount() {
 	}
 
 	now := time.Now()
-	yearMonth := fmt.Sprintf("%02d-%02d-01", now.Year()%100, now.Month())
+	yearMonth := fmt.Sprintf("%02d-%02d-01", now.Year(), now.Month())
 
 	tx := pkg.Db.MustBegin()
 	{
