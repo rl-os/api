@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/store"
@@ -14,10 +15,11 @@ func newSqlBeatmapStore(sqlStore SqlStore) store.Beatmap {
 	return &BeatmapStore{sqlStore}
 }
 
-func (s BeatmapStore) Get(id uint) (*entity.SingleBeatmap, error) {
+func (s BeatmapStore) Get(ctx context.Context, id uint) (*entity.SingleBeatmap, error) {
 	var beatmap entity.SingleBeatmap
 
-	err := s.GetMaster().Get(
+	err := s.GetMaster().GetContext(
+		ctx,
 		&beatmap,
 		`select id, beatmapset_id, mode, mode_int, convert,
        	  difficulty_rating, version, total_length, hit_length,
@@ -31,7 +33,7 @@ func (s BeatmapStore) Get(id uint) (*entity.SingleBeatmap, error) {
 	if err != nil {
 		return nil, err
 	}
-	set, err := s.BeatmapSet().Get(uint(beatmap.BeatmapsetID))
+	set, err := s.BeatmapSet().Get(ctx, uint(beatmap.BeatmapsetID))
 	if err != nil {
 		return nil, err
 	}
@@ -41,10 +43,11 @@ func (s BeatmapStore) Get(id uint) (*entity.SingleBeatmap, error) {
 	return &beatmap, nil
 }
 
-func (s BeatmapStore) GetBySetId(beatmapsetId uint) []entity.Beatmap {
+func (s BeatmapStore) GetBySetId(ctx context.Context, beatmapsetId uint) []entity.Beatmap {
 	beatmaps := make([]entity.Beatmap, 0)
 
-	_ = s.GetMaster().Select(
+	_ = s.GetMaster().SelectContext(
+		ctx,
 		&beatmaps,
 		`select id, beatmapset_id, mode, mode_int, convert,
 		   difficulty_rating, version, total_length,
@@ -61,7 +64,7 @@ func (s BeatmapStore) GetBySetId(beatmapsetId uint) []entity.Beatmap {
 	return beatmaps
 }
 
-func (s BeatmapStore) Create(from interface{}) (*entity.Beatmap, error) {
+func (s BeatmapStore) Create(ctx context.Context, from interface{}) (*entity.Beatmap, error) {
 	var set entity.Beatmap
 
 	b, err := json.Marshal(&from)
@@ -69,7 +72,8 @@ func (s BeatmapStore) Create(from interface{}) (*entity.Beatmap, error) {
 		return nil, err
 	}
 
-	err = s.GetMaster().Get(
+	err = s.GetMaster().GetContext(
+		ctx,
 		&set,
 		`insert into beatmaps
 		select id, beatmapset_id, mode, mode_int, convert,
@@ -90,7 +94,7 @@ func (s BeatmapStore) Create(from interface{}) (*entity.Beatmap, error) {
 	return &set, nil
 }
 
-func (s BeatmapStore) CreateBatch(from interface{}) (*[]entity.Beatmap, error) {
+func (s BeatmapStore) CreateBatch(ctx context.Context, from interface{}) (*[]entity.Beatmap, error) {
 	var sets []entity.Beatmap
 
 	b, err := json.Marshal(&from)
@@ -98,7 +102,8 @@ func (s BeatmapStore) CreateBatch(from interface{}) (*[]entity.Beatmap, error) {
 		return nil, err
 	}
 
-	err = s.GetMaster().Select(
+	err = s.GetMaster().SelectContext(
+		ctx,
 		&sets,
 		`insert into beatmaps
 		select id, beatmapset_id, mode, mode_int, convert,
@@ -119,10 +124,10 @@ func (s BeatmapStore) CreateBatch(from interface{}) (*[]entity.Beatmap, error) {
 	return &sets, nil
 }
 
-func (s BeatmapStore) Update(id uint, from interface{}) (*entity.Beatmap, error) {
+func (s BeatmapStore) Update(ctx context.Context, id uint, from interface{}) (*entity.Beatmap, error) {
 	panic("implement me")
 }
 
-func (s BeatmapStore) Delete(id uint) error {
+func (s BeatmapStore) Delete(ctx context.Context, id uint) error {
 	panic("implement me")
 }

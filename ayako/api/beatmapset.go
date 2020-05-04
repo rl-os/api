@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
 	"github.com/deissh/osu-lazer/ayako/store"
@@ -29,7 +30,9 @@ func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmapset id")
 	}
 
-	beatmaps, err := h.Store.BeatmapSet().Get(uint(beatmapsetID))
+	ctx := context.Background()
+
+	beatmaps, err := h.Store.BeatmapSet().Get(ctx, uint(beatmapsetID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "Beatmapset not found")
 	}
@@ -45,12 +48,14 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 		return err
 	}
 
-	beatmap, err := h.Store.Beatmap().Get(params.Id)
+	ctx := context.Background()
+
+	beatmap, err := h.Store.Beatmap().Get(ctx, params.Id)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
 	}
 
-	beatmapSet, err := h.Store.BeatmapSet().Get(uint(beatmap.Beatmapset.ID))
+	beatmapSet, err := h.Store.BeatmapSet().Get(ctx, uint(beatmap.Beatmapset.ID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "BeatmapSet not found")
 	}
@@ -66,7 +71,9 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 		return err
 	}
 
-	beatmapSets, err := h.Store.BeatmapSet().Get(1118896)
+	ctx := context.Background()
+
+	beatmapSets, err := h.Store.BeatmapSet().Get(ctx, 1118896)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "BeatmapSet not found")
 	}
@@ -97,6 +104,8 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 		return err
 	}
 
+	ctx := context.Background()
+
 	userId, ok := c.Get("current_user_id").(uint)
 	if !ok {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmapset id")
@@ -105,9 +114,9 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 	var total uint
 	switch params.Action {
 	case "favourite":
-		total, err = h.Store.BeatmapSet().SetFavourite(userId, uint(beatmapsetID))
+		total, err = h.Store.BeatmapSet().SetFavourite(ctx, userId, uint(beatmapsetID))
 	case "unfavourite":
-		total, err = h.Store.BeatmapSet().SetUnFavourite(userId, uint(beatmapsetID))
+		total, err = h.Store.BeatmapSet().SetUnFavourite(ctx, userId, uint(beatmapsetID))
 	default:
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid action")
 	}

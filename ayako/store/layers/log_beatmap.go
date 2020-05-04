@@ -5,6 +5,8 @@ package layers
 // using log.tmpl template
 
 import (
+	"context"
+
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/rs/zerolog/log"
@@ -22,8 +24,9 @@ func NewBeatmapWithLog(base store.Beatmap) store.Beatmap {
 }
 
 // Create implements store.Beatmap
-func (_d BeatmapWithLog) Create(from interface{}) (bp1 *entity.Beatmap, err error) {
+func (_d BeatmapWithLog) Create(ctx context.Context, from interface{}) (bp1 *entity.Beatmap, err error) {
 	log.Debug().
+		Interface("ctx", ctx).
 		Interface("from", from).
 		Msg("store.Beatmap.Create: calling")
 	defer func() {
@@ -35,12 +38,13 @@ func (_d BeatmapWithLog) Create(from interface{}) (bp1 *entity.Beatmap, err erro
 				Msg("store.Beatmap.Create: finished")
 		}
 	}()
-	return _d._base.Create(from)
+	return _d._base.Create(ctx, from)
 }
 
 // CreateBatch implements store.Beatmap
-func (_d BeatmapWithLog) CreateBatch(from interface{}) (bap1 *[]entity.Beatmap, err error) {
+func (_d BeatmapWithLog) CreateBatch(ctx context.Context, from interface{}) (bap1 *[]entity.Beatmap, err error) {
 	log.Debug().
+		Interface("ctx", ctx).
 		Interface("from", from).
 		Msg("store.Beatmap.CreateBatch: calling")
 	defer func() {
@@ -52,12 +56,13 @@ func (_d BeatmapWithLog) CreateBatch(from interface{}) (bap1 *[]entity.Beatmap, 
 				Msg("store.Beatmap.CreateBatch: finished")
 		}
 	}()
-	return _d._base.CreateBatch(from)
+	return _d._base.CreateBatch(ctx, from)
 }
 
 // Delete implements store.Beatmap
-func (_d BeatmapWithLog) Delete(id uint) (err error) {
+func (_d BeatmapWithLog) Delete(ctx context.Context, id uint) (err error) {
 	log.Debug().
+		Interface("ctx", ctx).
 		Interface("id", id).
 		Msg("store.Beatmap.Delete: calling")
 	defer func() {
@@ -69,12 +74,13 @@ func (_d BeatmapWithLog) Delete(id uint) (err error) {
 				Msg("store.Beatmap.Delete: finished")
 		}
 	}()
-	return _d._base.Delete(id)
+	return _d._base.Delete(ctx, id)
 }
 
 // Get implements store.Beatmap
-func (_d BeatmapWithLog) Get(id uint) (sp1 *entity.SingleBeatmap, err error) {
+func (_d BeatmapWithLog) Get(ctx context.Context, id uint) (sp1 *entity.SingleBeatmap, err error) {
 	log.Debug().
+		Interface("ctx", ctx).
 		Interface("id", id).
 		Msg("store.Beatmap.Get: calling")
 	defer func() {
@@ -86,24 +92,26 @@ func (_d BeatmapWithLog) Get(id uint) (sp1 *entity.SingleBeatmap, err error) {
 				Msg("store.Beatmap.Get: finished")
 		}
 	}()
-	return _d._base.Get(id)
+	return _d._base.Get(ctx, id)
 }
 
 // GetBySetId implements store.Beatmap
-func (_d BeatmapWithLog) GetBySetId(beatmapsetId uint) (ba1 []entity.Beatmap) {
+func (_d BeatmapWithLog) GetBySetId(ctx context.Context, beatmapsetId uint) (ba1 []entity.Beatmap) {
 	log.Debug().
+		Interface("ctx", ctx).
 		Interface("beatmapsetId", beatmapsetId).
 		Msg("store.Beatmap.GetBySetId: calling")
 	defer func() {
 		log.Debug().
 			Msg("store.Beatmap.GetBySetId: finished")
 	}()
-	return _d._base.GetBySetId(beatmapsetId)
+	return _d._base.GetBySetId(ctx, beatmapsetId)
 }
 
 // Update implements store.Beatmap
-func (_d BeatmapWithLog) Update(id uint, from interface{}) (bp1 *entity.Beatmap, err error) {
+func (_d BeatmapWithLog) Update(ctx context.Context, id uint, from interface{}) (bp1 *entity.Beatmap, err error) {
 	log.Debug().
+		Interface("ctx", ctx).
 		Interface("id", id).
 		Interface("from", from).
 		Msg("store.Beatmap.Update: calling")
@@ -116,5 +124,5 @@ func (_d BeatmapWithLog) Update(id uint, from interface{}) (bp1 *entity.Beatmap,
 				Msg("store.Beatmap.Update: finished")
 		}
 	}()
-	return _d._base.Update(id, from)
+	return _d._base.Update(ctx, id, from)
 }

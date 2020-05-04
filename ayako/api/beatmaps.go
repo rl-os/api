@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
 	"github.com/deissh/osu-lazer/ayako/store"
@@ -27,7 +28,9 @@ func (h *BeatmapHandlers) Show(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
 	}
 
-	beatmaps, err := h.Store.Beatmap().Get(uint(beatmapID))
+	ctx := context.Background()
+
+	beatmaps, err := h.Store.Beatmap().Get(ctx, uint(beatmapID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
 	}
@@ -45,19 +48,21 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 		return err
 	}
 
+	ctx := context.Background()
+
 	var beatmap *entity.SingleBeatmap
 	if params.CheckSum != "" {
 		// todo: search by md5
-		beatmap, err = h.Store.Beatmap().Get(params.Id)
+		beatmap, err = h.Store.Beatmap().Get(ctx, params.Id)
 	}
 
 	if beatmap == nil && params.Id != 0 {
-		beatmap, err = h.Store.Beatmap().Get(params.Id)
+		beatmap, err = h.Store.Beatmap().Get(ctx, params.Id)
 	}
 
 	if beatmap == nil && params.Filename != "" {
 		// todo: search by filename
-		beatmap, err = h.Store.Beatmap().Get(params.Id)
+		beatmap, err = h.Store.Beatmap().Get(ctx, params.Id)
 	}
 
 	if err != nil || beatmap == nil {
