@@ -11,8 +11,8 @@ func (s *App) DoBeatmapSetSearchNew() {
 		Str("job", "DoBeatmapSetSearchNew").
 		Msg("start beatmapset search")
 
-	//fixme: aaa!!!
-	ctx := context.TODO()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+	defer cancel()
 
 	id, err := s.Store.BeatmapSet().GetLatestId(ctx)
 	if err != nil {
@@ -23,14 +23,13 @@ func (s *App) DoBeatmapSetSearchNew() {
 		return
 	}
 
-	// trying get 10 beatmaps with id + i
-	for i := 1; i <= 10; i++ {
-		data, err := s.Store.BeatmapSet().FetchFromBancho(ctx, id+uint(i))
+	search := func(id uint) {
+		data, err := s.Store.BeatmapSet().FetchFromBancho(ctx, id)
 		if err != nil {
 			log.Debug().
 				Err(err).
 				Str("job", "DoBeatmapSetSearchNew").Send()
-			continue
+			return
 		}
 
 		data.LastChecked = time.Now()
@@ -41,11 +40,22 @@ func (s *App) DoBeatmapSetSearchNew() {
 				Str("job", "DoBeatmapSetSearchNew").
 				Uint("beatmap_set_id", uint(data.ID)).
 				Msg("creating new beatmapsets")
-			continue
+			return
 		}
 		log.Info().
 			Str("job", "DoBeatmapSetSearchNew").
 			Uint("beatmap_set_id", uint(data.ID)).
 			Msg("added new beatmapset")
+	}
+
+	// trying get 10 beatmaps with id + i
+	for i := 1; i <= 10; i++ {
+		select {
+		case <-s.goroutineExitSignal:
+		case <-ctx.Done():
+			break
+		default:
+			search(id + uint(i))
+		}
 	}
 }
