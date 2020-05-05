@@ -81,7 +81,7 @@ func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFu
 	err := s.GetMaster().GetContext(
 		ctx,
 		set,
-		`SELECT id, last_checked, title, artist, play_count,
+		`SELECT id, last_checked, title, artist,
        		submitted_date, last_updated, ranked_date,
 			creator, user_id, bpm, source, covers, preview_url, tags, video,
 			storyboard, ranked, status, is_scoreable, discussion_enabled,
@@ -92,7 +92,8 @@ func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFu
         	), false) as has_favourited,
        		coalesce((
        		    select count(*) from favouritemaps where beatmapset_id = $1
-       		), 0) as favourite_count
+       		), 0) as favourite_count,
+       		0 as play_count
 		FROM beatmap_set
 		WHERE id = $1;`,
 		id,
