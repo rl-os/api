@@ -32,6 +32,11 @@ func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 
 	ctx := context.Background()
 
+	userId, ok := c.Get("current_user_id").(uint)
+	if ok {
+		ctx = context.WithValue(context.Background(), "current_user_id", userId)
+	}
+
 	beatmaps, err := h.Store.BeatmapSet().Get(ctx, uint(beatmapsetID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "Beatmapset not found")
@@ -49,6 +54,11 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 	}
 
 	ctx := context.Background()
+
+	userId, ok := c.Get("current_user_id").(uint)
+	if ok {
+		ctx = context.WithValue(context.Background(), "current_user_id", userId)
+	}
 
 	beatmap, err := h.Store.Beatmap().Get(ctx, params.Id)
 	if err != nil {
@@ -72,6 +82,11 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 	}
 
 	ctx := context.Background()
+
+	userId, ok := c.Get("current_user_id").(uint)
+	if ok {
+		ctx = context.WithValue(context.Background(), "current_user_id", userId)
+	}
 
 	beatmapSets, err := h.Store.BeatmapSet().Get(ctx, 1118896)
 	if err != nil {
@@ -107,8 +122,8 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 	ctx := context.Background()
 
 	userId, ok := c.Get("current_user_id").(uint)
-	if !ok {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmapset id")
+	if ok {
+		ctx = context.WithValue(context.Background(), "current_user_id", userId)
 	}
 
 	var total uint

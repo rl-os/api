@@ -28,6 +28,7 @@ type BeatmapSet interface {
 	Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error)
 	GetAll(ctx context.Context, page int, limit int) (*[]entity.BeatmapSet, error)
 	ComputeFields(ctx context.Context, set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error)
+	IsFavourite(ctx context.Context, setId uint, userId uint) bool
 	SetFavourite(ctx context.Context, userId uint, id uint) (uint, error)
 	SetUnFavourite(ctx context.Context, userId uint, id uint) (uint, error)
 

@@ -30,6 +30,11 @@ func (h *BeatmapHandlers) Show(c echo.Context) error {
 
 	ctx := context.Background()
 
+	userId, ok := c.Get("current_user_id").(uint)
+	if ok {
+		ctx = context.WithValue(context.Background(), "current_user_id", userId)
+	}
+
 	beatmaps, err := h.Store.Beatmap().Get(ctx, uint(beatmapID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
@@ -49,6 +54,11 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 	}
 
 	ctx := context.Background()
+
+	userId, ok := c.Get("current_user_id").(uint)
+	if ok {
+		ctx = context.WithValue(context.Background(), "current_user_id", userId)
+	}
 
 	var beatmap *entity.SingleBeatmap
 	if params.CheckSum != "" {

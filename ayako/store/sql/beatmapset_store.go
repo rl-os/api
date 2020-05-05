@@ -70,6 +70,20 @@ func (s BeatmapSetStore) SetUnFavourite(ctx context.Context, userId uint, id uin
 	return total, nil
 }
 
+func (s BeatmapSetStore) IsFavourite(ctx context.Context, setId uint, userId uint) bool {
+	var status bool
+
+	_ = s.GetMaster().GetContext(
+		ctx,
+		&status,
+		`select true as status from favouritemaps where beatmapset_id = $1 and user_id = $2`,
+		setId,
+		userId,
+	)
+
+	return status
+}
+
 func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {
 	set := &entity.BeatmapSetFull{}
 
@@ -242,6 +256,10 @@ func (s BeatmapSetStore) ComputeFields(ctx context.Context, set entity.BeatmapSe
 	set.Ratings = make([]int64, 11)
 	set.Converts = []entity.Beatmap{}
 	set.Beatmaps = s.Beatmap().GetBySetId(ctx, uint(set.ID))
+
+	if userId, ok := ctx.Value("current_user_id").(uint); ok {
+		set.HasFavourited = s.BeatmapSet().IsFavourite(ctx, uint(set.ID), userId)
+	}
 
 	for _, b := range set.Beatmaps {
 		if b.Mode != entity.Osu {
