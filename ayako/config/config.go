@@ -17,15 +17,15 @@ type Config struct {
 
 	// Configurations
 	Server struct {
-		Host string `default:"0.0.0.0"`
-		Port string `default:"2400"`
-
-		EnableJobs bool `default:"false"`
+		Host       string `default:"0.0.0.0"`
+		Port       string `default:"2400"`
+		JWTSecret  string `default:"somesupersecretstring"`
+		EnableJobs bool   `default:"false"`
 	}
 	Service struct {
-		EnableSecurityFixAlert bool `default:"true"`
-		EnableUpdater          bool `default:"true"`
-		EnableSearch           bool `default:"true"`
+		EnableSecurityFixAlert bool `default:"false"`
+		EnableUpdater          bool `default:"false"`
+		EnableSearch           bool `default:"false"`
 	}
 	Database struct {
 		DSN    string `default:"postgres://postgres:postgres@/osuserver?sslmode=disable"`

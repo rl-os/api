@@ -21,7 +21,7 @@ server:
     statsd_host: ${SERVER__DATADOG__STATSD_HOST|127.0.0.1:8126}
 
   jwt:
-    secret: ${SERVER__JWT_SECRET}
+    secret: ${SERVER__JWT_SECRET|somesupersecretstring}
     hours_before_revoke: 24
 
   database:

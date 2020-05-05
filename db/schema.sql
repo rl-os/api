@@ -74,7 +74,6 @@ CREATE TABLE public.beatmap_set (
     artist character varying DEFAULT ''::character varying NOT NULL,
     play_count integer DEFAULT 0 NOT NULL,
     favourite_count integer DEFAULT 0 NOT NULL,
-    has_favourited boolean DEFAULT false,
     submitted_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     last_updated timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     ranked_date timestamp with time zone,
@@ -102,13 +101,6 @@ CREATE TABLE public.beatmap_set (
     language json DEFAULT json_build_object('id', 1, 'name', 'None') NOT NULL,
     "user" json DEFAULT json_build_object() NOT NULL
 );
-
-
---
--- Name: COLUMN beatmap_set.has_favourited; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.beatmap_set.has_favourited IS 'TODO THIS';
 
 
 --
@@ -265,6 +257,38 @@ CREATE SEQUENCE public.countries_id_seq
 --
 
 ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
+
+
+--
+-- Name: favouritemaps; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.favouritemaps (
+    id integer NOT NULL,
+    beatmapset_id integer NOT NULL,
+    user_id integer NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: favouritemaps_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.favouritemaps_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: favouritemaps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.favouritemaps_id_seq OWNED BY public.favouritemaps.id;
 
 
 --
@@ -627,6 +651,13 @@ ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.co
 
 
 --
+-- Name: favouritemaps id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.favouritemaps ALTER COLUMN id SET DEFAULT nextval('public.favouritemaps_id_seq'::regclass);
+
+
+--
 -- Name: message id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -720,6 +751,14 @@ ALTER TABLE ONLY public.channels
 
 ALTER TABLE ONLY public.countries
     ADD CONSTRAINT countries_pk PRIMARY KEY (id);
+
+
+--
+-- Name: favouritemaps favouritemaps_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.favouritemaps
+    ADD CONSTRAINT favouritemaps_pk PRIMARY KEY (id);
 
 
 --
@@ -848,6 +887,20 @@ CREATE UNIQUE INDEX countries_id_uindex ON public.countries USING btree (id);
 --
 
 CREATE UNIQUE INDEX countries_name_uindex ON public.countries USING btree (name);
+
+
+--
+-- Name: favouritemaps_id_uindex; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX favouritemaps_id_uindex ON public.favouritemaps USING btree (id);
+
+
+--
+-- Name: favouritemaps_user_record_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX favouritemaps_user_record_index ON public.favouritemaps USING btree (user_id, beatmapset_id);
 
 
 --
@@ -1067,4 +1120,6 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200224101740'),
     ('20200225094357'),
     ('20200313155053'),
-    ('20200425094246');
+    ('20200425094246'),
+    ('20200504082514'),
+    ('20200505080021');

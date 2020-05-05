@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"github.com/deissh/osu-lazer/ayako/entity"
@@ -18,43 +19,108 @@ func newSqlBeatmapSetStore(sqlStore SqlStore) store.BeatmapSet {
 	return &BeatmapSetStore{sqlStore}
 }
 
-func (s BeatmapSetStore) Get(id uint) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) SetFavourite(ctx context.Context, userId uint, id uint) (uint, error) {
+	_, err := s.GetMaster().ExecContext(
+		ctx,
+		`insert into favouritemaps (beatmapset_id, user_id)
+		select $1, $2
+		where not exists (
+			select id from favouritemaps where beatmapset_id = $1 and user_id = $2
+		)`,
+		id,
+		userId,
+	)
+
+	var total uint
+	err = s.GetMaster().GetContext(
+		ctx,
+		&total,
+		`select count(id) as total from favouritemaps where user_id = $1`,
+		userId,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	return total, nil
+}
+
+func (s BeatmapSetStore) SetUnFavourite(ctx context.Context, userId uint, id uint) (uint, error) {
+	_, err := s.GetMaster().ExecContext(
+		ctx,
+		`delete from favouritemaps where beatmapset_id = $1 and user_id = $2`,
+		id,
+		userId,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	var total uint
+	err = s.GetMaster().GetContext(
+		ctx,
+		&total,
+		`select count(id) as total from favouritemaps where user_id = $1`,
+		userId,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	return total, nil
+}
+
+func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {
 	set := &entity.BeatmapSetFull{}
 
-	err := s.GetMaster().Get(
+	userId, ok := ctx.Value("current_user_id").(uint)
+	if !ok {
+		userId = 0
+	}
+
+	err := s.GetMaster().GetContext(
+		ctx,
 		set,
-		`SELECT id, last_checked, title, artist, play_count, favourite_count,
-			has_favourited, submitted_date, last_updated, ranked_date,
-		   creator, user_id, bpm, source, covers, preview_url, tags, video,
-		   storyboard, ranked, status, is_scoreable, discussion_enabled,
-		   discussion_locked, can_be_hyped, availability, hype, nominations,
-		   legacy_thread_url, description, genre, language, "user"
+		`SELECT id, last_checked, title, artist,
+       		submitted_date, last_updated, ranked_date,
+			creator, user_id, bpm, source, covers, preview_url, tags, video,
+			storyboard, ranked, status, is_scoreable, discussion_enabled,
+			discussion_locked, can_be_hyped, availability, hype, nominations,
+			legacy_thread_url, description, genre, language, "user",
+        	coalesce((
+        	    select true from favouritemaps where beatmapset_id = $1 and user_id = $2
+        	), false) as has_favourited,
+       		coalesce((
+       		    select count(*) from favouritemaps where beatmapset_id = $1
+       		), 0) as favourite_count,
+       		0 as play_count
 		FROM beatmap_set
 		WHERE id = $1;`,
 		id,
+		userId,
 	)
 
 	switch err {
 	case sql.ErrNoRows:
-		data, err := s.FetchFromBancho(id)
+		data, err := s.BeatmapSet().FetchFromBancho(ctx, id)
 		if err != nil {
 			return nil, err
 		}
 
-		set, err = s.Create(data)
+		set, err = s.BeatmapSet().Create(ctx, data)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return s.ComputeFields(*set)
+	return s.BeatmapSet().ComputeFields(ctx, *set)
 }
 
-func (s BeatmapSetStore) GetAll(page int, limit int) (*[]entity.BeatmapSet, error) {
+func (s BeatmapSetStore) GetAll(ctx context.Context, page int, limit int) (*[]entity.BeatmapSet, error) {
 	panic("implement me")
 }
 
-func (s BeatmapSetStore) Create(from interface{}) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) Create(ctx context.Context, from interface{}) (*entity.BeatmapSetFull, error) {
 	var set entity.BeatmapSetFull
 
 	b, err := json.Marshal(&from)
@@ -62,15 +128,16 @@ func (s BeatmapSetStore) Create(from interface{}) (*entity.BeatmapSetFull, error
 		return nil, err
 	}
 
-	err = s.GetMaster().Get(
+	err = s.GetMaster().GetContext(
+		ctx,
 		&set,
 		`insert into beatmap_set
 		select id, last_checked, title, artist, play_count, favourite_count,
-			has_favourited, submitted_date, last_updated, ranked_date,
-		   creator, user_id, bpm, source, covers, preview_url, tags, video,
-		   storyboard, ranked, status, is_scoreable, discussion_enabled,
-		   discussion_locked, can_be_hyped, availability, hype, nominations,
-		   legacy_thread_url, description, genre, language, "user"
+			submitted_date, last_updated, ranked_date,
+			creator, user_id, bpm, source, covers, preview_url, tags, video,
+			storyboard, ranked, status, is_scoreable, discussion_enabled,
+			discussion_locked, can_be_hyped, availability, hype, nominations,
+			legacy_thread_url, description, genre, language, "user"
 		from json_populate_record(NULL::beatmap_set, $1)
 		returning *`,
 		string(b),
@@ -82,7 +149,7 @@ func (s BeatmapSetStore) Create(from interface{}) (*entity.BeatmapSetFull, error
 	// todo: может отказаться от from interface{} ?
 	// тк придется поддерживать все необходимые структуры
 	if m, ok := from.(*entity.BeatmapSetFull); ok {
-		data, err := s.Beatmap().CreateBatch(m.Beatmaps)
+		data, err := s.Beatmap().CreateBatch(ctx, m.Beatmaps)
 		if err == nil {
 			set.Beatmaps = *data
 		} else {
@@ -93,7 +160,7 @@ func (s BeatmapSetStore) Create(from interface{}) (*entity.BeatmapSetFull, error
 	return &set, nil
 }
 
-func (s BeatmapSetStore) Update(id uint, from interface{}) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) Update(ctx context.Context, id uint, from interface{}) (*entity.BeatmapSetFull, error) {
 	var set entity.BeatmapSetFull
 
 	b, err := json.Marshal(&from)
@@ -103,7 +170,8 @@ func (s BeatmapSetStore) Update(id uint, from interface{}) (*entity.BeatmapSetFu
 
 	// update only required fields from json
 	// easy to change
-	err = s.GetMaster().Get(
+	err = s.GetMaster().GetContext(
+		ctx,
 		&set,
 		`update beatmap_set set
 			last_checked = sq.last_checked, last_updated = sq.last_updated,
@@ -130,12 +198,12 @@ func (s BeatmapSetStore) Update(id uint, from interface{}) (*entity.BeatmapSetFu
 	return &set, nil
 }
 
-func (s BeatmapSetStore) Delete(id uint) error {
+func (s BeatmapSetStore) Delete(ctx context.Context, id uint) error {
 	panic("implement me")
 }
 
 // FetchFromBancho beatmapset from original api
-func (s BeatmapSetStore) FetchFromBancho(id uint) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) FetchFromBancho(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {
 	data, err := s.GetOsuClient().BeatmapSet.Get(id)
 	if err != nil {
 		return nil, err
@@ -150,11 +218,12 @@ func (s BeatmapSetStore) FetchFromBancho(id uint) (*entity.BeatmapSetFull, error
 }
 
 // GetIdsForUpdate and return list of ids
-func (s BeatmapSetStore) GetIdsForUpdate(limit int) ([]uint, error) {
+func (s BeatmapSetStore) GetIdsForUpdate(ctx context.Context, limit int) ([]uint, error) {
 	ids := make([]uint, 0)
 	now := time.Now()
 
-	err := s.GetMaster().Select(
+	err := s.GetMaster().SelectContext(
+		ctx,
 		&ids,
 		`select id
 		from beatmap_set
@@ -168,10 +237,10 @@ func (s BeatmapSetStore) GetIdsForUpdate(limit int) ([]uint, error) {
 	return ids, err
 }
 
-func (s BeatmapSetStore) GetLatestId() (uint, error) {
+func (s BeatmapSetStore) GetLatestId(ctx context.Context) (uint, error) {
 	var id uint
 
-	err := s.GetMaster().Get(&id, `select id from beatmap_set order by id desc`)
+	err := s.GetMaster().GetContext(ctx, &id, `select id from beatmap_set order by id desc`)
 
 	switch err {
 	case sql.ErrNoRows:
@@ -181,11 +250,11 @@ func (s BeatmapSetStore) GetLatestId() (uint, error) {
 	}
 }
 
-func (s BeatmapSetStore) ComputeFields(set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetStore) ComputeFields(ctx context.Context, set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
 	set.RecentFavourites = []entity.User{}
 	set.Ratings = make([]int64, 11)
 	set.Converts = []entity.Beatmap{}
-	set.Beatmaps = s.Beatmap().GetBySetId(uint(set.ID))
+	set.Beatmaps = s.Beatmap().GetBySetId(ctx, uint(set.ID))
 
 	for _, b := range set.Beatmaps {
 		if b.Mode != entity.Osu {

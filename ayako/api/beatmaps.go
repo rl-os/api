@@ -1,7 +1,9 @@
 package api
 
 import (
+	"context"
 	"github.com/deissh/osu-lazer/ayako/entity"
+	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -16,6 +18,7 @@ func (api *Routes) InitBeatmaps(store store.Store) {
 	handlers := BeatmapHandlers{store}
 
 	api.Beatmaps.GET("/:id", handlers.Show)
+	api.Beatmaps.GET("/:id/scores", echo.NotFoundHandler, permission.MustLogin)
 	api.Beatmaps.GET("/lookup", handlers.Lookup)
 }
 
@@ -25,7 +28,14 @@ func (h *BeatmapHandlers) Show(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
 	}
 
-	beatmaps, err := h.Store.Beatmap().Get(uint(beatmapID))
+	ctx := context.Background()
+
+	userId, ok := c.Get("current_user_id").(uint)
+	if ok {
+		ctx = context.WithValue(context.Background(), "current_user_id", userId)
+	}
+
+	beatmaps, err := h.Store.Beatmap().Get(ctx, uint(beatmapID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
 	}
@@ -43,19 +53,26 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 		return err
 	}
 
+	ctx := context.Background()
+
+	userId, ok := c.Get("current_user_id").(uint)
+	if ok {
+		ctx = context.WithValue(context.Background(), "current_user_id", userId)
+	}
+
 	var beatmap *entity.SingleBeatmap
 	if params.CheckSum != "" {
 		// todo: search by md5
-		beatmap, err = h.Store.Beatmap().Get(params.Id)
+		beatmap, err = h.Store.Beatmap().Get(ctx, params.Id)
 	}
 
 	if beatmap == nil && params.Id != 0 {
-		beatmap, err = h.Store.Beatmap().Get(params.Id)
+		beatmap, err = h.Store.Beatmap().Get(ctx, params.Id)
 	}
 
 	if beatmap == nil && params.Filename != "" {
 		// todo: search by filename
-		beatmap, err = h.Store.Beatmap().Get(params.Id)
+		beatmap, err = h.Store.Beatmap().Get(ctx, params.Id)
 	}
 
 	if err != nil || beatmap == nil {
@@ -63,4 +80,16 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 	}
 
 	return c.JSON(200, beatmap)
+}
+
+func (h *BeatmapHandlers) Scores(c echo.Context) (err error) {
+	params := struct {
+		Type string `query:"type"`
+		Mode string `query:"mode"`
+	}{}
+	if err := c.Bind(&params); err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, nil)
 }

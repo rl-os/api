@@ -16,8 +16,6 @@ func Middleware() echo.MiddlewareFunc {
 			res := c.Response()
 			start := time.Now()
 
-			id := req.Header.Get(echo.HeaderXRequestID)
-
 			logger := log.Logger
 
 			if err = next(c); err != nil {
@@ -28,7 +26,12 @@ func Middleware() echo.MiddlewareFunc {
 
 			evt := logger.Info()
 
-			if id != "" {
+			// getting token information if present
+			data := c.Get("current_user_id")
+			if userId, ok := data.(uint); ok {
+				evt.Uint("user_id", userId)
+			}
+			if id := req.Header.Get(echo.HeaderXRequestID); id != "" {
 				evt.Str("request_id", id)
 			}
 			evt.Str("remote_ip", c.RealIP())

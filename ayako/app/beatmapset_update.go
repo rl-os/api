@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"github.com/rs/zerolog/log"
 	"time"
 )
@@ -11,7 +12,10 @@ func (s *App) DoBeatmapSetUpdate() {
 		Uint("batch_size", 100).
 		Msg("start beatmapset update check")
 
-	ids, err := s.Store.BeatmapSet().GetIdsForUpdate(100)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	ids, err := s.Store.BeatmapSet().GetIdsForUpdate(ctx, 100)
 	if err != nil {
 		log.Error().
 			Err(err).
@@ -20,13 +24,13 @@ func (s *App) DoBeatmapSetUpdate() {
 		return
 	}
 
-	for _, id := range ids {
+	updater := func(id uint) {
 		log.Debug().
 			Str("job", "DoBeatmapSetUpdate").
 			Uint("beatmap_set_id", id).
 			Msg("fetching")
 
-		data, err := s.Store.BeatmapSet().FetchFromBancho(id)
+		data, err := s.Store.BeatmapSet().FetchFromBancho(ctx, id)
 		if err != nil {
 			log.Error().
 				Err(err).
@@ -38,7 +42,7 @@ func (s *App) DoBeatmapSetUpdate() {
 
 		data.LastChecked = time.Now()
 
-		_, err = s.Store.BeatmapSet().Update(id, *data)
+		_, err = s.Store.BeatmapSet().Update(ctx, id, *data)
 		if err != nil {
 			log.Error().
 				Err(err).
@@ -52,5 +56,15 @@ func (s *App) DoBeatmapSetUpdate() {
 			Str("job", "DoBeatmapSetUpdate").
 			Uint("beatmap_set_id", id).
 			Msg("updated")
+	}
+
+	for _, id := range ids {
+		select {
+		case <-s.goroutineExitSignal:
+		case <-ctx.Done():
+			break
+		default:
+			updater(id)
+		}
 	}
 }

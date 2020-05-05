@@ -33,12 +33,14 @@ func Init(cfg *config.Config, osuClient *osu.OsuAPI) store.Store {
 
 	supplier.initConnection(cfg)
 
-	supplier.stores.beatmap = newSqlBeatmapStore(supplier)
-	supplier.stores.beatmapSet = newSqlBeatmapSetStore(supplier)
-
-	return layers.NewStoreWithLog(
-		supplier,
+	supplier.stores.beatmap = layers.NewBeatmapWithLog(
+		newSqlBeatmapStore(supplier),
 	)
+	supplier.stores.beatmapSet = layers.NewBeatmapSetWithLog(
+		newSqlBeatmapSetStore(supplier),
+	)
+
+	return supplier
 }
 
 func (ss *Supplier) initConnection(cfg *config.Config) {
