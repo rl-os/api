@@ -70,35 +70,33 @@ func (s BeatmapSetStore) SetUnFavourite(ctx context.Context, userId uint, id uin
 	return total, nil
 }
 
-func (s BeatmapSetStore) IsFavourite(ctx context.Context, setId uint, userId uint) bool {
-	var status bool
-
-	_ = s.GetMaster().GetContext(
-		ctx,
-		&status,
-		`select true as status from favouritemaps where beatmapset_id = $1 and user_id = $2`,
-		setId,
-		userId,
-	)
-
-	return status
-}
-
 func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {
 	set := &entity.BeatmapSetFull{}
+
+	userId, ok := ctx.Value("current_user_id").(uint)
+	if !ok {
+		userId = 0
+	}
 
 	err := s.GetMaster().GetContext(
 		ctx,
 		set,
-		`SELECT id, last_checked, title, artist, play_count, favourite_count,
-			has_favourited, submitted_date, last_updated, ranked_date,
-		   creator, user_id, bpm, source, covers, preview_url, tags, video,
-		   storyboard, ranked, status, is_scoreable, discussion_enabled,
-		   discussion_locked, can_be_hyped, availability, hype, nominations,
-		   legacy_thread_url, description, genre, language, "user"
+		`SELECT id, last_checked, title, artist, play_count,
+       		submitted_date, last_updated, ranked_date,
+			creator, user_id, bpm, source, covers, preview_url, tags, video,
+			storyboard, ranked, status, is_scoreable, discussion_enabled,
+			discussion_locked, can_be_hyped, availability, hype, nominations,
+			legacy_thread_url, description, genre, language, "user",
+        	coalesce((
+        	    select true from favouritemaps where beatmapset_id = $1 and user_id = $2
+        	), false) as has_favourited,
+       		coalesce((
+       		    select count(*) from favouritemaps where beatmapset_id = $1
+       		), 0) as favourite_count
 		FROM beatmap_set
 		WHERE id = $1;`,
 		id,
+		userId,
 	)
 
 	switch err {
@@ -134,11 +132,11 @@ func (s BeatmapSetStore) Create(ctx context.Context, from interface{}) (*entity.
 		&set,
 		`insert into beatmap_set
 		select id, last_checked, title, artist, play_count, favourite_count,
-			has_favourited, submitted_date, last_updated, ranked_date,
-		   creator, user_id, bpm, source, covers, preview_url, tags, video,
-		   storyboard, ranked, status, is_scoreable, discussion_enabled,
-		   discussion_locked, can_be_hyped, availability, hype, nominations,
-		   legacy_thread_url, description, genre, language, "user"
+			submitted_date, last_updated, ranked_date,
+			creator, user_id, bpm, source, covers, preview_url, tags, video,
+			storyboard, ranked, status, is_scoreable, discussion_enabled,
+			discussion_locked, can_be_hyped, availability, hype, nominations,
+			legacy_thread_url, description, genre, language, "user"
 		from json_populate_record(NULL::beatmap_set, $1)
 		returning *`,
 		string(b),
@@ -256,10 +254,6 @@ func (s BeatmapSetStore) ComputeFields(ctx context.Context, set entity.BeatmapSe
 	set.Ratings = make([]int64, 11)
 	set.Converts = []entity.Beatmap{}
 	set.Beatmaps = s.Beatmap().GetBySetId(ctx, uint(set.ID))
-
-	if userId, ok := ctx.Value("current_user_id").(uint); ok {
-		set.HasFavourited = s.BeatmapSet().IsFavourite(ctx, uint(set.ID), userId)
-	}
 
 	for _, b := range set.Beatmaps {
 		if b.Mode != entity.Osu {

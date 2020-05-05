@@ -242,20 +242,6 @@ func (mr *MockBeatmapSetMockRecorder) ComputeFields(ctx, set interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ComputeFields", reflect.TypeOf((*MockBeatmapSet)(nil).ComputeFields), ctx, set)
 }
 
-// IsFavourite mocks base method
-func (m *MockBeatmapSet) IsFavourite(ctx context.Context, setId, userId uint) bool {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IsFavourite", ctx, setId, userId)
-	ret0, _ := ret[0].(bool)
-	return ret0
-}
-
-// IsFavourite indicates an expected call of IsFavourite
-func (mr *MockBeatmapSetMockRecorder) IsFavourite(ctx, setId, userId interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsFavourite", reflect.TypeOf((*MockBeatmapSet)(nil).IsFavourite), ctx, setId, userId)
-}
-
 // SetFavourite mocks base method
 func (m *MockBeatmapSet) SetFavourite(ctx context.Context, userId, id uint) (uint, error) {
 	m.ctrl.T.Helper()

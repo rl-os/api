@@ -167,20 +167,6 @@ func (_d BeatmapSetWithLog) GetLatestId(ctx context.Context) (u1 uint, err error
 	return _d._base.GetLatestId(ctx)
 }
 
-// IsFavourite implements store.BeatmapSet
-func (_d BeatmapSetWithLog) IsFavourite(ctx context.Context, setId uint, userId uint) (b1 bool) {
-	log.Debug().
-		Interface("ctx", ctx).
-		Interface("setId", setId).
-		Interface("userId", userId).
-		Msg("store.BeatmapSet.IsFavourite: calling")
-	defer func() {
-		log.Debug().
-			Msg("store.BeatmapSet.IsFavourite: finished")
-	}()
-	return _d._base.IsFavourite(ctx, setId, userId)
-}
-
 // SetFavourite implements store.BeatmapSet
 func (_d BeatmapSetWithLog) SetFavourite(ctx context.Context, userId uint, id uint) (u1 uint, err error) {
 	log.Debug().

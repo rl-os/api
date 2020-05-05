@@ -74,7 +74,6 @@ CREATE TABLE public.beatmap_set (
     artist character varying DEFAULT ''::character varying NOT NULL,
     play_count integer DEFAULT 0 NOT NULL,
     favourite_count integer DEFAULT 0 NOT NULL,
-    has_favourited boolean DEFAULT false,
     submitted_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     last_updated timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     ranked_date timestamp with time zone,
@@ -102,13 +101,6 @@ CREATE TABLE public.beatmap_set (
     language json DEFAULT json_build_object('id', 1, 'name', 'None') NOT NULL,
     "user" json DEFAULT json_build_object() NOT NULL
 );
-
-
---
--- Name: COLUMN beatmap_set.has_favourited; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.beatmap_set.has_favourited IS 'TODO THIS';
 
 
 --
@@ -1129,4 +1121,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20200225094357'),
     ('20200313155053'),
     ('20200425094246'),
-    ('20200504082514');
+    ('20200504082514'),
+    ('20200505080021');
