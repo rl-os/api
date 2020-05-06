@@ -54,5 +54,5 @@ jobs:
       run: make docker-build
       working-directory: ${{env.working-directory}}
 
-#    - name: Upload coverage report
-#      run: bash <(curl -s https://codecov.io/bash)
+    - name: Upload coverage report
+      run: bash <(curl -s https://codecov.io/bash)
