@@ -1,0 +1,23 @@
+//
+// Main Stylesheet
+//
+
+
+
+
+////////////////////////////////////////////////////////////////
+///////////// DO NOT MODIFY BELOW INCLUDE ORDER ////////////////
+////////////////////////////////////////////////////////////////
+
+// 1: Include global config
+@import "config";
+
+// 2: Include config (that overrides the above global config)
+@import "global/integration/frameworks/bootstrap/variables";
+
+// 3: Bootstrap Include
+@import "~bootstrap/scss/bootstrap";
+@import "global/integration/frameworks/bootstrap/bootstrap.scss";
+
+// 3: Components include
+@import "global/include";

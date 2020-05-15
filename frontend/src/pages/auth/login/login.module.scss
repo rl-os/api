@@ -1,0 +1,17 @@
+@import "src/styles/config";
+
+.root {
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+
+.aside {
+    background-color: #f2c98a;
+    width: 100%;
+    max-width: 450px;
+
+    @include rl-tablet-and-mobile {
+        max-width: 0px;
+    }
+}

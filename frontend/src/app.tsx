@@ -7,13 +7,13 @@ import { useAsync } from './utils/hooks';
 import { SecureRoute } from './components/secure-route';
 
 import { HomePage } from './pages/home';
-import { LoginPage } from "./pages/login";
+import { LoginPage } from "./pages/auth/login";
 
 const content = (store: Store) => {
   return <StoreContext.Provider value={store}>
     <BrowserRouter>
       <SecureRoute exact={true} path="/" component={HomePage}/>
-      <SecureRoute exact={true} path="/login" component={LoginPage}/>
+      <SecureRoute exact={true} path="/auth/login" component={LoginPage}/>
     </BrowserRouter>
   </StoreContext.Provider>;
 };
