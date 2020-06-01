@@ -7,7 +7,7 @@ require (
 	github.com/deissh/go-utils v1.1.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/getsentry/sentry-go v0.5.1
-	github.com/gin-gonic/gin v1.6.2
+	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.2.0
 	github.com/go-sql-driver/mysql v1.4.0
 	github.com/gookit/config/v2 v2.0.13
