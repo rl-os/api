@@ -15,6 +15,6 @@ require (
 	github.com/labstack/echo/v4 v4.1.16
 	github.com/lib/pq v1.6.0
 	github.com/robfig/cron/v3 v3.0.1
-	github.com/rs/zerolog v1.18.0
+	github.com/rs/zerolog v1.19.0
 	gopkg.in/redis.v5 v5.2.9
 )
