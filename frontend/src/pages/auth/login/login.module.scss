@@ -4,6 +4,10 @@
     height: 100vh;
     display: flex;
     flex-direction: row;
+
+    @include rl-tablet-and-mobile {
+        padding: 1rem;
+    }
 }
 
 .aside {
@@ -14,4 +18,18 @@
     @include rl-tablet-and-mobile {
         max-width: 0px;
     }
+}
+
+.title {
+    padding-bottom: 3.25em;
+}
+
+.btn {
+    color: #fff;
+
+    // border-radius: .675rem !important;
+
+    font-size: 15px !important;
+    font-weight: 600!important;
+    padding: 0.7rem 1.5rem!important;
 }
