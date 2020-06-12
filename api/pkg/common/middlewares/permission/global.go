@@ -37,7 +37,7 @@ func GlobalMiddleware() echo.MiddlewareFunc {
 			if key, err := extractor(c); err == nil {
 				token, err := oauth.ValidateOAuthToken(key)
 				if err != nil {
-					return err
+					return next(c)
 				}
 
 				current, err := user.UpdateLastVisit(token.UserID)

@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import App from './app';
 import * as serviceWorker from './serviceWorker';
 
+import 'noty/src/noty.scss';
+import 'noty/src/themes/mint.scss';
 import './styles/index.scss';
 
 ReactDOM.render(<App />, document.getElementById('root'));

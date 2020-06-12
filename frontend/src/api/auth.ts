@@ -1,23 +1,41 @@
 import { AxiosInstance } from "axios";
 import { Token } from "../models/oauth";
-import { Config } from "../store/config";
+
+type Scope = '*' | 'read.*'
+type GrantType = 'password'
+
+interface GrantTypePwd {
+  username: string;
+  password: string;
+}
 
 export class AuthAPI {
-  constructor(private readonly axios: AxiosInstance, private readonly config: Config) {}
+  constructor(
+    private readonly axios: AxiosInstance,
+    private readonly clientId: number,
+    private readonly clientSecret: string
+  ) {}
 
-  public async loginByPwd(username: string, password: string): Promise<Token> {
+  // tslint:disable-next-line:variable-name
+  public async token<T extends GrantTypePwd>(scope: Scope, grant_type: GrantType, body: T): Promise<Token> {
     const { data } = await this.axios.post(
       "/oauth/token",
       {
-        client_id: this.config.clientId,
-        client_secret: this.config.clientSecret,
-        scope: '*', // WARNING: replace
-        grant_type: 'password',
-        username,
-        password,
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        grant_type,
+        scope,
+        ...body
       }
     );
 
     return data;
+  }
+
+  public async loginByPwd(username: string, password: string): Promise<Token> {
+    return this.token('*', 'password', {
+      username,
+      password
+    });
   }
 }

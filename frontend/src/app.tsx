@@ -28,7 +28,9 @@ const App = observer(() => {
 
   return useAsync({
     dependencies: [store],
-    init: async () => {/* feature */},
+    init: async () => {
+      await store.auth.init();
+    },
     loading: () => <div>Loading</div>,
     failed: (e) => <div>{e.toString()}</div>,
     success: () => content(store),

@@ -1,20 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from "classnames";
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import Noty from "noty";
 
 import styles from './login.module.scss';
 import { useStore } from '../../../store';
+import { useRouter } from "../../../utils/hooks";
 
 
 const Login = () => {
-  const { handleSubmit, register, errors } = useForm();
   const store = useStore();
+  const router = useRouter();
+  const { handleSubmit, register, errors } = useForm();
+
+  useEffect(() => {
+    if (store.auth.currentUser === null) { return; }
+    router.history.push('/');
+  }, [router.history, store.auth.currentUser])
+
+  const onLogin = () => {
+    new Noty({
+      type: "success",
+      text: `Вы успешно вошли в свой аккаунт!`,
+      timeout: 5000,
+    }).show();
+
+    router.history.push('/');
+  }
+  const onError = (e: any) => {
+    new Noty({
+      type: "error",
+      text: e.response?.data.message || e.message,
+      timeout: 5000,
+    }).show();
+  };
 
   const onSubmit = ({username, password}: any) =>
-    store.auth.login(username, password);
-
+    store.auth.login(username, password)
+      .then(onLogin)
+      .catch(onError);
 
   return <div className={classNames(styles.root)}>
     <div className={classNames(styles.aside, "d-flex flex-row-auto")}>
@@ -40,13 +66,13 @@ const Login = () => {
             <input
               className="form-control form-control-solid h-auto py-7 px-6 rounded-lg"
               type="text"
-              name="login"
+              name="username"
               ref={register({
                 required: "Необходимо заполнить",
                 validate: value => value.length >= 3 ? true : 'Не верный логин'
               })}
             />
-            {errors.login && errors.login.message}
+            {errors.username && errors.username.message}
           </div>
 
           <div className="form-group fv-plugins-icon-container">
@@ -71,15 +97,15 @@ const Login = () => {
       </div>
 
       <div className="d-flex justify-content-lg-start justify-content-center align-items-end pb-2 pt-lg-0">
-        <a href="#" className="text-primary font-weight-bolder font-size-h5">
+        <Link to="/" className="text-primary font-weight-bolder font-size-h5">
           Правила
-        </a>
-        <a href="#" className="text-primary ml-3 font-weight-bolder font-size-h5">
+        </Link>
+        <Link to="/" className="text-primary ml-3 font-weight-bolder font-size-h5">
           Контакты
-        </a>
-        <a href="#" className="text-primary ml-3 font-weight-bolder font-size-h5">
+        </Link>
+        <Link to="/" className="text-primary ml-3 font-weight-bolder font-size-h5">
           О проекте
-        </a>
+        </Link>
       </div>
     </div>
   </div>;

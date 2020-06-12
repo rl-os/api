@@ -7,10 +7,10 @@ export class Config {
   public language: string = "ru";
 
   @observable
-  public baseAPI: string = "https://dev.risu.life"
+  public baseAPI: string = "https://osu.local"
 
   @observable
-  public clientId: string = "5";
+  public clientId: number = 5;
 
   @observable
   public clientSecret: string = "FGc9GAtyHzeQDshWP5Ah7dega8hJACAJpQtw6OXk";

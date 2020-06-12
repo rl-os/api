@@ -5,16 +5,18 @@ import { Auth } from './auth';
 import { observable } from 'mobx';
 
 export class Store {
+  @observable
   public readonly config: Config;
+  @observable
   public readonly api: Api;
-
+  @observable
   public readonly auth: Auth;
 
   constructor() {
-    this.config = observable(new Config(this));
-    this.auth = observable(new Auth(this));
+    this.config = new Config(this);
+    this.auth = new Auth(this);
 
-    this.api = observable(new Api(this));
+    this.api = new Api(this);
   }
 }
 

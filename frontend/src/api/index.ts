@@ -1,11 +1,13 @@
 import Axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { Store } from "../store";
 import { AuthAPI } from "./auth";
+import { UserAPI } from "./user";
 
 export class Api {
   protected axios: AxiosInstance;
 
   public readonly auth: AuthAPI;
+  public readonly user: UserAPI;
 
   constructor(private readonly store: Store, config?: AxiosRequestConfig) {
     this.axios = Axios.create({
@@ -14,11 +16,12 @@ export class Api {
     });
 
     this.axios.interceptors.request.use(
-      this.setAccessToken,
+      req => this.setAccessToken(req),
       err => err,
     );
 
-    this.auth = new AuthAPI(this.axios, this.store.config);
+    this.auth = new AuthAPI(this.axios, this.store.config.clientId, this.store.config.clientSecret);
+    this.user = new UserAPI(this.axios);
   }
 
   private setAccessToken(req: AxiosRequestConfig): AxiosRequestConfig {
