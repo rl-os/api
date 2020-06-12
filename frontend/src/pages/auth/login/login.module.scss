@@ -6,17 +6,18 @@
     flex-direction: row;
 
     @include rl-tablet-and-mobile {
-        padding: 1rem;
+        height: auto;
+        flex-direction: column;
     }
 }
 
 .aside {
-    background-color: #f2c98a;
-    width: 100%;
-    max-width: 450px;
+    background-color: #2d2d2d;
+    width: 450px;
 
     @include rl-tablet-and-mobile {
-        max-width: 0px;
+        width: 100%;
+        flex-direction: row;
     }
 }
 

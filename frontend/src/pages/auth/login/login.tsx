@@ -3,12 +3,12 @@ import classNames from "classnames";
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import { useStore } from '../../../store';
+import { useRouter } from "../../../utils/hooks";
 import Noty from "noty";
 
 import styles from './login.module.scss';
-import { useStore } from '../../../store';
-import { useRouter } from "../../../utils/hooks";
-
+import { Logo } from './logo';
 
 const Login = () => {
   const store = useStore();
@@ -44,10 +44,10 @@ const Login = () => {
 
   return <div className={classNames(styles.root)}>
     <div className={classNames(styles.aside, "d-flex flex-row-auto")}>
-      text
+      <Logo/>
     </div>
 
-    <div className="flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-7 ml-auto mr-auto">
+    <div className="flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-5 ml-auto mr-auto">
       <div className="d-flex flex-column-fluid flex-center mt-6 mt-lg-0">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={classNames(styles.title)}>
@@ -96,7 +96,7 @@ const Login = () => {
         </form>
       </div>
 
-      <div className="d-flex justify-content-lg-start justify-content-center align-items-end pb-2 pt-lg-0">
+      <div className="d-flex justify-content-center align-items-end pb-5 pt-5">
         <Link to="/" className="text-primary font-weight-bolder font-size-h5">
           Правила
         </Link>

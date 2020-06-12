@@ -19,5 +19,8 @@
 @import "~bootstrap/scss/bootstrap";
 @import "global/integration/frameworks/bootstrap/bootstrap.scss";
 
-// 3: Components include
+// 4: Helpers include
+@import "helpers/include";
+
+// 5: Components include
 @import "global/include";

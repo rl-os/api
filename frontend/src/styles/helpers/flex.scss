@@ -1,7 +1,14 @@
+@import "../global/init";
+
 .flex-column-fluid {
     -webkit-box-flex: 1;
     -ms-flex: 1 0 auto;
     flex: 1 0 auto;
+}
+
+.flex-column {
+    flex-direction: column;
+    width: 100%;
 }
 
 .flex-center {
@@ -11,4 +18,16 @@
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
+}
+
+.flex-column-auto {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+}
+
+.flex-row-auto {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
 }
