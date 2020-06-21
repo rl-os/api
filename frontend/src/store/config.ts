@@ -7,7 +7,7 @@ export class Config {
   public language: string = "ru";
 
   @observable
-  public baseAPI: string = "https://osu.local"
+  public baseAPI: string = "https://osu.ppy.sh"
 
   @observable
   public clientId: number = 5;

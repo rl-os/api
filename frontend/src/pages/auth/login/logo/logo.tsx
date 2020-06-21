@@ -6,10 +6,11 @@ import styles from './logo.module.scss';
 
 const Logo = () => {
   return <div className={classNames(styles.root, "d-flex flex-column-auto flex-column")}>
-    <a href="#" className="text-center mb-10">
+    <a href="/" className="text-center mb-10">
       <img
         src="https://301222.selcdn.ru/akasi/assets/logo/logo.svg"
         className="max-h-150px"
+        alt="risu.life"
       />
     </a>
     <h3 className={classNames(styles.text)}>

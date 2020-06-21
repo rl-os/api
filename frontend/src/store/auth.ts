@@ -36,11 +36,12 @@ export class Auth {
     try {
       this.currentUser = await this.store.api.user.me();
     } catch (e) {
-      if (e.isAxiosError && e.response.status === 401) {
+      if (e.isAxiosError && e.response?.status === 401) {
         this.currentUser = null;
-      } else {
-        throw e;
+        return;
       }
+
+      throw e;
     }
   }
 
