@@ -32,7 +32,7 @@ func (_d BeatmapSetWithLog) ComputeFields(ctx context.Context, set entity.Beatma
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.ComputeFields: returned an errors")
+				Msg("store.BeatmapSet.ComputeFields: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.ComputeFields: finished")
@@ -50,7 +50,7 @@ func (_d BeatmapSetWithLog) Create(ctx context.Context, from interface{}) (bp1 *
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.Create: returned an errors")
+				Msg("store.BeatmapSet.Create: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.Create: finished")
@@ -68,7 +68,7 @@ func (_d BeatmapSetWithLog) Delete(ctx context.Context, id uint) (err error) {
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.Delete: returned an errors")
+				Msg("store.BeatmapSet.Delete: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.Delete: finished")
@@ -86,7 +86,7 @@ func (_d BeatmapSetWithLog) FetchFromBancho(ctx context.Context, id uint) (bp1 *
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.FetchFromBancho: returned an errors")
+				Msg("store.BeatmapSet.FetchFromBancho: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.FetchFromBancho: finished")
@@ -104,7 +104,7 @@ func (_d BeatmapSetWithLog) Get(ctx context.Context, id uint) (bp1 *entity.Beatm
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.Get: returned an errors")
+				Msg("store.BeatmapSet.Get: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.Get: finished")
@@ -123,7 +123,7 @@ func (_d BeatmapSetWithLog) GetAll(ctx context.Context, page int, limit int) (ba
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.GetAll: returned an errors")
+				Msg("store.BeatmapSet.GetAll: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.GetAll: finished")
@@ -141,7 +141,7 @@ func (_d BeatmapSetWithLog) GetIdsForUpdate(ctx context.Context, limit int) (ua1
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.GetIdsForUpdate: returned an errors")
+				Msg("store.BeatmapSet.GetIdsForUpdate: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.GetIdsForUpdate: finished")
@@ -158,7 +158,7 @@ func (_d BeatmapSetWithLog) GetLatestId(ctx context.Context) (u1 uint, err error
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.GetLatestId: returned an errors")
+				Msg("store.BeatmapSet.GetLatestId: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.GetLatestId: finished")
@@ -177,7 +177,7 @@ func (_d BeatmapSetWithLog) SetFavourite(ctx context.Context, userId uint, id ui
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.SetFavourite: returned an errors")
+				Msg("store.BeatmapSet.SetFavourite: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.SetFavourite: finished")
@@ -196,7 +196,7 @@ func (_d BeatmapSetWithLog) SetUnFavourite(ctx context.Context, userId uint, id 
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.SetUnFavourite: returned an errors")
+				Msg("store.BeatmapSet.SetUnFavourite: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.SetUnFavourite: finished")
@@ -215,7 +215,7 @@ func (_d BeatmapSetWithLog) Update(ctx context.Context, id uint, from interface{
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.BeatmapSet.Update: returned an errors")
+				Msg("store.BeatmapSet.Update: returned an error")
 		} else {
 			log.Debug().
 				Msg("store.BeatmapSet.Update: finished")

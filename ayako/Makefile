@@ -57,6 +57,8 @@ SHELL_EXPORT := $(foreach v,$(MAKE_ENV),$(v)='$($(v))' )
 EXECUTABLES = wget
 _ := $(foreach exec,$(EXECUTABLES),\
         $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
+# pass all args
+args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 # ===============================================
 
 ## Clear bin folder
@@ -96,6 +98,8 @@ lint: vet fmt-check
 install:
 	@echo -e "\e[1;34m> Checking if there is any missing dependencies...\e[0m"
 	$(GOMOD) download
+	@echo -e "\e[1;34m> Installing generators and etc packages\e[0m"
+	$(GOGET) -u github.com/amacneil/dbmate
 	$(GOGET) -u github.com/google/wire/cmd/wire
 	$(GOGET) -u github.com/golang/mock/mockgen@latest
 	$(GOGET) -u github.com/hexdigest/gowrap/cmd/gowrap
@@ -144,16 +148,32 @@ help: message
 		$(MAKEFILE_LIST)
 
 ## -- Database --
+## DBMate wrap with custom ENV and disabled schema dump
 
-## Create the database (if it does not already exist) and run any pending migrations
+## Migrate all files and commit changes
+## Require CONFIG__DATABASE__DSN
 .PHONY: db-migrate
 db-migrate:
-	@dbmate --wait --env CONFIG__DATABASE__DSN --no-dump-schema -d migrations -s schema.sql up
+	@dbmate --wait --env CONFIG__DATABASE__DSN \
+	--no-dump-schema -d migrations -s schema.sql \
+	up
 
-## roll back the most recent migration
+## Rollback last changes
+## Require CONFIG__DATABASE__DSN
 .PHONY: db-rollback
 db-rollback:
-	@dbmate --wait --env CONFIG__DATABASE__DSN rollback
+	@dbmate --wait --env CONFIG__DATABASE__DSN \
+	--no-dump-schema -d migrations -s schema.sql \
+	up
+
+## Validate migrations
+## Require CONFIG__DATABASE__DSN
+.PHONY: db-status
+db-status:
+	@dbmate --wait --env CONFIG__DATABASE__DSN \
+	--no-dump-schema -d migrations -s schema.sql \
+	status
+
 
 ## -- Docker --
 
