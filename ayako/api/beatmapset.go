@@ -96,7 +96,7 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 	return c.JSON(200, struct {
 		Beatmapsets           *[]entity.BeatmapSetFull `json:"beatmapsets"`
 		RecommendedDifficulty float32                  `json:"recommended_difficulty"`
-		Error                 error                    `json:"error"`
+		Error                 error                    `json:"errors"`
 		Total                 uint                     `json:"total"`
 	}{
 		&[]entity.BeatmapSetFull{*beatmapSets},
@@ -136,7 +136,7 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid action")
 	}
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Internal error")
+		return echo.NewHTTPError(http.StatusInternalServerError, "Internal errors")
 	}
 
 	return c.JSON(http.StatusOK, struct {

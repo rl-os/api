@@ -32,7 +32,7 @@ func (_d BeatmapWithLog) Create(ctx context.Context, from interface{}) (bp1 *ent
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.Beatmap.Create: returned an error")
+				Msg("store.Beatmap.Create: returned an errors")
 		} else {
 			log.Debug().
 				Msg("store.Beatmap.Create: finished")
@@ -50,7 +50,7 @@ func (_d BeatmapWithLog) CreateBatch(ctx context.Context, from interface{}) (bap
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.Beatmap.CreateBatch: returned an error")
+				Msg("store.Beatmap.CreateBatch: returned an errors")
 		} else {
 			log.Debug().
 				Msg("store.Beatmap.CreateBatch: finished")
@@ -68,7 +68,7 @@ func (_d BeatmapWithLog) Delete(ctx context.Context, id uint) (err error) {
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.Beatmap.Delete: returned an error")
+				Msg("store.Beatmap.Delete: returned an errors")
 		} else {
 			log.Debug().
 				Msg("store.Beatmap.Delete: finished")
@@ -86,7 +86,7 @@ func (_d BeatmapWithLog) Get(ctx context.Context, id uint) (sp1 *entity.SingleBe
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.Beatmap.Get: returned an error")
+				Msg("store.Beatmap.Get: returned an errors")
 		} else {
 			log.Debug().
 				Msg("store.Beatmap.Get: finished")
@@ -118,7 +118,7 @@ func (_d BeatmapWithLog) Update(ctx context.Context, id uint, from interface{}) 
 	defer func() {
 		if err != nil {
 			log.Error().Err(err).
-				Msg("store.Beatmap.Update: returned an error")
+				Msg("store.Beatmap.Update: returned an errors")
 		} else {
 			log.Debug().
 				Msg("store.Beatmap.Update: finished")

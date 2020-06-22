@@ -71,7 +71,7 @@ func TestRevokeOAuthToken(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if err := RevokeOAuthToken(); (err != nil) != tt.wantErr {
-				t.Errorf("RevokeOAuthToken() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("RevokeOAuthToken() errors = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

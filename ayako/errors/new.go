@@ -1,11 +1,11 @@
-package error
+package errors
 
 import (
 	"fmt"
 	"github.com/pkg/errors"
 )
 
-// New - create new custom error
+// New - create new custom errors
 func New(id uint16, msg string, args ...interface{}) *Error {
 	err := Error{
 		ID:     id,
@@ -18,7 +18,7 @@ func New(id uint16, msg string, args ...interface{}) *Error {
 	return &err
 }
 
-// WithCause - create new custom error with cause
+// WithCause - create new custom errors with cause
 func WithCause(id uint16, msg string, causeErr error, args ...interface{}) *Error {
 	err := Error{
 		ID:       id,

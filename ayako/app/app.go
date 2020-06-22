@@ -6,6 +6,7 @@ import (
 	"github.com/deissh/osu-lazer/ayako/config"
 	"github.com/deissh/osu-lazer/ayako/middlewares/customlogger"
 	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
+	"github.com/deissh/osu-lazer/ayako/middlewares/reqest_context"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -16,9 +17,10 @@ import (
 )
 
 type App struct {
-	Config *config.Config
-	Store  store.Store
-	Echo   *echo.Echo
+	Config  *config.Config
+	Store   store.Store
+	Echo    *echo.Echo
+	Context context.Context
 
 	goroutineCount      int32
 	goroutineExitSignal chan struct{}
@@ -27,24 +29,31 @@ type App struct {
 // NewApp with DI
 // expect store.Store
 func NewApp(cfg *config.Config, store store.Store) *App {
+	ctx := context.Background()
+
 	e := echo.New()
 	e.HidePort = true
 	e.HideBanner = true
 
-	e.Use(middleware.RequestID())
-	e.Use(customlogger.Middleware())
-	e.Use(permission.GlobalMiddleware(cfg))
+	e.Use(
+		middleware.RequestID(),
+		customlogger.Middleware(),
+		permission.GlobalMiddleware([]byte(cfg.Server.JWTSecret)),
+		reqest_context.GlobalMiddleware(ctx),
+	)
 
-	api.New(store, e.Group("/api/v2"))
+	{ // setup routes
+		api.New(store, e.Group("/api/v2"))
+	}
 
-	s := &App{
+	app := &App{
 		Store:  store,
 		Echo:   e,
 		Config: cfg,
 	}
-	s.Config.AutoReloadCallback = s.OnConfigReload
+	app.Config.AutoReloadCallback = app.OnConfigReload
 
-	return s
+	return app
 }
 
 // Start http server and setup graceful shutdown
@@ -90,7 +99,7 @@ func (s *App) Start() error {
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(s.Context, 10*time.Second)
 	defer func() {
 		cancel()
 		s.WaitForGoroutines()
@@ -101,30 +110,18 @@ func (s *App) Start() error {
 
 func runSecurityJob(s *App) {
 	CreateRecurringTask("Security", func() {
-		doSecurity(s)
+		s.DoSecurityUpdateCheck()
 	}, time.Hour*6)
 }
 
 func runUpdateCheck(s *App) {
 	CreateRecurringTask("UpdateCheck", func() {
-		doUpdateCheck(s)
+		s.DoBeatmapSetUpdate()
 	}, time.Minute*30)
 }
 
 func runSearchNew(s *App) {
 	CreateRecurringTask("SearchNew", func() {
-		doSearchNew(s)
+		s.DoBeatmapSetSearchNew()
 	}, time.Hour)
-}
-
-func doSecurity(s *App) {
-	s.DoSecurityUpdateCheck()
-}
-
-func doUpdateCheck(s *App) {
-	s.DoBeatmapSetUpdate()
-}
-
-func doSearchNew(s *App) {
-	s.DoBeatmapSetSearchNew()
 }

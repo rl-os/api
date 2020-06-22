@@ -31,7 +31,7 @@ func TokenCreate(userID uint, clientID uint, scopes string) (*Token, error) {
 	refreshToken, err := utils.GenerateRandomString(255)
 	jwtID, err := utils.GenerateRandomString(64)
 	if err != nil {
-		return nil, echo.NewHTTPError(500, "New refresh token generate error.")
+		return nil, echo.NewHTTPError(500, "New refresh token generate errors.")
 	}
 
 	now := time.Now()
@@ -75,7 +75,7 @@ func CreateOAuthToken(userID uint, clientID uint, clientSecret string, scopes st
 
 	token, err := TokenCreate(userID, clientID, scopes)
 	if err != nil {
-		return nil, echo.NewHTTPError(500, "New access token generate error.")
+		return nil, echo.NewHTTPError(500, "New access token generate errors.")
 	}
 
 	err = pkg.Db.Get(
@@ -86,13 +86,13 @@ func CreateOAuthToken(userID uint, clientID uint, clientSecret string, scopes st
 		token.UserID, token.ClientID, token.AccessToken, token.RefreshToken, token.Scopes, token.ExpiresAt,
 	)
 	if err != nil {
-		return nil, echo.NewHTTPError(500, "Creating new access_token in database error.")
+		return nil, echo.NewHTTPError(500, "Creating new access_token in database errors.")
 	}
 
 	return token, nil
 }
 
-// RevokeOAuthToken and return error if not successfully
+// RevokeOAuthToken and return errors if not successfully
 func RevokeOAuthToken() (err error) {
 	return nil
 }
@@ -120,7 +120,7 @@ func ValidateOAuthToken(accessToken string) (*Token, error) {
 		accessToken,
 	)
 	if err != nil {
-		return nil, echo.NewHTTPError(500, "Selecting access_token in database error.")
+		return nil, echo.NewHTTPError(500, "Selecting access_token in database errors.")
 	}
 	if token.Revoked {
 		return nil, pkg.NewHTTPError(401, "oauth_token_revoked", "Access token expired")

@@ -24,7 +24,7 @@ func TestMiddleware(t *testing.T) {
 		return echo.ErrServiceUnavailable
 	})
 
-	// it must just log and return original error if exist
+	// it must just log and return original errors if exist
 	err := middleware(c)
 	assert.Equal(t, err, echo.ErrServiceUnavailable)
 }

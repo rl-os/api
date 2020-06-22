@@ -40,7 +40,7 @@ func TestAvailability_Scan(t *testing.T) {
 				MoreInformation:  "None",
 			}
 			if err := c.Scan(tt.args.value); (err != nil) != tt.wantErr {
-				t.Errorf("Scan() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Scan() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 		})
@@ -93,7 +93,7 @@ func TestAvailability_Value(t *testing.T) {
 			}
 			got, err := c.Value()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Value() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Value() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
@@ -138,7 +138,7 @@ func TestCovers_Value(t *testing.T) {
 			}
 			got, err := c.Value()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Value() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Value() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
@@ -184,7 +184,7 @@ func TestCurrentUserAttributes_Scan(t *testing.T) {
 				RemainingHype: tt.fields.RemainingHype,
 			}
 			if err := c.Scan(tt.args.value); (err != nil) != tt.wantErr {
-				t.Errorf("Scan() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Scan() errors = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -221,7 +221,7 @@ func TestCurrentUserAttributes_Value(t *testing.T) {
 			}
 			got, err := c.Value()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Value() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Value() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
@@ -252,7 +252,7 @@ func TestDescription_Scan(t *testing.T) {
 				Description: tt.fields.Description,
 			}
 			if err := c.Scan(tt.args.value); (err != nil) != tt.wantErr {
-				t.Errorf("Scan() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Scan() errors = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -277,7 +277,7 @@ func TestDescription_Value(t *testing.T) {
 			}
 			got, err := c.Value()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Value() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Value() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
@@ -310,7 +310,7 @@ func TestGenre_Scan(t *testing.T) {
 				Name: tt.fields.Name,
 			}
 			if err := c.Scan(tt.args.value); (err != nil) != tt.wantErr {
-				t.Errorf("Scan() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Scan() errors = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -337,7 +337,7 @@ func TestGenre_Value(t *testing.T) {
 			}
 			got, err := c.Value()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Value() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Value() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
@@ -370,7 +370,7 @@ func TestHype_Scan(t *testing.T) {
 				Required: tt.fields.Required,
 			}
 			if err := c.Scan(tt.args.value); (err != nil) != tt.wantErr {
-				t.Errorf("Scan() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Scan() errors = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -397,7 +397,7 @@ func TestHype_Value(t *testing.T) {
 			}
 			got, err := c.Value()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Value() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Value() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
@@ -450,7 +450,7 @@ func TestUser_Scan(t *testing.T) {
 				PmFriendsOnly: tt.fields.PmFriendsOnly,
 			}
 			if err := c.Scan(tt.args.value); (err != nil) != tt.wantErr {
-				t.Errorf("Scan() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Scan() errors = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -497,7 +497,7 @@ func TestUser_Value(t *testing.T) {
 			}
 			got, err := c.Value()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Value() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Value() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {

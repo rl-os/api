@@ -2,7 +2,6 @@ package permission
 
 import (
 	"errors"
-	"github.com/deissh/osu-lazer/ayako/config"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -29,16 +28,16 @@ func keyFromHeader(header string) func(echo.Context) (string, error) {
 }
 
 // GlobalMiddleware check access_token
-func GlobalMiddleware(cfg *config.Config) echo.MiddlewareFunc {
+func GlobalMiddleware(jwtSecret []byte) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			extractor := keyFromHeader(echo.HeaderAuthorization)
 
-			// check token and write to context if user send one
+			// check token and write to reqest_context if user send one
 			if key, err := extractor(c); err == nil {
 				claims := jwt.MapClaims{}
 				token, err := jwt.ParseWithClaims(key, &claims, func(token *jwt.Token) (interface{}, error) {
-					return []byte(cfg.Server.JWTSecret), nil
+					return jwtSecret, nil
 				})
 				if err != nil {
 					return echo.NewHTTPError(http.StatusUnauthorized, "Invalid token")

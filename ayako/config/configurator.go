@@ -35,7 +35,7 @@ func (c *Config) GetEnvironment() string {
 	}
 }
 
-// GetErrorOnUnmatchedKeys returns a boolean indicating if an error should be
+// GetErrorOnUnmatchedKeys returns a boolean indicating if an errors should be
 // thrown if there are keys in the config file that do not correspond to the
 // config struct
 func (c *Config) GetErrorOnUnmatchedKeys() bool {

@@ -63,6 +63,101 @@ func (mr *MockStoreMockRecorder) BeatmapSet() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeatmapSet", reflect.TypeOf((*MockStore)(nil).BeatmapSet))
 }
 
+// MockOAuth is a mock of OAuth interface
+type MockOAuth struct {
+	ctrl     *gomock.Controller
+	recorder *MockOAuthMockRecorder
+}
+
+// MockOAuthMockRecorder is the mock recorder for MockOAuth
+type MockOAuthMockRecorder struct {
+	mock *MockOAuth
+}
+
+// NewMockOAuth creates a new mock instance
+func NewMockOAuth(ctrl *gomock.Controller) *MockOAuth {
+	mock := &MockOAuth{ctrl: ctrl}
+	mock.recorder = &MockOAuthMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockOAuth) EXPECT() *MockOAuthMockRecorder {
+	return m.recorder
+}
+
+// CreateClient mocks base method
+func (m *MockOAuth) CreateClient(ctx context.Context, name, redirect string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "CreateClient", ctx, name, redirect)
+}
+
+// CreateClient indicates an expected call of CreateClient
+func (mr *MockOAuthMockRecorder) CreateClient(ctx, name, redirect interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateClient", reflect.TypeOf((*MockOAuth)(nil).CreateClient), ctx, name, redirect)
+}
+
+// GetClient mocks base method
+func (m *MockOAuth) GetClient(ctx context.Context, id uint) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "GetClient", ctx, id)
+}
+
+// GetClient indicates an expected call of GetClient
+func (mr *MockOAuthMockRecorder) GetClient(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetClient", reflect.TypeOf((*MockOAuth)(nil).GetClient), ctx, id)
+}
+
+// CreateToken mocks base method
+func (m *MockOAuth) CreateToken(ctx context.Context, userId, clientID uint, clientSecret, scopes string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "CreateToken", ctx, userId, clientID, clientSecret, scopes)
+}
+
+// CreateToken indicates an expected call of CreateToken
+func (mr *MockOAuthMockRecorder) CreateToken(ctx, userId, clientID, clientSecret, scopes interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateToken", reflect.TypeOf((*MockOAuth)(nil).CreateToken), ctx, userId, clientID, clientSecret, scopes)
+}
+
+// RevokeToken mocks base method
+func (m *MockOAuth) RevokeToken(ctx context.Context, userId uint, accessToken string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "RevokeToken", ctx, userId, accessToken)
+}
+
+// RevokeToken indicates an expected call of RevokeToken
+func (mr *MockOAuthMockRecorder) RevokeToken(ctx, userId, accessToken interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RevokeToken", reflect.TypeOf((*MockOAuth)(nil).RevokeToken), ctx, userId, accessToken)
+}
+
+// RefreshToken mocks base method
+func (m *MockOAuth) RefreshToken(ctx context.Context, refreshToken string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "RefreshToken", ctx, refreshToken)
+}
+
+// RefreshToken indicates an expected call of RefreshToken
+func (mr *MockOAuthMockRecorder) RefreshToken(ctx, refreshToken interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RefreshToken", reflect.TypeOf((*MockOAuth)(nil).RefreshToken), ctx, refreshToken)
+}
+
+// ValidateToken mocks base method
+func (m *MockOAuth) ValidateToken(ctx context.Context, accessToken string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "ValidateToken", ctx, accessToken)
+}
+
+// ValidateToken indicates an expected call of ValidateToken
+func (mr *MockOAuthMockRecorder) ValidateToken(ctx, accessToken interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidateToken", reflect.TypeOf((*MockOAuth)(nil).ValidateToken), ctx, accessToken)
+}
+
 // MockBeatmap is a mock of Beatmap interface
 type MockBeatmap struct {
 	ctrl     *gomock.Controller

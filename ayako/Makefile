@@ -111,32 +111,32 @@ install:
 ## Which can also be multiline
 .PHONY: help
 help: message
-	@printf "Usage\n";
+	@printf " Usage\n";
 
 	@awk '{ \
 			if ($$0 ~ /^.PHONY: [a-zA-Z\-\_0-9]+$$/) { \
 				helpCommand = substr($$0, index($$0, ":") + 2); \
 				if (helpMessage) { \
-					printf "\033[36m%-20s\033[0m %s\n", \
+					printf " \033[36m%-20s\033[0m %s\n", \
 						helpCommand, helpMessage; \
 					helpMessage = ""; \
 				} \
 			} else if ($$0 ~ /^[a-zA-Z\-\_0-9.]+:/) { \
 				helpCommand = substr($$0, 0, index($$0, ":")); \
 				if (helpMessage) { \
-					printf "\033[36m%-20s\033[0m %s\n", \
+					printf "  \033[36m%-20s\033[0m %s\n", \
 						helpCommand, helpMessage; \
 					helpMessage = ""; \
 				} \
 			} else if ($$0 ~ /^##/) { \
 				if (helpMessage) { \
-					helpMessage = helpMessage"\n                     "substr($$0, 3); \
+					helpMessage = helpMessage"\n                      "substr($$0, 3); \
 				} else { \
 					helpMessage = substr($$0, 3); \
 				} \
 			} else { \
 				if (helpMessage) { \
-					print "\n                     "helpMessage"\n" \
+					print "\n\n                      "helpMessage"\n" \
 				} \
 				helpMessage = ""; \
 			} \
@@ -177,7 +177,7 @@ chglog:
 .PHONY: message
 message:
 	@clear
-	@echo -e "\033[36m\n                                        \033[0m _                   _         \033[36m\n        _.====.._                    \033[0m   /_\    _  _   __ _  | |__  ___ \033[36m\n     ,:.         ~-_                 \033[0m  / _ \  | || | / _\` | | / / / _ \ \033[36m\n         \`\        ~-_               \033[0m /_/ \_\  \_, | \__,_| |_\_\ \___/\033[36m\n           |          \`.              \033[0m         |__/                    \033[36m\n         ,/             ~-_          \033[0mBeatmap slave database and storage\033[36m\n-..__..-''                 ~~--..__...----...--.....---.....--....---..\033[0m\n\n                                                      https://risu.life\n                                    https://github.com/deissh/osu-lazer\n\n                                                      2019-2020, deissh\n\n"
+	@echo -e "\033[36m\n                                        \033[0m _                   _         \033[36m\n        _.====.._                    \033[0m   /_\    _  _   __ _  | |__  ___ \033[36m\n     ,:.         ~-_                 \033[0m  / _ \  | || | / _\` | | / / / _ \ \033[36m\n         \`\        ~-_               \033[0m /_/ \_\  \_, | \__,_| |_\_\ \___/\033[36m\n           |          \`.              \033[0m         |__/                    \033[36m\n         ,/             ~-_                        \033[0mOAuth and API server\033[36m\n-..__..-''                 ~~--..__...----...--.....---.....--....---..\033[0m\n\n                                                      https://risu.life\n                                    https://github.com/deissh/osu-lazer\n\n                                                      2019-2020, deissh\n\n"
 
 
 ## -- Go commands --
