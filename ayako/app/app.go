@@ -47,9 +47,10 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 	}
 
 	app := &App{
-		Store:  store,
-		Echo:   e,
-		Config: cfg,
+		Store:   store,
+		Echo:    e,
+		Config:  cfg,
+		Context: ctx,
 	}
 	app.Config.AutoReloadCallback = app.OnConfigReload
 
