@@ -15,7 +15,7 @@ const (
 var (
 	emptyReqIdErr     = errors.New(1101, "empty requestId")
 	emptyUserIdErr    = errors.New(1102, "empty userId")
-	emptyUserTokenErr = errors.New(1102, "empty userToken")
+	emptyUserTokenErr = errors.New(1103, "empty userToken")
 )
 
 type PipeFunc func(ctx context.Context) context.Context

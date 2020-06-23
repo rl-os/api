@@ -8,7 +8,7 @@ create table oauth_token
     access_token  varchar                             not null,
     refresh_token varchar                             not null,
     scopes        varchar                             not null,
-    revoked       boolean default false               not null,
+    revoked       boolean   default false             not null,
     expires_at    timestamp                           not null,
     created_at    timestamp default CURRENT_TIMESTAMP not null
 );

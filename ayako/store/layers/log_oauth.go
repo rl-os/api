@@ -7,6 +7,7 @@ package layers
 import (
 	"context"
 
+	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/rs/zerolog/log"
 )
@@ -23,22 +24,26 @@ func NewOAuthWithLog(base store.OAuth) store.OAuth {
 }
 
 // CreateClient implements store.OAuth
-func (_d OAuthWithLog) CreateClient(ctx context.Context, name string, redirect string) {
+func (_d OAuthWithLog) CreateClient(ctx context.Context, name string, redirect string) (op1 *entity.OAuthClient, err error) {
 	log.Debug().
 		Interface("ctx", ctx).
 		Interface("name", name).
 		Interface("redirect", redirect).
 		Msg("store.OAuth.CreateClient: calling")
 	defer func() {
-		log.Debug().
-			Msg("store.OAuth.CreateClient: finished")
+		if err != nil {
+			log.Error().Err(err).
+				Msg("store.OAuth.CreateClient: returned an error")
+		} else {
+			log.Debug().
+				Msg("store.OAuth.CreateClient: finished")
+		}
 	}()
-	_d._base.CreateClient(ctx, name, redirect)
-	return
+	return _d._base.CreateClient(ctx, name, redirect)
 }
 
 // CreateToken implements store.OAuth
-func (_d OAuthWithLog) CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) {
+func (_d OAuthWithLog) CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (op1 *entity.OAuthToken, err error) {
 	log.Debug().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
@@ -47,66 +52,86 @@ func (_d OAuthWithLog) CreateToken(ctx context.Context, userId uint, clientID ui
 		Interface("scopes", scopes).
 		Msg("store.OAuth.CreateToken: calling")
 	defer func() {
-		log.Debug().
-			Msg("store.OAuth.CreateToken: finished")
+		if err != nil {
+			log.Error().Err(err).
+				Msg("store.OAuth.CreateToken: returned an error")
+		} else {
+			log.Debug().
+				Msg("store.OAuth.CreateToken: finished")
+		}
 	}()
-	_d._base.CreateToken(ctx, userId, clientID, clientSecret, scopes)
-	return
+	return _d._base.CreateToken(ctx, userId, clientID, clientSecret, scopes)
 }
 
 // GetClient implements store.OAuth
-func (_d OAuthWithLog) GetClient(ctx context.Context, id uint) {
+func (_d OAuthWithLog) GetClient(ctx context.Context, id uint) (op1 *entity.OAuthClient, err error) {
 	log.Debug().
 		Interface("ctx", ctx).
 		Interface("id", id).
 		Msg("store.OAuth.GetClient: calling")
 	defer func() {
-		log.Debug().
-			Msg("store.OAuth.GetClient: finished")
+		if err != nil {
+			log.Error().Err(err).
+				Msg("store.OAuth.GetClient: returned an error")
+		} else {
+			log.Debug().
+				Msg("store.OAuth.GetClient: finished")
+		}
 	}()
-	_d._base.GetClient(ctx, id)
-	return
+	return _d._base.GetClient(ctx, id)
 }
 
 // RefreshToken implements store.OAuth
-func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string) {
+func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string) (op1 *entity.OAuthToken, err error) {
 	log.Debug().
 		Interface("ctx", ctx).
 		Interface("refreshToken", refreshToken).
 		Msg("store.OAuth.RefreshToken: calling")
 	defer func() {
-		log.Debug().
-			Msg("store.OAuth.RefreshToken: finished")
+		if err != nil {
+			log.Error().Err(err).
+				Msg("store.OAuth.RefreshToken: returned an error")
+		} else {
+			log.Debug().
+				Msg("store.OAuth.RefreshToken: finished")
+		}
 	}()
-	_d._base.RefreshToken(ctx, refreshToken)
-	return
+	return _d._base.RefreshToken(ctx, refreshToken)
 }
 
 // RevokeToken implements store.OAuth
-func (_d OAuthWithLog) RevokeToken(ctx context.Context, userId uint, accessToken string) {
+func (_d OAuthWithLog) RevokeToken(ctx context.Context, userId uint, accessToken string) (err error) {
 	log.Debug().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("accessToken", accessToken).
 		Msg("store.OAuth.RevokeToken: calling")
 	defer func() {
-		log.Debug().
-			Msg("store.OAuth.RevokeToken: finished")
+		if err != nil {
+			log.Error().Err(err).
+				Msg("store.OAuth.RevokeToken: returned an error")
+		} else {
+			log.Debug().
+				Msg("store.OAuth.RevokeToken: finished")
+		}
 	}()
-	_d._base.RevokeToken(ctx, userId, accessToken)
-	return
+	return _d._base.RevokeToken(ctx, userId, accessToken)
 }
 
 // ValidateToken implements store.OAuth
-func (_d OAuthWithLog) ValidateToken(ctx context.Context, accessToken string) {
+func (_d OAuthWithLog) ValidateToken(ctx context.Context, accessToken string) (err error) {
 	log.Debug().
 		Interface("ctx", ctx).
 		Interface("accessToken", accessToken).
 		Msg("store.OAuth.ValidateToken: calling")
 	defer func() {
-		log.Debug().
-			Msg("store.OAuth.ValidateToken: finished")
+		if err != nil {
+			log.Error().Err(err).
+				Msg("store.OAuth.ValidateToken: returned an error")
+		} else {
+			log.Debug().
+				Msg("store.OAuth.ValidateToken: finished")
+		}
 	}()
-	_d._base.ValidateToken(ctx, accessToken)
-	return
+	return _d._base.ValidateToken(ctx, accessToken)
 }

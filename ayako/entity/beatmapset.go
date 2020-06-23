@@ -39,7 +39,7 @@ type BeatmapSet struct {
 	Description       Description  `json:"description" db:"description"`
 	Genre             Genre        `json:"genre" db:"genre"`
 	Language          Genre        `json:"language" db:"language"`
-	User              User         `json:"user" db:"user"`
+	User              UserShort    `json:"user" db:"user"`
 }
 
 type BeatmapSetFull struct {
@@ -110,24 +110,6 @@ type Hype struct {
 
 func (c Hype) Value() (driver.Value, error)  { return utils.ValueOfStruct(c) }
 func (c *Hype) Scan(value interface{}) error { return utils.ScanToStruct(c, value) }
-
-type User struct {
-	ID            int64        `json:"id"`
-	Username      string       `json:"username"`
-	ProfileColour interface{}  `json:"profile_colour" mapstructure:"profile_colour"`
-	AvatarURL     string       `json:"avatar_url" mapstructure:"avatar_url"`
-	CountryCode   string       `json:"country_code" mapstructure:"country_code"`
-	DefaultGroup  DefaultGroup `json:"default_group"`
-	IsActive      bool         `json:"is_active"`
-	IsBot         bool         `json:"is_bot"`
-	IsOnline      bool         `json:"is_online"`
-	IsSupporter   bool         `json:"is_supporter"`
-	LastVisit     *string      `json:"last_visit" mapstructure:"last_visit"`
-	PmFriendsOnly bool         `json:"pm_friends_only"`
-}
-
-func (c User) Value() (driver.Value, error)  { return utils.ValueOfStruct(c) }
-func (c *User) Scan(value interface{}) error { return utils.ScanToStruct(c, value) }
 
 type DefaultGroup string
 

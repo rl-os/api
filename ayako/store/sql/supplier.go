@@ -13,6 +13,7 @@ import (
 type SupplierStores struct {
 	beatmap    store.Beatmap
 	beatmapSet store.BeatmapSet
+	user       store.User
 }
 
 type Supplier struct {
@@ -38,6 +39,9 @@ func Init(cfg *config.Config, osuClient *osu.OsuAPI) store.Store {
 	)
 	supplier.stores.beatmapSet = layers.NewBeatmapSetWithLog(
 		newSqlBeatmapSetStore(supplier),
+	)
+	supplier.stores.user = layers.NewUserWithLog(
+		newSqlUserStore(supplier),
 	)
 
 	return supplier
@@ -75,3 +79,4 @@ func (ss *Supplier) GetOsuClient() *osu.OsuAPI { return ss.osuClient }
 
 func (ss *Supplier) Beatmap() store.Beatmap       { return ss.stores.beatmap }
 func (ss *Supplier) BeatmapSet() store.BeatmapSet { return ss.stores.beatmapSet }
+func (ss *Supplier) User() store.User             { return ss.stores.user }
