@@ -7,7 +7,9 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/deissh/go-utils v1.1.0
 	github.com/deissh/osu-go-client v1.1.3
+	github.com/deissh/osu-lazer/api v0.0.0-20200605195236-da50f7d02796
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/go-playground/validator/v10 v10.3.0
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golang/mock v1.4.3
 	github.com/google/wire v0.4.0
@@ -22,7 +24,7 @@ require (
 	github.com/stretchr/testify v1.6.0
 	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9 // indirect
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect
-	golang.org/x/sys v0.0.0-20200620081246-981b61492c35 // indirect
+	golang.org/x/sys v0.0.0-20200622214017-ed371f2e16b4 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v2 v2.3.0
 )

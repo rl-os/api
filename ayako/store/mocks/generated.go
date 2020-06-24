@@ -556,18 +556,18 @@ func (mr *MockUserMockRecorder) ComputeFields(ctx, user interface{}) *gomock.Cal
 }
 
 // Create mocks base method
-func (m *MockUser) Create(ctx context.Context, from interface{}) (*entity.UserShort, error) {
+func (m *MockUser) Create(ctx context.Context, name, email, pwd string) (*entity.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", ctx, from)
-	ret0, _ := ret[0].(*entity.UserShort)
+	ret := m.ctrl.Call(m, "Create", ctx, name, email, pwd)
+	ret0, _ := ret[0].(*entity.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Create indicates an expected call of Create
-func (mr *MockUserMockRecorder) Create(ctx, from interface{}) *gomock.Call {
+func (mr *MockUserMockRecorder) Create(ctx, name, email, pwd interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUser)(nil).Create), ctx, from)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUser)(nil).Create), ctx, name, email, pwd)
 }
 
 // Update mocks base method

@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"github.com/deissh/osu-lazer/ayako/api"
+	api_oauth "github.com/deissh/osu-lazer/ayako/api-oauth"
 	"github.com/deissh/osu-lazer/ayako/config"
 	"github.com/deissh/osu-lazer/ayako/middlewares/customlogger"
 	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
@@ -44,6 +45,7 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 
 	{ // setup routes
 		api.New(store, e.Group("/api/v2"))
+		api_oauth.New(store, e.Group(""))
 	}
 
 	app := &App{

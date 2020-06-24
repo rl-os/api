@@ -1,4 +1,4 @@
-package api
+package api_oauth
 
 import (
 	"github.com/deissh/osu-lazer/ayako/store"
@@ -6,21 +6,18 @@ import (
 )
 
 type Routes struct {
-	Beatmaps    *echo.Group
-	BeatmapSets *echo.Group
-	Me          *echo.Group
+	Token        *echo.Group
+	Registration *echo.Group
 }
 
 func New(store store.Store, prefix *echo.Group) {
 	api := Routes{}
 
-	api.Beatmaps = prefix.Group("/beatmaps")
-	api.BeatmapSets = prefix.Group("/beatmapsets")
-	api.Me = prefix.Group("/me")
+	api.Token = prefix.Group("/oauth/token")
+	api.Registration = prefix.Group("/users")
 
-	api.InitBeatmaps(store)
-	api.InitBeatmapSet(store)
-	api.InitMe(store)
+	api.InitToken(store)
+	api.InitRegistration(store)
 }
 
 func empty(c echo.Context) (err error) {

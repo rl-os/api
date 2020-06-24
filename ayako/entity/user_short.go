@@ -1,8 +1,6 @@
 package entity
 
 import (
-	"database/sql/driver"
-	"github.com/deissh/go-utils"
 	"time"
 )
 
@@ -27,5 +25,5 @@ type UserShort struct {
 	SupportExpiredAt time.Time `json:"-" db:"support_expired_at"`
 }
 
-func (u UserShort) Value() (driver.Value, error)  { return utils.ValueOfStruct(u) }
-func (u *UserShort) Scan(value interface{}) error { return utils.ScanToStruct(u, value) }
+//func (u UserShort) Value() (driver.Value, error)  { return utils.ValueOfStruct(u) }
+//func (u *UserShort) Scan(value interface{}) error { return utils.ScanToStruct(u, value) }

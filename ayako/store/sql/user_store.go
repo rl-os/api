@@ -2,8 +2,10 @@ package sql
 
 import (
 	"context"
+	"fmt"
 	"github.com/deissh/go-utils"
 	"github.com/deissh/osu-lazer/ayako/entity"
+	"github.com/deissh/osu-lazer/ayako/errors"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"time"
 )
@@ -19,12 +21,10 @@ func newSqlUserStore(sqlStore SqlStore) store.User {
 }
 
 func (u UserStore) Get(ctx context.Context, userId uint, mode string) (*entity.User, error) {
-	var user entity.User
-
 	if !utils.ContainsString(modes, mode) {
 		mode = "std"
 	}
-	user.Mode = mode
+	user := entity.User{Mode: mode}
 
 	err := u.GetMaster().GetContext(
 		ctx,
@@ -47,8 +47,50 @@ func (u UserStore) GetShort(ctx context.Context, userId uint, mode string) (*ent
 	panic("implement me")
 }
 
-func (u UserStore) Create(ctx context.Context, from interface{}) (*entity.UserShort, error) {
-	panic("implement me")
+func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity.User, error) {
+	var baseUser entity.User
+
+	now := time.Now()
+
+	hashed, err := utils.GetHash(pwd)
+	if err != nil {
+		return nil, errors.WithCause(1005, "hashing password", err)
+	}
+
+	tx := u.GetMaster().MustBeginTx(ctx, nil)
+	{ // begin transaction
+		err = tx.GetContext(
+			ctx,
+			&baseUser,
+			`INSERT INTO users (username, email, password_hash)
+			VALUES ($1, $2, $3)
+			RETURNING *, check_online(last_visit)`,
+			name, email, hashed,
+		)
+		if err != nil {
+			return nil, errors.WithCause(1006, "creating user", err)
+		}
+
+		// creating default records
+		tx.MustExecContext(
+			ctx,
+			`INSERT INTO user_month_playcount (user_id, playcount, year_month) VALUES ($1, 0, $2)`,
+			baseUser.ID,
+			fmt.Sprintf("%02d-%02d-01", now.Year(), now.Month()),
+		)
+		tx.MustExecContext(
+			ctx,
+			`INSERT INTO user_statistics (user_id) VALUES ($1)`,
+			baseUser.ID,
+		)
+	} // end transaction
+
+	err = tx.Commit()
+	if err != nil {
+		return nil, errors.WithCause(1007, "creating user", err)
+	}
+
+	return u.User().ComputeFields(ctx, baseUser)
 }
 
 func (u UserStore) Update(ctx context.Context, userId uint, from interface{}) (*entity.UserShort, error) {

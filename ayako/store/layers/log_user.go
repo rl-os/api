@@ -80,10 +80,12 @@ func (_d UserWithLog) ComputeFields(ctx context.Context, user entity.User) (up1 
 }
 
 // Create implements store.User
-func (_d UserWithLog) Create(ctx context.Context, from interface{}) (up1 *entity.UserShort, err error) {
+func (_d UserWithLog) Create(ctx context.Context, name string, email string, pwd string) (up1 *entity.User, err error) {
 	log.Debug().
 		Interface("ctx", ctx).
-		Interface("from", from).
+		Interface("name", name).
+		Interface("email", email).
+		Interface("pwd", pwd).
 		Msg("store.User.Create: calling")
 	defer func() {
 		if err != nil {
@@ -94,7 +96,7 @@ func (_d UserWithLog) Create(ctx context.Context, from interface{}) (up1 *entity
 				Msg("store.User.Create: finished")
 		}
 	}()
-	return _d._base.Create(ctx, from)
+	return _d._base.Create(ctx, name, email, pwd)
 }
 
 // Deactivate implements store.User

@@ -40,7 +40,7 @@ func GlobalMiddleware(jwtSecret []byte) echo.MiddlewareFunc {
 					return jwtSecret, nil
 				})
 				if err != nil {
-					return echo.NewHTTPError(http.StatusUnauthorized, "Invalid token")
+					return next(c)
 				}
 
 				userId, err := strconv.ParseUint(claims["sub"].(string), 10, 32)

@@ -59,7 +59,7 @@ type User interface {
 	Get(ctx context.Context, userId uint, mode string) (*entity.User, error)
 	GetShort(ctx context.Context, userId uint, mode string) (*entity.UserShort, error)
 	ComputeFields(ctx context.Context, user entity.User) (*entity.User, error)
-	Create(ctx context.Context, from interface{}) (*entity.UserShort, error)
+	Create(ctx context.Context, name, email, pwd string) (*entity.User, error)
 	Update(ctx context.Context, userId uint, from interface{}) (*entity.UserShort, error)
 
 	Activate(ctx context.Context, userId uint) error
