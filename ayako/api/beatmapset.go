@@ -96,7 +96,7 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 	return c.JSON(200, struct {
 		Beatmapsets           *[]entity.BeatmapSetFull `json:"beatmapsets"`
 		RecommendedDifficulty float32                  `json:"recommended_difficulty"`
-		Error                 error                    `json:"errors"`
+		Error                 error                    `json:"error"`
 		Total                 uint                     `json:"total"`
 	}{
 		&[]entity.BeatmapSetFull{*beatmapSets},

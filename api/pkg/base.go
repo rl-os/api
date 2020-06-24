@@ -3,7 +3,7 @@ package pkg
 // ErrorResponse default struct for errors
 type ErrorResponse struct {
 	// contain short, unique errors
-	ErrorID string `json:"errors"`
+	ErrorID string `json:"error"`
 	// full description about errors
 	ErrorDescription string `json:"error_description"`
 	// addition information
