@@ -20,6 +20,28 @@ func newSqlUserStore(sqlStore SqlStore) store.User {
 	return &UserStore{sqlStore}
 }
 
+func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.UserShort, error) {
+	var baseUser entity.User
+
+	err := u.GetMaster().GetContext(
+		ctx,
+		&baseUser,
+		`SELECT *, check_online(last_visit)
+		FROM users
+		WHERE username = $1 OR email = $1`,
+		login,
+	)
+	if err != nil {
+		return nil, errors.WithCause(401, "the user credentials were incorrect", err)
+	}
+
+	if ok := utils.CompareHash(baseUser.PasswordHash, pwd); !ok {
+		return nil, errors.New(401, "The user credentials were incorrect.")
+	}
+
+	return baseUser.GetShort(), nil
+}
+
 func (u UserStore) Get(ctx context.Context, userId uint, mode string) (*entity.User, error) {
 	if !utils.ContainsString(modes, mode) {
 		mode = "std"

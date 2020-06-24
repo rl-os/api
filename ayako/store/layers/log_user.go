@@ -136,6 +136,25 @@ func (_d UserWithLog) Get(ctx context.Context, userId uint, mode string) (up1 *e
 	return _d._base.Get(ctx, userId, mode)
 }
 
+// GetByBasic implements store.User
+func (_d UserWithLog) GetByBasic(ctx context.Context, login string, pwd string) (up1 *entity.UserShort, err error) {
+	log.Debug().
+		Interface("ctx", ctx).
+		Interface("login", login).
+		Interface("pwd", pwd).
+		Msg("store.User.GetByBasic: calling")
+	defer func() {
+		if err != nil {
+			log.Error().Err(err).
+				Msg("store.User.GetByBasic: returned an error")
+		} else {
+			log.Debug().
+				Msg("store.User.GetByBasic: finished")
+		}
+	}()
+	return _d._base.GetByBasic(ctx, login, pwd)
+}
+
 // GetShort implements store.User
 func (_d UserWithLog) GetShort(ctx context.Context, userId uint, mode string) (up1 *entity.UserShort, err error) {
 	log.Debug().

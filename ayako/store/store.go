@@ -13,7 +13,7 @@ import (
 )
 
 type Store interface {
-	//OAuth() OAuth
+	OAuth() OAuth
 	Beatmap() Beatmap
 	BeatmapSet() BeatmapSet
 	User() User
@@ -21,7 +21,7 @@ type Store interface {
 
 type OAuth interface {
 	CreateClient(ctx context.Context, name string, redirect string) (*entity.OAuthClient, error)
-	GetClient(ctx context.Context, id uint) (*entity.OAuthClient, error)
+	GetClient(ctx context.Context, id uint, secret string) (*entity.OAuthClient, error)
 
 	CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (*entity.OAuthToken, error)
 	RevokeToken(ctx context.Context, userId uint, accessToken string) error
@@ -58,6 +58,7 @@ type BeatmapSet interface {
 type User interface {
 	Get(ctx context.Context, userId uint, mode string) (*entity.User, error)
 	GetShort(ctx context.Context, userId uint, mode string) (*entity.UserShort, error)
+	GetByBasic(ctx context.Context, login, pwd string) (*entity.UserShort, error)
 	ComputeFields(ctx context.Context, user entity.User) (*entity.User, error)
 	Create(ctx context.Context, name, email, pwd string) (*entity.User, error)
 	Update(ctx context.Context, userId uint, from interface{}) (*entity.UserShort, error)

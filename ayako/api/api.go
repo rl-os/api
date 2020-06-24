@@ -22,9 +22,3 @@ func New(store store.Store, prefix *echo.Group) {
 	api.InitBeatmapSet(store)
 	api.InitMe(store)
 }
-
-func empty(c echo.Context) (err error) {
-	return c.JSON(200, map[string]string{
-		"message": "I'm alive!",
-	})
-}

@@ -36,6 +36,20 @@ func (m *MockStore) EXPECT() *MockStoreMockRecorder {
 	return m.recorder
 }
 
+// OAuth mocks base method
+func (m *MockStore) OAuth() store.OAuth {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "OAuth")
+	ret0, _ := ret[0].(store.OAuth)
+	return ret0
+}
+
+// OAuth indicates an expected call of OAuth
+func (mr *MockStoreMockRecorder) OAuth() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "OAuth", reflect.TypeOf((*MockStore)(nil).OAuth))
+}
+
 // Beatmap mocks base method
 func (m *MockStore) Beatmap() store.Beatmap {
 	m.ctrl.T.Helper()
@@ -117,18 +131,18 @@ func (mr *MockOAuthMockRecorder) CreateClient(ctx, name, redirect interface{}) *
 }
 
 // GetClient mocks base method
-func (m *MockOAuth) GetClient(ctx context.Context, id uint) (*entity.OAuthClient, error) {
+func (m *MockOAuth) GetClient(ctx context.Context, id uint, secret string) (*entity.OAuthClient, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetClient", ctx, id)
+	ret := m.ctrl.Call(m, "GetClient", ctx, id, secret)
 	ret0, _ := ret[0].(*entity.OAuthClient)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetClient indicates an expected call of GetClient
-func (mr *MockOAuthMockRecorder) GetClient(ctx, id interface{}) *gomock.Call {
+func (mr *MockOAuthMockRecorder) GetClient(ctx, id, secret interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetClient", reflect.TypeOf((*MockOAuth)(nil).GetClient), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetClient", reflect.TypeOf((*MockOAuth)(nil).GetClient), ctx, id, secret)
 }
 
 // CreateToken mocks base method
@@ -538,6 +552,21 @@ func (m *MockUser) GetShort(ctx context.Context, userId uint, mode string) (*ent
 func (mr *MockUserMockRecorder) GetShort(ctx, userId, mode interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetShort", reflect.TypeOf((*MockUser)(nil).GetShort), ctx, userId, mode)
+}
+
+// GetByBasic mocks base method
+func (m *MockUser) GetByBasic(ctx context.Context, login, pwd string) (*entity.UserShort, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByBasic", ctx, login, pwd)
+	ret0, _ := ret[0].(*entity.UserShort)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByBasic indicates an expected call of GetByBasic
+func (mr *MockUserMockRecorder) GetByBasic(ctx, login, pwd interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByBasic", reflect.TypeOf((*MockUser)(nil).GetByBasic), ctx, login, pwd)
 }
 
 // ComputeFields mocks base method

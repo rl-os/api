@@ -14,10 +14,12 @@ type SupplierStores struct {
 	beatmap    store.Beatmap
 	beatmapSet store.BeatmapSet
 	user       store.User
+	oauth      store.OAuth
 }
 
 type Supplier struct {
 	master *sqlx.DB
+	cfg    *config.Config
 
 	osuClient *osu.OsuAPI
 
@@ -29,6 +31,7 @@ type Supplier struct {
 func Init(cfg *config.Config, osuClient *osu.OsuAPI) store.Store {
 	log.Debug().Msg("Creating new SQL store")
 	supplier := &Supplier{
+		cfg:       cfg,
 		osuClient: osuClient,
 	}
 
@@ -42,6 +45,9 @@ func Init(cfg *config.Config, osuClient *osu.OsuAPI) store.Store {
 	)
 	supplier.stores.user = layers.NewUserWithLog(
 		newSqlUserStore(supplier),
+	)
+	supplier.stores.oauth = layers.NewOAuthWithLog(
+		newSqlOAuthStore(supplier),
 	)
 
 	return supplier
@@ -73,10 +79,12 @@ func (ss *Supplier) initConnection(cfg *config.Config) {
 		Msg("master database connected")
 }
 
-func (ss *Supplier) GetMaster() *sqlx.DB { return ss.master }
+func (ss *Supplier) GetMaster() *sqlx.DB       { return ss.master }
+func (ss *Supplier) GetConfig() *config.Config { return ss.cfg }
 
 func (ss *Supplier) GetOsuClient() *osu.OsuAPI { return ss.osuClient }
 
 func (ss *Supplier) Beatmap() store.Beatmap       { return ss.stores.beatmap }
 func (ss *Supplier) BeatmapSet() store.BeatmapSet { return ss.stores.beatmapSet }
 func (ss *Supplier) User() store.User             { return ss.stores.user }
+func (ss *Supplier) OAuth() store.OAuth           { return ss.stores.oauth }

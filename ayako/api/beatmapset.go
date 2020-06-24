@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	myctx "github.com/deissh/osu-lazer/ayako/ctx"
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
 	"github.com/deissh/osu-lazer/ayako/store"
@@ -53,12 +54,7 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 		return err
 	}
 
-	ctx := context.Background()
-
-	userId, ok := c.Get("current_user_id").(uint)
-	if ok {
-		ctx = context.WithValue(context.Background(), "current_user_id", userId)
-	}
+	ctx, _ := c.Get("context").(context.Context)
 
 	beatmap, err := h.Store.Beatmap().Get(ctx, params.Id)
 	if err != nil {
@@ -119,11 +115,11 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 		return err
 	}
 
-	ctx := context.Background()
+	ctx, _ := c.Get("context").(context.Context)
 
-	userId, ok := c.Get("current_user_id").(uint)
-	if ok {
-		ctx = context.WithValue(context.Background(), "current_user_id", userId)
+	userId, err := myctx.GetUserID(ctx)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	var total uint

@@ -18,7 +18,7 @@ var _ error = (*Error)(nil)
 // with the ability to add more information
 // about the errors and its location
 type Error struct {
-	ID       uint16 // unique errors code
+	Code     uint16 // unique errors code
 	Msg      string // message body
 	Args     string // argument string with additional information
 	CauseErr error  // reason errors
@@ -29,7 +29,7 @@ type Error struct {
 
 // Error print custom errors
 func (e *Error) Error() string {
-	mes := fmt.Sprintf("%s errId=%v", e.Msg, e.ID)
+	mes := fmt.Sprintf("%s errId=%v", e.Msg, e.Code)
 	if e.Args != "" {
 		mes = fmt.Sprintf("%s args=%s", mes, e.Args)
 	}

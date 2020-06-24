@@ -39,7 +39,7 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 	e.Use(
 		middleware.RequestID(),
 		customlogger.Middleware(),
-		permission.GlobalMiddleware([]byte(cfg.Server.JWTSecret)),
+		permission.GlobalMiddleware([]byte(cfg.JWT.Secret)),
 		reqest_context.GlobalMiddleware(ctx),
 	)
 

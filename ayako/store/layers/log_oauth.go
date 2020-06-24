@@ -64,10 +64,11 @@ func (_d OAuthWithLog) CreateToken(ctx context.Context, userId uint, clientID ui
 }
 
 // GetClient implements store.OAuth
-func (_d OAuthWithLog) GetClient(ctx context.Context, id uint) (op1 *entity.OAuthClient, err error) {
+func (_d OAuthWithLog) GetClient(ctx context.Context, id uint, secret string) (op1 *entity.OAuthClient, err error) {
 	log.Debug().
 		Interface("ctx", ctx).
 		Interface("id", id).
+		Interface("secret", secret).
 		Msg("store.OAuth.GetClient: calling")
 	defer func() {
 		if err != nil {
@@ -78,7 +79,7 @@ func (_d OAuthWithLog) GetClient(ctx context.Context, id uint) (op1 *entity.OAut
 				Msg("store.OAuth.GetClient: finished")
 		}
 	}()
-	return _d._base.GetClient(ctx, id)
+	return _d._base.GetClient(ctx, id, secret)
 }
 
 // RefreshToken implements store.OAuth

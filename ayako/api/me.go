@@ -18,7 +18,7 @@ func (api *Routes) InitMe(store store.Store) {
 
 	api.Me.GET("/", handlers.Me, permission.MustLogin)
 	api.Me.GET("/:mode", handlers.Me, permission.MustLogin)
-	api.Me.GET("/download-quota-check", empty, permission.MustLogin)
+	api.Me.GET("/download-quota-check", echo.NotFoundHandler, permission.MustLogin)
 }
 
 func (h *MeHandlers) Me(c echo.Context) error {
