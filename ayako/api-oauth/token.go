@@ -67,7 +67,7 @@ func (h *TokenHandlers) Create(c echo.Context) error {
 		}
 	} else if params.GrantType == "refresh_token" {
 		var err error
-		token, err = h.Store.OAuth().RefreshToken(ctx, params.RefreshToken)
+		token, err = h.Store.OAuth().RefreshToken(ctx, params.RefreshToken, params.ClientID, params.ClientSecret)
 		if err != nil {
 			return err
 		}

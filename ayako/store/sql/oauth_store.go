@@ -3,6 +3,7 @@ package sql
 import (
 	"context"
 	"github.com/deissh/go-utils"
+	"github.com/deissh/osu-lazer/api/pkg"
 	myctx "github.com/deissh/osu-lazer/ayako/ctx"
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/errors"
@@ -95,8 +96,24 @@ func (o OAuthStore) RevokeToken(ctx context.Context, userId uint, accessToken st
 	panic("implement me")
 }
 
-func (o OAuthStore) RefreshToken(ctx context.Context, refreshToken string) (*entity.OAuthToken, error) {
-	panic("implement me")
+func (o OAuthStore) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error) {
+	var token entity.OAuthToken
+	err := o.GetMaster().GetContext(
+		ctx,
+		&token,
+		`UPDATE oauth_token
+			SET revoked = true
+			WHERE refresh_token = $1 AND revoked = false AND client_id = $2
+			RETURNING *`,
+		refreshToken,
+		clientID,
+	)
+	if err != nil {
+		return nil, pkg.NewHTTPError(400, "oauth_token_not_exist", "Refresh token not exist or already revoked")
+	}
+
+	newToken, err := o.OAuth().CreateToken(ctx, token.UserID, clientID, clientSecret, token.Scopes)
+	return newToken, err
 }
 
 func (o OAuthStore) ValidateToken(ctx context.Context, accessToken string) error {
