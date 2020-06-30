@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/BDMASne.png" alt="logo" width="400" />
+  <img src="https://301222.selcdn.ru/akasi/assets/rl-logo/logo-grey.svg" alt="logo" width="300" />
 </p>
 
 <h1 align="center"></h1>
