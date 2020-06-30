@@ -18,7 +18,12 @@ func newSqlFriendStore(sqlStore SqlStore) store.Friend {
 func (f FriendStore) Add(ctx context.Context, userId, targetId uint) error {
 	_, err := f.GetMaster().ExecContext(
 		ctx,
-		`INSERT INTO user_relation (user_id, target_id) VALUES ($1, $2)`,
+		`INSERT INTO user_relation (user_id, target_id)
+		SELECT $1, $2
+		WHERE
+    	NOT EXISTS (
+        	SELECT id FROM user_relation WHERE user_id = $1 AND target_id = $2
+    	)`,
 		userId, targetId,
 	)
 	if err != nil {
