@@ -59,7 +59,7 @@ func New(store store.Store, prefix *echo.Group) {
 			bmsets.GET("/search/:filters", h.Search)
 			bmsets.GET("/:beatmapset", h.Get)
 			bmsets.GET("/:beatmapset/download", echo.MethodNotAllowedHandler, permission.MustLogin)
-			bmsets.GET("/:beatmapset/favourites", h.Favourite, permission.MustLogin)
+			bmsets.POST("/:beatmapset/favourites", h.Favourite, permission.MustLogin)
 		}
 
 		// === Scores ===

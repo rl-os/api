@@ -184,6 +184,24 @@ func (u UserStore) UpdateLastVisit(ctx context.Context, userId uint) error {
 
 func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity.User, error) {
 	// =========================
+	// followers
+	_ = u.GetMaster().GetContext(
+		ctx,
+		&user.FollowerCount,
+		`SELECT count(*) FROM user_relation WHERE target_id = $1`,
+		user.ID,
+	)
+
+	// =========================
+	// favourite beatmapsets count
+	_ = u.GetMaster().GetContext(
+		ctx,
+		&user.FavouriteBeatmapsetCount,
+		`SELECT count(*) FROM favouritemaps WHERE user_id = $1`,
+		user.ID,
+	)
+
+	// =========================
 	// getting MonthlyPlayCounts
 	user.MonthlyPlaycounts = make([]entity.MonthlyPlaycounts, 0)
 	err := u.GetMaster().SelectContext(
