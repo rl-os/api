@@ -83,10 +83,12 @@ func (_d OAuthWithLog) GetClient(ctx context.Context, id uint, secret string) (o
 }
 
 // RefreshToken implements store.OAuth
-func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string) (op1 *entity.OAuthToken, err error) {
+func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (op1 *entity.OAuthToken, err error) {
 	log.Debug().
 		Interface("ctx", ctx).
 		Interface("refreshToken", refreshToken).
+		Interface("clientID", clientID).
+		Interface("clientSecret", clientSecret).
 		Msg("store.OAuth.RefreshToken: calling")
 	defer func() {
 		if err != nil {
@@ -97,7 +99,7 @@ func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string) (o
 				Msg("store.OAuth.RefreshToken: finished")
 		}
 	}()
-	return _d._base.RefreshToken(ctx, refreshToken)
+	return _d._base.RefreshToken(ctx, refreshToken, clientID, clientSecret)
 }
 
 // RevokeToken implements store.OAuth
@@ -120,7 +122,7 @@ func (_d OAuthWithLog) RevokeToken(ctx context.Context, userId uint, accessToken
 }
 
 // ValidateToken implements store.OAuth
-func (_d OAuthWithLog) ValidateToken(ctx context.Context, accessToken string) (err error) {
+func (_d OAuthWithLog) ValidateToken(ctx context.Context, accessToken string) (op1 *entity.OAuthToken, err error) {
 	log.Debug().
 		Interface("ctx", ctx).
 		Interface("accessToken", accessToken).

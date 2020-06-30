@@ -175,26 +175,27 @@ func (mr *MockOAuthMockRecorder) RevokeToken(ctx, userId, accessToken interface{
 }
 
 // RefreshToken mocks base method
-func (m *MockOAuth) RefreshToken(ctx context.Context, refreshToken string) (*entity.OAuthToken, error) {
+func (m *MockOAuth) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RefreshToken", ctx, refreshToken)
+	ret := m.ctrl.Call(m, "RefreshToken", ctx, refreshToken, clientID, clientSecret)
 	ret0, _ := ret[0].(*entity.OAuthToken)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // RefreshToken indicates an expected call of RefreshToken
-func (mr *MockOAuthMockRecorder) RefreshToken(ctx, refreshToken interface{}) *gomock.Call {
+func (mr *MockOAuthMockRecorder) RefreshToken(ctx, refreshToken, clientID, clientSecret interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RefreshToken", reflect.TypeOf((*MockOAuth)(nil).RefreshToken), ctx, refreshToken)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RefreshToken", reflect.TypeOf((*MockOAuth)(nil).RefreshToken), ctx, refreshToken, clientID, clientSecret)
 }
 
 // ValidateToken mocks base method
-func (m *MockOAuth) ValidateToken(ctx context.Context, accessToken string) error {
+func (m *MockOAuth) ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ValidateToken", ctx, accessToken)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*entity.OAuthToken)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // ValidateToken indicates an expected call of ValidateToken

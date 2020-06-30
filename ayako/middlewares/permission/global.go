@@ -1,11 +1,10 @@
 package permission
 
 import (
+	"context"
 	"errors"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/labstack/echo/v4"
-	"net/http"
-	"strconv"
 )
 
 // keyFromHeader returns a `keyExtractor` that extracts key from the request header.
@@ -28,28 +27,21 @@ func keyFromHeader(header string) func(echo.Context) (string, error) {
 }
 
 // GlobalMiddleware check access_token
-func GlobalMiddleware(jwtSecret []byte) echo.MiddlewareFunc {
+func GlobalMiddleware(store store.Store, ctx context.Context) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			extractor := keyFromHeader(echo.HeaderAuthorization)
 
 			// check token and write to reqest_context if user send one
 			if key, err := extractor(c); err == nil {
-				claims := jwt.MapClaims{}
-				token, err := jwt.ParseWithClaims(key, &claims, func(token *jwt.Token) (interface{}, error) {
-					return jwtSecret, nil
-				})
+				token, err := store.OAuth().ValidateToken(ctx, key)
 				if err != nil {
+					// todo
 					return next(c)
 				}
 
-				userId, err := strconv.ParseUint(claims["sub"].(string), 10, 32)
-				if err != nil {
-					return echo.NewHTTPError(http.StatusUnauthorized, "Invalid token")
-				}
-
-				c.Set("current_user_id", uint(userId))
-				c.Set("current_user_token", token)
+				c.Set("current_user_id", token.ID)
+				c.Set("current_user_token", token.AccessToken)
 			}
 
 			return next(c)

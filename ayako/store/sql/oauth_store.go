@@ -3,11 +3,11 @@ package sql
 import (
 	"context"
 	"github.com/deissh/go-utils"
-	"github.com/deissh/osu-lazer/api/pkg"
 	myctx "github.com/deissh/osu-lazer/ayako/ctx"
 	"github.com/deissh/osu-lazer/ayako/entity"
 	"github.com/deissh/osu-lazer/ayako/errors"
 	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/dgrijalva/jwt-go"
 	"time"
 )
 
@@ -93,7 +93,20 @@ func (o OAuthStore) CreateToken(ctx context.Context, userId uint, clientID uint,
 }
 
 func (o OAuthStore) RevokeToken(ctx context.Context, userId uint, accessToken string) error {
-	panic("implement me")
+	_, err := o.GetMaster().ExecContext(
+		ctx,
+		`UPDATE oauth_token
+			SET revoked = true
+			WHERE user_id = $1 AND client_id = $2 AND revoked = false
+			RETURNING *`,
+		userId,
+		accessToken,
+	)
+	if err != nil {
+		return errors.WithCause(404, "Access token not exist or already revoked", err)
+	}
+
+	return nil
 }
 
 func (o OAuthStore) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error) {
@@ -109,13 +122,47 @@ func (o OAuthStore) RefreshToken(ctx context.Context, refreshToken string, clien
 		clientID,
 	)
 	if err != nil {
-		return nil, pkg.NewHTTPError(400, "oauth_token_not_exist", "Refresh token not exist or already revoked")
+		return nil, errors.WithCause(404, "Access token not exist or already revoked", err)
 	}
 
 	newToken, err := o.OAuth().CreateToken(ctx, token.UserID, clientID, clientSecret, token.Scopes)
 	return newToken, err
 }
 
-func (o OAuthStore) ValidateToken(ctx context.Context, accessToken string) error {
-	panic("implement me")
+func (o OAuthStore) ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
+	cfg := o.GetConfig()
+
+	_, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
+		return []byte(cfg.JWT.Secret), nil
+	})
+
+	v, _ := err.(*jwt.ValidationError)
+	if err != nil && v.Errors == jwt.ValidationErrorExpired {
+		_, _ = o.GetMaster().ExecContext(
+			ctx,
+			`UPDATE oauth_token SET revoked = true WHERE access_token = $1`,
+			accessToken,
+		)
+
+		return nil, errors.WithCause(400, "Access token expired", err)
+	} else if err != nil {
+		return nil, errors.WithCause(400, "Invalid access token", err)
+	}
+
+	var token entity.OAuthToken
+	err = o.GetMaster().GetContext(
+		ctx,
+		&token,
+		`SELECT * FROM oauth_token
+				WHERE access_token = $1`,
+		accessToken,
+	)
+	if err != nil {
+		return nil, errors.WithCause(500, "Selecting access_token in database errors.", err)
+	}
+	if token.Revoked {
+		return nil, errors.WithCause(400, "Access token expired", err)
+	}
+
+	return &token, nil
 }
