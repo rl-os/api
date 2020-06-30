@@ -249,9 +249,10 @@ func (_d UserWithLog) Update(ctx context.Context, userId uint, from interface{})
 }
 
 // UpdateLastVisit implements store.User
-func (_d UserWithLog) UpdateLastVisit(ctx context.Context) (err error) {
+func (_d UserWithLog) UpdateLastVisit(ctx context.Context, userId uint) (err error) {
 	log.Debug().
 		Interface("ctx", ctx).
+		Interface("userId", userId).
 		Msg("store.User.UpdateLastVisit: calling")
 	defer func() {
 		if err != nil {
@@ -262,5 +263,5 @@ func (_d UserWithLog) UpdateLastVisit(ctx context.Context) (err error) {
 				Msg("store.User.UpdateLastVisit: finished")
 		}
 	}()
-	return _d._base.UpdateLastVisit(ctx)
+	return _d._base.UpdateLastVisit(ctx, userId)
 }

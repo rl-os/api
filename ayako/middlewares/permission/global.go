@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/deissh/osu-lazer/ayako/store"
 	"github.com/labstack/echo/v4"
+	"github.com/rs/zerolog/log"
 )
 
 // keyFromHeader returns a `keyExtractor` that extracts key from the request header.
@@ -40,7 +41,11 @@ func GlobalMiddleware(store store.Store, ctx context.Context) echo.MiddlewareFun
 					return next(c)
 				}
 
-				c.Set("current_user_id", token.ID)
+				if err = store.User().UpdateLastVisit(ctx, token.UserID); err != nil {
+					log.Error().Err(err).Msg("updating last visit")
+				}
+
+				c.Set("current_user_id", token.UserID)
 				c.Set("current_user_token", token.AccessToken)
 			}
 

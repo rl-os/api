@@ -700,15 +700,15 @@ func (mr *MockUserMockRecorder) UnMute(ctx, userId interface{}) *gomock.Call {
 }
 
 // UpdateLastVisit mocks base method
-func (m *MockUser) UpdateLastVisit(ctx context.Context) error {
+func (m *MockUser) UpdateLastVisit(ctx context.Context, userId uint) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateLastVisit", ctx)
+	ret := m.ctrl.Call(m, "UpdateLastVisit", ctx, userId)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UpdateLastVisit indicates an expected call of UpdateLastVisit
-func (mr *MockUserMockRecorder) UpdateLastVisit(ctx interface{}) *gomock.Call {
+func (mr *MockUserMockRecorder) UpdateLastVisit(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLastVisit", reflect.TypeOf((*MockUser)(nil).UpdateLastVisit), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLastVisit", reflect.TypeOf((*MockUser)(nil).UpdateLastVisit), ctx, userId)
 }

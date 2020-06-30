@@ -120,11 +120,33 @@ func (u UserStore) Update(ctx context.Context, userId uint, from interface{}) (*
 }
 
 func (u UserStore) Activate(ctx context.Context, userId uint) error {
-	panic("implement me")
+	_, err := u.GetMaster().ExecContext(
+		ctx,
+		`UPDATE users
+		SET is_active = true
+		WHERE is_active = false AND id = $1`,
+		userId,
+	)
+	if err != nil {
+		return errors.WithCause(404, "User not found", err)
+	}
+
+	return nil
 }
 
 func (u UserStore) Deactivate(ctx context.Context, userId uint) error {
-	panic("implement me")
+	_, err := u.GetMaster().ExecContext(
+		ctx,
+		`UPDATE users
+		SET is_active = false 
+		WHERE is_active = true AND id = $1`,
+		userId,
+	)
+	if err != nil {
+		return errors.WithCause(404, "User not found", err)
+	}
+
+	return nil
 }
 
 func (u UserStore) Ban(ctx context.Context, userId uint, time time.Duration) error {
@@ -143,8 +165,21 @@ func (u UserStore) UnMute(ctx context.Context, userId uint) error {
 	panic("implement me")
 }
 
-func (u UserStore) UpdateLastVisit(ctx context.Context) error {
-	panic("implement me")
+func (u UserStore) UpdateLastVisit(ctx context.Context, userId uint) error {
+	currentTime := time.Now().UTC()
+
+	_, err := u.GetMaster().ExecContext(
+		ctx,
+		`UPDATE users
+		SET last_visit = $1
+		WHERE id = $2`,
+		currentTime,
+		userId,
+	)
+	if err != nil {
+		return errors.WithCause(404, "User not found", err)
+	}
+	return nil
 }
 
 func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity.User, error) {

@@ -70,5 +70,5 @@ type User interface {
 	Mute(ctx context.Context, userId uint, time time.Duration) error
 	UnMute(ctx context.Context, userId uint) error
 
-	UpdateLastVisit(ctx context.Context) error
+	UpdateLastVisit(ctx context.Context, userId uint) error
 }
