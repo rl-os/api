@@ -35,6 +35,9 @@ alter table user_statistics
     add constraint user_statistics_pk
         primary key (id);
 
+insert into user_statistics (user_id) values (1);
+insert into user_statistics (user_id) values (2);
+
 -- migrate:down
 drop index user_statistics_id_uindex;
 drop index user_statistics_user_id_is_ranked_index;

@@ -33,7 +33,7 @@ func GlobalMiddleware() echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			extractor := keyFromHeader(echo.HeaderAuthorization)
 
-			// check token and write to context if user send one
+			// check token and write to reqest_context if user send one
 			if key, err := extractor(c); err == nil {
 				token, err := oauth.ValidateOAuthToken(key)
 				if err != nil {

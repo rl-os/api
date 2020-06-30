@@ -23,7 +23,7 @@ func TestGetUser(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := GetUser(tt.args.id, tt.args.mode)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetUser() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GetUser() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
@@ -50,7 +50,7 @@ func TestLoginByPassword(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := LoginByPassword(tt.args.username, tt.args.password)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("LoginByPassword() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("LoginByPassword() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
@@ -78,7 +78,7 @@ func TestRegister(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Register(tt.args.username, tt.args.email, tt.args.password)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Register() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Register() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {

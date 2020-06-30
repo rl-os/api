@@ -60,7 +60,7 @@ func TestRequired1(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "Invalid current_user_token in context",
+			name: "Invalid current_user_token in reqest_context",
 			args: args{
 				required: []string{oauth.ChatsScope},
 			},
@@ -87,7 +87,7 @@ func TestRequired1(t *testing.T) {
 			}
 
 			if err := handler(c); (err != nil) != tt.wantErr {
-				t.Errorf("Required().Error = %v, want error", err)
+				t.Errorf("Required().Error = %v, want errors", err)
 			}
 		})
 	}

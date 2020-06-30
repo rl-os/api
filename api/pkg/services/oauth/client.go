@@ -21,7 +21,7 @@ type Client struct {
 func CreateOAuthClient(userID uint, name string, redirect string) (client Client, err error) {
 	secret, err := utils.GenerateRandomString(255)
 	if err != nil {
-		return Client{}, pkg.NewHTTPError(500, "server_error", "New refresh token generate error.")
+		return Client{}, pkg.NewHTTPError(500, "server_error", "New refresh token generate errors.")
 	}
 
 	err = pkg.Db.Get(
@@ -32,7 +32,7 @@ func CreateOAuthClient(userID uint, name string, redirect string) (client Client
 		userID, name, secret, redirect,
 	)
 	if err != nil {
-		return Client{}, pkg.NewHTTPError(500, "server_error", "Creating new oauth_client in database error.")
+		return Client{}, pkg.NewHTTPError(500, "server_error", "Creating new oauth_client in database errors.")
 	}
 
 	return

@@ -23,7 +23,7 @@ func (api *Routes) InitBeatmaps(store store.Store) {
 }
 
 func (h *BeatmapHandlers) Show(c echo.Context) error {
-	beatmapID, err := strconv.ParseUint(c.Param("beatmap"), 10, 32)
+	beatmapID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
 	}

@@ -16,5 +16,6 @@ require (
 	github.com/lib/pq v1.6.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.19.0
+	google.golang.org/appengine v1.6.6 // indirect
 	gopkg.in/redis.v5 v5.2.9
 )

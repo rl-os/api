@@ -23,7 +23,7 @@ func TestCreateOAuthClient(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			gotClient, err := CreateOAuthClient(tt.args.userID, tt.args.name, tt.args.redirect)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("CreateOAuthClient() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("CreateOAuthClient() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(gotClient, tt.wantClient) {
@@ -50,7 +50,7 @@ func TestFindOAuthClient(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			gotOut, err := FindOAuthClient(tt.args.clientID, tt.args.clientSecret)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("FindOAuthClient() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("FindOAuthClient() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(gotOut, tt.wantOut) {

@@ -43,7 +43,7 @@ func main() {
 
 func setupLogger() {
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-	if os.Getenv("env") == "dev" {
+	if os.Getenv("env") != "production" {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 

@@ -11,7 +11,7 @@ func (s *App) DoBeatmapSetSearchNew() {
 		Str("job", "DoBeatmapSetSearchNew").
 		Msg("start beatmapset search")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+	ctx, cancel := context.WithTimeout(s.Context, time.Minute)
 	defer cancel()
 
 	id, err := s.Store.BeatmapSet().GetLatestId(ctx)

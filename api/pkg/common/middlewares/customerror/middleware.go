@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-// CustomHTTPErrorHandler transform GoLang error to JSON response
+// CustomHTTPErrorHandler transform GoLang errors to JSON response
 func CustomHTTPErrorHandler(err error, c echo.Context) {
 	if c.Response().Size > 0 {
 		return
@@ -29,13 +29,13 @@ func CustomHTTPErrorHandler(err error, c echo.Context) {
 		res.ErrorDescription = he.Error()
 	}
 
-	// if custom error
+	// if custom errors
 	if he, ok := err.(*pkg.ErrorResponse); ok {
 		res = *he
 		code = he.Status
 	}
 
-	// todo: getting locale and translate error message
+	// todo: getting locale and translate errors message
 
 	err = c.JSON(code, res)
 	if err != nil {

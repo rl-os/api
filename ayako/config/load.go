@@ -29,7 +29,7 @@ func (c *Config) Load(files ...string) (err error) {
 						c.AutoReloadCallback(c)
 					}
 				} else if err != nil {
-					log.Error().Msgf("Failed to reload configuration from %v, got error %v", files, err)
+					log.Error().Msgf("Failed to reload configuration from %v, got errors %v", files, err)
 				}
 				timer.Reset(c.AutoReloadInterval)
 			}

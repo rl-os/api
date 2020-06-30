@@ -74,7 +74,7 @@ func Register(username string, email string, password string) (*entity.User, err
 
 	hashed, err := utils.GetHash(password)
 	if err != nil {
-		return nil, pkg.NewHTTPError(http.StatusInternalServerError, "internal_error", "Getting hash from password error.")
+		return nil, pkg.NewHTTPError(http.StatusInternalServerError, "internal_error", "Getting hash from password errors.")
 	}
 
 	tx := pkg.Db.MustBegin()

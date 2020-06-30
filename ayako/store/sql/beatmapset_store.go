@@ -251,7 +251,7 @@ func (s BeatmapSetStore) GetLatestId(ctx context.Context) (uint, error) {
 }
 
 func (s BeatmapSetStore) ComputeFields(ctx context.Context, set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
-	set.RecentFavourites = []entity.User{}
+	set.RecentFavourites = make([]entity.UserShortField, 0)
 	set.Ratings = make([]int64, 11)
 	set.Converts = []entity.Beatmap{}
 	set.Beatmaps = s.Beatmap().GetBySetId(ctx, uint(set.ID))
