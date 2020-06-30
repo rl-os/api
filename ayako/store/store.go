@@ -5,6 +5,7 @@ package store
 //go:generate gowrap gen -g -p . -i Beatmap -t layers/log.tmpl -o layers/log_beatmap.go
 //go:generate gowrap gen -g -p . -i BeatmapSet -t layers/log.tmpl -o layers/log_beatmapset.go
 //go:generate gowrap gen -g -p . -i User -t layers/log.tmpl -o layers/log_user.go
+//go:generate gowrap gen -g -p . -i Friend -t layers/log.tmpl -o layers/log_friends.go
 
 import (
 	"context"
@@ -17,6 +18,7 @@ type Store interface {
 	Beatmap() Beatmap
 	BeatmapSet() BeatmapSet
 	User() User
+	Friend() Friend
 }
 
 type OAuth interface {
@@ -71,4 +73,12 @@ type User interface {
 	UnMute(ctx context.Context, userId uint) error
 
 	UpdateLastVisit(ctx context.Context, userId uint) error
+}
+
+type Friend interface {
+	Add(ctx context.Context, userId uint) error
+	Remove(ctx context.Context, userId uint) error
+	Check(ctx context.Context, userId, targetId uint) error
+	GetSubscriptions(ctx context.Context, userId uint) (*[]entity.UserShort, error)
+	GetFriends(ctx context.Context, userId uint) (*[]entity.UserShort, error)
 }
