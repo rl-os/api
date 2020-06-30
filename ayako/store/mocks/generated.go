@@ -92,6 +92,20 @@ func (mr *MockStoreMockRecorder) User() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "User", reflect.TypeOf((*MockStore)(nil).User))
 }
 
+// Friend mocks base method
+func (m *MockStore) Friend() store.Friend {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Friend")
+	ret0, _ := ret[0].(store.Friend)
+	return ret0
+}
+
+// Friend indicates an expected call of Friend
+func (mr *MockStoreMockRecorder) Friend() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Friend", reflect.TypeOf((*MockStore)(nil).Friend))
+}
+
 // MockOAuth is a mock of OAuth interface
 type MockOAuth struct {
 	ctrl     *gomock.Controller
@@ -711,4 +725,70 @@ func (m *MockUser) UpdateLastVisit(ctx context.Context, userId uint) error {
 func (mr *MockUserMockRecorder) UpdateLastVisit(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLastVisit", reflect.TypeOf((*MockUser)(nil).UpdateLastVisit), ctx, userId)
+}
+
+// MockFriend is a mock of Friend interface
+type MockFriend struct {
+	ctrl     *gomock.Controller
+	recorder *MockFriendMockRecorder
+}
+
+// MockFriendMockRecorder is the mock recorder for MockFriend
+type MockFriendMockRecorder struct {
+	mock *MockFriend
+}
+
+// NewMockFriend creates a new mock instance
+func NewMockFriend(ctrl *gomock.Controller) *MockFriend {
+	mock := &MockFriend{ctrl: ctrl}
+	mock.recorder = &MockFriendMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockFriend) EXPECT() *MockFriendMockRecorder {
+	return m.recorder
+}
+
+// Add mocks base method
+func (m *MockFriend) Add(ctx context.Context, userId, targetId uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Add", ctx, userId, targetId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Add indicates an expected call of Add
+func (mr *MockFriendMockRecorder) Add(ctx, userId, targetId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockFriend)(nil).Add), ctx, userId, targetId)
+}
+
+// Remove mocks base method
+func (m *MockFriend) Remove(ctx context.Context, userId, targetId uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Remove", ctx, userId, targetId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Remove indicates an expected call of Remove
+func (mr *MockFriendMockRecorder) Remove(ctx, userId, targetId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFriend)(nil).Remove), ctx, userId, targetId)
+}
+
+// GetSubscriptions mocks base method
+func (m *MockFriend) GetSubscriptions(ctx context.Context, userId uint) (*[]entity.UserShort, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSubscriptions", ctx, userId)
+	ret0, _ := ret[0].(*[]entity.UserShort)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSubscriptions indicates an expected call of GetSubscriptions
+func (mr *MockFriendMockRecorder) GetSubscriptions(ctx, userId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSubscriptions", reflect.TypeOf((*MockFriend)(nil).GetSubscriptions), ctx, userId)
 }

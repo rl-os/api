@@ -184,6 +184,24 @@ func (u UserStore) UpdateLastVisit(ctx context.Context, userId uint) error {
 
 func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity.User, error) {
 	// =========================
+	// followers
+	_ = u.GetMaster().GetContext(
+		ctx,
+		&user.FollowerCount,
+		`SELECT count(*) FROM user_relation WHERE target_id = $1`,
+		user.ID,
+	)
+
+	// =========================
+	// favourite beatmapsets count
+	_ = u.GetMaster().GetContext(
+		ctx,
+		&user.FavouriteBeatmapsetCount,
+		`SELECT count(*) FROM favouritemaps WHERE user_id = $1`,
+		user.ID,
+	)
+
+	// =========================
 	// getting MonthlyPlayCounts
 	user.MonthlyPlaycounts = make([]entity.MonthlyPlaycounts, 0)
 	err := u.GetMaster().SelectContext(
@@ -246,13 +264,12 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 		&user.Statistics.Rank,
 		`SELECT country, global
 		FROM (
-				 SELECT rank() over (PARTITION BY t.country_code ORDER BY t.pp DESC) as country,
-						rank() over (ORDER BY t.pp DESC) as global,
-				        t.user_id
-				 FROM (SELECT us.user_id, us.pp, u.country_code
-						FROM user_statistics us
-						JOIN users u on us.user_id = u.id) as t
-			 ) as rt
+			SELECT rank() over (PARTITION BY t.country_code ORDER BY t.pp DESC) as country,
+				rank() over (ORDER BY t.pp DESC) as global, t.user_id
+			FROM (SELECT us.user_id, us.pp, u.country_code
+				FROM user_statistics us
+				JOIN users u on us.user_id = u.id) as t
+			) as rt
 		WHERE rt.user_id = $1;`,
 		user.ID,
 	)

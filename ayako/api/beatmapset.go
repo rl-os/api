@@ -4,7 +4,6 @@ import (
 	"context"
 	myctx "github.com/deissh/rl/ayako/ctx"
 	"github.com/deissh/rl/ayako/entity"
-	"github.com/deissh/rl/ayako/middlewares/permission"
 	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -13,16 +12,6 @@ import (
 
 type BeatmapSetHandlers struct {
 	Store store.Store
-}
-
-func (api *Routes) InitBeatmapSet(store store.Store) {
-	handlers := BeatmapSetHandlers{store}
-
-	api.BeatmapSets.GET("/:beatmapset", handlers.Get)
-	api.BeatmapSets.POST("/:beatmapset/favourites", handlers.Favourite, permission.MustLogin)
-	api.BeatmapSets.GET("/:beatmapset/download", handlers.Get, permission.MustLogin)
-	api.BeatmapSets.GET("/lookup", handlers.Lookup)
-	api.BeatmapSets.GET("/search", handlers.Search)
 }
 
 func (h *BeatmapSetHandlers) Get(c echo.Context) error {

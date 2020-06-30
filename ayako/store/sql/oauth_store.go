@@ -138,15 +138,9 @@ func (o OAuthStore) ValidateToken(ctx context.Context, accessToken string) (*ent
 
 	v, _ := err.(*jwt.ValidationError)
 	if err != nil && v.Errors == jwt.ValidationErrorExpired {
-		_, _ = o.GetMaster().ExecContext(
-			ctx,
-			`UPDATE oauth_token SET revoked = true WHERE access_token = $1`,
-			accessToken,
-		)
-
 		return nil, errors.WithCause(400, "Access token expired", err)
 	} else if err != nil {
-		return nil, errors.WithCause(400, "Invalid access token", err)
+		return nil, errors.WithCause(401, "Invalid access token", err)
 	}
 
 	var token entity.OAuthToken

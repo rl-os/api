@@ -44,7 +44,7 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 	)
 
 	{ // setup routes
-		api.New(store, e.Group("/api/v2"))
+		api.New(store, e.Group("/api"))
 		api_oauth.New(store, e.Group(""))
 	}
 
