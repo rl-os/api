@@ -76,8 +76,8 @@ type User interface {
 }
 
 type Friend interface {
-	Add(ctx context.Context, userId uint) error
-	Remove(ctx context.Context, userId uint) error
+	Add(ctx context.Context, userId, targetId uint) error
+	Remove(ctx context.Context, userId, targetId uint) error
 	Check(ctx context.Context, userId, targetId uint) error
 	GetSubscriptions(ctx context.Context, userId uint) (*[]entity.UserShort, error)
 	GetFriends(ctx context.Context, userId uint) (*[]entity.UserShort, error)

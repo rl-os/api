@@ -246,13 +246,12 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 		&user.Statistics.Rank,
 		`SELECT country, global
 		FROM (
-				 SELECT rank() over (PARTITION BY t.country_code ORDER BY t.pp DESC) as country,
-						rank() over (ORDER BY t.pp DESC) as global,
-				        t.user_id
-				 FROM (SELECT us.user_id, us.pp, u.country_code
-						FROM user_statistics us
-						JOIN users u on us.user_id = u.id) as t
-			 ) as rt
+			SELECT rank() over (PARTITION BY t.country_code ORDER BY t.pp DESC) as country,
+				rank() over (ORDER BY t.pp DESC) as global, t.user_id
+			FROM (SELECT us.user_id, us.pp, u.country_code
+				FROM user_statistics us
+				JOIN users u on us.user_id = u.id) as t
+			) as rt
 		WHERE rt.user_id = $1;`,
 		user.ID,
 	)
