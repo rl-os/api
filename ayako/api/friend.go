@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	myctx "github.com/deissh/rl/ayako/ctx"
-	"github.com/deissh/rl/ayako/middlewares/permission"
 	"github.com/deissh/rl/ayako/store"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -12,14 +11,6 @@ import (
 
 type FriendHandlers struct {
 	Store store.Store
-}
-
-func (api *Routes) InitFriend(store store.Store) {
-	handlers := FriendHandlers{store}
-
-	api.Friend.GET("", handlers.GetAll, permission.MustLogin)
-	api.Friend.PUT("", handlers.Add, permission.MustLogin)
-	api.Friend.DELETE("", handlers.Remove, permission.MustLogin)
 }
 
 func (h *FriendHandlers) GetAll(c echo.Context) error {

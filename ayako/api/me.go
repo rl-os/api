@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	myctx "github.com/deissh/rl/ayako/ctx"
-	"github.com/deissh/rl/ayako/middlewares/permission"
 	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -11,14 +10,6 @@ import (
 
 type MeHandlers struct {
 	Store store.Store
-}
-
-func (api *Routes) InitMe(store store.Store) {
-	handlers := MeHandlers{store}
-
-	api.Me.GET("/", handlers.Me, permission.MustLogin)
-	api.Me.GET("/:mode", handlers.Me, permission.MustLogin)
-	api.Me.GET("/download-quota-check", echo.NotFoundHandler, permission.MustLogin)
 }
 
 func (h *MeHandlers) Me(c echo.Context) error {

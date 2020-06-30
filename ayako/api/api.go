@@ -6,13 +6,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type Routes struct {
-	Beatmaps    *echo.Group
-	BeatmapSets *echo.Group
-	Me          *echo.Group
-	Friend      *echo.Group
-}
-
 func New(store store.Store, prefix *echo.Group) {
 	v2 := prefix.Group("/v2")
 	{
@@ -70,50 +63,56 @@ func New(store store.Store, prefix *echo.Group) {
 		}
 
 		// === Scores ===
-		v2.GET("/scores/:mode/:score/download", echo.MethodNotAllowedHandler)
+		scores := v2.Group("/scores")
+		{
+			scores.GET("/:mode/:score/download", echo.MethodNotAllowedHandler)
+		}
 
 		// === Rooms ===
-		v2.POST("/rooms", echo.MethodNotAllowedHandler)
-		v2.GET("/rooms/:room", echo.MethodNotAllowedHandler)
-		v2.PUT("/rooms/:room/users/:user", echo.MethodNotAllowedHandler)
-		v2.DELETE("/rooms/:room/users/:user", echo.MethodNotAllowedHandler)
-		v2.GET("/rooms/:room/leaderboard", echo.MethodNotAllowedHandler)
-		v2.POST("/rooms/:room/playlist/:playlist/scores", echo.MethodNotAllowedHandler)
-		v2.PUT("/rooms/:room/playlist/:playlist/scores/:score", echo.MethodNotAllowedHandler)
+		rooms := v2.Group("/rooms")
+		{
+			rooms.POST("", echo.MethodNotAllowedHandler)
+			rooms.GET("/:room", echo.MethodNotAllowedHandler)
+			rooms.PUT("/:room/users/:user", echo.MethodNotAllowedHandler)
+			rooms.DELETE("/:room/users/:user", echo.MethodNotAllowedHandler)
+			rooms.GET("/:room/leaderboard", echo.MethodNotAllowedHandler)
+			rooms.POST("/:room/playlist/:playlist/scores", echo.MethodNotAllowedHandler)
+			rooms.PUT("/:room/playlist/:playlist/scores/:score", echo.MethodNotAllowedHandler)
+		}
 
 		// === Chats ===
-		v2Chat := v2.Group("/chat", permission.MustLogin)
+		chat := v2.Group("/chat", permission.MustLogin)
 		{
-			v2Chat.POST("/new", echo.MethodNotAllowedHandler)
-			v2Chat.GET("/updates", echo.MethodNotAllowedHandler)
-			v2Chat.GET("/presence", echo.MethodNotAllowedHandler) // ???
-			v2Chat.GET("/channels", echo.MethodNotAllowedHandler)
-			v2Chat.GET("/channels/joined", echo.MethodNotAllowedHandler)
-			v2Chat.GET("/channels/:channel/messages", echo.MethodNotAllowedHandler)
-			v2Chat.POST("/channels/:channel/messages", echo.MethodNotAllowedHandler)
-			v2Chat.PUT("/channels/:channel/users/:user", echo.MethodNotAllowedHandler)
-			v2Chat.DELETE("/channels/:channel/users/:user", echo.MethodNotAllowedHandler)
-			v2Chat.PUT("/channels/:channel/mark-as-read/:message", echo.MethodNotAllowedHandler)
+			chat.POST("/new", echo.MethodNotAllowedHandler)
+			chat.GET("/updates", echo.MethodNotAllowedHandler)
+			chat.GET("/presence", echo.MethodNotAllowedHandler) // ???
+			chat.GET("/channels", echo.MethodNotAllowedHandler)
+			chat.GET("/channels/joined", echo.MethodNotAllowedHandler)
+			chat.GET("/channels/:channel/messages", echo.MethodNotAllowedHandler)
+			chat.POST("/channels/:channel/messages", echo.MethodNotAllowedHandler)
+			chat.PUT("/channels/:channel/users/:user", echo.MethodNotAllowedHandler)
+			chat.DELETE("/channels/:channel/users/:user", echo.MethodNotAllowedHandler)
+			chat.PUT("/channels/:channel/mark-as-read/:message", echo.MethodNotAllowedHandler)
 		}
 
 		// === Comments ===
-		v2Comments := v2.Group("/comments")
+		comments := v2.Group("/comments")
 		{
-			v2Comments.GET("/", echo.MethodNotAllowedHandler)
-			v2Comments.POST("/", echo.MethodNotAllowedHandler)
-			v2Comments.GET("/:comment", echo.MethodNotAllowedHandler)
-			v2Comments.PUT("/:comment", echo.MethodNotAllowedHandler)
-			v2Comments.PATCH("/:comment", echo.MethodNotAllowedHandler)
-			v2Comments.DELETE("/:comment", echo.MethodNotAllowedHandler)
-			v2Comments.POST("/:comment/vote", echo.MethodNotAllowedHandler)
-			v2Comments.DELETE("/:comment/vote", echo.MethodNotAllowedHandler)
+			comments.GET("/", echo.MethodNotAllowedHandler)
+			comments.POST("/", echo.MethodNotAllowedHandler)
+			comments.GET("/:comment", echo.MethodNotAllowedHandler)
+			comments.PUT("/:comment", echo.MethodNotAllowedHandler)
+			comments.PATCH("/:comment", echo.MethodNotAllowedHandler)
+			comments.DELETE("/:comment", echo.MethodNotAllowedHandler)
+			comments.POST("/:comment/vote", echo.MethodNotAllowedHandler)
+			comments.DELETE("/:comment/vote", echo.MethodNotAllowedHandler)
 		}
 
 		// === Notifications ===
-		v2Notif := v2.Group("/Notifications", permission.MustLogin)
+		notif := v2.Group("/Notifications", permission.MustLogin)
 		{
-			v2Notif.GET("/", echo.MethodNotAllowedHandler)
-			v2Notif.POST("/mark-read", echo.MethodNotAllowedHandler)
+			notif.GET("/", echo.MethodNotAllowedHandler)
+			notif.POST("/mark-read", echo.MethodNotAllowedHandler)
 		}
 
 		// === Misc ===
