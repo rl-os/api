@@ -41,10 +41,6 @@ func (f FriendStore) Remove(ctx context.Context, userId, targetId uint) error {
 	return nil
 }
 
-func (f FriendStore) Check(ctx context.Context, userId, targetId uint) error {
-	panic("implement me")
-}
-
 func (f FriendStore) GetSubscriptions(ctx context.Context, userId uint) (*[]entity.UserShort, error) {
 	users := make([]entity.UserShort, 0)
 
@@ -66,8 +62,4 @@ func (f FriendStore) GetSubscriptions(ctx context.Context, userId uint) (*[]enti
 	}
 
 	return &users, nil
-}
-
-func (f FriendStore) GetFriends(ctx context.Context, userId uint) (*[]entity.UserShort, error) {
-	panic("implement me")
 }

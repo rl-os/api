@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"github.com/deissh/rl/ayako/entity"
-	"github.com/deissh/rl/ayako/middlewares/permission"
 	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -12,14 +11,6 @@ import (
 
 type BeatmapHandlers struct {
 	Store store.Store
-}
-
-func (api *Routes) InitBeatmaps(store store.Store) {
-	handlers := BeatmapHandlers{store}
-
-	api.Beatmaps.GET("/:id", handlers.Show)
-	api.Beatmaps.GET("/:id/scores", echo.NotFoundHandler, permission.MustLogin)
-	api.Beatmaps.GET("/lookup", handlers.Lookup)
 }
 
 func (h *BeatmapHandlers) Show(c echo.Context) error {

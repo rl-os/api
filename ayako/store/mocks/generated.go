@@ -751,45 +751,31 @@ func (m *MockFriend) EXPECT() *MockFriendMockRecorder {
 }
 
 // Add mocks base method
-func (m *MockFriend) Add(ctx context.Context, userId uint) error {
+func (m *MockFriend) Add(ctx context.Context, userId, targetId uint) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Add", ctx, userId)
+	ret := m.ctrl.Call(m, "Add", ctx, userId, targetId)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Add indicates an expected call of Add
-func (mr *MockFriendMockRecorder) Add(ctx, userId interface{}) *gomock.Call {
+func (mr *MockFriendMockRecorder) Add(ctx, userId, targetId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockFriend)(nil).Add), ctx, userId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockFriend)(nil).Add), ctx, userId, targetId)
 }
 
 // Remove mocks base method
-func (m *MockFriend) Remove(ctx context.Context, userId uint) error {
+func (m *MockFriend) Remove(ctx context.Context, userId, targetId uint) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Remove", ctx, userId)
+	ret := m.ctrl.Call(m, "Remove", ctx, userId, targetId)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Remove indicates an expected call of Remove
-func (mr *MockFriendMockRecorder) Remove(ctx, userId interface{}) *gomock.Call {
+func (mr *MockFriendMockRecorder) Remove(ctx, userId, targetId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFriend)(nil).Remove), ctx, userId)
-}
-
-// Check mocks base method
-func (m *MockFriend) Check(ctx context.Context, userId, targetId uint) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Check", ctx, userId, targetId)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Check indicates an expected call of Check
-func (mr *MockFriendMockRecorder) Check(ctx, userId, targetId interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Check", reflect.TypeOf((*MockFriend)(nil).Check), ctx, userId, targetId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFriend)(nil).Remove), ctx, userId, targetId)
 }
 
 // GetSubscriptions mocks base method
@@ -805,19 +791,4 @@ func (m *MockFriend) GetSubscriptions(ctx context.Context, userId uint) (*[]enti
 func (mr *MockFriendMockRecorder) GetSubscriptions(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSubscriptions", reflect.TypeOf((*MockFriend)(nil).GetSubscriptions), ctx, userId)
-}
-
-// GetFriends mocks base method
-func (m *MockFriend) GetFriends(ctx context.Context, userId uint) (*[]entity.UserShort, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetFriends", ctx, userId)
-	ret0, _ := ret[0].(*[]entity.UserShort)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetFriends indicates an expected call of GetFriends
-func (mr *MockFriendMockRecorder) GetFriends(ctx, userId interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFriends", reflect.TypeOf((*MockFriend)(nil).GetFriends), ctx, userId)
 }
