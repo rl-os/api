@@ -3,7 +3,7 @@ package entity
 import (
 	"database/sql/driver"
 	"github.com/deissh/go-utils"
-	"github.com/deissh/osu-lazer/api/pkg"
+	"github.com/deissh/rl/api/pkg"
 	"github.com/lib/pq"
 	"github.com/rs/zerolog/log"
 	"time"

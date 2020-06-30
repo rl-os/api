@@ -2,9 +2,9 @@ package api
 
 import (
 	"context"
-	"github.com/deissh/osu-lazer/ayako/entity"
-	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/middlewares/permission"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"

@@ -2,8 +2,8 @@ package api
 
 import (
 	"errors"
-	"github.com/deissh/osu-lazer/ayako/entity"
-	mock_store "github.com/deissh/osu-lazer/ayako/store/mocks"
+	"github.com/deissh/rl/ayako/entity"
+	mock_store "github.com/deissh/rl/ayako/store/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"
 	"net/http"

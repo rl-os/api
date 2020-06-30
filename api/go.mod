@@ -1,4 +1,4 @@
-module github.com/deissh/osu-lazer/api
+module github.com/deissh/rl/api
 
 go 1.13
 

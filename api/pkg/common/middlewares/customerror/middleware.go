@@ -1,7 +1,7 @@
 package customerror
 
 import (
-	"github.com/deissh/osu-lazer/api/pkg"
+	"github.com/deissh/rl/api/pkg"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 

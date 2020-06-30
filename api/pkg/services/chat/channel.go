@@ -1,8 +1,8 @@
 package chat
 
 import (
-	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/entity"
+	"github.com/deissh/rl/api/pkg"
+	"github.com/deissh/rl/api/pkg/entity"
 	"github.com/rs/zerolog/log"
 	"net/http"
 )

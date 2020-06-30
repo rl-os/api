@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/deissh/osu-lazer/ayako/services/bancho"
+	"github.com/deissh/rl/ayako/services/bancho"
 	"github.com/google/wire"
 )
 

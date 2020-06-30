@@ -1,7 +1,7 @@
 package mock_store
 
 import (
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/golang/mock/gomock"
 )
 

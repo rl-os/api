@@ -1,9 +1,9 @@
 package chats
 
 import (
-	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/entity"
-	chatService "github.com/deissh/osu-lazer/api/pkg/services/chat"
+	"github.com/deissh/rl/api/pkg"
+	"github.com/deissh/rl/api/pkg/entity"
+	chatService "github.com/deissh/rl/api/pkg/services/chat"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"net/http"

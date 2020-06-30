@@ -1,9 +1,9 @@
 package friends
 
 import (
-	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/entity"
-	userService "github.com/deissh/osu-lazer/api/pkg/services/user"
+	"github.com/deissh/rl/api/pkg"
+	"github.com/deissh/rl/api/pkg/entity"
+	userService "github.com/deissh/rl/api/pkg/services/user"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"net/http"

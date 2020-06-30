@@ -3,7 +3,7 @@ package permission
 import (
 	"context"
 	"errors"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 )

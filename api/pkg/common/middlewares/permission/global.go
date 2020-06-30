@@ -2,9 +2,9 @@ package permission
 
 import (
 	"errors"
-	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/services/oauth"
-	"github.com/deissh/osu-lazer/api/pkg/services/user"
+	"github.com/deissh/rl/api/pkg"
+	"github.com/deissh/rl/api/pkg/services/oauth"
+	"github.com/deissh/rl/api/pkg/services/user"
 	"github.com/labstack/echo/v4"
 )
 

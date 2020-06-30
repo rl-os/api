@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/common/middlewares/customerror"
-	"github.com/deissh/osu-lazer/api/pkg/common/middlewares/customlogger"
-	"github.com/deissh/osu-lazer/api/pkg/common/middlewares/permission"
-	"github.com/deissh/osu-lazer/api/pkg/controllers/oauth"
-	"github.com/deissh/osu-lazer/api/pkg/controllers/v2"
+	"github.com/deissh/rl/api/pkg"
+	"github.com/deissh/rl/api/pkg/common/middlewares/customerror"
+	"github.com/deissh/rl/api/pkg/common/middlewares/customlogger"
+	"github.com/deissh/rl/api/pkg/common/middlewares/permission"
+	"github.com/deissh/rl/api/pkg/controllers/oauth"
+	"github.com/deissh/rl/api/pkg/controllers/v2"
 	"github.com/getsentry/sentry-go"
 	sentryEcho "github.com/getsentry/sentry-go/echo"
 	"github.com/gookit/config/v2"

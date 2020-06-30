@@ -8,7 +8,7 @@ package store
 
 import (
 	"context"
-	"github.com/deissh/osu-lazer/ayako/entity"
+	"github.com/deissh/rl/ayako/entity"
 	"time"
 )
 

@@ -1,9 +1,9 @@
 package users
 
 import (
-	"github.com/deissh/osu-lazer/api/pkg"
-	oauthService "github.com/deissh/osu-lazer/api/pkg/services/oauth"
-	userService "github.com/deissh/osu-lazer/api/pkg/services/user"
+	"github.com/deissh/rl/api/pkg"
+	oauthService "github.com/deissh/rl/api/pkg/services/oauth"
+	userService "github.com/deissh/rl/api/pkg/services/user"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 	"net/http"

@@ -2,7 +2,7 @@ package bancho
 
 import (
 	osu "github.com/deissh/osu-go-client"
-	"github.com/deissh/osu-lazer/ayako/config"
+	"github.com/deissh/rl/ayako/config"
 	"github.com/rs/zerolog/log"
 )
 

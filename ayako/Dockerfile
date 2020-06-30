@@ -7,15 +7,15 @@ RUN curl -fsSL -o /dbmate https://github.com/amacneil/dbmate/releases/download/v
 RUN chmod +x /dbmate
 
 # Copy the code from the host and compile it
-WORKDIR $GOPATH/src/github.com/deissh/osu-lazer/ayako
+WORKDIR $GOPATH/src/github.com/deissh/rl/ayako
 COPY ./ayako/go.mod ./ayako/go.sum ./ayako/Makefile ./
 RUN make install
 
 # Copy .git folder (using to get versions and last commit id)
-WORKDIR $GOPATH/src/github.com/deissh/osu-lazer
+WORKDIR $GOPATH/src/github.com/deissh/rl
 COPY .git .git
 
-WORKDIR $GOPATH/src/github.com/deissh/osu-lazer/ayako
+WORKDIR $GOPATH/src/github.com/deissh/rl/ayako
 COPY ./ayako .
 RUN make build-prod && mv bin/* /
 

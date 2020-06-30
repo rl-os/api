@@ -2,8 +2,8 @@ package sql
 
 import (
 	osu "github.com/deissh/osu-go-client"
-	"github.com/deissh/osu-lazer/ayako/config"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/config"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/jmoiron/sqlx"
 )
 

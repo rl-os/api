@@ -7,8 +7,8 @@ package layers
 import (
 	"context"
 
-	"github.com/deissh/osu-lazer/ayako/entity"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/rs/zerolog/log"
 )
 

@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/deissh/osu-lazer/api/pkg/entity"
+	"github.com/deissh/rl/api/pkg/entity"
 	"reflect"
 	"testing"
 )

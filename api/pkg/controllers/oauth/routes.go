@@ -1,10 +1,10 @@
 package oauth
 
 import (
-	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/controllers/oauth/token"
-	"github.com/deissh/osu-lazer/api/pkg/controllers/oauth/user"
-	oauthService "github.com/deissh/osu-lazer/api/pkg/services/oauth"
+	"github.com/deissh/rl/api/pkg"
+	"github.com/deissh/rl/api/pkg/controllers/oauth/token"
+	"github.com/deissh/rl/api/pkg/controllers/oauth/user"
+	oauthService "github.com/deissh/rl/api/pkg/services/oauth"
 	"github.com/labstack/echo/v4"
 )
 

@@ -2,7 +2,7 @@ package ctx
 
 import (
 	"context"
-	"github.com/deissh/osu-lazer/ayako/errors"
+	"github.com/deissh/rl/ayako/errors"
 )
 
 const (

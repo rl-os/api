@@ -143,7 +143,7 @@ chglog:
 
 .PHONY: message
 message:
-	@echo -e "\n        _.====.._                                 ___                _ \n     ,:.         ~-_                             / _ \   ___  _  _  | |\n         \`\        ~-_                          | (_) | (_-< | || | |_|\n           |          \`.                         \___/  /__/  \_,_| (_)\n         ,/             ~-_                                lazer server\n-..__..-''                 ~~--..__...----...--.....---.....--....---...\n\n                                   GitHub: github.com/deissh/osu-lazer\n                                                     2019-2020, deissh\n\n"
+	@echo -e "\n        _.====.._                                 ___                _ \n     ,:.         ~-_                             / _ \   ___  _  _  | |\n         \`\        ~-_                          | (_) | (_-< | || | |_|\n           |          \`.                         \___/  /__/  \_,_| (_)\n         ,/             ~-_                                lazer server\n-..__..-''                 ~~--..__...----...--.....---.....--....---...\n\n                                   GitHub: github.com/deissh/rl\n                                                     2019-2020, deissh\n\n"
 
 
 ## -- Go commands --

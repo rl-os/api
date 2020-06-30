@@ -2,9 +2,9 @@ package api
 
 import (
 	"context"
-	myctx "github.com/deissh/osu-lazer/ayako/ctx"
-	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
-	"github.com/deissh/osu-lazer/ayako/store"
+	myctx "github.com/deissh/rl/ayako/ctx"
+	"github.com/deissh/rl/ayako/middlewares/permission"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )

@@ -48,7 +48,7 @@ services:
         constraints: [node.role == manager]
 
   ayako:
-    image: docker.pkg.github.com/deissh/osu-lazer/ayako:v1.1.14a
+    image: docker.pkg.github.com/deissh/rl/ayako:v1.1.14a
     restart: unless-stopped
     depends_on:
       - db

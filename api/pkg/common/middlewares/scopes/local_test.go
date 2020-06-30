@@ -1,7 +1,7 @@
 package scopes
 
 import (
-	"github.com/deissh/osu-lazer/api/pkg/services/oauth"
+	"github.com/deissh/rl/api/pkg/services/oauth"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"net/http/httptest"

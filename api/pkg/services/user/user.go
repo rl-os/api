@@ -3,8 +3,8 @@ package user
 import (
 	"fmt"
 	"github.com/deissh/go-utils"
-	"github.com/deissh/osu-lazer/api/pkg"
-	"github.com/deissh/osu-lazer/api/pkg/entity"
+	"github.com/deissh/rl/api/pkg"
+	"github.com/deissh/rl/api/pkg/entity"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"time"

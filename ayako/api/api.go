@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 )
 

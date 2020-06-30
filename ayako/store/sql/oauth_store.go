@@ -3,10 +3,10 @@ package sql
 import (
 	"context"
 	"github.com/deissh/go-utils"
-	myctx "github.com/deissh/osu-lazer/ayako/ctx"
-	"github.com/deissh/osu-lazer/ayako/entity"
-	"github.com/deissh/osu-lazer/ayako/errors"
-	"github.com/deissh/osu-lazer/ayako/store"
+	myctx "github.com/deissh/rl/ayako/ctx"
+	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/errors"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/dgrijalva/jwt-go"
 	"time"
 )

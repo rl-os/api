@@ -2,7 +2,7 @@ package permission
 
 import (
 	"context"
-	myctx "github.com/deissh/osu-lazer/ayako/ctx"
+	myctx "github.com/deissh/rl/ayako/ctx"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )

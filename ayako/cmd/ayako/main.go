@@ -4,10 +4,10 @@
 package main
 
 import (
-	"github.com/deissh/osu-lazer/ayako/app"
-	"github.com/deissh/osu-lazer/ayako/config"
-	"github.com/deissh/osu-lazer/ayako/services"
-	"github.com/deissh/osu-lazer/ayako/store/sql"
+	"github.com/deissh/rl/ayako/app"
+	"github.com/deissh/rl/ayako/config"
+	"github.com/deissh/rl/ayako/services"
+	"github.com/deissh/rl/ayako/store/sql"
 	"github.com/google/wire"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"

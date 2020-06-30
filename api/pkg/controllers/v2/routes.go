@@ -1,10 +1,10 @@
 package v2
 
 import (
-	"github.com/deissh/osu-lazer/api/pkg/common/middlewares/permission"
-	"github.com/deissh/osu-lazer/api/pkg/controllers/v2/chats"
-	"github.com/deissh/osu-lazer/api/pkg/controllers/v2/friends"
-	"github.com/deissh/osu-lazer/api/pkg/controllers/v2/users"
+	"github.com/deissh/rl/api/pkg/common/middlewares/permission"
+	"github.com/deissh/rl/api/pkg/controllers/v2/chats"
+	"github.com/deissh/rl/api/pkg/controllers/v2/friends"
+	"github.com/deissh/rl/api/pkg/controllers/v2/users"
 	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
 )

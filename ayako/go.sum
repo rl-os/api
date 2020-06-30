@@ -32,9 +32,9 @@ github.com/deissh/go-utils v1.1.0 h1:7twLI+2qAL+UIXDMiGqOCCYIjUpcpESq2CmrGQ1ZlO0
 github.com/deissh/go-utils v1.1.0/go.mod h1:JVjK+ZgEuVaQi8/OPVlpvsJ/sejtO1DbX7pafhd5o3c=
 github.com/deissh/osu-go-client v1.1.3 h1:1TGHRM/leWiLNm/nJg0VO0HYmtexRNRGNOfMRAo0WSk=
 github.com/deissh/osu-go-client v1.1.3/go.mod h1:1g0c6Ioit95h9rDlt5sthOxS3YfFRwmaNlAPP3zubw8=
-github.com/deissh/osu-lazer v1.1.21 h1:3Lee161jsIbm+TvlJSXYCoUOdH6eCYP1nUmZ5at9DNs=
-github.com/deissh/osu-lazer/api v0.0.0-20200605195236-da50f7d02796 h1:NYYvkfxJonEoTmpRDibMFiTpKzJpgKco5DbdR/lXnZY=
-github.com/deissh/osu-lazer/api v0.0.0-20200605195236-da50f7d02796/go.mod h1:MLXOrI2cW6i0uQYQnPhz6oVG2hWFFVe8H1PReqRtOTM=
+github.com/deissh/rl v1.1.21 h1:3Lee161jsIbm+TvlJSXYCoUOdH6eCYP1nUmZ5at9DNs=
+github.com/deissh/rl/api v0.0.0-20200605195236-da50f7d02796 h1:NYYvkfxJonEoTmpRDibMFiTpKzJpgKco5DbdR/lXnZY=
+github.com/deissh/rl/api v0.0.0-20200605195236-da50f7d02796/go.mod h1:MLXOrI2cW6i0uQYQnPhz6oVG2hWFFVe8H1PReqRtOTM=
 github.com/dgraph-io/badger v1.6.0/go.mod h1:zwt7syl517jmP8s94KqSxTlM6IMsdhYy6psNgSztDR4=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=

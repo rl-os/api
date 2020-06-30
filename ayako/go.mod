@@ -1,4 +1,4 @@
-module github.com/deissh/osu-lazer/ayako
+module github.com/deissh/rl/ayako
 
 go 1.13
 
@@ -7,7 +7,6 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/deissh/go-utils v1.1.0
 	github.com/deissh/osu-go-client v1.1.3
-	github.com/deissh/osu-lazer/api v0.0.0-20200605195236-da50f7d02796
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-playground/validator/v10 v10.3.0
 	github.com/go-sql-driver/mysql v1.5.0 // indirect

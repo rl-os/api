@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/deissh/datadog-client"
-	"github.com/deissh/osu-lazer/api/pkg"
+	"github.com/deissh/rl/api/pkg"
 	"github.com/gookit/config/v2"
 	"github.com/gookit/config/v2/yaml"
 	"github.com/rs/zerolog"

@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/deissh/go-utils"
-	"github.com/deissh/osu-lazer/ayako/entity"
-	"github.com/deissh/osu-lazer/ayako/errors"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/errors"
+	"github.com/deissh/rl/ayako/store"
 	"time"
 )
 
