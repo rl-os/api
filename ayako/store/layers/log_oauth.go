@@ -32,7 +32,7 @@ func (_d OAuthWithLog) CreateClient(ctx context.Context, name string, redirect s
 		Msg("store.OAuth.CreateClient: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.OAuth.CreateClient: returned an error")
 		} else {
 			log.Debug().
@@ -53,7 +53,7 @@ func (_d OAuthWithLog) CreateToken(ctx context.Context, userId uint, clientID ui
 		Msg("store.OAuth.CreateToken: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.OAuth.CreateToken: returned an error")
 		} else {
 			log.Debug().
@@ -72,7 +72,7 @@ func (_d OAuthWithLog) GetClient(ctx context.Context, id uint, secret string) (o
 		Msg("store.OAuth.GetClient: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.OAuth.GetClient: returned an error")
 		} else {
 			log.Debug().
@@ -92,7 +92,7 @@ func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string, cl
 		Msg("store.OAuth.RefreshToken: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.OAuth.RefreshToken: returned an error")
 		} else {
 			log.Debug().
@@ -111,7 +111,7 @@ func (_d OAuthWithLog) RevokeToken(ctx context.Context, userId uint, accessToken
 		Msg("store.OAuth.RevokeToken: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.OAuth.RevokeToken: returned an error")
 		} else {
 			log.Debug().
@@ -129,7 +129,7 @@ func (_d OAuthWithLog) ValidateToken(ctx context.Context, accessToken string) (o
 		Msg("store.OAuth.ValidateToken: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.OAuth.ValidateToken: returned an error")
 		} else {
 			log.Debug().

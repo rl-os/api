@@ -32,11 +32,11 @@ func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.U
 		login,
 	)
 	if err != nil {
-		return nil, errors.WithCause(401, "the user credentials were incorrect", err)
+		return nil, errors.WithCause("user_get", 401, "user credentials were incorrect", err)
 	}
 
 	if ok := utils.CompareHash(baseUser.PasswordHash, pwd); !ok {
-		return nil, errors.New(401, "The user credentials were incorrect.")
+		return nil, errors.WithCause("user_get", 401, "user credentials were incorrect", err)
 	}
 
 	return baseUser.GetShort(), nil
@@ -59,7 +59,9 @@ func (u UserStore) Get(ctx context.Context, userId uint, mode string) (*entity.U
 		userId,
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause(
+			"user_get", 404, "user not found", err,
+		)
 	}
 
 	return u.ComputeFields(ctx, user)
@@ -76,7 +78,9 @@ func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity
 
 	hashed, err := utils.GetHash(pwd)
 	if err != nil {
-		return nil, errors.WithCause(1005, "hashing password", err)
+		return nil, errors.WithCause(
+			"user_create", 500, "hashing password", err,
+		)
 	}
 
 	tx := u.GetMaster().MustBeginTx(ctx, nil)
@@ -90,7 +94,7 @@ func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity
 			name, email, hashed,
 		)
 		if err != nil {
-			return nil, errors.WithCause(1006, "creating user", err)
+			return nil, errors.WithCause("user_create", 500, "creating user", err)
 		}
 
 		// creating default records
@@ -109,7 +113,7 @@ func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity
 
 	err = tx.Commit()
 	if err != nil {
-		return nil, errors.WithCause(1007, "creating user", err)
+		return nil, errors.WithCause("user_create", 500, "transaction not complited", err)
 	}
 
 	return u.User().ComputeFields(ctx, baseUser)
@@ -128,7 +132,7 @@ func (u UserStore) Activate(ctx context.Context, userId uint) error {
 		userId,
 	)
 	if err != nil {
-		return errors.WithCause(404, "User not found", err)
+		return errors.WithCause("user_activate", 404, "User not found", err)
 	}
 
 	return nil
@@ -143,7 +147,7 @@ func (u UserStore) Deactivate(ctx context.Context, userId uint) error {
 		userId,
 	)
 	if err != nil {
-		return errors.WithCause(404, "User not found", err)
+		return errors.WithCause("user_deactivate", 404, "User not found", err)
 	}
 
 	return nil
@@ -177,7 +181,7 @@ func (u UserStore) UpdateLastVisit(ctx context.Context, userId uint) error {
 		userId,
 	)
 	if err != nil {
-		return errors.WithCause(404, "User not found", err)
+		return errors.WithCause("user_update_online", 404, "User not found", err)
 	}
 	return nil
 }
@@ -211,7 +215,7 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 		user.ID,
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("user_compute", 500, "getting MonthlyPlayCounts", err)
 	}
 
 	// =========================
@@ -235,7 +239,7 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 		user.ID,
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("user_compute", 500, "getting UserAchievements", err)
 	}
 
 	// =========================
@@ -254,7 +258,7 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 		user.ID,
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("user_compute", 500, "getting UserStatistics", err)
 	}
 
 	// =========================
@@ -274,7 +278,7 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 		user.ID,
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("user_compute", 500, "getting UserRank", err)
 	}
 	user.Statistics.PpRank = user.Statistics.Rank.Global
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/deissh/rl/ayako/api"
 	"github.com/deissh/rl/ayako/config"
+	"github.com/deissh/rl/ayako/middlewares/customerror"
 	"github.com/deissh/rl/ayako/middlewares/customlogger"
 	"github.com/deissh/rl/ayako/middlewares/permission"
 	"github.com/deissh/rl/ayako/middlewares/reqest_context"
@@ -34,6 +35,7 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 	e := echo.New()
 	e.HidePort = true
 	e.HideBanner = true
+	e.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
 
 	e.Use(
 		middleware.RequestID(),

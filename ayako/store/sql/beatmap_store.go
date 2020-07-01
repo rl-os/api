@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/errors"
 	"github.com/deissh/rl/ayako/store"
 )
 
@@ -31,7 +32,7 @@ func (s BeatmapStore) Get(ctx context.Context, id uint) (*entity.SingleBeatmap, 
 		id,
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("bm_get", 404, "Beatmap not found", err)
 	}
 	set, err := s.BeatmapSet().Get(ctx, uint(beatmap.BeatmapsetID))
 	if err != nil {
@@ -69,7 +70,7 @@ func (s BeatmapStore) Create(ctx context.Context, from interface{}) (*entity.Bea
 
 	b, err := json.Marshal(&from)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("bm_create", 500, "marshaling input interface", err)
 	}
 
 	err = s.GetMaster().GetContext(
@@ -88,7 +89,7 @@ func (s BeatmapStore) Create(ctx context.Context, from interface{}) (*entity.Bea
 		string(b),
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("bm_create", 400, "beatmap not created", err)
 	}
 
 	return &set, nil
@@ -99,7 +100,7 @@ func (s BeatmapStore) CreateBatch(ctx context.Context, from interface{}) (*[]ent
 
 	b, err := json.Marshal(&from)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("bm_create", 500, "marshaling input interface", err)
 	}
 
 	err = s.GetMaster().SelectContext(
@@ -118,7 +119,7 @@ func (s BeatmapStore) CreateBatch(ctx context.Context, from interface{}) (*[]ent
 		string(b),
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("bm_create_batch", 400, "beatmap not created", err)
 	}
 
 	return &sets, nil

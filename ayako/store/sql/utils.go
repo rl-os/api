@@ -15,7 +15,7 @@ func tokenCreate(jwtSecret string, beforeRevoke time.Duration, userID uint, clie
 	refreshToken, err := utils.GenerateRandomString(255)
 	jwtID, err := utils.GenerateRandomString(64)
 	if err != nil {
-		return nil, errors.WithCause(500, "New refresh token generate errors.", err)
+		return nil, errors.WithCause("internal_signing", 500, "new refresh token generate", err)
 	}
 
 	now := time.Now()
@@ -32,7 +32,7 @@ func tokenCreate(jwtSecret string, beforeRevoke time.Duration, userID uint, clie
 
 	accessToken, err := tokenClaims.SignedString([]byte(jwtSecret))
 	if err != nil {
-		return nil, errors.WithCause(500, "Signing error", err)
+		return nil, errors.WithCause("internal_signing", 500, "access token signing", err)
 	}
 
 	// inserting new oauth_token

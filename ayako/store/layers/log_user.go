@@ -32,7 +32,7 @@ func (_d UserWithLog) Activate(ctx context.Context, userId uint) (err error) {
 		Msg("store.User.Activate: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.Activate: returned an error")
 		} else {
 			log.Debug().
@@ -51,7 +51,7 @@ func (_d UserWithLog) Ban(ctx context.Context, userId uint, time time.Duration) 
 		Msg("store.User.Ban: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.Ban: returned an error")
 		} else {
 			log.Debug().
@@ -69,7 +69,7 @@ func (_d UserWithLog) ComputeFields(ctx context.Context, user entity.User) (up1 
 		Msg("store.User.ComputeFields: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.ComputeFields: returned an error")
 		} else {
 			log.Debug().
@@ -89,7 +89,7 @@ func (_d UserWithLog) Create(ctx context.Context, name string, email string, pwd
 		Msg("store.User.Create: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.Create: returned an error")
 		} else {
 			log.Debug().
@@ -107,7 +107,7 @@ func (_d UserWithLog) Deactivate(ctx context.Context, userId uint) (err error) {
 		Msg("store.User.Deactivate: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.Deactivate: returned an error")
 		} else {
 			log.Debug().
@@ -126,7 +126,7 @@ func (_d UserWithLog) Get(ctx context.Context, userId uint, mode string) (up1 *e
 		Msg("store.User.Get: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.Get: returned an error")
 		} else {
 			log.Debug().
@@ -145,7 +145,7 @@ func (_d UserWithLog) GetByBasic(ctx context.Context, login string, pwd string) 
 		Msg("store.User.GetByBasic: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.GetByBasic: returned an error")
 		} else {
 			log.Debug().
@@ -164,7 +164,7 @@ func (_d UserWithLog) GetShort(ctx context.Context, userId uint, mode string) (u
 		Msg("store.User.GetShort: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.GetShort: returned an error")
 		} else {
 			log.Debug().
@@ -183,7 +183,7 @@ func (_d UserWithLog) Mute(ctx context.Context, userId uint, time time.Duration)
 		Msg("store.User.Mute: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.Mute: returned an error")
 		} else {
 			log.Debug().
@@ -201,7 +201,7 @@ func (_d UserWithLog) UnBan(ctx context.Context, userId uint) (err error) {
 		Msg("store.User.UnBan: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.UnBan: returned an error")
 		} else {
 			log.Debug().
@@ -219,7 +219,7 @@ func (_d UserWithLog) UnMute(ctx context.Context, userId uint) (err error) {
 		Msg("store.User.UnMute: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.UnMute: returned an error")
 		} else {
 			log.Debug().
@@ -238,7 +238,7 @@ func (_d UserWithLog) Update(ctx context.Context, userId uint, from interface{})
 		Msg("store.User.Update: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.Update: returned an error")
 		} else {
 			log.Debug().
@@ -256,7 +256,7 @@ func (_d UserWithLog) UpdateLastVisit(ctx context.Context, userId uint) (err err
 		Msg("store.User.UpdateLastVisit: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.User.UpdateLastVisit: returned an error")
 		} else {
 			log.Debug().

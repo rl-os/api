@@ -27,7 +27,7 @@ func (f FriendStore) Add(ctx context.Context, userId, targetId uint) error {
 		userId, targetId,
 	)
 	if err != nil {
-		return errors.WithCause(500, "creating relationships", err)
+		return errors.WithCause("friend_add", 400, "creating relationships", err)
 	}
 
 	return nil
@@ -40,7 +40,7 @@ func (f FriendStore) Remove(ctx context.Context, userId, targetId uint) error {
 		userId, targetId,
 	)
 	if err != nil {
-		return errors.WithCause(500, "remove relationships", err)
+		return errors.WithCause("friend_remove", 400, "remove relationships", err)
 	}
 
 	return nil
@@ -63,7 +63,7 @@ func (f FriendStore) GetSubscriptions(ctx context.Context, userId uint) (*[]enti
 		userId,
 	)
 	if err != nil {
-		return nil, errors.WithCause(500, "get all subscriptions", err)
+		return nil, errors.WithCause("friend_all", 404, "get all subscriptions", err)
 	}
 
 	return &users, nil

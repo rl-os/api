@@ -32,7 +32,7 @@ func (_d FriendWithLog) Add(ctx context.Context, userId uint, targetId uint) (er
 		Msg("store.Friend.Add: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.Friend.Add: returned an error")
 		} else {
 			log.Debug().
@@ -50,7 +50,7 @@ func (_d FriendWithLog) GetSubscriptions(ctx context.Context, userId uint) (uap1
 		Msg("store.Friend.GetSubscriptions: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.Friend.GetSubscriptions: returned an error")
 		} else {
 			log.Debug().
@@ -69,7 +69,7 @@ func (_d FriendWithLog) Remove(ctx context.Context, userId uint, targetId uint) 
 		Msg("store.Friend.Remove: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.Friend.Remove: returned an error")
 		} else {
 			log.Debug().

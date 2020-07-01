@@ -66,7 +66,7 @@ func (h *OAuthTokenHandlers) Create(c echo.Context) error {
 			return err
 		}
 	} else {
-		return errors.New(400, "Invalid grand_type")
+		return errors.New("oauth_token_create", 400, "Invalid grand_type")
 	}
 
 	return c.JSON(200, struct {

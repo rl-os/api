@@ -4,6 +4,7 @@ import (
 	"context"
 	myctx "github.com/deissh/rl/ayako/ctx"
 	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/errors"
 	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -17,7 +18,7 @@ type BeatmapSetHandlers struct {
 func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 	beatmapsetID, err := strconv.ParseUint(c.Param("beatmapset"), 10, 32)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmapset id")
+		return errors.New("request_params", 400, "Invalid beatmapset id")
 	}
 
 	ctx := context.Background()
@@ -29,7 +30,7 @@ func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 
 	beatmaps, err := h.Store.BeatmapSet().Get(ctx, uint(beatmapsetID))
 	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "Beatmapset not found")
+		return err
 	}
 
 	return c.JSON(200, beatmaps)
@@ -40,19 +41,19 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 		Id uint `query:"beatmap_id"`
 	}{}
 	if err := c.Bind(&params); err != nil {
-		return err
+		return errors.New("request_params", 400, "Invalid params")
 	}
 
 	ctx, _ := c.Get("context").(context.Context)
 
 	beatmap, err := h.Store.Beatmap().Get(ctx, params.Id)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
+		return err
 	}
 
 	beatmapSet, err := h.Store.BeatmapSet().Get(ctx, uint(beatmap.Beatmapset.ID))
 	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "BeatmapSet not found")
+		return err
 	}
 
 	return c.JSON(200, beatmapSet)
@@ -60,10 +61,9 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 
 func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 	// todo: this
-	params := struct {
-	}{}
+	params := struct{}{}
 	if err := c.Bind(&params); err != nil {
-		return err
+		return errors.New("request_params", 400, "Invalid params")
 	}
 
 	ctx := context.Background()
@@ -75,7 +75,7 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 
 	beatmapSets, err := h.Store.BeatmapSet().Get(ctx, 1118896)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "BeatmapSet not found")
+		return err
 	}
 
 	return c.JSON(200, struct {
@@ -97,18 +97,18 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 	}{}
 	beatmapsetID, err := strconv.ParseUint(c.Param("beatmapset"), 10, 32)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmapset id")
+		return errors.New("request_params", 400, "Invalid beatmapset id")
 	}
 
 	if err := c.Bind(&params); err != nil {
-		return err
+		return errors.New("request_params", 400, "Invalid params")
 	}
 
 	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		return err
 	}
 
 	var total uint
@@ -121,7 +121,7 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid action")
 	}
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Internal errors")
+		return err
 	}
 
 	return c.JSON(http.StatusOK, struct {
