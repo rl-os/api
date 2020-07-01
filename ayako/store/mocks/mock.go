@@ -15,6 +15,7 @@ type MockedStore struct {
 	beatmapSet *MockBeatmapSet
 	user       *MockUser
 	oauth      *MockOAuth
+	friend     *MockFriend
 }
 
 func InitStore(ctrl *gomock.Controller) MockedStore {
@@ -29,8 +30,10 @@ func (ss MockedStore) Beatmap() store.Beatmap       { return ss.beatmap }
 func (ss MockedStore) BeatmapSet() store.BeatmapSet { return ss.beatmapSet }
 func (ss MockedStore) User() store.User             { return ss.user }
 func (ss MockedStore) OAuth() store.OAuth           { return ss.oauth }
+func (ss MockedStore) Friend() store.Friend         { return ss.friend }
 
 func (ss MockedStore) BeatmapExpect() *MockBeatmapMockRecorder       { return ss.beatmap.EXPECT() }
 func (ss MockedStore) BeatmapSetExpect() *MockBeatmapSetMockRecorder { return ss.beatmapSet.EXPECT() }
 func (ss MockedStore) UserExpect() *MockUserMockRecorder             { return ss.user.EXPECT() }
 func (ss MockedStore) OAuthExpect() *MockOAuthMockRecorder           { return ss.oauth.EXPECT() }
+func (ss MockedStore) FriendExpect() *MockFriendMockRecorder         { return ss.friend.EXPECT() }

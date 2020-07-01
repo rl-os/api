@@ -1,4 +1,4 @@
-package api_oauth
+package api
 
 import (
 	"context"
@@ -10,12 +10,6 @@ import (
 
 type RegistrationHandlers struct {
 	Store store.Store
-}
-
-func (api *Routes) InitRegistration(store store.Store) {
-	handlers := RegistrationHandlers{store}
-
-	api.Registration.POST("", handlers.Create)
 }
 
 func (h *RegistrationHandlers) Create(c echo.Context) error {

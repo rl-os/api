@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"github.com/deissh/rl/ayako/api"
-	api_oauth "github.com/deissh/rl/ayako/api-oauth"
 	"github.com/deissh/rl/ayako/config"
 	"github.com/deissh/rl/ayako/middlewares/customlogger"
 	"github.com/deissh/rl/ayako/middlewares/permission"
@@ -43,10 +42,8 @@ func NewApp(cfg *config.Config, store store.Store) *App {
 		reqest_context.GlobalMiddleware(ctx),
 	)
 
-	{ // setup routes
-		api.New(store, e.Group("/api"))
-		api_oauth.New(store, e.Group(""))
-	}
+	// setup routes
+	api.New(store, e)
 
 	app := &App{
 		Store:   store,

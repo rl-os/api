@@ -57,7 +57,7 @@ func TestBeatmapHandlers_Show(t *testing.T) {
 			mocked := mock_store.InitStore(ctrl)
 
 			// trying create new api
-			New(mocked, e.Group("/"))
+			New(mocked, e)
 
 			h := &BeatmapHandlers{mocked}
 
@@ -133,7 +133,7 @@ func TestBeatmapHandlers_Lookup(t *testing.T) {
 			mocked := mock_store.InitStore(ctrl)
 
 			// trying create new api
-			New(mocked, e.Group("/"))
+			New(mocked, e)
 
 			h := &BeatmapHandlers{mocked}
 

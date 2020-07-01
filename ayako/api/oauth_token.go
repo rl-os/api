@@ -1,4 +1,4 @@
-package api_oauth
+package api
 
 import (
 	"context"
@@ -10,17 +10,11 @@ import (
 	"net/http"
 )
 
-type TokenHandlers struct {
+type OAuthTokenHandlers struct {
 	Store store.Store
 }
 
-func (api *Routes) InitToken(store store.Store) {
-	handlers := TokenHandlers{store}
-
-	api.Token.POST("", handlers.Create)
-}
-
-func (h *TokenHandlers) Create(c echo.Context) error {
+func (h *OAuthTokenHandlers) Create(c echo.Context) error {
 	// createTokenRequestData contain incoming data with user credentials
 	type createTokenRequestData struct {
 		GrantType    string `json:"grant_type" form:"grant_type" validate:"required"`
