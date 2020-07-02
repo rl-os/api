@@ -5,12 +5,6 @@ import (
 	"net/http"
 )
 
-// Error code consists of 4 digits
-// [prefix][code], example 1056 (10 - prefix and 56 - code)
-// 10 - internal errors
-// 11 - request errors
-// ...
-
 // Interface assertion
 // this code is necessary to check for compatibility
 // with the Error type so that it would be

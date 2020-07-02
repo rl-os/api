@@ -68,7 +68,8 @@ func New(store store.Store, router *echo.Echo) {
 		{
 			h := BeatmapSetHandlers{store}
 			bmsets.GET("/lookup", h.Lookup)
-			bmsets.GET("/search/:filters", h.Search)
+			bmsets.GET("/search", h.Search)
+			bmsets.GET("/search/:filters", h.Search) // ???
 			bmsets.GET("/:beatmapset", h.Get)
 			bmsets.GET("/:beatmapset/download", echo.MethodNotAllowedHandler, permission.MustLogin)
 			bmsets.POST("/:beatmapset/favourites", h.Favourite, permission.MustLogin)

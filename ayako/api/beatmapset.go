@@ -61,30 +61,37 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 
 func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 	// todo: this
-	params := struct{}{}
+	params := struct {
+		Query    string `json:"q" query:"q"`
+		Mode     int    `json:"m" query:"m"`
+		Status   string `json:"s" query:"s"`
+		Genre    string `json:"g" query:"g"`
+		Language string `json:"l" query:"l"`
+		Sort     string `json:"sort" query:"sort"`
+	}{}
 	if err := c.Bind(&params); err != nil {
 		return errors.New("request_params", 400, "Invalid params")
 	}
 
-	ctx := context.Background()
+	//ctx := context.Background()
+	//
+	//userId, ok := c.Get("current_user_id").(uint)
+	//if ok {
+	//	ctx = context.WithValue(context.Background(), "current_user_id", userId)
+	//}
 
-	userId, ok := c.Get("current_user_id").(uint)
-	if ok {
-		ctx = context.WithValue(context.Background(), "current_user_id", userId)
-	}
-
-	beatmapSets, err := h.Store.BeatmapSet().Get(ctx, 1118896)
-	if err != nil {
-		return err
-	}
+	//beatmapSets, err := h.Store.BeatmapSet().Get(ctx, 1118896)
+	//if err != nil {
+	//	return err
+	//}
 
 	return c.JSON(200, struct {
-		Beatmapsets           *[]entity.BeatmapSetFull `json:"beatmapsets"`
-		RecommendedDifficulty float32                  `json:"recommended_difficulty"`
-		Error                 error                    `json:"error"`
-		Total                 uint                     `json:"total"`
+		Beatmapsets           *[]entity.BeatmapSearch `json:"beatmapsets"`
+		RecommendedDifficulty float32                 `json:"recommended_difficulty"`
+		Error                 error                   `json:"error"`
+		Total                 uint                    `json:"total"`
 	}{
-		&[]entity.BeatmapSetFull{*beatmapSets},
+		&[]entity.BeatmapSearch{entity.BeatmapSearch{}},
 		3,
 		nil,
 		0,
