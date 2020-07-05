@@ -14,7 +14,7 @@ Before you get started, make sure you have the following dependencies installed 
 ## Local Installation
 
 ```bash
-$ git clone git@github.com:deissh/osu-lazer.git && cd osu-lazer
+$ git clone git@github.com:deissh/rl.git && cd rl
 ```
 
 First you need to prepare the database, you can create and migrate database using the `dbmate` command with the `db` folder.

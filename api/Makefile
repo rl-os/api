@@ -83,13 +83,13 @@ lint: vet fmt-check
 	@$(GOCYCLO) -over 55 $(shell find . -iname '*.go' -type f | grep -v /vendor/)
 
 ## Install missing dependencies
-## Also setup unnessosory packages that using in CI
+## Also setup unnecessary packages that using in CI
 .PHONY: install
 install:
 	@echo ">  Checking if there is any missing dependencies..."
 	@$(GOMOD) download
 	@$(GOGET) -u github.com/amacneil/dbmate
-	@echo ">  Installing unnessosory packages"
+	@echo ">  Installing unnecessary packages"
 	$(GOGET) -u golang.org/x/lint/golint
 	$(GOGET) -u github.com/fzipp/gocyclo
 	$(GOGET) -u golang.org/x/tools/cmd/goimports
