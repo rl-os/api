@@ -18,4 +18,5 @@ type SqlStore interface {
 	BeatmapSet() store.BeatmapSet
 	User() store.User
 	Friend() store.Friend
+	Chat() store.Chat
 }
