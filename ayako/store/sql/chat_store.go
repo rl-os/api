@@ -67,8 +67,14 @@ func (c ChatStore) GetOrCreatePm(ctx context.Context, userId, targetId uint) (*e
 		ctx,
 		&channel,
 		`INSERT INTO channels (name, description, type, icon, users, active_users)
-				VALUES ('PM', '-', 'PM', DEFAULT, ARRAY[$1, $2]::int[], ARRAY[$1, $2]::int[])
-				RETURNING *`,
+		SELECT
+			name.str, '-', 'PM', 'PM', ARRAY[$1, $2]::int[], ARRAY[$1, $2]::int[]
+		FROM (
+			select string_agg(users.username, ' & ') as str
+			from users
+			where users.id in ($1, $2)
+		) as name
+		RETURNING *`,
 		userId,
 		targetId,
 	)
