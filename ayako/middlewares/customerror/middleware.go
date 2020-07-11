@@ -25,6 +25,7 @@ func CustomHTTPErrorHandler(err error, c echo.Context) {
 		res.ErrorID = "internal"
 		res.ErrorDescription = he.Error()
 		res.Message = http.StatusText(he.Code)
+		code = he.Code
 	}
 
 	// if custom errors
