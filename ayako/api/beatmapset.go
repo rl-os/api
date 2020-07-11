@@ -91,7 +91,7 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 		Error                 error                   `json:"error"`
 		Total                 uint                    `json:"total"`
 	}{
-		&[]entity.BeatmapSearch{entity.BeatmapSearch{}},
+		&[]entity.BeatmapSearch{},
 		3,
 		nil,
 		0,

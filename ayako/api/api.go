@@ -98,16 +98,17 @@ func New(store store.Store, router *echo.Echo) {
 		// === Chats ===
 		chat := v2.Group("/chat", permission.MustLogin)
 		{
-			chat.POST("/new", echo.MethodNotAllowedHandler)
-			chat.GET("/updates", echo.MethodNotAllowedHandler)
+			h := ChatHandlers{store}
+			chat.POST("/new", h.NewPm)
+			chat.GET("/updates", h.Updates)
 			chat.GET("/presence", echo.MethodNotAllowedHandler) // ???
-			chat.GET("/channels", echo.MethodNotAllowedHandler)
-			chat.GET("/channels/joined", echo.MethodNotAllowedHandler)
-			chat.GET("/channels/:channel/messages", echo.MethodNotAllowedHandler)
-			chat.POST("/channels/:channel/messages", echo.MethodNotAllowedHandler)
-			chat.PUT("/channels/:channel/users/:user", echo.MethodNotAllowedHandler)
-			chat.DELETE("/channels/:channel/users/:user", echo.MethodNotAllowedHandler)
-			chat.PUT("/channels/:channel/mark-as-read/:message", echo.MethodNotAllowedHandler)
+			chat.GET("/channels", h.GetAll)
+			chat.GET("/channels/joined", h.GetJoined)
+			chat.GET("/channels/:channel/messages", h.Messages)
+			chat.POST("/channels/:channel/messages", h.Send)
+			chat.PUT("/channels/:channel/users/:user", h.Join)
+			chat.DELETE("/channels/:channel/users/:user", h.Leave)
+			chat.PUT("/channels/:channel/mark-as-read/:message", echo.MethodNotAllowedHandler) // todo
 		}
 
 		// === Comments ===
