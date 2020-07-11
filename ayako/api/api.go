@@ -46,12 +46,14 @@ func New(store store.Store, router *echo.Echo) {
 		// === Users ===
 		users := v2.Group("/users")
 		{
+			h := UsersHandlers{store}
 			users.GET("/:user/kudosu", echo.MethodNotAllowedHandler)
 			users.GET("/:user/scores/:type", echo.MethodNotAllowedHandler)
 			users.GET("/:user/beatmapsets/:type", echo.MethodNotAllowedHandler)
 			users.GET("/:user/recent_activity", echo.MethodNotAllowedHandler)
-			users.GET("/:user/:mode", echo.MethodNotAllowedHandler)
-			users.GET("/:user/", echo.MethodNotAllowedHandler)
+			users.GET("/:user/:mode", h.Get)
+			users.GET("/:user/", h.Get)
+			users.GET("/:user", h.Get)
 		}
 
 		// === Beatmaps ===
