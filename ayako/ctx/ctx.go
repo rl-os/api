@@ -13,9 +13,9 @@ const (
 
 // prebuild errors
 var (
-	emptyReqIdErr     = errors.New(1101, "empty requestId")
-	emptyUserIdErr    = errors.New(1102, "empty userId")
-	emptyUserTokenErr = errors.New(1103, "empty userToken")
+	emptyReqIdErr     = errors.New("internal_context", 500, "empty requestId")
+	emptyUserIdErr    = errors.New("internal_context", 401, "empty userId")
+	emptyUserTokenErr = errors.New("internal_context", 401, "empty userToken")
 )
 
 type PipeFunc func(ctx context.Context) context.Context

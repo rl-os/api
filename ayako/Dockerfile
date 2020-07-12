@@ -2,7 +2,7 @@ FROM golang:1.13-alpine3.10 AS builder
 
 ENV GO111MODULE="on"
 
-RUN apk add --no-cache bash make git curl
+RUN apk add --no-cache bash make git curl gcc g++
 RUN curl -fsSL -o /dbmate https://github.com/amacneil/dbmate/releases/download/v1.8.0/dbmate-linux-amd64
 RUN chmod +x /dbmate
 

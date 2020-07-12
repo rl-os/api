@@ -24,12 +24,14 @@ func (o OAuthStore) CreateClient(ctx context.Context, name string, redirect stri
 
 	secret, err := utils.GenerateRandomString(255)
 	if err != nil {
-		return nil, errors.WithCause(500, "Internal error", err)
+		return nil, errors.WithCause(
+			"oauth_create_client", 500, "OAuth not created", err,
+		)
 	}
 
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {
-		return nil, errors.WithCause(401, "Require user_id", err)
+		return nil, err
 	}
 
 	err = o.GetMaster().GetContext(
@@ -53,6 +55,14 @@ func (o OAuthStore) GetClient(ctx context.Context, id uint, secret string) (*ent
 		`SELECT * FROM oauth_client WHERE id = $1 AND secret = $2`,
 		id, secret,
 	)
+	if err != nil {
+		return nil, errors.WithCause(
+			"oauth_get_client",
+			404,
+			"OAuth client not found",
+			err,
+		)
+	}
 
 	return &client, err
 }
@@ -60,7 +70,7 @@ func (o OAuthStore) GetClient(ctx context.Context, id uint, secret string) (*ent
 func (o OAuthStore) CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (*entity.OAuthToken, error) {
 	_, err := o.OAuth().GetClient(ctx, clientID, clientSecret)
 	if err != nil {
-		return nil, errors.WithCause(404, "OAuth client not found", err)
+		return nil, err
 	}
 
 	cfg := o.GetConfig()
@@ -86,7 +96,12 @@ func (o OAuthStore) CreateToken(ctx context.Context, userId uint, clientID uint,
 		token.RefreshToken, token.Scopes, token.ExpiresAt,
 	)
 	if err != nil {
-		return nil, errors.WithCause(500, "creating token", err)
+		return nil, errors.WithCause(
+			"oauth_create_token",
+			500,
+			"Access token not created",
+			err,
+		)
 	}
 
 	return token, nil
@@ -103,7 +118,12 @@ func (o OAuthStore) RevokeToken(ctx context.Context, userId uint, accessToken st
 		accessToken,
 	)
 	if err != nil {
-		return errors.WithCause(404, "Access token not exist or already revoked", err)
+		return errors.WithCause(
+			"oauth_revoke_token",
+			400,
+			"Access token not exist or already revoked",
+			err,
+		)
 	}
 
 	return nil
@@ -122,7 +142,12 @@ func (o OAuthStore) RefreshToken(ctx context.Context, refreshToken string, clien
 		clientID,
 	)
 	if err != nil {
-		return nil, errors.WithCause(404, "Access token not exist or already revoked", err)
+		return nil, errors.WithCause(
+			"oauth_refresh_token",
+			400,
+			"Access token not exist or already revoked",
+			err,
+		)
 	}
 
 	newToken, err := o.OAuth().CreateToken(ctx, token.UserID, clientID, clientSecret, token.Scopes)
@@ -138,15 +163,9 @@ func (o OAuthStore) ValidateToken(ctx context.Context, accessToken string) (*ent
 
 	v, _ := err.(*jwt.ValidationError)
 	if err != nil && v.Errors == jwt.ValidationErrorExpired {
-		_, _ = o.GetMaster().ExecContext(
-			ctx,
-			`UPDATE oauth_token SET revoked = true WHERE access_token = $1`,
-			accessToken,
-		)
-
-		return nil, errors.WithCause(400, "Access token expired", err)
+		return nil, errors.WithCause("oauth_validate_token", 400, "Access token expired", err)
 	} else if err != nil {
-		return nil, errors.WithCause(400, "Invalid access token", err)
+		return nil, errors.WithCause("oauth_validate_token", 401, "Invalid access token", err)
 	}
 
 	var token entity.OAuthToken
@@ -158,10 +177,20 @@ func (o OAuthStore) ValidateToken(ctx context.Context, accessToken string) (*ent
 		accessToken,
 	)
 	if err != nil {
-		return nil, errors.WithCause(500, "Selecting access_token in database errors.", err)
+		return nil, errors.WithCause(
+			"oauth_validate_token",
+			500,
+			"Selecting access_token in database",
+			err,
+		)
 	}
 	if token.Revoked {
-		return nil, errors.WithCause(400, "Access token expired", err)
+		return nil, errors.WithCause(
+			"oauth_validate_token",
+			400,
+			"Access token expired",
+			err,
+		)
 	}
 
 	return &token, nil

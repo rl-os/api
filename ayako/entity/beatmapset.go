@@ -111,6 +111,14 @@ type Hype struct {
 func (c Hype) Value() (driver.Value, error)  { return utils.ValueOfStruct(c) }
 func (c *Hype) Scan(value interface{}) error { return utils.ScanToStruct(c, value) }
 
+type Nominations struct {
+	Current  int `json:"current"`
+	Required int `json:"required"`
+}
+
+func (c Nominations) Value() (driver.Value, error)  { return utils.ValueOfStruct(c) }
+func (c *Nominations) Scan(value interface{}) error { return utils.ScanToStruct(c, value) }
+
 type DefaultGroup string
 
 const (

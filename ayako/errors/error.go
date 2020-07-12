@@ -1,12 +1,9 @@
 package errors
 
-import "fmt"
-
-// Error code consists of 4 digits
-// [prefix][code], example 1056 (10 - prefix and 56 - code)
-// 10 - internal errors
-// 11 - request errors
-// ...
+import (
+	"fmt"
+	"net/http"
+)
 
 // Interface assertion
 // this code is necessary to check for compatibility
@@ -18,7 +15,8 @@ var _ error = (*Error)(nil)
 // with the ability to add more information
 // about the errors and its location
 type Error struct {
-	Code     uint16 // unique errors code
+	Id       string // unique errors code
+	Code     int    // status code
 	Msg      string // message body
 	Args     string // argument string with additional information
 	CauseErr error  // reason errors
@@ -27,16 +25,31 @@ type Error struct {
 	Caller   string // file, line and name of the method in which the errors occurred
 }
 
+type ResponseFormat struct {
+	ErrorID          string `json:"error_id"`
+	ErrorDescription string `json:"error_description"`
+	Message          string `json:"message"`
+}
+
 // Error print custom errors
 func (e *Error) Error() string {
-	mes := fmt.Sprintf("%s errId=%v", e.Msg, e.Code)
+	mes := fmt.Sprintf("%s %s", e.Id, e.Msg)
 	if e.Args != "" {
-		mes = fmt.Sprintf("%s args=%s", mes, e.Args)
+		mes = fmt.Sprintf("%s with %s", mes, e.Args)
 	}
 
 	if e.CauseMsg != "" {
-		mes = fmt.Sprintf("%s causemes=%s", mes, e.CauseMsg)
+		mes = fmt.Sprintf("%s causemes %s", mes, e.CauseMsg)
 	}
 
 	return mes
+}
+
+// responseFormat format an errors and return interface that must be show user
+func (e *Error) ResponseFormat() ResponseFormat {
+	return ResponseFormat{
+		e.Id,
+		e.Msg,
+		http.StatusText(e.Code),
+	}
 }

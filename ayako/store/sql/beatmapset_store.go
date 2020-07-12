@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/errors"
 	"github.com/deissh/rl/ayako/store"
 	"github.com/jinzhu/copier"
-	"github.com/rs/zerolog/log"
 	"time"
 )
 
@@ -30,6 +30,14 @@ func (s BeatmapSetStore) SetFavourite(ctx context.Context, userId uint, id uint)
 		id,
 		userId,
 	)
+	if err != nil {
+		return 0, errors.WithCause(
+			"bms_set_favourite",
+			400,
+			"beatmapset not found or already favourited",
+			err,
+		)
+	}
 
 	var total uint
 	err = s.GetMaster().GetContext(
@@ -39,7 +47,12 @@ func (s BeatmapSetStore) SetFavourite(ctx context.Context, userId uint, id uint)
 		userId,
 	)
 	if err != nil {
-		return 0, err
+		return 0, errors.WithCause(
+			"bms_set_favourite",
+			404,
+			"favourited maps not found",
+			err,
+		)
 	}
 
 	return total, nil
@@ -53,7 +66,12 @@ func (s BeatmapSetStore) SetUnFavourite(ctx context.Context, userId uint, id uin
 		userId,
 	)
 	if err != nil {
-		return 0, err
+		return 0, errors.WithCause(
+			"bms_set_favourite",
+			400,
+			"beatmapset not found or already favourited",
+			err,
+		)
 	}
 
 	var total uint
@@ -64,7 +82,12 @@ func (s BeatmapSetStore) SetUnFavourite(ctx context.Context, userId uint, id uin
 		userId,
 	)
 	if err != nil {
-		return 0, err
+		return 0, errors.WithCause(
+			"bms_set_favourite",
+			404,
+			"favourited maps not found",
+			err,
+		)
 	}
 
 	return total, nil
@@ -125,7 +148,7 @@ func (s BeatmapSetStore) Create(ctx context.Context, from interface{}) (*entity.
 
 	b, err := json.Marshal(&from)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("bms_create", 500, "marshaling input interface", err)
 	}
 
 	err = s.GetMaster().GetContext(
@@ -143,7 +166,7 @@ func (s BeatmapSetStore) Create(ctx context.Context, from interface{}) (*entity.
 		string(b),
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("bms_create", 400, "beatmapset not created", err)
 	}
 
 	// todo: может отказаться от from interface{} ?
@@ -152,8 +175,6 @@ func (s BeatmapSetStore) Create(ctx context.Context, from interface{}) (*entity.
 		data, err := s.Beatmap().CreateBatch(ctx, m.Beatmaps)
 		if err == nil {
 			set.Beatmaps = *data
-		} else {
-			log.Error().Err(err).Send()
 		}
 	}
 
@@ -165,7 +186,7 @@ func (s BeatmapSetStore) Update(ctx context.Context, id uint, from interface{}) 
 
 	b, err := json.Marshal(&from)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("bms_update", 500, "marshaling input interface", err)
 	}
 
 	// update only required fields from json
@@ -192,7 +213,7 @@ func (s BeatmapSetStore) Update(ctx context.Context, id uint, from interface{}) 
 		string(b),
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("bms_update", 400, "beatmapset not updated", err)
 	}
 
 	return &set, nil
@@ -206,12 +227,12 @@ func (s BeatmapSetStore) Delete(ctx context.Context, id uint) error {
 func (s BeatmapSetStore) FetchFromBancho(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {
 	data, err := s.GetOsuClient().BeatmapSet.Get(id)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithCause("bms_fetch", 404, "beatmapset not found", err)
 	}
 
 	var out entity.BeatmapSetFull
 	if err := copier.Copy(&out, &data); err != nil {
-		return nil, err
+		return nil, errors.WithCause("bms_fetch", 500, "invalid structs", err)
 	}
 
 	return &out, nil
@@ -234,7 +255,11 @@ func (s BeatmapSetStore) GetIdsForUpdate(ctx context.Context, limit int) ([]uint
 		now.Add(-time.Minute*30),
 		limit,
 	)
-	return ids, err
+	if err != nil {
+		return nil, errors.WithCause("bms_need_update", 404, "beatmapset not found", err)
+	}
+
+	return ids, nil
 }
 
 func (s BeatmapSetStore) GetLatestId(ctx context.Context) (uint, error) {

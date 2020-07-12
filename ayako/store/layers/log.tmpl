@@ -33,7 +33,7 @@ func New{{$decorator}}(base {{.Interface.Type}}) {{.Interface.Type}} {
         {{- if $method.HasResults}}
           {{- if $method.ReturnsError}}
             if err != nil {
-              log.Error().Err(err).
+              log.Debug().Err(err).
                 Msg("store.{{$interface}}.{{$method.Name}}: returned an error")
             } else {
               log.Debug().

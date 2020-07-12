@@ -15,6 +15,8 @@ type SupplierStores struct {
 	beatmapSet store.BeatmapSet
 	user       store.User
 	oauth      store.OAuth
+	friend     store.Friend
+	chat       store.Chat
 }
 
 type Supplier struct {
@@ -48,6 +50,12 @@ func Init(cfg *config.Config, osuClient *osu.OsuAPI) store.Store {
 	)
 	supplier.stores.oauth = layers.NewOAuthWithLog(
 		newSqlOAuthStore(supplier),
+	)
+	supplier.stores.friend = layers.NewFriendWithLog(
+		newSqlFriendStore(supplier),
+	)
+	supplier.stores.chat = layers.NewChatWithLog(
+		newSqlChatStore(supplier),
 	)
 
 	return supplier
@@ -88,3 +96,5 @@ func (ss *Supplier) Beatmap() store.Beatmap       { return ss.stores.beatmap }
 func (ss *Supplier) BeatmapSet() store.BeatmapSet { return ss.stores.beatmapSet }
 func (ss *Supplier) User() store.User             { return ss.stores.user }
 func (ss *Supplier) OAuth() store.OAuth           { return ss.stores.oauth }
+func (ss *Supplier) Friend() store.Friend         { return ss.stores.friend }
+func (ss *Supplier) Chat() store.Chat             { return ss.stores.chat }

@@ -6,8 +6,9 @@ import (
 )
 
 // New - create new custom errors
-func New(code uint16, msg string, args ...interface{}) *Error {
+func New(id string, code int, msg string, args ...interface{}) *Error {
 	err := Error{
+		Id:     id,
 		Code:   code,
 		Msg:    msg,
 		Caller: caller(2),
@@ -19,8 +20,9 @@ func New(code uint16, msg string, args ...interface{}) *Error {
 }
 
 // WithCause - create new custom errors with cause
-func WithCause(code uint16, msg string, causeErr error, args ...interface{}) *Error {
+func WithCause(id string, code int, msg string, causeErr error, args ...interface{}) *Error {
 	err := Error{
+		Id:       id,
 		Code:     code,
 		Msg:      msg,
 		Caller:   caller(2),
