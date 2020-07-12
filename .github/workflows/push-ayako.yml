@@ -43,6 +43,7 @@ jobs:
     
     - name: Copy default config
       run: cp config.example.yaml config.yaml
+      working-directory: ${{env.working-directory}}
     
     - name: Run tests
       timeout-minutes: 10
