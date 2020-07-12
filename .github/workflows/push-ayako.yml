@@ -41,6 +41,9 @@ jobs:
       run: make lint
       working-directory: ${{env.working-directory}}
     
+    - name: Copy default config
+      run: cp config.example.yaml config.yaml
+    
     - name: Run tests
       timeout-minutes: 10
       run: make test
