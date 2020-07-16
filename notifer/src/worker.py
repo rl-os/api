@@ -16,16 +16,16 @@ class Worker:
     log = log
 
     async def up(self, loop: asyncio.AbstractEventLoop):
-        self.log.debug('connecting to NATS server')
+        self.log.info('connecting to NATS server')
         self.nc = NATS()
 
         await self.nc.connect(io_loop=loop)
-        self.log.debug('connected')
+        self.log.info('connected')
 
         return await self.__run()
 
     async def down(self):
-        self.log.debug('closing all connections')
+        self.log.info('closing all connections')
         await self.nc.close()
 
         for h in self.handlers:

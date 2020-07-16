@@ -21,7 +21,11 @@ class BaseHandler(abc.ABC):
 
     async def connect(self, nc):
         self.nc = nc
-        await self.nc.subscribe(self.event, cb=self.callback)
+        await self.nc.subscribe(
+            self.event,
+            cb=self.log.catch(self.callback),
+            is_async=True,
+        )
 
     async def on_start(self):
         self.log.debug("starting handler")

@@ -1,4 +1,7 @@
+import json
+
 from src.base_handler import BaseHandler
+from src.models.user import UserShort
 
 
 class SendRegistrationEmail(BaseHandler):
@@ -6,4 +9,6 @@ class SendRegistrationEmail(BaseHandler):
     queue = 'workers'
 
     async def callback(self, msg):
-        self.log.info(msg.data)
+        data = json.loads(msg.data)
+        user = UserShort(**data)
+        self.log.info(user.username)
