@@ -19,8 +19,11 @@ type Config struct {
 	Server struct {
 		Host       string `default:"0.0.0.0"`
 		Port       string `default:"2400"`
-		JWTSecret  string `default:"somesupersecretstring"`
 		EnableJobs bool   `default:"false"`
+	}
+	JWT struct {
+		Secret            string `default:"somesupersecretstring"`
+		HoursBeforeRevoke int    `default:"1"`
 	}
 	Service struct {
 		EnableSecurityFixAlert bool `default:"false"`

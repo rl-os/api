@@ -3,8 +3,8 @@ package mock_store
 import (
 	"context"
 	"errors"
-	"github.com/deissh/osu-lazer/ayako/entity"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -29,11 +29,11 @@ func TestNewMockStore(t *testing.T) {
 		assert.Equal(t, int64(123321), data.ID)
 	})
 
-	t.Run("get beatmap by id with error", func(t *testing.T) {
+	t.Run("get beatmap by id with errors", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		defError := errors.New("some internal error")
+		defError := errors.New("some internal errors")
 
 		mocked := InitStore(ctrl)
 		mocked.BeatmapExpect().

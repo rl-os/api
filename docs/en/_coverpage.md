@@ -7,5 +7,5 @@
 Open source game server for osu!lazer.
 Made with ❤️ by <a href="https://github.com/deissh">@deissh</a> and maybe you!
 
-[GitHub](https://github.com/deissh/osu-lazer)
+[GitHub](https://github.com/deissh/rl)
 [Get Started](#introduction)

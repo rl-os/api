@@ -147,7 +147,7 @@ func unmarshalToml(data []byte, config interface{}, errorOnUnmatchedKeys bool) e
 }
 
 // unmarshalJSON unmarshals the given data into the config interface.
-// If the errorOnUnmatchedKeys boolean is true, an error will be returned if there
+// If the errorOnUnmatchedKeys boolean is true, an errors will be returned if there
 // are keys in the data that do not match fields in the config interface.
 func unmarshalJSON(data []byte, config interface{}, errorOnUnmatchedKeys bool) error {
 	reader := strings.NewReader(string(data))
@@ -231,7 +231,7 @@ func (c *Config) processTags(config interface{}, prefixes ...string) error {
 					return err
 				}
 			} else if fieldStruct.Tag.Get("required") == "true" {
-				// return error if it is required but blank
+				// return errors if it is required but blank
 				return errors.New(fieldStruct.Name + " is required, but blank")
 			}
 		}

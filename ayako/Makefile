@@ -57,6 +57,8 @@ SHELL_EXPORT := $(foreach v,$(MAKE_ENV),$(v)='$($(v))' )
 EXECUTABLES = wget
 _ := $(foreach exec,$(EXECUTABLES),\
         $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
+# pass all args
+args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 # ===============================================
 
 ## Clear bin folder
@@ -96,6 +98,8 @@ lint: vet fmt-check
 install:
 	@echo -e "\e[1;34m> Checking if there is any missing dependencies...\e[0m"
 	$(GOMOD) download
+	@echo -e "\e[1;34m> Installing generators and etc packages\e[0m"
+	$(GOGET) -u github.com/amacneil/dbmate
 	$(GOGET) -u github.com/google/wire/cmd/wire
 	$(GOGET) -u github.com/golang/mock/mockgen@latest
 	$(GOGET) -u github.com/hexdigest/gowrap/cmd/gowrap
@@ -111,32 +115,32 @@ install:
 ## Which can also be multiline
 .PHONY: help
 help: message
-	@printf "Usage\n";
+	@printf " Usage\n";
 
 	@awk '{ \
 			if ($$0 ~ /^.PHONY: [a-zA-Z\-\_0-9]+$$/) { \
 				helpCommand = substr($$0, index($$0, ":") + 2); \
 				if (helpMessage) { \
-					printf "\033[36m%-20s\033[0m %s\n", \
+					printf " \033[36m%-20s\033[0m %s\n", \
 						helpCommand, helpMessage; \
 					helpMessage = ""; \
 				} \
 			} else if ($$0 ~ /^[a-zA-Z\-\_0-9.]+:/) { \
 				helpCommand = substr($$0, 0, index($$0, ":")); \
 				if (helpMessage) { \
-					printf "\033[36m%-20s\033[0m %s\n", \
+					printf "  \033[36m%-20s\033[0m %s\n", \
 						helpCommand, helpMessage; \
 					helpMessage = ""; \
 				} \
 			} else if ($$0 ~ /^##/) { \
 				if (helpMessage) { \
-					helpMessage = helpMessage"\n                     "substr($$0, 3); \
+					helpMessage = helpMessage"\n                      "substr($$0, 3); \
 				} else { \
 					helpMessage = substr($$0, 3); \
 				} \
 			} else { \
 				if (helpMessage) { \
-					print "\n                     "helpMessage"\n" \
+					print "\n\n                      "helpMessage"\n" \
 				} \
 				helpMessage = ""; \
 			} \
@@ -144,16 +148,32 @@ help: message
 		$(MAKEFILE_LIST)
 
 ## -- Database --
+## DBMate wrap with custom ENV and disabled schema dump
 
-## Create the database (if it does not already exist) and run any pending migrations
+## Migrate all files and commit changes
+## Require CONFIG__DATABASE__DSN
 .PHONY: db-migrate
 db-migrate:
-	@dbmate --wait --env CONFIG__DATABASE__DSN --no-dump-schema -d migrations -s schema.sql up
+	@dbmate --wait --env CONFIG__DATABASE__DSN \
+	--no-dump-schema -d migrations -s schema.sql \
+	up
 
-## roll back the most recent migration
+## Rollback last changes
+## Require CONFIG__DATABASE__DSN
 .PHONY: db-rollback
 db-rollback:
-	@dbmate --wait --env CONFIG__DATABASE__DSN rollback
+	@dbmate --wait --env CONFIG__DATABASE__DSN \
+	--no-dump-schema -d migrations -s schema.sql \
+	up
+
+## Validate migrations
+## Require CONFIG__DATABASE__DSN
+.PHONY: db-status
+db-status:
+	@dbmate --wait --env CONFIG__DATABASE__DSN \
+	--no-dump-schema -d migrations -s schema.sql \
+	status
+
 
 ## -- Docker --
 
@@ -177,7 +197,7 @@ chglog:
 .PHONY: message
 message:
 	@clear
-	@echo -e "\033[36m\n                                        \033[0m _                   _         \033[36m\n        _.====.._                    \033[0m   /_\    _  _   __ _  | |__  ___ \033[36m\n     ,:.         ~-_                 \033[0m  / _ \  | || | / _\` | | / / / _ \ \033[36m\n         \`\        ~-_               \033[0m /_/ \_\  \_, | \__,_| |_\_\ \___/\033[36m\n           |          \`.              \033[0m         |__/                    \033[36m\n         ,/             ~-_          \033[0mBeatmap slave database and storage\033[36m\n-..__..-''                 ~~--..__...----...--.....---.....--....---..\033[0m\n\n                                                      https://risu.life\n                                    https://github.com/deissh/osu-lazer\n\n                                                      2019-2020, deissh\n\n"
+	@echo -e "\033[36m\n                                        \033[0m _                   _         \033[36m\n        _.====.._                    \033[0m   /_\    _  _   __ _  | |__  ___ \033[36m\n     ,:.         ~-_                 \033[0m  / _ \  | || | / _\` | | / / / _ \ \033[36m\n         \`\        ~-_               \033[0m /_/ \_\  \_, | \__,_| |_\_\ \___/\033[36m\n           |          \`.              \033[0m         |__/                    \033[36m\n         ,/             ~-_                        \033[0mOAuth and API server\033[36m\n-..__..-''                 ~~--..__...----...--.....---.....--....---..\033[0m\n\n                                                      https://risu.life\n                                    https://github.com/deissh/rl\n\n                                                      2019-2020, deissh\n\n"
 
 
 ## -- Go commands --

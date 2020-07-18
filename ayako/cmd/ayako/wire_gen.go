@@ -6,10 +6,10 @@
 package main
 
 import (
-	"github.com/deissh/osu-lazer/ayako/app"
-	"github.com/deissh/osu-lazer/ayako/config"
-	"github.com/deissh/osu-lazer/ayako/services/bancho"
-	"github.com/deissh/osu-lazer/ayako/store/sql"
+	"github.com/deissh/rl/ayako/app"
+	"github.com/deissh/rl/ayako/config"
+	"github.com/deissh/rl/ayako/services/bancho"
+	"github.com/deissh/rl/ayako/store/sql"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"
@@ -55,7 +55,7 @@ func main() {
 
 func setupLogger() {
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-	if os.Getenv("env") == "dev" {
+	if os.Getenv("env") != "production" {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 	log.Logger = log.Output(zerolog.ConsoleWriter{

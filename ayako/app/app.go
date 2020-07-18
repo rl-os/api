@@ -2,11 +2,13 @@ package app
 
 import (
 	"context"
-	"github.com/deissh/osu-lazer/ayako/api"
-	"github.com/deissh/osu-lazer/ayako/config"
-	"github.com/deissh/osu-lazer/ayako/middlewares/customlogger"
-	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/api"
+	"github.com/deissh/rl/ayako/config"
+	"github.com/deissh/rl/ayako/middlewares/customerror"
+	"github.com/deissh/rl/ayako/middlewares/customlogger"
+	"github.com/deissh/rl/ayako/middlewares/permission"
+	"github.com/deissh/rl/ayako/middlewares/reqest_context"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
@@ -16,9 +18,10 @@ import (
 )
 
 type App struct {
-	Config *config.Config
-	Store  store.Store
-	Echo   *echo.Echo
+	Config  *config.Config
+	Store   store.Store
+	Echo    *echo.Echo
+	Context context.Context
 
 	goroutineCount      int32
 	goroutineExitSignal chan struct{}
@@ -27,24 +30,32 @@ type App struct {
 // NewApp with DI
 // expect store.Store
 func NewApp(cfg *config.Config, store store.Store) *App {
+	ctx := context.Background()
+
 	e := echo.New()
 	e.HidePort = true
 	e.HideBanner = true
+	e.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
 
-	e.Use(middleware.RequestID())
-	e.Use(customlogger.Middleware())
-	e.Use(permission.GlobalMiddleware(cfg))
+	e.Use(
+		middleware.RequestID(),
+		customlogger.Middleware(),
+		permission.GlobalMiddleware(store, ctx),
+		reqest_context.GlobalMiddleware(ctx),
+	)
 
-	api.New(store, e.Group("/api/v2"))
+	// setup routes
+	api.New(store, e)
 
-	s := &App{
-		Store:  store,
-		Echo:   e,
-		Config: cfg,
+	app := &App{
+		Store:   store,
+		Echo:    e,
+		Config:  cfg,
+		Context: ctx,
 	}
-	s.Config.AutoReloadCallback = s.OnConfigReload
+	app.Config.AutoReloadCallback = app.OnConfigReload
 
-	return s
+	return app
 }
 
 // Start http server and setup graceful shutdown
@@ -90,7 +101,7 @@ func (s *App) Start() error {
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(s.Context, 10*time.Second)
 	defer func() {
 		cancel()
 		s.WaitForGoroutines()
@@ -101,30 +112,18 @@ func (s *App) Start() error {
 
 func runSecurityJob(s *App) {
 	CreateRecurringTask("Security", func() {
-		doSecurity(s)
+		s.DoSecurityUpdateCheck()
 	}, time.Hour*6)
 }
 
 func runUpdateCheck(s *App) {
 	CreateRecurringTask("UpdateCheck", func() {
-		doUpdateCheck(s)
+		s.DoBeatmapSetUpdate()
 	}, time.Minute*30)
 }
 
 func runSearchNew(s *App) {
 	CreateRecurringTask("SearchNew", func() {
-		doSearchNew(s)
+		s.DoBeatmapSetSearchNew()
 	}, time.Hour)
-}
-
-func doSecurity(s *App) {
-	s.DoSecurityUpdateCheck()
-}
-
-func doUpdateCheck(s *App) {
-	s.DoBeatmapSetUpdate()
-}
-
-func doSearchNew(s *App) {
-	s.DoBeatmapSetSearchNew()
 }

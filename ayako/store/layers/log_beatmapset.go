@@ -7,8 +7,8 @@ package layers
 import (
 	"context"
 
-	"github.com/deissh/osu-lazer/ayako/entity"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/rs/zerolog/log"
 )
 
@@ -31,7 +31,7 @@ func (_d BeatmapSetWithLog) ComputeFields(ctx context.Context, set entity.Beatma
 		Msg("store.BeatmapSet.ComputeFields: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.ComputeFields: returned an error")
 		} else {
 			log.Debug().
@@ -49,7 +49,7 @@ func (_d BeatmapSetWithLog) Create(ctx context.Context, from interface{}) (bp1 *
 		Msg("store.BeatmapSet.Create: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.Create: returned an error")
 		} else {
 			log.Debug().
@@ -67,7 +67,7 @@ func (_d BeatmapSetWithLog) Delete(ctx context.Context, id uint) (err error) {
 		Msg("store.BeatmapSet.Delete: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.Delete: returned an error")
 		} else {
 			log.Debug().
@@ -85,7 +85,7 @@ func (_d BeatmapSetWithLog) FetchFromBancho(ctx context.Context, id uint) (bp1 *
 		Msg("store.BeatmapSet.FetchFromBancho: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.FetchFromBancho: returned an error")
 		} else {
 			log.Debug().
@@ -103,7 +103,7 @@ func (_d BeatmapSetWithLog) Get(ctx context.Context, id uint) (bp1 *entity.Beatm
 		Msg("store.BeatmapSet.Get: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.Get: returned an error")
 		} else {
 			log.Debug().
@@ -122,7 +122,7 @@ func (_d BeatmapSetWithLog) GetAll(ctx context.Context, page int, limit int) (ba
 		Msg("store.BeatmapSet.GetAll: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.GetAll: returned an error")
 		} else {
 			log.Debug().
@@ -140,7 +140,7 @@ func (_d BeatmapSetWithLog) GetIdsForUpdate(ctx context.Context, limit int) (ua1
 		Msg("store.BeatmapSet.GetIdsForUpdate: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.GetIdsForUpdate: returned an error")
 		} else {
 			log.Debug().
@@ -157,7 +157,7 @@ func (_d BeatmapSetWithLog) GetLatestId(ctx context.Context) (u1 uint, err error
 		Msg("store.BeatmapSet.GetLatestId: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.GetLatestId: returned an error")
 		} else {
 			log.Debug().
@@ -176,7 +176,7 @@ func (_d BeatmapSetWithLog) SetFavourite(ctx context.Context, userId uint, id ui
 		Msg("store.BeatmapSet.SetFavourite: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.SetFavourite: returned an error")
 		} else {
 			log.Debug().
@@ -195,7 +195,7 @@ func (_d BeatmapSetWithLog) SetUnFavourite(ctx context.Context, userId uint, id 
 		Msg("store.BeatmapSet.SetUnFavourite: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.SetUnFavourite: returned an error")
 		} else {
 			log.Debug().
@@ -214,7 +214,7 @@ func (_d BeatmapSetWithLog) Update(ctx context.Context, id uint, from interface{
 		Msg("store.BeatmapSet.Update: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.BeatmapSet.Update: returned an error")
 		} else {
 			log.Debug().

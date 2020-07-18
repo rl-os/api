@@ -1,5 +1,5 @@
 
-Pentru o listă completă de modificari, vedeți [changelog](https://github.com/deissh/osu-lazer/blob/master/CHANGELOG.md)
+Pentru o listă completă de modificari, vedeți [changelog](https://github.com/deissh/rl/blob/master/CHANGELOG.md)
 
 ## Schimbări Majore
 

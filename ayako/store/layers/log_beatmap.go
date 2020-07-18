@@ -7,8 +7,8 @@ package layers
 import (
 	"context"
 
-	"github.com/deissh/osu-lazer/ayako/entity"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/rs/zerolog/log"
 )
 
@@ -31,7 +31,7 @@ func (_d BeatmapWithLog) Create(ctx context.Context, from interface{}) (bp1 *ent
 		Msg("store.Beatmap.Create: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.Beatmap.Create: returned an error")
 		} else {
 			log.Debug().
@@ -49,7 +49,7 @@ func (_d BeatmapWithLog) CreateBatch(ctx context.Context, from interface{}) (bap
 		Msg("store.Beatmap.CreateBatch: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.Beatmap.CreateBatch: returned an error")
 		} else {
 			log.Debug().
@@ -67,7 +67,7 @@ func (_d BeatmapWithLog) Delete(ctx context.Context, id uint) (err error) {
 		Msg("store.Beatmap.Delete: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.Beatmap.Delete: returned an error")
 		} else {
 			log.Debug().
@@ -85,7 +85,7 @@ func (_d BeatmapWithLog) Get(ctx context.Context, id uint) (sp1 *entity.SingleBe
 		Msg("store.Beatmap.Get: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.Beatmap.Get: returned an error")
 		} else {
 			log.Debug().
@@ -117,7 +117,7 @@ func (_d BeatmapWithLog) Update(ctx context.Context, id uint, from interface{}) 
 		Msg("store.Beatmap.Update: calling")
 	defer func() {
 		if err != nil {
-			log.Error().Err(err).
+			log.Debug().Err(err).
 				Msg("store.Beatmap.Update: returned an error")
 		} else {
 			log.Debug().

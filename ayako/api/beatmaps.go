@@ -2,9 +2,8 @@ package api
 
 import (
 	"context"
-	"github.com/deissh/osu-lazer/ayako/entity"
-	"github.com/deissh/osu-lazer/ayako/middlewares/permission"
-	"github.com/deissh/osu-lazer/ayako/store"
+	"github.com/deissh/rl/ayako/entity"
+	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
@@ -14,16 +13,8 @@ type BeatmapHandlers struct {
 	Store store.Store
 }
 
-func (api *Routes) InitBeatmaps(store store.Store) {
-	handlers := BeatmapHandlers{store}
-
-	api.Beatmaps.GET("/:id", handlers.Show)
-	api.Beatmaps.GET("/:id/scores", echo.NotFoundHandler, permission.MustLogin)
-	api.Beatmaps.GET("/lookup", handlers.Lookup)
-}
-
 func (h *BeatmapHandlers) Show(c echo.Context) error {
-	beatmapID, err := strconv.ParseUint(c.Param("beatmap"), 10, 32)
+	beatmapID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
 	}

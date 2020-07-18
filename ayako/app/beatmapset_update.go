@@ -12,7 +12,7 @@ func (s *App) DoBeatmapSetUpdate() {
 		Uint("batch_size", 100).
 		Msg("start beatmapset update check")
 
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(s.Context)
 	defer cancel()
 
 	ids, err := s.Store.BeatmapSet().GetIdsForUpdate(ctx, 100)

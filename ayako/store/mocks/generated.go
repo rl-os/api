@@ -6,10 +6,11 @@ package mock_store
 
 import (
 	context "context"
-	entity "github.com/deissh/osu-lazer/ayako/entity"
-	store "github.com/deissh/osu-lazer/ayako/store"
+	entity "github.com/deissh/rl/ayako/entity"
+	store "github.com/deissh/rl/ayako/store"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+	time "time"
 )
 
 // MockStore is a mock of Store interface
@@ -33,6 +34,20 @@ func NewMockStore(ctrl *gomock.Controller) *MockStore {
 // EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockStore) EXPECT() *MockStoreMockRecorder {
 	return m.recorder
+}
+
+// OAuth mocks base method
+func (m *MockStore) OAuth() store.OAuth {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "OAuth")
+	ret0, _ := ret[0].(store.OAuth)
+	return ret0
+}
+
+// OAuth indicates an expected call of OAuth
+func (mr *MockStoreMockRecorder) OAuth() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "OAuth", reflect.TypeOf((*MockStore)(nil).OAuth))
 }
 
 // Beatmap mocks base method
@@ -63,6 +78,160 @@ func (mr *MockStoreMockRecorder) BeatmapSet() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeatmapSet", reflect.TypeOf((*MockStore)(nil).BeatmapSet))
 }
 
+// User mocks base method
+func (m *MockStore) User() store.User {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "User")
+	ret0, _ := ret[0].(store.User)
+	return ret0
+}
+
+// User indicates an expected call of User
+func (mr *MockStoreMockRecorder) User() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "User", reflect.TypeOf((*MockStore)(nil).User))
+}
+
+// Friend mocks base method
+func (m *MockStore) Friend() store.Friend {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Friend")
+	ret0, _ := ret[0].(store.Friend)
+	return ret0
+}
+
+// Friend indicates an expected call of Friend
+func (mr *MockStoreMockRecorder) Friend() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Friend", reflect.TypeOf((*MockStore)(nil).Friend))
+}
+
+// Chat mocks base method
+func (m *MockStore) Chat() store.Chat {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Chat")
+	ret0, _ := ret[0].(store.Chat)
+	return ret0
+}
+
+// Chat indicates an expected call of Chat
+func (mr *MockStoreMockRecorder) Chat() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Chat", reflect.TypeOf((*MockStore)(nil).Chat))
+}
+
+// MockOAuth is a mock of OAuth interface
+type MockOAuth struct {
+	ctrl     *gomock.Controller
+	recorder *MockOAuthMockRecorder
+}
+
+// MockOAuthMockRecorder is the mock recorder for MockOAuth
+type MockOAuthMockRecorder struct {
+	mock *MockOAuth
+}
+
+// NewMockOAuth creates a new mock instance
+func NewMockOAuth(ctrl *gomock.Controller) *MockOAuth {
+	mock := &MockOAuth{ctrl: ctrl}
+	mock.recorder = &MockOAuthMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockOAuth) EXPECT() *MockOAuthMockRecorder {
+	return m.recorder
+}
+
+// CreateClient mocks base method
+func (m *MockOAuth) CreateClient(ctx context.Context, name, redirect string) (*entity.OAuthClient, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateClient", ctx, name, redirect)
+	ret0, _ := ret[0].(*entity.OAuthClient)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateClient indicates an expected call of CreateClient
+func (mr *MockOAuthMockRecorder) CreateClient(ctx, name, redirect interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateClient", reflect.TypeOf((*MockOAuth)(nil).CreateClient), ctx, name, redirect)
+}
+
+// GetClient mocks base method
+func (m *MockOAuth) GetClient(ctx context.Context, id uint, secret string) (*entity.OAuthClient, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetClient", ctx, id, secret)
+	ret0, _ := ret[0].(*entity.OAuthClient)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetClient indicates an expected call of GetClient
+func (mr *MockOAuthMockRecorder) GetClient(ctx, id, secret interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetClient", reflect.TypeOf((*MockOAuth)(nil).GetClient), ctx, id, secret)
+}
+
+// CreateToken mocks base method
+func (m *MockOAuth) CreateToken(ctx context.Context, userId, clientID uint, clientSecret, scopes string) (*entity.OAuthToken, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateToken", ctx, userId, clientID, clientSecret, scopes)
+	ret0, _ := ret[0].(*entity.OAuthToken)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateToken indicates an expected call of CreateToken
+func (mr *MockOAuthMockRecorder) CreateToken(ctx, userId, clientID, clientSecret, scopes interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateToken", reflect.TypeOf((*MockOAuth)(nil).CreateToken), ctx, userId, clientID, clientSecret, scopes)
+}
+
+// RevokeToken mocks base method
+func (m *MockOAuth) RevokeToken(ctx context.Context, userId uint, accessToken string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RevokeToken", ctx, userId, accessToken)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RevokeToken indicates an expected call of RevokeToken
+func (mr *MockOAuthMockRecorder) RevokeToken(ctx, userId, accessToken interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RevokeToken", reflect.TypeOf((*MockOAuth)(nil).RevokeToken), ctx, userId, accessToken)
+}
+
+// RefreshToken mocks base method
+func (m *MockOAuth) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RefreshToken", ctx, refreshToken, clientID, clientSecret)
+	ret0, _ := ret[0].(*entity.OAuthToken)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RefreshToken indicates an expected call of RefreshToken
+func (mr *MockOAuthMockRecorder) RefreshToken(ctx, refreshToken, clientID, clientSecret interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RefreshToken", reflect.TypeOf((*MockOAuth)(nil).RefreshToken), ctx, refreshToken, clientID, clientSecret)
+}
+
+// ValidateToken mocks base method
+func (m *MockOAuth) ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ValidateToken", ctx, accessToken)
+	ret0, _ := ret[0].(*entity.OAuthToken)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ValidateToken indicates an expected call of ValidateToken
+func (mr *MockOAuthMockRecorder) ValidateToken(ctx, accessToken interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidateToken", reflect.TypeOf((*MockOAuth)(nil).ValidateToken), ctx, accessToken)
+}
+
 // MockBeatmap is a mock of Beatmap interface
 type MockBeatmap struct {
 	ctrl     *gomock.Controller
@@ -84,35 +253,6 @@ func NewMockBeatmap(ctrl *gomock.Controller) *MockBeatmap {
 // EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockBeatmap) EXPECT() *MockBeatmapMockRecorder {
 	return m.recorder
-}
-
-// Get mocks base method
-func (m *MockBeatmap) Get(ctx context.Context, id uint) (*entity.SingleBeatmap, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", ctx, id)
-	ret0, _ := ret[0].(*entity.SingleBeatmap)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Get indicates an expected call of Get
-func (mr *MockBeatmapMockRecorder) Get(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockBeatmap)(nil).Get), ctx, id)
-}
-
-// GetBySetId mocks base method
-func (m *MockBeatmap) GetBySetId(ctx context.Context, beatmapsetId uint) []entity.Beatmap {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBySetId", ctx, beatmapsetId)
-	ret0, _ := ret[0].([]entity.Beatmap)
-	return ret0
-}
-
-// GetBySetId indicates an expected call of GetBySetId
-func (mr *MockBeatmapMockRecorder) GetBySetId(ctx, beatmapsetId interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBySetId", reflect.TypeOf((*MockBeatmap)(nil).GetBySetId), ctx, beatmapsetId)
 }
 
 // Create mocks base method
@@ -174,6 +314,35 @@ func (mr *MockBeatmapMockRecorder) Delete(ctx, id interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockBeatmap)(nil).Delete), ctx, id)
 }
 
+// Get mocks base method
+func (m *MockBeatmap) Get(ctx context.Context, id uint) (*entity.SingleBeatmap, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Get", ctx, id)
+	ret0, _ := ret[0].(*entity.SingleBeatmap)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Get indicates an expected call of Get
+func (mr *MockBeatmapMockRecorder) Get(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockBeatmap)(nil).Get), ctx, id)
+}
+
+// GetBySetId mocks base method
+func (m *MockBeatmap) GetBySetId(ctx context.Context, beatmapsetId uint) []entity.Beatmap {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetBySetId", ctx, beatmapsetId)
+	ret0, _ := ret[0].([]entity.Beatmap)
+	return ret0
+}
+
+// GetBySetId indicates an expected call of GetBySetId
+func (mr *MockBeatmapMockRecorder) GetBySetId(ctx, beatmapsetId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBySetId", reflect.TypeOf((*MockBeatmap)(nil).GetBySetId), ctx, beatmapsetId)
+}
+
 // MockBeatmapSet is a mock of BeatmapSet interface
 type MockBeatmapSet struct {
 	ctrl     *gomock.Controller
@@ -195,6 +364,50 @@ func NewMockBeatmapSet(ctrl *gomock.Controller) *MockBeatmapSet {
 // EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockBeatmapSet) EXPECT() *MockBeatmapSetMockRecorder {
 	return m.recorder
+}
+
+// Create mocks base method
+func (m *MockBeatmapSet) Create(ctx context.Context, from interface{}) (*entity.BeatmapSetFull, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", ctx, from)
+	ret0, _ := ret[0].(*entity.BeatmapSetFull)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Create indicates an expected call of Create
+func (mr *MockBeatmapSetMockRecorder) Create(ctx, from interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockBeatmapSet)(nil).Create), ctx, from)
+}
+
+// Update mocks base method
+func (m *MockBeatmapSet) Update(ctx context.Context, id uint, from interface{}) (*entity.BeatmapSetFull, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, id, from)
+	ret0, _ := ret[0].(*entity.BeatmapSetFull)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Update indicates an expected call of Update
+func (mr *MockBeatmapSetMockRecorder) Update(ctx, id, from interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockBeatmapSet)(nil).Update), ctx, id, from)
+}
+
+// Delete mocks base method
+func (m *MockBeatmapSet) Delete(ctx context.Context, id uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete
+func (mr *MockBeatmapSetMockRecorder) Delete(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockBeatmapSet)(nil).Delete), ctx, id)
 }
 
 // Get mocks base method
@@ -302,50 +515,6 @@ func (mr *MockBeatmapSetMockRecorder) GetIdsForUpdate(ctx, limit interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetIdsForUpdate", reflect.TypeOf((*MockBeatmapSet)(nil).GetIdsForUpdate), ctx, limit)
 }
 
-// Create mocks base method
-func (m *MockBeatmapSet) Create(ctx context.Context, from interface{}) (*entity.BeatmapSetFull, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", ctx, from)
-	ret0, _ := ret[0].(*entity.BeatmapSetFull)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Create indicates an expected call of Create
-func (mr *MockBeatmapSetMockRecorder) Create(ctx, from interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockBeatmapSet)(nil).Create), ctx, from)
-}
-
-// Update mocks base method
-func (m *MockBeatmapSet) Update(ctx context.Context, id uint, from interface{}) (*entity.BeatmapSetFull, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", ctx, id, from)
-	ret0, _ := ret[0].(*entity.BeatmapSetFull)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Update indicates an expected call of Update
-func (mr *MockBeatmapSetMockRecorder) Update(ctx, id, from interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockBeatmapSet)(nil).Update), ctx, id, from)
-}
-
-// Delete mocks base method
-func (m *MockBeatmapSet) Delete(ctx context.Context, id uint) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Delete", ctx, id)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Delete indicates an expected call of Delete
-func (mr *MockBeatmapSetMockRecorder) Delete(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockBeatmapSet)(nil).Delete), ctx, id)
-}
-
 // FetchFromBancho mocks base method
 func (m *MockBeatmapSet) FetchFromBancho(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {
 	m.ctrl.T.Helper()
@@ -359,4 +528,480 @@ func (m *MockBeatmapSet) FetchFromBancho(ctx context.Context, id uint) (*entity.
 func (mr *MockBeatmapSetMockRecorder) FetchFromBancho(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchFromBancho", reflect.TypeOf((*MockBeatmapSet)(nil).FetchFromBancho), ctx, id)
+}
+
+// MockUser is a mock of User interface
+type MockUser struct {
+	ctrl     *gomock.Controller
+	recorder *MockUserMockRecorder
+}
+
+// MockUserMockRecorder is the mock recorder for MockUser
+type MockUserMockRecorder struct {
+	mock *MockUser
+}
+
+// NewMockUser creates a new mock instance
+func NewMockUser(ctrl *gomock.Controller) *MockUser {
+	mock := &MockUser{ctrl: ctrl}
+	mock.recorder = &MockUserMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockUser) EXPECT() *MockUserMockRecorder {
+	return m.recorder
+}
+
+// Create mocks base method
+func (m *MockUser) Create(ctx context.Context, name, email, pwd string) (*entity.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", ctx, name, email, pwd)
+	ret0, _ := ret[0].(*entity.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Create indicates an expected call of Create
+func (mr *MockUserMockRecorder) Create(ctx, name, email, pwd interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUser)(nil).Create), ctx, name, email, pwd)
+}
+
+// Update mocks base method
+func (m *MockUser) Update(ctx context.Context, userId uint, from interface{}) (*entity.UserShort, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, userId, from)
+	ret0, _ := ret[0].(*entity.UserShort)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Update indicates an expected call of Update
+func (mr *MockUserMockRecorder) Update(ctx, userId, from interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUser)(nil).Update), ctx, userId, from)
+}
+
+// Get mocks base method
+func (m *MockUser) Get(ctx context.Context, userId uint, mode string) (*entity.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Get", ctx, userId, mode)
+	ret0, _ := ret[0].(*entity.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Get indicates an expected call of Get
+func (mr *MockUserMockRecorder) Get(ctx, userId, mode interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockUser)(nil).Get), ctx, userId, mode)
+}
+
+// GetShort mocks base method
+func (m *MockUser) GetShort(ctx context.Context, userId uint, mode string) (*entity.UserShort, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetShort", ctx, userId, mode)
+	ret0, _ := ret[0].(*entity.UserShort)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetShort indicates an expected call of GetShort
+func (mr *MockUserMockRecorder) GetShort(ctx, userId, mode interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetShort", reflect.TypeOf((*MockUser)(nil).GetShort), ctx, userId, mode)
+}
+
+// GetByBasic mocks base method
+func (m *MockUser) GetByBasic(ctx context.Context, login, pwd string) (*entity.UserShort, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByBasic", ctx, login, pwd)
+	ret0, _ := ret[0].(*entity.UserShort)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByBasic indicates an expected call of GetByBasic
+func (mr *MockUserMockRecorder) GetByBasic(ctx, login, pwd interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByBasic", reflect.TypeOf((*MockUser)(nil).GetByBasic), ctx, login, pwd)
+}
+
+// ComputeFields mocks base method
+func (m *MockUser) ComputeFields(ctx context.Context, user entity.User) (*entity.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ComputeFields", ctx, user)
+	ret0, _ := ret[0].(*entity.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ComputeFields indicates an expected call of ComputeFields
+func (mr *MockUserMockRecorder) ComputeFields(ctx, user interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ComputeFields", reflect.TypeOf((*MockUser)(nil).ComputeFields), ctx, user)
+}
+
+// Activate mocks base method
+func (m *MockUser) Activate(ctx context.Context, userId uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Activate", ctx, userId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Activate indicates an expected call of Activate
+func (mr *MockUserMockRecorder) Activate(ctx, userId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Activate", reflect.TypeOf((*MockUser)(nil).Activate), ctx, userId)
+}
+
+// Deactivate mocks base method
+func (m *MockUser) Deactivate(ctx context.Context, userId uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Deactivate", ctx, userId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Deactivate indicates an expected call of Deactivate
+func (mr *MockUserMockRecorder) Deactivate(ctx, userId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Deactivate", reflect.TypeOf((*MockUser)(nil).Deactivate), ctx, userId)
+}
+
+// Ban mocks base method
+func (m *MockUser) Ban(ctx context.Context, userId uint, time time.Duration) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Ban", ctx, userId, time)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Ban indicates an expected call of Ban
+func (mr *MockUserMockRecorder) Ban(ctx, userId, time interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Ban", reflect.TypeOf((*MockUser)(nil).Ban), ctx, userId, time)
+}
+
+// UnBan mocks base method
+func (m *MockUser) UnBan(ctx context.Context, userId uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UnBan", ctx, userId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UnBan indicates an expected call of UnBan
+func (mr *MockUserMockRecorder) UnBan(ctx, userId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnBan", reflect.TypeOf((*MockUser)(nil).UnBan), ctx, userId)
+}
+
+// Mute mocks base method
+func (m *MockUser) Mute(ctx context.Context, userId uint, time time.Duration) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Mute", ctx, userId, time)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Mute indicates an expected call of Mute
+func (mr *MockUserMockRecorder) Mute(ctx, userId, time interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Mute", reflect.TypeOf((*MockUser)(nil).Mute), ctx, userId, time)
+}
+
+// UnMute mocks base method
+func (m *MockUser) UnMute(ctx context.Context, userId uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UnMute", ctx, userId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UnMute indicates an expected call of UnMute
+func (mr *MockUserMockRecorder) UnMute(ctx, userId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnMute", reflect.TypeOf((*MockUser)(nil).UnMute), ctx, userId)
+}
+
+// UpdateLastVisit mocks base method
+func (m *MockUser) UpdateLastVisit(ctx context.Context, userId uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateLastVisit", ctx, userId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateLastVisit indicates an expected call of UpdateLastVisit
+func (mr *MockUserMockRecorder) UpdateLastVisit(ctx, userId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLastVisit", reflect.TypeOf((*MockUser)(nil).UpdateLastVisit), ctx, userId)
+}
+
+// MockFriend is a mock of Friend interface
+type MockFriend struct {
+	ctrl     *gomock.Controller
+	recorder *MockFriendMockRecorder
+}
+
+// MockFriendMockRecorder is the mock recorder for MockFriend
+type MockFriendMockRecorder struct {
+	mock *MockFriend
+}
+
+// NewMockFriend creates a new mock instance
+func NewMockFriend(ctrl *gomock.Controller) *MockFriend {
+	mock := &MockFriend{ctrl: ctrl}
+	mock.recorder = &MockFriendMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockFriend) EXPECT() *MockFriendMockRecorder {
+	return m.recorder
+}
+
+// Add mocks base method
+func (m *MockFriend) Add(ctx context.Context, userId, targetId uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Add", ctx, userId, targetId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Add indicates an expected call of Add
+func (mr *MockFriendMockRecorder) Add(ctx, userId, targetId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockFriend)(nil).Add), ctx, userId, targetId)
+}
+
+// Remove mocks base method
+func (m *MockFriend) Remove(ctx context.Context, userId, targetId uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Remove", ctx, userId, targetId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Remove indicates an expected call of Remove
+func (mr *MockFriendMockRecorder) Remove(ctx, userId, targetId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFriend)(nil).Remove), ctx, userId, targetId)
+}
+
+// GetSubscriptions mocks base method
+func (m *MockFriend) GetSubscriptions(ctx context.Context, userId uint) (*[]entity.UserShort, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSubscriptions", ctx, userId)
+	ret0, _ := ret[0].(*[]entity.UserShort)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSubscriptions indicates an expected call of GetSubscriptions
+func (mr *MockFriendMockRecorder) GetSubscriptions(ctx, userId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSubscriptions", reflect.TypeOf((*MockFriend)(nil).GetSubscriptions), ctx, userId)
+}
+
+// MockChat is a mock of Chat interface
+type MockChat struct {
+	ctrl     *gomock.Controller
+	recorder *MockChatMockRecorder
+}
+
+// MockChatMockRecorder is the mock recorder for MockChat
+type MockChatMockRecorder struct {
+	mock *MockChat
+}
+
+// NewMockChat creates a new mock instance
+func NewMockChat(ctrl *gomock.Controller) *MockChat {
+	mock := &MockChat{ctrl: ctrl}
+	mock.recorder = &MockChatMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockChat) EXPECT() *MockChatMockRecorder {
+	return m.recorder
+}
+
+// CreatePM mocks base method
+func (m *MockChat) CreatePM(ctx context.Context, userId, targetId uint, message string, isAction bool) (*entity.ChannelNewPm, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreatePM", ctx, userId, targetId, message, isAction)
+	ret0, _ := ret[0].(*entity.ChannelNewPm)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreatePM indicates an expected call of CreatePM
+func (mr *MockChatMockRecorder) CreatePM(ctx, userId, targetId, message, isAction interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePM", reflect.TypeOf((*MockChat)(nil).CreatePM), ctx, userId, targetId, message, isAction)
+}
+
+// Get mocks base method
+func (m *MockChat) Get(ctx context.Context, channelId uint) (*entity.Channel, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Get", ctx, channelId)
+	ret0, _ := ret[0].(*entity.Channel)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Get indicates an expected call of Get
+func (mr *MockChatMockRecorder) Get(ctx, channelId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockChat)(nil).Get), ctx, channelId)
+}
+
+// GetOrCreatePm mocks base method
+func (m *MockChat) GetOrCreatePm(ctx context.Context, userId, targetId uint) (*entity.Channel, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetOrCreatePm", ctx, userId, targetId)
+	ret0, _ := ret[0].(*entity.Channel)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetOrCreatePm indicates an expected call of GetOrCreatePm
+func (mr *MockChatMockRecorder) GetOrCreatePm(ctx, userId, targetId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrCreatePm", reflect.TypeOf((*MockChat)(nil).GetOrCreatePm), ctx, userId, targetId)
+}
+
+// GetPublic mocks base method
+func (m *MockChat) GetPublic(ctx context.Context) (*[]entity.Channel, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPublic", ctx)
+	ret0, _ := ret[0].(*[]entity.Channel)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPublic indicates an expected call of GetPublic
+func (mr *MockChatMockRecorder) GetPublic(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPublic", reflect.TypeOf((*MockChat)(nil).GetPublic), ctx)
+}
+
+// GetJoined mocks base method
+func (m *MockChat) GetJoined(ctx context.Context, userId uint) (*[]entity.Channel, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetJoined", ctx, userId)
+	ret0, _ := ret[0].(*[]entity.Channel)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetJoined indicates an expected call of GetJoined
+func (mr *MockChatMockRecorder) GetJoined(ctx, userId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetJoined", reflect.TypeOf((*MockChat)(nil).GetJoined), ctx, userId)
+}
+
+// GetMessage mocks base method
+func (m *MockChat) GetMessage(ctx context.Context, messageId uint) (*entity.ChatMessage, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMessage", ctx, messageId)
+	ret0, _ := ret[0].(*entity.ChatMessage)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMessage indicates an expected call of GetMessage
+func (mr *MockChatMockRecorder) GetMessage(ctx, messageId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMessage", reflect.TypeOf((*MockChat)(nil).GetMessage), ctx, messageId)
+}
+
+// GetMessages mocks base method
+func (m *MockChat) GetMessages(ctx context.Context, userId, since uint) (*[]entity.ChatMessage, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMessages", ctx, userId, since)
+	ret0, _ := ret[0].(*[]entity.ChatMessage)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMessages indicates an expected call of GetMessages
+func (mr *MockChatMockRecorder) GetMessages(ctx, userId, since interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMessages", reflect.TypeOf((*MockChat)(nil).GetMessages), ctx, userId, since)
+}
+
+// GetUpdates mocks base method
+func (m *MockChat) GetUpdates(ctx context.Context, userId, since, channelId, limit uint) (*entity.ChannelUpdates, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUpdates", ctx, userId, since, channelId, limit)
+	ret0, _ := ret[0].(*entity.ChannelUpdates)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUpdates indicates an expected call of GetUpdates
+func (mr *MockChatMockRecorder) GetUpdates(ctx, userId, since, channelId, limit interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUpdates", reflect.TypeOf((*MockChat)(nil).GetUpdates), ctx, userId, since, channelId, limit)
+}
+
+// SendMessage mocks base method
+func (m *MockChat) SendMessage(ctx context.Context, userId, channelId uint, content string, isAction bool) (*entity.ChatMessage, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendMessage", ctx, userId, channelId, content, isAction)
+	ret0, _ := ret[0].(*entity.ChatMessage)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SendMessage indicates an expected call of SendMessage
+func (mr *MockChatMockRecorder) SendMessage(ctx, userId, channelId, content, isAction interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendMessage", reflect.TypeOf((*MockChat)(nil).SendMessage), ctx, userId, channelId, content, isAction)
+}
+
+// Join mocks base method
+func (m *MockChat) Join(ctx context.Context, userId, channelId uint) (*entity.Channel, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Join", ctx, userId, channelId)
+	ret0, _ := ret[0].(*entity.Channel)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Join indicates an expected call of Join
+func (mr *MockChatMockRecorder) Join(ctx, userId, channelId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Join", reflect.TypeOf((*MockChat)(nil).Join), ctx, userId, channelId)
+}
+
+// Leave mocks base method
+func (m *MockChat) Leave(ctx context.Context, userId, channelId uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Leave", ctx, userId, channelId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Leave indicates an expected call of Leave
+func (mr *MockChatMockRecorder) Leave(ctx, userId, channelId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Leave", reflect.TypeOf((*MockChat)(nil).Leave), ctx, userId, channelId)
+}
+
+// ReadMessage mocks base method
+func (m *MockChat) ReadMessage() {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "ReadMessage")
+}
+
+// ReadMessage indicates an expected call of ReadMessage
+func (mr *MockChatMockRecorder) ReadMessage() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadMessage", reflect.TypeOf((*MockChat)(nil).ReadMessage))
 }
