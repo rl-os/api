@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { useStore } from '../../../store';
-import { useRouter } from "../../../utils/hooks";
+import {useRouter, useTranslate} from "../../../utils/hooks";
 import classNames from "classnames";
 import Noty from "noty";
 
@@ -14,7 +14,7 @@ import { Logo } from './logo';
 const Login = () => {
   const store = useStore();
   const router = useRouter();
-  const { t } = useTranslation("auth");
+  const { t } = useTranslate('auth');
   const { handleSubmit, register, errors } = useForm();
 
   useEffect(() => {

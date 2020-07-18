@@ -1,4 +1,4 @@
-import Backend from 'i18next-xhr-backend';
+import Backend from "i18next-xhr-backend";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
@@ -26,12 +26,11 @@ i18n.init({
   fallbackLng: Config.i18n.fallbackLng,
   whitelist: SUPPORTED_LANGUAGES.map(lang => lang.code),
 
-  ns: [],
   interpolation: {
     escapeValue: false, // not needed for react as it escapes by default
   },
   backend: {
-    loadPath: "/locales/{{lng}}/{{ns}}.json",
+    loadPath: "/locales/{{lng}}.json",
   },
 });
 
