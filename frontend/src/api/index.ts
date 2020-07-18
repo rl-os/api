@@ -22,7 +22,7 @@ export class Api {
       err => err,
     );
 
-    this.auth = new AuthAPI(this.axios, Config.clientId, Config.clientSecret);
+    this.auth = new AuthAPI(this.axios, Config.oauth.clientId, Config.oauth.clientSecret);
     this.user = new UserAPI(this.axios);
   }
 

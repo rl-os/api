@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import classNames from "classnames";
+import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { useStore } from '../../../store';
 import { useRouter } from "../../../utils/hooks";
+import classNames from "classnames";
 import Noty from "noty";
 
 import styles from './login.module.scss';
@@ -13,6 +14,7 @@ import { Logo } from './logo';
 const Login = () => {
   const store = useStore();
   const router = useRouter();
+  const { t } = useTranslation("auth");
   const { handleSubmit, register, errors } = useForm();
 
   useEffect(() => {
@@ -23,7 +25,7 @@ const Login = () => {
   const onLogin = () => {
     new Noty({
       type: "success",
-      text: `Вы успешно вошли в свой аккаунт!`,
+      text: t`successfully_login`,
       timeout: 5000,
     }).show();
 
@@ -52,17 +54,19 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={classNames(styles.title)}>
             <h3 className="font-weight-bolder text-dark display5">
-              Добро пожаловать на Risu.Life
+              {t`Welcome to RisuLife`}
             </h3>
             <span className="text-muted font-weight-bold font-size-h4">
-              Нет аккаунта? <Link to="/auth/signup" className="text-primary font-weight-bolder">
-                Регистрация
+              {t`Need account?`} <Link to="/auth/signup" className="text-primary font-weight-bolder">
+                {t`Sign Up`}
               </Link>
             </span>
           </div>
 
           <div className="form-group fv-plugins-icon-container">
-            <label className="font-size-h6 font-weight-bolder text-dark">Логин</label>
+            <label className="font-size-h6 font-weight-bolder text-dark">
+              {t`Login`}
+            </label>
             <input
               className="form-control form-control-solid h-auto py-7 px-6 rounded-lg"
               type="text"
@@ -76,7 +80,9 @@ const Login = () => {
           </div>
 
           <div className="form-group fv-plugins-icon-container">
-            <label className="font-size-h6 font-weight-bolder text-dark">Пароль</label>
+            <label className="font-size-h6 font-weight-bolder text-dark">
+              {t`Password`}
+            </label>
             <input
               className="form-control form-control-solid h-auto py-7 px-6 rounded-lg"
               type="password"
@@ -90,7 +96,7 @@ const Login = () => {
           </div>
 
           <button className={classNames(styles.btn, "btn btn-primary")} type="submit">
-            Войти
+            {t`Log in`}
           </button>
 
         </form>
@@ -98,13 +104,13 @@ const Login = () => {
 
       <div className="d-flex justify-content-center align-items-end pb-5 pt-5">
         <Link to="/" className="text-primary font-weight-bolder font-size-h5">
-          Правила
+          {t`Rules`}
         </Link>
         <Link to="/" className="text-primary ml-3 font-weight-bolder font-size-h5">
-          Контакты
+          {t`Contacts`}
         </Link>
         <Link to="/" className="text-primary ml-3 font-weight-bolder font-size-h5">
-          О проекте
+          {t`About`}
         </Link>
       </div>
     </div>

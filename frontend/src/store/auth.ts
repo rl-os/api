@@ -54,6 +54,10 @@ export class Auth {
 
   public reset() {
     this.currentUser = null;
+    this.accessToken = null;
+    this.refreshToken = null;
+
+    this.save();
   }
 
   public async login(username: string, pwd: string): Promise<void> {

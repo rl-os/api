@@ -8,6 +8,7 @@ import { SecureRoute } from './components/secure-route';
 
 import { HomePage } from './pages/home';
 import { LoginPage } from "./pages/auth/login";
+import { Loading } from "./components/loading";
 
 const content = (store: Store) => {
   return <StoreContext.Provider value={store}>
@@ -31,7 +32,7 @@ const App = observer(() => {
     init: async () => {
       await store.auth.init();
     },
-    loading: () => <div>Loading</div>,
+    loading: () => <Loading />,
     failed: (e) => <div>{e.toString()}</div>,
     success: () => content(store),
   });
