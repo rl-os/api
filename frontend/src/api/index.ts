@@ -3,6 +3,8 @@ import { Store } from "../store";
 import { AuthAPI } from "./auth";
 import { UserAPI } from "./user";
 
+import Config from "../config";
+
 export class Api {
   protected axios: AxiosInstance;
 
@@ -12,7 +14,7 @@ export class Api {
   constructor(private readonly store: Store, config?: AxiosRequestConfig) {
     this.axios = Axios.create({
       ...config,
-      baseURL: this.store.config.baseAPI,
+      baseURL: Config.baseAPI,
     });
 
     this.axios.interceptors.request.use(
@@ -20,7 +22,7 @@ export class Api {
       err => err,
     );
 
-    this.auth = new AuthAPI(this.axios, this.store.config.clientId, this.store.config.clientSecret);
+    this.auth = new AuthAPI(this.axios, Config.clientId, Config.clientSecret);
     this.user = new UserAPI(this.axios);
   }
 
