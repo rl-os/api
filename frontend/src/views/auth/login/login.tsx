@@ -57,7 +57,8 @@ const Login = () => {
               {t`Welcome to RisuLife`}
             </h3>
             <span className="text-muted font-weight-bold font-size-h4">
-              {t`Need account?`} <Link to="/auth/signup" className="text-primary font-weight-bolder">
+              {t`Need account?`}
+              <Link to="/auth/signup" className="text-primary font-weight-bolder">
                 {t`Sign Up`}
               </Link>
             </span>
@@ -72,8 +73,8 @@ const Login = () => {
               type="text"
               name="username"
               ref={register({
-                required: "Необходимо заполнить",
-                validate: value => value.length >= 3 ? true : 'Не верный логин'
+                required: t`Required` as string,
+                validate: value => value.length >= 3 ? true : t`Wrong login` as any
               })}
             />
             {errors.username && errors.username.message}
@@ -88,8 +89,8 @@ const Login = () => {
               type="password"
               name="password"
               ref={register({
-                required: "Необходимо заполнить",
-                validate: value => value.length >= 8 ? true : 'Пароль должен быть больше или равен 8 символам'
+                required: t`Required` as string,
+                validate: value => value.length >= 8 ? true : t`Wrong password` as any
               })}
             />
             {errors.password && errors.password.message}

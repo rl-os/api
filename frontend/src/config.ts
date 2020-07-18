@@ -1,5 +1,5 @@
 export default {
-  baseAPI: "https://osu.ppy.sh",
+  baseAPI: process.env.BASE_API || "https://osu.ppy.sh",
 
   oauth: {
     clientId: 5,

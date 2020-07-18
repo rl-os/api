@@ -2,11 +2,15 @@ import { AxiosInstance } from "axios";
 import { Token } from "../models/oauth";
 
 type Scope = '*' | 'read.*'
-type GrantType = 'password'
-
-interface GrantTypePwd {
-  username: string;
-  password: string;
+type GrantTypes = 'password' | 'refresh_token'
+type grandType = {
+  'refresh_token': {
+    refresh_token: string;
+  },
+  'password': {
+    username: string;
+    password: string;
+  }
 }
 
 export class AuthAPI {
@@ -16,8 +20,7 @@ export class AuthAPI {
     private readonly clientSecret: string
   ) {}
 
-  // tslint:disable-next-line:variable-name
-  public async token<T extends GrantTypePwd>(scope: Scope, grant_type: GrantType, body: T): Promise<Token> {
+  public async token<T extends GrantTypes>(scope: Scope, grant_type: T, body: grandType[T]): Promise<Token> {
     const { data } = await this.axios.post(
       "/oauth/token",
       {
@@ -36,6 +39,12 @@ export class AuthAPI {
     return this.token('*', 'password', {
       username,
       password
+    });
+  }
+
+  public async refreshToken(refresh_token: string): Promise<Token> {
+    return this.token('*', 'refresh_token', {
+      refresh_token,
     });
   }
 }
