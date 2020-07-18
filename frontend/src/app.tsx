@@ -6,8 +6,8 @@ import { Store, StoreContext } from './store';
 import { useAsync } from './utils/hooks';
 import { SecureRoute } from './components/secure-route';
 
-import { HomePage } from './pages/home';
-import { LoginPage } from "./pages/auth/login";
+import { HomePage } from './views/home';
+import { LoginPage } from "./views/auth/login";
 import { Loading } from "./components/loading";
 
 const content = (store: Store) => {
