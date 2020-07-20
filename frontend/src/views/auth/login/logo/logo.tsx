@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { observer } from 'mobx-react-lite';
 
 import styles from './logo.module.scss';
-import {useTranslate} from "../../../../utils/hooks";
+import { useTranslate } from "../../../../utils/hooks";
 
 const Logo = () => {
   const { t } = useTranslate("auth");
