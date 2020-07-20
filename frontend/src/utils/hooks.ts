@@ -2,6 +2,7 @@
 import { DependencyList, MutableRefObject, ReactElement, useCallback, useContext, useEffect, useRef } from 'react';
 import { useAsync as useAsyncInner } from 'react-async';
 import { __RouterContext } from 'react-router';
+import {useTranslation, UseTranslationResponse} from 'react-i18next';
 
 export function useRouter() {
   return useContext(__RouterContext);
@@ -48,4 +49,21 @@ export function useWatch<T>(valueFn: () => T, callback: (newValue: T, oldValue: 
       callbackRef.current(newValue, oldValue);
     };
   },        [oldValue]);
+}
+
+/**
+ * Обертка над useTranslation с возможностью указать путь до перевода
+ * @param context {string} где искать перевод
+ * @param ns {string} namespace
+ * @param options {any} параметры для настройки
+ */
+export function useTranslate(context: string, ns?: string, options?: any): UseTranslationResponse {
+  const def = useTranslation(ns, options);
+
+  return {
+    ...def,
+    t: (key: string, options?: any) => {
+      return def.t(`${context}.${key}`, options);
+    }
+  }
 }
