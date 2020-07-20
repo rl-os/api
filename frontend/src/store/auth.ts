@@ -3,6 +3,7 @@ import { Store } from ".";
 import { DetailedUser } from "../models/detailed_user";
 import Axios from "axios";
 import { KJUR } from 'jsrsasign';
+import { JWTAccessToken } from "../common/interfaces/access_token";
 
 const LOCALSTORAGE_KEY = 'user_auth';
 
@@ -16,7 +17,7 @@ export class Auth {
   @observable
   public refreshToken: string | null = null;
 
-  private tokenWatcher: TokenWatcher | null = null;
+  private readonly cancelToken = Axios.CancelToken.source();
 
   constructor(private readonly store: Store) {}
 
@@ -37,10 +38,7 @@ export class Auth {
       this.refreshToken = data.refreshToken || null;
     }
 
-    this.tokenWatcher = new TokenWatcher(this.store);
-
     try {
-      await this.tokenWatcher.start();
       this.currentUser = await this.store.api.user.me();
     } catch (e) {
       if (e.isAxiosError && e.response?.status === 401) {
@@ -76,16 +74,6 @@ export class Auth {
     this.currentUser = await this.store.api.user.me();
     this.save();
   }
-}
-
-class TokenWatcher {
-  private readonly cancelToken = Axios.CancelToken.source();
-
-  constructor(
-    private readonly store: Store
-  ) {}
-
-  private async onIssue() {}
 
   public start() {
     return this.safeLoop(() => this.check());
@@ -94,7 +82,8 @@ class TokenWatcher {
   private async check(): Promise<void> {
     if (this.store.auth.accessToken === null) return;
 
-    console.log(KJUR.jws.JWS.parse(this.store.auth.accessToken).payloadObj);
+    // todo: validate token structure
+    const token = KJUR.jws.JWS.parse(this.store.auth.accessToken).payloadObj as JWTAccessToken | undefined;
   }
 
   private async safeLoop(fn: () => Promise<void>) {
@@ -103,11 +92,10 @@ class TokenWatcher {
         await fn();
         await new Promise(resolve => setTimeout(resolve, 5 * 1000));
       } catch (e) {
-        if (!Axios.isCancel(e)) {
-          await new Promise(resolve => setTimeout(resolve, 30 * 1000));
-        }
+        if (Axios.isCancel(e)) return;
+
+        await new Promise(resolve => setTimeout(resolve, 30 * 1000));
       }
     }
   }
-
 }

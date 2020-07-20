@@ -9,6 +9,9 @@
 ///////////// DO NOT MODIFY BELOW INCLUDE ORDER ////////////////
 ////////////////////////////////////////////////////////////////
 
+// 0: Makes browsers render all elements more consistently and in line with modern standards.
+@import "~normalize.css/normalize.css";
+
 // 1: Include global config
 @import "config";
 

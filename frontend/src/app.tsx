@@ -30,6 +30,10 @@ const App = observer(() => {
   return useAsync({
     dependencies: [store],
     init: async () => {
+      // run in bg
+      // noinspection ES6MissingAwait
+      store.auth.start();
+      // restore current user and fetch personal information
       await store.auth.init();
     },
     loading: () => <Loading />,
