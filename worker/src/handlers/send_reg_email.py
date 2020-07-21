@@ -1,9 +1,10 @@
 import json
 
-from src.base_handler import BaseHandler
+from src import app, BaseHandler
 from src.models.user import UserShort
 
 
+@app.register
 class SendRegistrationEmail(BaseHandler):
     event = 'api.users.created'
     queue = 'workers'

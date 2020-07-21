@@ -1,8 +1,7 @@
 import abc
 
 from loguru import logger as log
-from nats.aio.client import Client as NATS
-from stan.aio.client import Msg, Client as STAN
+from stan.aio.client import Client as STAN, Msg
 
 
 class BaseHandler(abc.ABC):
@@ -10,7 +9,7 @@ class BaseHandler(abc.ABC):
     queue: str = None
 
     # active connection
-    nc: NATS
+    sc: STAN = None
 
     # helpers
     log = log
@@ -19,12 +18,12 @@ class BaseHandler(abc.ABC):
     async def callback(self, msg: Msg):
         pass
 
-    async def connect(self, nc):
-        self.nc = nc
-        await self.nc.subscribe(
+    async def connect(self, sc: STAN):
+        self.sc = sc
+        await self.sc.subscribe(
             self.event,
+            queue=self.queue,
             cb=self.log.catch(self.callback),
-            is_async=True,
         )
 
     async def on_start(self):
