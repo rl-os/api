@@ -1,20 +1,16 @@
-import asyncio
-import click
+import json
 
 from src import Application
-from src.cli import cli, pass_app
-
-
-async def push_event(app):
-    pass
+from src.cli import cli, pass_app, click
 
 
 @cli.command()
 @click.argument('name')
 @click.argument('data')
 @pass_app
-def send(app: Application, name: str, data):
+async def send(app: Application, name: str, data):
     """ Send event """
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(push_event(app))
-    loop.close()
+    await app.sc.publish(
+        name,
+        json.dumps(data).encode(),
+    )

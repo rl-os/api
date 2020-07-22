@@ -17,23 +17,21 @@ class Application:
     # helpers
     log = log
 
-    async def up(self, loop: asyncio.AbstractEventLoop):
+    async def up(self):
         self.log.info('connecting to NATS server')
 
         # Use borrowed connection for NATS then mount NATS Streaming
         # client on top.
         self.nc = NATS()
 
-        await self.nc.connect(io_loop=loop)
+        await self.nc.connect(io_loop=asyncio.get_running_loop())
         self.log.info('connected')
 
         self.log.info('connecting to NATS Streaming cluster')
         # Start session with NATS Streaming cluster.
         self.sc = STAN()
-        await self.sc.connect("test-cluster", "client-123", nats=self.nc)
+        await self.sc.connect("test-cluster", "adasdasdasd-123", nats=self.nc)
         self.log.info('connected')
-
-        return await self.__run()
 
     async def down(self):
         self.log.info('closing all connections')
@@ -48,7 +46,7 @@ class Application:
     def register(self, handler: Type[BaseHandler]):
         self.handlers.append(handler())
 
-    async def __run(self):
+    async def run(self):
         for h in self.handlers:
             await h.connect(self.sc)
             self.log.info(f'connected handler for {h.event} with queue {h.queue}')

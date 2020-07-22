@@ -1,16 +1,16 @@
 import asyncio
 
+from src import Application
 from src.cli import cli, pass_app
 
 
 @cli.command()
 @pass_app
-def run(app):
+async def run(app: Application):
     """ Run as worker """
-    loop = asyncio.get_event_loop()
-    loop.create_task(app.up(loop))
+    await app.run()
 
     try:
-        loop.run_forever()
+        asyncio.get_running_loop().run_forever()
     except KeyboardInterrupt:
-        loop.run_until_complete(app.down())
+        await app.down()
