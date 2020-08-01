@@ -11,7 +11,7 @@ updates:
   - deissh
   labels:
   - dependencies
-  - area/ayako
+  - area/frontend
 - package-ecosystem: gomod
   directory: "/ayako"
   schedule:
