@@ -3,8 +3,8 @@ updates:
 - package-ecosystem: "npm"
   directory: "/frontend"
   schedule:
-    interval: "daily"
-  open-pull-requests-limit: 3
+    interval: monthly
+  open-pull-requests-limit: 10
   reviewers:
   - deissh
   assignees:
@@ -15,8 +15,8 @@ updates:
 - package-ecosystem: gomod
   directory: "/ayako"
   schedule:
-    interval: daily
-  open-pull-requests-limit: 3
+    interval: monthly
+  open-pull-requests-limit: 10
   reviewers:
   - deissh
   assignees:
