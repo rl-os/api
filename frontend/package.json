@@ -18,7 +18,7 @@
     "i18next": "^19.6.2",
     "i18next-browser-languagedetector": "^5.0.0",
     "i18next-xhr-backend": "^3.2.2",
-    "jsrsasign": "^8.0.20",
+    "jsrsasign": "^8.0.21",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
     "node-sass": "^4.13.1",
