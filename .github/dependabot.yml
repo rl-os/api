@@ -1,11 +1,22 @@
 version: 2
 updates:
+- package-ecosystem: "npm"
+  directory: "/frontend"
+  schedule:
+    interval: "daily"
+  open-pull-requests-limit: 3
+  reviewers:
+  - deissh
+  assignees:
+  - deissh
+  labels:
+  - dependencies
+  - area/frontend
 - package-ecosystem: gomod
   directory: "/ayako"
   schedule:
     interval: daily
-    time: "22:00"
-  open-pull-requests-limit: 10
+  open-pull-requests-limit: 3
   reviewers:
   - deissh
   assignees:

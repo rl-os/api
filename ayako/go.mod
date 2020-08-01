@@ -10,7 +10,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-playground/validator/v10 v10.3.0
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
-	github.com/golang/mock v1.4.3
+	github.com/golang/mock v1.4.4
 	github.com/google/wire v0.4.0
 	github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a
 	github.com/jmoiron/sqlx v1.2.0
