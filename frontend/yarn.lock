@@ -1599,10 +1599,10 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.5.tgz#dcce4430e64b443ba8945f0290fb564ad5bac6dd"
   integrity sha512-7+2BITlgjgDhH0vvwZU/HZJVyk+2XUlvxXe8dFMedNX/aMkaOq++rMAFXc0tM7ij15QaWlbdQASBR9dihi+bDQ==
 
-"@types/jsrsasign@^8.0.3":
-  version "8.0.3"
-  resolved "https://registry.yarnpkg.com/@types/jsrsasign/-/jsrsasign-8.0.3.tgz#ef62d0326e3f7047925d5defc4591a6c4a24bf8e"
-  integrity sha512-k04lvcT2VkdEwOkVMJuBPENJHZebD90NjKKp0hXvNgQ43StwnsUIHq+GULCgYIImGKpO2WhlpsCVolBYYzu1+Q==
+"@types/jsrsasign@^8.0.5":
+  version "8.0.5"
+  resolved "https://registry.yarnpkg.com/@types/jsrsasign/-/jsrsasign-8.0.5.tgz#36443722d9fc8d6e560b2ec42cacace4598be2e8"
+  integrity sha512-WFkeZMTrRb+zu4x/Bb0etY6+uZOfKzytmKkC+WNQ1+0LkhySn6KYZJ3l7uisyJ0gY+K0VliCyZmRm+8xnqhxkQ==
 
 "@types/minimatch@*":
   version "3.0.3"
