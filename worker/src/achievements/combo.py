@@ -29,7 +29,7 @@ class Combo(AchievementBase):
         achievement_ids = []
 
         for ach in self.achievements:
-            if ach.index > score.maxcombo:
+            if ach.index > score.maxcombo or ach.mode is not score.mode:
                 continue
 
             achievement_ids.append(ach.id)
