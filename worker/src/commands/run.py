@@ -1,6 +1,6 @@
 import asyncio
 
-from src import Application
+from src.application import Application
 from src.cli import cli, pass_app
 
 

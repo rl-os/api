@@ -1,11 +1,10 @@
 from src.config import config
-from src.cli import *
-from src.application import *
+from src.cli import cli
+from src.application import app
 from src.base_handler import BaseHandler
 
+# noinspection PyUnresolvedReferences
+from src.handlers import *
 
-# register all handlers
 # noinspection PyUnresolvedReferences
-import src.handlers
-# noinspection PyUnresolvedReferences
-import src.commands
+from src.commands import *
