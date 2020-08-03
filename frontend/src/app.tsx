@@ -6,14 +6,15 @@ import { Store, StoreContext } from './store';
 import { useAsync } from './utils/hooks';
 import { SecureRoute } from './components/secure-route';
 
-import { HomePage } from './pages/home';
-import { LoginPage } from "./pages/login";
+import { HomePage } from './views/home';
+import { LoginPage } from "./views/auth/login";
+import { Loading } from "./components/loading";
 
 const content = (store: Store) => {
   return <StoreContext.Provider value={store}>
     <BrowserRouter>
       <SecureRoute exact={true} path="/" component={HomePage}/>
-      <SecureRoute exact={true} path="/login" component={LoginPage}/>
+      <SecureRoute exact={true} path="/auth/login" component={LoginPage}/>
     </BrowserRouter>
   </StoreContext.Provider>;
 };
@@ -28,8 +29,14 @@ const App = observer(() => {
 
   return useAsync({
     dependencies: [store],
-    init: async () => {/* feature */},
-    loading: () => <div>Loading</div>,
+    init: async () => {
+      // run in bg
+      // noinspection ES6MissingAwait
+      store.auth.start();
+      // restore current user and fetch personal information
+      await store.auth.init();
+    },
+    loading: () => <Loading />,
     failed: (e) => <div>{e.toString()}</div>,
     success: () => content(store),
   });
