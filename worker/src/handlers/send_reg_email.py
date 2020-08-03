@@ -1,7 +1,7 @@
 import json
 
 from src import app, BaseHandler
-from src.models.user import UserShort
+from src.core.models.user import UserShort
 
 
 @app.register
