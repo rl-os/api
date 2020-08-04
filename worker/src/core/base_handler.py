@@ -1,6 +1,7 @@
 import abc
 import aiormq
 
+from src import config
 from src.logger import log
 
 
