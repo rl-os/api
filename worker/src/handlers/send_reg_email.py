@@ -1,3 +1,4 @@
+import asyncio
 import json
 from src import app, BaseHandler
 from src.logger import log
@@ -6,12 +7,12 @@ from src.core.models.user import UserShort
 
 @app.register
 class SendRegistrationEmail(BaseHandler):
-    event = 'api.users.created'
-    queue = 'workers'
+    queue = 'rl.api.users.created'
 
     async def callback(self, msg):
-        data = json.loads(msg.data)
+        data = json.loads(msg.body)
         user = UserShort(**data)
-        log.info(user.username)
+        log.info(user)
 
-        await self.ack(msg)
+        await asyncio.sleep(15)
+        await self.ack(msg.delivery.delivery_tag)

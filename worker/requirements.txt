@@ -1,5 +1,4 @@
-asyncio-nats-client==0.10.0
-asyncio-nats-streaming==0.4.0
+aiormq==3.2.3
 click==7.1.2
 cool-config==0.2.3
 loguru==0.5.1
