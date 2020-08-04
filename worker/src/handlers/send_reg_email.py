@@ -1,6 +1,6 @@
 import json
-
 from src import app, BaseHandler
+from src.logger import log
 from src.core.models.user import UserShort
 
 
@@ -12,4 +12,6 @@ class SendRegistrationEmail(BaseHandler):
     async def callback(self, msg):
         data = json.loads(msg.data)
         user = UserShort(**data)
-        self.log.info(user.username)
+        log.info(user.username)
+
+        await self.ack(msg)

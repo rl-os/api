@@ -1,42 +1,43 @@
 import asyncio
 from typing import List, Type
 
-from loguru import logger as log
-from src.base_handler import BaseHandler
+from src.logger import log
+from src.core.base_handler import BaseHandler
 from nats.aio.client import Client as NATS
 from stan.aio.client import Client as STAN
 
 
 class Application:
-    handlers: List[BaseHandler] = []
+    cluster_id: str
+    client_id: str
+    loop: asyncio.AbstractEventLoop
 
     # active connection
     nc: NATS = None
     sc: STAN = None
 
-    # helpers
-    log = log
+    _handlers: List[BaseHandler] = []
 
-    async def up(self):
-        self.log.info('connecting to NATS server')
+    async def up(self, loop, cluster_id: str, client_id: str):
+        self.loop = loop
+
+        log.info('setting up NATS Streaming cluster connection')
 
         # Use borrowed connection for NATS then mount NATS Streaming
         # client on top.
         self.nc = NATS()
 
-        await self.nc.connect(io_loop=asyncio.get_running_loop())
-        self.log.info('connected')
+        await self.nc.connect(io_loop=self.loop)
 
-        self.log.info('connecting to NATS Streaming cluster')
         # Start session with NATS Streaming cluster.
         self.sc = STAN()
-        await self.sc.connect("test-cluster", "adasdasdasd-123", nats=self.nc)
-        self.log.info('connected')
+        await self.sc.connect(cluster_id, client_id, nats=self.nc)
+        log.info(f'connected to {cluster_id} as {client_id}')
 
     async def down(self):
-        self.log.info('closing all connections')
+        log.info('closing all connections')
 
-        for h in self.handlers:
+        for h in self._handlers:
             await h.on_stop()
 
         # Close NATS Streaming session
@@ -44,15 +45,15 @@ class Application:
         await self.nc.close()
 
     def register(self, handler: Type[BaseHandler]):
-        self.handlers.append(handler())
+        self._handlers.append(handler())
 
     async def run(self):
-        for h in self.handlers:
+        for h in self._handlers:
             await h.connect(self.sc)
-            self.log.info(f'connected handler for {h.event} with queue {h.queue}')
+            log.info(f'connected handler for {h.event} with queue {h.queue}')
             await h.on_start()
 
-        self.log.info('all handlers enabled')
+        log.info('all handlers enabled')
 
 
 app = Application()

@@ -2,7 +2,8 @@ from dataclasses import dataclass
 from typing import List, Any
 from datetime import datetime
 
-from src.core.models import UserShort, Beatmap
+from src.core.models.user import UserShort
+from src.core.models.beatmap import Beatmap
 
 
 @dataclass

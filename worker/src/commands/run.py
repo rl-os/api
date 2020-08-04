@@ -6,11 +6,15 @@ from src.cli import cli, pass_app
 
 @cli.command()
 @pass_app
-async def run(app: Application):
+def run(app: Application):
     """ Run as worker """
-    await app.run()
+    app.loop.create_task(app.run())
 
     try:
-        asyncio.get_running_loop().run_forever()
+        app.loop.run_forever()
+        pass
     except KeyboardInterrupt:
-        await app.down()
+        pass
+    finally:
+        app.loop.run_until_complete(app.down())
+        app.loop.close()
