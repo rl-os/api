@@ -3,7 +3,7 @@ import aiormq
 from typing import List, Type
 
 from src.logger import log
-from src.core.base_handler import BaseHandler
+from src.base_handler import BaseHandler
 
 
 class Application:
@@ -30,7 +30,7 @@ class Application:
 
         await self._connection.close()
 
-    def register(self, handler: Type[BaseHandler]):
+    def register_task(self, handler: Type[BaseHandler]):
         self._handlers.append(handler())
 
     async def run(self):
@@ -39,7 +39,7 @@ class Application:
             await h.connect(self._connection)
             log.info(f'connected handler for {h.queue}')
 
-        log.info('all handlers enabled')
+        log.info('all tasks enabled')
 
     async def send(self, routing_key: str, data: str):
         channel = await self._connection.channel()

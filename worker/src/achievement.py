@@ -2,7 +2,7 @@ import abc
 import math
 from typing import Dict, List, Any
 
-from src.core.models import Score, AchievementData
+from src.models import Score, AchievementData
 
 
 class AchievementBase(abc.ABC):

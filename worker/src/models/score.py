@@ -2,7 +2,7 @@ from typing import List, Union
 
 from dataclasses import dataclass
 
-from src.core.models.user import UserShort
+from src.models import UserShort
 
 
 @dataclass

@@ -1,7 +1,7 @@
 from typing import List
 
-from src.core import AchievementBase
-from src.core.models import Score
+from src.achievement import AchievementBase
+from src.models import Score, AchievementData
 
 
 class Combo(AchievementBase):
@@ -21,6 +21,8 @@ class Combo(AchievementBase):
         "index": 1,
         "mode": 4
     }
+
+    achievements: List[AchievementData] = []
 
     def __init__(self):
         super().__init__()

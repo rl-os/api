@@ -1,7 +1,6 @@
 import abc
 import aiormq
 
-from src import config
 from src.logger import log
 
 
@@ -20,6 +19,10 @@ class BaseHandler(abc.ABC):
     async def ack(self, delivery_tag: int):
         log.debug("basic_ack: {}", delivery_tag)
         return await self._channel.basic_ack(delivery_tag)
+
+    async def reject(self, delivery_tag: int):
+        log.debug("reject: {}", delivery_tag)
+        return await self._channel.basic_reject(delivery_tag)
 
     async def connect(self, conn: aiormq.Connection):
         self._connection = conn
