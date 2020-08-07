@@ -1,7 +1,8 @@
 from typing import List
 
 from src.achievement import AchievementBase
-from src.models import Score, AchievementData
+from src.models.score import Score
+from src.models.achievement_data import AchievementData
 
 
 class Combo(AchievementBase):

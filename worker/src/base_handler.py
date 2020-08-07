@@ -37,12 +37,15 @@ class BaseHandler(abc.ABC):
 
         await self._channel.basic_consume(
             declare_ok.queue,
-            log.catch(self.callback),
+            self.__cb_wrapper,
             no_ack=False,
         )
 
     async def on_start(self):
-        log.debug("starting handler")
+        pass
 
     async def on_stop(self):
-        log.debug("stopping handler")
+        pass
+
+    async def __cb_wrapper(self, *args, **kwargs):
+        return await log.catch(self.callback)(*args, **kwargs)

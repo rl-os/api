@@ -2,6 +2,7 @@ import asyncio
 import aiormq
 from typing import List, Type
 
+from src import config
 from src.logger import log
 from src.base_handler import BaseHandler
 
@@ -14,13 +15,16 @@ class Application:
 
     _handlers: List[BaseHandler] = []
 
-    async def up(self, loop, uri: str):
+    async def up(self, loop):
         self.loop = loop
 
+        log.info("loaded {}", config.to_dict())
+
         self._connection = await aiormq.connect(
-            uri
+            config.amqp.url,
+            client_properties=config.amqp.client_properties,
         )
-        log.info(f'connected')
+        log.info('rabbitmq connected')
 
     async def down(self):
         log.info('closing all connections')

@@ -2,13 +2,12 @@ from typing import List, Union
 
 from dataclasses import dataclass
 
-from src.models import UserShort
+from src.models.user import UserShort
 
 
 @dataclass
 class Score:
     id: int
-    user_id: int
     user: UserShort
     mode: str
     count50: int
