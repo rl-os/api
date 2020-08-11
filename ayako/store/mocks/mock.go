@@ -27,6 +27,8 @@ func InitStore(ctrl *gomock.Controller) MockedStore {
 	}
 }
 
+func (ss MockedStore) Close() {}
+
 func (ss MockedStore) Beatmap() store.Beatmap       { return ss.beatmap }
 func (ss MockedStore) BeatmapSet() store.BeatmapSet { return ss.beatmapSet }
 func (ss MockedStore) User() store.User             { return ss.user }
