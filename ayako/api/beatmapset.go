@@ -80,7 +80,7 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 	//	ctx = context.WithValue(context.Background(), "current_user_id", userId)
 	//}
 
-	//beatmapSets, err := h.Store.BeatmapSet().Get(ctx, 1118896)
+	//beatmapSets, err := h.GetStore.BeatmapSet().Get(ctx, 1118896)
 	//if err != nil {
 	//	return err
 	//}

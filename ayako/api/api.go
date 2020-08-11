@@ -7,7 +7,7 @@ import (
 )
 
 func New(app *app.App) {
-	router := app.Srv().RootRouter
+	router := app.Srv().GetRootRouter()
 
 	signup := router.Group("/users")
 	{

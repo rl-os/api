@@ -13,9 +13,11 @@ func Init(cfg *config.Config) *osu.OsuAPI {
 		cfg.Mirror.Bancho.Password,
 	)
 	if err != nil {
-		log.Fatal().
+		log.Warn().
 			Err(errors.WithCause("service_bancho", 500, "auth in bancho", err)).
 			Send()
+
+		return nil
 	}
 
 	return client

@@ -1,4 +1,4 @@
-package server
+package base
 
 import (
 	"context"
@@ -60,7 +60,7 @@ func (s *Server) DoBeatmapSetUpdate() {
 
 	for _, id := range ids {
 		select {
-		case <-s.goroutineExitSignal:
+		case <-s.GoroutineExitSignal:
 		case <-ctx.Done():
 			break
 		default:

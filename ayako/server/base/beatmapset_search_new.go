@@ -1,4 +1,4 @@
-package server
+package base
 
 import (
 	"context"
@@ -51,7 +51,7 @@ func (s *Server) DoBeatmapSetSearchNew() {
 	// trying get 10 beatmaps with id + i
 	for i := 1; i <= 10; i++ {
 		select {
-		case <-s.goroutineExitSignal:
+		case <-s.GoroutineExitSignal:
 		case <-ctx.Done():
 			break
 		default:
