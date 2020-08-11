@@ -1,9 +1,11 @@
 import json
 import aiobotocore as aboto
+from osrparse import parse_replay
 
 from src import app, BaseHandler, config
 from src.logger import log
 from src.models.requsets.new_replay import NewReplayRequest
+from src.models.score import Score, ParsedScore
 
 
 @app.register_task
@@ -38,18 +40,42 @@ class ProcessReplay(BaseHandler):
         req = NewReplayRequest(**data)
 
         replay_data = await self._load_replay(req.bucket, req.key)
+        # todo: calculate pp and accuracy
+        # todo: anticheat validation (secret code?)
+        # todo: check achievements
+        # todo: upload result
+
+        log.debug(replay_data)
 
         await self.ack(msg.delivery.delivery_tag)
 
-    async def _load_replay(self, bucket: str, key: str):
+    async def _load_replay(self, bucket: str, key: str) -> ParsedScore:
         resp = await self.s3_client.get_object(
             Bucket=bucket,
             Key=key,
         )
 
-        log.info('Loaded replay from {}/{}', bucket, key)
+        log.debug('Loaded replay from {}/{}', bucket, key)
         log.debug('ContentType: {} LastModified: {} Meta: {}',
                   resp['ContentType'], resp['LastModified'], resp['Metadata'])
 
         async with resp['Body'] as stream:
-            return await stream.read()
+            parsed = parse_replay(
+                await stream.read()
+            )
+
+        return ParsedScore(
+            mode=parsed.game_mode,
+            count50=parsed.number_50s,
+            count100=parsed.number_100s,
+            count300=parsed.number_300s,
+            countgeki=parsed.gekis,
+            countkatu=parsed.katus,
+            countmiss=parsed.misses,
+            enabled_mods=[],  # todo: this
+            maxcombo=parsed.max_combo,
+            passed=0,  # todo: this
+            perfect=0,  # todo: this
+            score=parsed.score,
+            frame=0,  # todo: this
+        )

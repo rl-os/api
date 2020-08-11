@@ -6,9 +6,7 @@ from src.models.user import UserShort
 
 
 @dataclass
-class Score:
-    id: int
-    user: UserShort
+class ParsedScore:
     mode: str
     count50: int
     count100: int
@@ -17,12 +15,20 @@ class Score:
     countkatu: int
     countmiss: int
     enabled_mods: List[str]
-    frame: int
-    game_id: Union[int, None]
-    game: Union[dict, None]
     maxcombo: int
     passed: int
     perfect: int
     score: int
+    frame: int
+
+
+@dataclass
+class Score:
+    id: int
+    user: UserShort
+    game_id: Union[int, None]
+    game: Union[dict, None]
     slot: Union[int, None]
     team: Union[int, None]
+
+    parsed: ParsedScore

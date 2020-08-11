@@ -1,7 +1,7 @@
 from typing import List
 
 from src.achievement import AchievementBase
-from src.models.score import Score
+from src.models.score import Score, ParsedScore
 from src.models.achievement_data import AchievementData
 
 
@@ -28,7 +28,7 @@ class Combo(AchievementBase):
     def __init__(self):
         super().__init__()
 
-    def handle(self, score: Score) -> List[str]:
+    def handle(self, score: ParsedScore) -> List[str]:
         achievement_ids = []
 
         for ach in self.achievements:
