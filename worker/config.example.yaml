@@ -9,7 +9,7 @@ amqp:
 s3:
   region_name: 'ru-1a'
 
-  secret_access_key: 123321
-  access_key_id: 123321
+  secret_access_key: minioadmin
+  access_key_id: minioadmin
 
-  endpoint_url: 'https://s3.selcdn.ru'
+  endpoint_url: 'http://127.0.0.1:9000'
