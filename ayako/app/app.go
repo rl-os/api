@@ -18,7 +18,6 @@ import (
 )
 
 type App struct {
-	Config  *config.Config
 	Store   store.Store
 	Echo    *echo.Echo
 	Context context.Context

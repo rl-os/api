@@ -92,6 +92,8 @@ func (ss *Supplier) GetConfig() *config.Config { return ss.cfg }
 
 func (ss *Supplier) GetOsuClient() *osu.OsuAPI { return ss.osuClient }
 
+func (ss *Supplier) Close() { _ = ss.master.Close() }
+
 func (ss *Supplier) Beatmap() store.Beatmap       { return ss.stores.beatmap }
 func (ss *Supplier) BeatmapSet() store.BeatmapSet { return ss.stores.beatmapSet }
 func (ss *Supplier) User() store.User             { return ss.stores.user }

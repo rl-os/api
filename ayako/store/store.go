@@ -21,6 +21,8 @@ type Store interface {
 	User() User
 	Friend() Friend
 	Chat() Chat
+
+	Close()
 }
 
 type OAuth interface {
