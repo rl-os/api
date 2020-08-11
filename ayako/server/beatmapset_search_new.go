@@ -1,4 +1,4 @@
-package app
+package server
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func (s *App) DoBeatmapSetSearchNew() {
+func (s *Server) DoBeatmapSetSearchNew() {
 	log.Info().
 		Str("job", "DoBeatmapSetSearchNew").
 		Msg("start beatmapset search")

@@ -2,15 +2,15 @@ package api
 
 import (
 	"context"
+	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/entity"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
 )
 
 type BeatmapHandlers struct {
-	Store store.Store
+	*app.App
 }
 
 func (h *BeatmapHandlers) Show(c echo.Context) error {
@@ -26,7 +26,7 @@ func (h *BeatmapHandlers) Show(c echo.Context) error {
 		ctx = context.WithValue(context.Background(), "current_user_id", userId)
 	}
 
-	beatmaps, err := h.Store.Beatmap().Get(ctx, uint(beatmapID))
+	beatmaps, err := h.Store().Beatmap().Get(ctx, uint(beatmapID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
 	}
@@ -54,16 +54,16 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 	var beatmap *entity.SingleBeatmap
 	if params.CheckSum != "" {
 		// todo: search by md5
-		beatmap, err = h.Store.Beatmap().Get(ctx, params.Id)
+		beatmap, err = h.Store().Beatmap().Get(ctx, params.Id)
 	}
 
 	if beatmap == nil && params.Id != 0 {
-		beatmap, err = h.Store.Beatmap().Get(ctx, params.Id)
+		beatmap, err = h.Store().Beatmap().Get(ctx, params.Id)
 	}
 
 	if beatmap == nil && params.Filename != "" {
 		// todo: search by filename
-		beatmap, err = h.Store.Beatmap().Get(ctx, params.Id)
+		beatmap, err = h.Store().Beatmap().Get(ctx, params.Id)
 	}
 
 	if err != nil || beatmap == nil {

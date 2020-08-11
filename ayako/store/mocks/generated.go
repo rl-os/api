@@ -120,6 +120,18 @@ func (mr *MockStoreMockRecorder) Chat() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Chat", reflect.TypeOf((*MockStore)(nil).Chat))
 }
 
+// Close mocks base method
+func (m *MockStore) Close() {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Close")
+}
+
+// Close indicates an expected call of Close
+func (mr *MockStoreMockRecorder) Close() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockStore)(nil).Close))
+}
+
 // MockOAuth is a mock of OAuth interface
 type MockOAuth struct {
 	ctrl     *gomock.Controller

@@ -1,11 +1,17 @@
-package app
+package server
 
 import (
 	"context"
+	"github.com/deissh/rl/ayako/api"
+	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/config"
 	"github.com/deissh/rl/ayako/middlewares/customerror"
+	"github.com/deissh/rl/ayako/middlewares/customlogger"
+	"github.com/deissh/rl/ayako/middlewares/permission"
+	"github.com/deissh/rl/ayako/middlewares/reqest_context"
 	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
 	"sync"
 	"time"
@@ -14,6 +20,11 @@ import (
 const WAIT_FOR_CONNECTIONS_BEFORE_SHUTDOWN = time.Second * 2
 
 type Server struct {
+	App *app.App
+
+	// Global context
+	Context context.Context
+
 	// Server instance
 	Server *echo.Echo
 
@@ -41,15 +52,17 @@ type Server struct {
 	didFinishListen chan struct{}
 }
 
-func NewServer(config *config.Config) (*Server, error) {
-	srv := echo.New()
-	srv.HidePort = true
-	srv.HideBanner = true
-	srv.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
-
-	s := &Server{
-		Server:              srv,
+// NewServer create and fill server configuration
+func NewServer(
+	config *config.Config,
+	app *app.App,
+	store store.Store,
+) *Server {
+	srv := &Server{
+		App:                 app,
+		Context:             context.Background(),
 		Config:              config,
+		Store:               store,
 		goroutineCount:      0,
 		goroutineExitSignal: make(chan struct{}, 1),
 	}
@@ -58,10 +71,22 @@ func NewServer(config *config.Config) (*Server, error) {
 
 	{
 		log.Info().Msg("Setting up config callback")
-		s.Config.AutoReloadCallback = s.onConfigReload
+		srv.Config.AutoReloadCallback = srv.onConfigReload
 	}
 
-	return s, nil
+	{
+		log.Info().Msg("Setting up application")
+		srv.App.SetServer(srv)
+		srv.App.SetContext(srv.Context)
+	}
+
+	return srv
+}
+
+func (s *Server) Start() error {
+	s.StartHTTPServer()
+
+	return nil
 }
 
 func (s *Server) Shutdown() error {
@@ -88,6 +113,45 @@ func (s *Server) Shutdown() error {
 
 func (s *Server) StartHTTPServer() {
 	log.Info().Msg("Starting HTTP server...")
+
+	srv := echo.New()
+	srv.HidePort = true
+	srv.HideBanner = true
+	srv.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
+
+	srv.Use(
+		middleware.RequestID(),
+		permission.GlobalMiddleware(s.Store, s.Context),
+		reqest_context.GlobalMiddleware(s.Context),
+		customlogger.Middleware(),
+	)
+
+	s.RootRouter = srv.Group("")
+
+	api.New(s.App)
+
+	// log all routes
+	for _, route := range s.Server.Routes() {
+		log.Debug().
+			Str("name", route.Name).
+			Str("method", route.Method).
+			Str("path", route.Path).
+			Msg("Route loaded")
+	}
+
+	addr := s.Config.Server.Host + ":" + s.Config.Server.Port
+
+	s.didFinishListen = make(chan struct{})
+	go func() {
+		err := s.Server.Start(addr)
+		if err != nil {
+			log.Error().
+				Err(err).
+				Msg("Error starting server")
+		}
+
+		close(s.didFinishListen)
+	}()
 }
 
 func (s *Server) StopHTTPServer() {

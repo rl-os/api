@@ -1,4 +1,4 @@
-package app
+package server
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func (s *App) DoBeatmapSetUpdate() {
+func (s *Server) DoBeatmapSetUpdate() {
 	log.Info().
 		Str("job", "DoBeatmapSetUpdate").
 		Uint("batch_size", 100).

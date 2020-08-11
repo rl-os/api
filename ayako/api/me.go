@@ -2,14 +2,14 @@ package api
 
 import (
 	"context"
+	"github.com/deissh/rl/ayako/app"
 	myctx "github.com/deissh/rl/ayako/ctx"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
 type MeHandlers struct {
-	Store store.Store
+	*app.App
 }
 
 func (h *MeHandlers) Me(c echo.Context) error {
@@ -22,7 +22,7 @@ func (h *MeHandlers) Me(c echo.Context) error {
 
 	mode := c.Param("mode")
 
-	user, err := h.Store.User().Get(ctx, userId, mode)
+	user, err := h.Store().User().Get(ctx, userId, mode)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "User not found")
 	}

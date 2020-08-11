@@ -2,14 +2,14 @@ package api
 
 import (
 	"context"
-	"github.com/deissh/rl/ayako/store"
+	"github.com/deissh/rl/ayako/app"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
 type RegistrationHandlers struct {
-	Store store.Store
+	*app.App
 }
 
 func (h *RegistrationHandlers) Create(c echo.Context) error {
@@ -31,7 +31,7 @@ func (h *RegistrationHandlers) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid user information")
 	}
 
-	user, err := h.Store.User().Create(ctx, params.Username, params.Email, params.Password)
+	user, err := h.Store().User().Create(ctx, params.Username, params.Email, params.Password)
 	if err != nil {
 		return err
 	}

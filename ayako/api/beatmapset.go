@@ -2,17 +2,17 @@ package api
 
 import (
 	"context"
+	"github.com/deissh/rl/ayako/app"
 	myctx "github.com/deissh/rl/ayako/ctx"
 	"github.com/deissh/rl/ayako/entity"
 	"github.com/deissh/rl/ayako/errors"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
 )
 
 type BeatmapSetHandlers struct {
-	Store store.Store
+	*app.App
 }
 
 func (h *BeatmapSetHandlers) Get(c echo.Context) error {
@@ -28,7 +28,7 @@ func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 		ctx = context.WithValue(context.Background(), "current_user_id", userId)
 	}
 
-	beatmaps, err := h.Store.BeatmapSet().Get(ctx, uint(beatmapsetID))
+	beatmaps, err := h.Store().BeatmapSet().Get(ctx, uint(beatmapsetID))
 	if err != nil {
 		return err
 	}
@@ -46,12 +46,12 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	beatmap, err := h.Store.Beatmap().Get(ctx, params.Id)
+	beatmap, err := h.Store().Beatmap().Get(ctx, params.Id)
 	if err != nil {
 		return err
 	}
 
-	beatmapSet, err := h.Store.BeatmapSet().Get(ctx, uint(beatmap.Beatmapset.ID))
+	beatmapSet, err := h.Store().BeatmapSet().Get(ctx, uint(beatmap.Beatmapset.ID))
 	if err != nil {
 		return err
 	}
@@ -121,9 +121,9 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 	var total uint
 	switch params.Action {
 	case "favourite":
-		total, err = h.Store.BeatmapSet().SetFavourite(ctx, userId, uint(beatmapsetID))
+		total, err = h.Store().BeatmapSet().SetFavourite(ctx, userId, uint(beatmapsetID))
 	case "unfavourite":
-		total, err = h.Store.BeatmapSet().SetUnFavourite(ctx, userId, uint(beatmapsetID))
+		total, err = h.Store().BeatmapSet().SetUnFavourite(ctx, userId, uint(beatmapsetID))
 	default:
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid action")
 	}

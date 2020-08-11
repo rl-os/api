@@ -1,10 +1,10 @@
-package app
+package server
 
 import (
 	"github.com/rs/zerolog/log"
 )
 
-func (s *App) DoSecurityUpdateCheck() {
+func (s *Server) DoSecurityUpdateCheck() {
 	if !s.Config.Service.EnableSecurityFixAlert {
 		return
 	}

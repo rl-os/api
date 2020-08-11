@@ -6,6 +6,7 @@ package main
 import (
 	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/config"
+	"github.com/deissh/rl/ayako/server"
 	"github.com/deissh/rl/ayako/services"
 	"github.com/deissh/rl/ayako/store/sql"
 	"github.com/google/wire"
@@ -32,11 +33,11 @@ func main() {
 
 	log.Debug().Msg("Start initialize dependencies")
 
-	app := Injector("config.yaml")
+	srv := Injector("config.yaml")
 
 	log.Debug().Msg("Initialize dependencies successful done")
 
-	if err := app.Start(); err != nil {
+	if err := srv.Start(); err != nil {
 		log.Fatal().Err(err).Send()
 	}
 }
@@ -56,11 +57,12 @@ func setupLogger() {
 	).With().Caller().Logger()
 }
 
-func Injector(configPath string) *app.App {
+func Injector(configPath string) *server.Server {
 	wire.Build(
 		config.Init,
 		sql.Init,
 		app.ProviderSet,
+		server.ProviderSet,
 		services.ProviderSet,
 	)
 
