@@ -5,7 +5,6 @@ import (
 	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/entity"
 	"github.com/deissh/rl/ayako/errors"
-	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
@@ -37,7 +36,7 @@ func (h *OAuthTokenHandlers) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Token info not found")
 	}
 
-	if err := validator.New().Struct(params); err != nil {
+	if err := h.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid token information")
 	}
 

@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/deissh/rl/ayako/app"
 	myctx "github.com/deissh/rl/ayako/ctx"
-	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
@@ -40,7 +39,7 @@ func (h *FriendHandlers) Add(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
 
-	if err := validator.New().Struct(params); err != nil {
+	if err := h.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
 
@@ -74,7 +73,7 @@ func (h *FriendHandlers) Remove(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
 
-	if err := validator.New().Struct(params); err != nil {
+	if err := h.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
 

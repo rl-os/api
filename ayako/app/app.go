@@ -4,11 +4,14 @@ import (
 	"context"
 	"github.com/deissh/rl/ayako/services"
 	"github.com/deissh/rl/ayako/store"
+	"github.com/go-playground/validator/v10"
 )
 
 type App struct {
 	// Global context
 	Context context.Context
+	// Global validation context
+	Validator *validator.Validate
 
 	// Store contains active implementation
 	Store store.Store
@@ -22,8 +25,9 @@ func NewApp(
 	services *services.Services,
 ) *App {
 	app := &App{
-		Store:    store,
-		Services: services,
+		Store:     store,
+		Services:  services,
+		Validator: validator.New(),
 	}
 
 	return app
