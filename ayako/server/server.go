@@ -41,6 +41,9 @@ type Server struct {
 	// users and etc.
 	LocalRouter *echo.Group
 
+	// ScheduledTasks is the list of all active background tasks
+	ScheduledTasks []*ScheduledTask
+
 	// GoroutineCount and GoroutineExitSignal use for wait
 	// all necessary tasks before shutdown
 	GoroutineCount      int32
@@ -76,6 +79,10 @@ func NewServer(
 func (s *Server) Start() error {
 	s.StartHTTPServer()
 
+	if s.Config.Server.EnableJobs {
+		s.StartTasks()
+	}
+
 	return nil
 }
 
@@ -85,6 +92,7 @@ func (s *Server) Shutdown() error {
 	// stopping all created services
 	// external http server
 	s.StopHTTPServer()
+	s.StopTasks()
 
 	// wait all necessary goroutines
 	s.WaitForGoroutines()
@@ -99,6 +107,23 @@ func (s *Server) Shutdown() error {
 	log.Info().Msg("Server stopped")
 
 	return nil
+}
+
+func (s *Server) StartTasks() {
+	log.Info().Msg("Starting background tasks...")
+
+	s.ScheduledTasks = append(
+		s.ScheduledTasks,
+		CreateRecurringTask("UpdateCheck", s.DoBeatmapSetUpdate, time.Minute*30),
+	)
+	s.ScheduledTasks = append(
+		s.ScheduledTasks,
+		CreateRecurringTask("SearchNew", s.DoBeatmapSetSearchNew, time.Hour),
+	)
+	s.ScheduledTasks = append(
+		s.ScheduledTasks,
+		CreateRecurringTask("Security", s.DoSecurityUpdateCheck, time.Hour*6),
+	)
 }
 
 func (s *Server) StartHTTPServer() {
@@ -145,6 +170,14 @@ func (s *Server) StartHTTPServer() {
 	}()
 }
 
+func (s *Server) StopTasks() {
+	log.Info().Msg("Shutdown background tasks")
+
+	for _, t := range s.ScheduledTasks {
+		t.Cancel()
+	}
+}
+
 func (s *Server) StopHTTPServer() {
 	if s.Server == nil {
 		return
@@ -176,23 +209,5 @@ func (s *Server) StopHTTPServer() {
 	s.Server = nil
 }
 
-func (s *Server) GetStore() store.Store      { return s.GetStore() }
+func (s *Server) GetStore() store.Store      { return s.App.Store }
 func (s *Server) GetRootRouter() *echo.Group { return s.RootRouter }
-
-func runSecurityJob(s *Server) {
-	CreateRecurringTask("Security", func() {
-		s.DoSecurityUpdateCheck()
-	}, time.Hour*6)
-}
-
-func runUpdateCheck(s *Server) {
-	CreateRecurringTask("UpdateCheck", func() {
-		s.DoBeatmapSetUpdate()
-	}, time.Minute*30)
-}
-
-func runSearchNew(s *Server) {
-	CreateRecurringTask("SearchNew", func() {
-		s.DoBeatmapSetSearchNew()
-	}, time.Hour)
-}

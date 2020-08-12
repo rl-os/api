@@ -25,11 +25,6 @@ type Config struct {
 		Secret            string `default:"somesupersecretstring"`
 		HoursBeforeRevoke int    `default:"1"`
 	}
-	Service struct {
-		EnableSecurityFixAlert bool `default:"false"`
-		EnableUpdater          bool `default:"false"`
-		EnableSearch           bool `default:"false"`
-	}
 	Database struct {
 		DSN    string `default:"postgres://postgres:postgres@/osuserver?sslmode=disable"`
 		Driver string `default:"postgres"`
