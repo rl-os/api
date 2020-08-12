@@ -1,4 +1,4 @@
-package base
+package server
 
 import "github.com/deissh/rl/ayako/config"
 

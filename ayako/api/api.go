@@ -6,22 +6,20 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func New(app *app.App) {
-	router := app.Srv().GetRootRouter()
-
-	signup := router.Group("/users")
+func New(app *app.App, root *echo.Group) {
+	signup := root.Group("/users")
 	{
 		h := RegistrationHandlers{app}
 		signup.POST("", h.Create)
 	}
 
-	oauth := router.Group("/oauth")
+	oauth := root.Group("/oauth")
 	{
 		h := OAuthTokenHandlers{app}
 		oauth.POST("/token", h.Create)
 	}
 
-	v2 := router.Group("/api/v2")
+	v2 := root.Group("/api/v2")
 	{
 		// Health status
 		// хз для чего я пишу в каждой версии свой пинг

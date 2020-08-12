@@ -7,7 +7,6 @@ import (
 	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/config"
 	"github.com/deissh/rl/ayako/server"
-	"github.com/deissh/rl/ayako/server/base"
 	"github.com/deissh/rl/ayako/services"
 	"github.com/deissh/rl/ayako/store/sql"
 	"github.com/google/wire"
@@ -69,12 +68,12 @@ func setupLogger() {
 	).With().Caller().Logger()
 }
 
-func Injector(configPath string) server.Server {
+func Injector(configPath string) *server.Server {
 	wire.Build(
 		config.Init,
 		sql.Init,
 		app.NewApp,
-		base.NewServer,
+		server.NewServer,
 		services.ProviderSet,
 	)
 

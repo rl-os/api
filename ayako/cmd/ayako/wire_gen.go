@@ -9,7 +9,6 @@ import (
 	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/config"
 	"github.com/deissh/rl/ayako/server"
-	"github.com/deissh/rl/ayako/server/base"
 	"github.com/deissh/rl/ayako/services"
 	"github.com/deissh/rl/ayako/services/bancho"
 	"github.com/deissh/rl/ayako/store/sql"
@@ -22,13 +21,13 @@ import (
 
 // Injectors from main.go:
 
-func Injector(configPath string) server.Server {
+func Injector(configPath string) *server.Server {
 	configConfig := config.Init(configPath)
 	osuAPI := bancho.Init(configConfig)
 	servicesServices := services.NewServices(osuAPI)
-	appApp := app.NewApp(servicesServices)
 	store := sql.Init(configConfig, servicesServices)
-	serverServer := base.NewServer(configConfig, appApp, store)
+	appApp := app.NewApp(store, servicesServices)
+	serverServer := server.NewServer(configConfig, appApp)
 	return serverServer
 }
 

@@ -1,4 +1,4 @@
-package base
+package server
 
 import (
 	"context"
@@ -15,7 +15,7 @@ func (s *Server) DoBeatmapSetUpdate() {
 	ctx, cancel := context.WithCancel(s.Context)
 	defer cancel()
 
-	ids, err := s.Store.BeatmapSet().GetIdsForUpdate(ctx, 100)
+	ids, err := s.GetStore().BeatmapSet().GetIdsForUpdate(ctx, 100)
 	if err != nil {
 		log.Error().
 			Err(err).
@@ -30,7 +30,7 @@ func (s *Server) DoBeatmapSetUpdate() {
 			Uint("beatmap_set_id", id).
 			Msg("fetching")
 
-		data, err := s.Store.BeatmapSet().FetchFromBancho(ctx, id)
+		data, err := s.GetStore().BeatmapSet().FetchFromBancho(ctx, id)
 		if err != nil {
 			log.Error().
 				Err(err).
@@ -42,7 +42,7 @@ func (s *Server) DoBeatmapSetUpdate() {
 
 		data.LastChecked = time.Now()
 
-		_, err = s.Store.BeatmapSet().Update(ctx, id, *data)
+		_, err = s.GetStore().BeatmapSet().Update(ctx, id, *data)
 		if err != nil {
 			log.Error().
 				Err(err).

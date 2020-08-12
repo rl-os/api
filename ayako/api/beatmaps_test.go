@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/entity"
 	mock_store "github.com/deissh/rl/ayako/store/mocks"
 	"github.com/golang/mock/gomock"
@@ -57,9 +58,9 @@ func TestBeatmapHandlers_Show(t *testing.T) {
 			mocked := mock_store.InitStore(ctrl)
 
 			// trying create new api
-			New(mocked, e)
+			fakeApp := app.NewApp(mocked, nil)
 
-			h := &BeatmapHandlers{mocked}
+			h := &BeatmapHandlers{fakeApp}
 
 			tt.prepare(&mocked)
 
@@ -133,9 +134,9 @@ func TestBeatmapHandlers_Lookup(t *testing.T) {
 			mocked := mock_store.InitStore(ctrl)
 
 			// trying create new api
-			New(mocked, e)
+			fakeApp := app.NewApp(mocked, nil)
 
-			h := &BeatmapHandlers{mocked}
+			h := &BeatmapHandlers{fakeApp}
 
 			tt.prepare(&mocked)
 

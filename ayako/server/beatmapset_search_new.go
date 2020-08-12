@@ -1,4 +1,4 @@
-package base
+package server
 
 import (
 	"context"
@@ -14,7 +14,7 @@ func (s *Server) DoBeatmapSetSearchNew() {
 	ctx, cancel := context.WithTimeout(s.Context, time.Minute)
 	defer cancel()
 
-	id, err := s.Store.BeatmapSet().GetLatestId(ctx)
+	id, err := s.GetStore().BeatmapSet().GetLatestId(ctx)
 	if err != nil {
 		log.Error().
 			Err(err).
@@ -24,7 +24,7 @@ func (s *Server) DoBeatmapSetSearchNew() {
 	}
 
 	search := func(id uint) {
-		data, err := s.Store.BeatmapSet().FetchFromBancho(ctx, id)
+		data, err := s.GetStore().BeatmapSet().FetchFromBancho(ctx, id)
 		if err != nil {
 			log.Debug().
 				Err(err).
@@ -33,7 +33,7 @@ func (s *Server) DoBeatmapSetSearchNew() {
 		}
 
 		data.LastChecked = time.Now()
-		_, err = s.Store.BeatmapSet().Create(ctx, data)
+		_, err = s.GetStore().BeatmapSet().Create(ctx, data)
 		if err != nil {
 			log.Error().
 				Err(err).

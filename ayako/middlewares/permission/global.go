@@ -1,9 +1,8 @@
 package permission
 
 import (
-	"context"
 	"errors"
-	"github.com/deissh/rl/ayako/store"
+	"github.com/deissh/rl/ayako/app"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 )
@@ -28,20 +27,20 @@ func keyFromHeader(header string) func(echo.Context) (string, error) {
 }
 
 // GlobalMiddleware check access_token
-func GlobalMiddleware(store store.Store, ctx context.Context) echo.MiddlewareFunc {
+func GlobalMiddleware(app *app.App) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			extractor := keyFromHeader(echo.HeaderAuthorization)
 
 			// check token and write to reqest_context if user send one
 			if key, err := extractor(c); err == nil {
-				token, err := store.OAuth().ValidateToken(ctx, key)
+				token, err := app.Store.OAuth().ValidateToken(app.Context, key)
 				if err != nil {
 					// todo
 					return next(c)
 				}
 
-				if err = store.User().UpdateLastVisit(ctx, token.UserID); err != nil {
+				if err = app.Store.User().UpdateLastVisit(app.Context, token.UserID); err != nil {
 					log.Error().Err(err).Msg("updating last visit")
 				}
 

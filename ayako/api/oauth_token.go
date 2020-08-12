@@ -44,12 +44,12 @@ func (h *OAuthTokenHandlers) Create(c echo.Context) error {
 	var token *entity.OAuthToken
 
 	if params.GrantType == "password" {
-		user, err := h.Store().User().GetByBasic(ctx, params.Username, params.Password)
+		user, err := h.Store.User().GetByBasic(ctx, params.Username, params.Password)
 		if err != nil {
 			return err
 		}
 
-		token, err = h.Store().OAuth().CreateToken(
+		token, err = h.Store.OAuth().CreateToken(
 			ctx,
 			user.ID,
 			params.ClientID,
@@ -61,7 +61,7 @@ func (h *OAuthTokenHandlers) Create(c echo.Context) error {
 		}
 	} else if params.GrantType == "refresh_token" {
 		var err error
-		token, err = h.Store().OAuth().RefreshToken(ctx, params.RefreshToken, params.ClientID, params.ClientSecret)
+		token, err = h.Store.OAuth().RefreshToken(ctx, params.RefreshToken, params.ClientID, params.ClientSecret)
 		if err != nil {
 			return err
 		}

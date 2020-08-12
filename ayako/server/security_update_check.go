@@ -1,4 +1,4 @@
-package base
+package server
 
 import (
 	"github.com/rs/zerolog/log"

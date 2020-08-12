@@ -21,7 +21,7 @@ func (h *FriendHandlers) GetAll(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.Store().Friend().GetSubscriptions(ctx, userId)
+	users, err := h.Store.Friend().GetSubscriptions(ctx, userId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "User not found")
 	}
@@ -51,12 +51,12 @@ func (h *FriendHandlers) Add(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	err = h.Store().Friend().Add(ctx, userId, params.TargetId)
+	err = h.Store.Friend().Add(ctx, userId, params.TargetId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "User not found")
 	}
 
-	users, err := h.Store().Friend().GetSubscriptions(ctx, userId)
+	users, err := h.Store.Friend().GetSubscriptions(ctx, userId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "User not found")
 	}
@@ -85,12 +85,12 @@ func (h *FriendHandlers) Remove(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	err = h.Store().Friend().Remove(ctx, userId, params.TargetId)
+	err = h.Store.Friend().Remove(ctx, userId, params.TargetId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "User not found")
 	}
 
-	users, err := h.Store().Friend().GetSubscriptions(ctx, userId)
+	users, err := h.Store.Friend().GetSubscriptions(ctx, userId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "User not found")
 	}

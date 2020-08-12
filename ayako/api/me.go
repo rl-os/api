@@ -22,7 +22,7 @@ func (h *MeHandlers) Me(c echo.Context) error {
 
 	mode := c.Param("mode")
 
-	user, err := h.Store().User().Get(ctx, userId, mode)
+	user, err := h.Store.User().Get(ctx, userId, mode)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "User not found")
 	}

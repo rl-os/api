@@ -31,7 +31,7 @@ func (h *RegistrationHandlers) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid user information")
 	}
 
-	user, err := h.Store().User().Create(ctx, params.Username, params.Email, params.Password)
+	user, err := h.Store.User().Create(ctx, params.Username, params.Email, params.Password)
 	if err != nil {
 		return err
 	}
