@@ -148,7 +148,7 @@ func (s *Server) StartHTTPServer() {
 
 	// log all routes
 	for _, route := range s.Server.Routes() {
-		log.Debug().
+		log.Trace().
 			Str("name", route.Name).
 			Str("method", route.Method).
 			Str("path", route.Path).

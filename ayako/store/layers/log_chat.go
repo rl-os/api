@@ -25,7 +25,7 @@ func NewChatWithLog(base store.Chat) store.Chat {
 
 // CreatePM implements store.Chat
 func (_d ChatWithLog) CreatePM(ctx context.Context, userId uint, targetId uint, message string, isAction bool) (cp1 *entity.ChannelNewPm, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("targetId", targetId).
@@ -34,10 +34,10 @@ func (_d ChatWithLog) CreatePM(ctx context.Context, userId uint, targetId uint, 
 		Msg("store.Chat.CreatePM: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.CreatePM: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.CreatePM: finished")
 		}
 	}()
@@ -46,16 +46,16 @@ func (_d ChatWithLog) CreatePM(ctx context.Context, userId uint, targetId uint, 
 
 // Get implements store.Chat
 func (_d ChatWithLog) Get(ctx context.Context, channelId uint) (cp1 *entity.Channel, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("channelId", channelId).
 		Msg("store.Chat.Get: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.Get: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.Get: finished")
 		}
 	}()
@@ -64,16 +64,16 @@ func (_d ChatWithLog) Get(ctx context.Context, channelId uint) (cp1 *entity.Chan
 
 // GetJoined implements store.Chat
 func (_d ChatWithLog) GetJoined(ctx context.Context, userId uint) (cap1 *[]entity.Channel, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Msg("store.Chat.GetJoined: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.GetJoined: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.GetJoined: finished")
 		}
 	}()
@@ -82,16 +82,16 @@ func (_d ChatWithLog) GetJoined(ctx context.Context, userId uint) (cap1 *[]entit
 
 // GetMessage implements store.Chat
 func (_d ChatWithLog) GetMessage(ctx context.Context, messageId uint) (cp1 *entity.ChatMessage, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("messageId", messageId).
 		Msg("store.Chat.GetMessage: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.GetMessage: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.GetMessage: finished")
 		}
 	}()
@@ -100,17 +100,17 @@ func (_d ChatWithLog) GetMessage(ctx context.Context, messageId uint) (cp1 *enti
 
 // GetMessages implements store.Chat
 func (_d ChatWithLog) GetMessages(ctx context.Context, userId uint, since uint) (cap1 *[]entity.ChatMessage, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("since", since).
 		Msg("store.Chat.GetMessages: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.GetMessages: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.GetMessages: finished")
 		}
 	}()
@@ -119,17 +119,17 @@ func (_d ChatWithLog) GetMessages(ctx context.Context, userId uint, since uint) 
 
 // GetOrCreatePm implements store.Chat
 func (_d ChatWithLog) GetOrCreatePm(ctx context.Context, userId uint, targetId uint) (cp1 *entity.Channel, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("targetId", targetId).
 		Msg("store.Chat.GetOrCreatePm: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.GetOrCreatePm: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.GetOrCreatePm: finished")
 		}
 	}()
@@ -138,15 +138,15 @@ func (_d ChatWithLog) GetOrCreatePm(ctx context.Context, userId uint, targetId u
 
 // GetPublic implements store.Chat
 func (_d ChatWithLog) GetPublic(ctx context.Context) (cap1 *[]entity.Channel, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Msg("store.Chat.GetPublic: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.GetPublic: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.GetPublic: finished")
 		}
 	}()
@@ -155,7 +155,7 @@ func (_d ChatWithLog) GetPublic(ctx context.Context) (cap1 *[]entity.Channel, er
 
 // GetUpdates implements store.Chat
 func (_d ChatWithLog) GetUpdates(ctx context.Context, userId uint, since uint, channelId uint, limit uint) (cp1 *entity.ChannelUpdates, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("since", since).
@@ -164,10 +164,10 @@ func (_d ChatWithLog) GetUpdates(ctx context.Context, userId uint, since uint, c
 		Msg("store.Chat.GetUpdates: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.GetUpdates: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.GetUpdates: finished")
 		}
 	}()
@@ -176,17 +176,17 @@ func (_d ChatWithLog) GetUpdates(ctx context.Context, userId uint, since uint, c
 
 // Join implements store.Chat
 func (_d ChatWithLog) Join(ctx context.Context, userId uint, channelId uint) (cp1 *entity.Channel, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("channelId", channelId).
 		Msg("store.Chat.Join: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.Join: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.Join: finished")
 		}
 	}()
@@ -195,17 +195,17 @@ func (_d ChatWithLog) Join(ctx context.Context, userId uint, channelId uint) (cp
 
 // Leave implements store.Chat
 func (_d ChatWithLog) Leave(ctx context.Context, userId uint, channelId uint) (err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("channelId", channelId).
 		Msg("store.Chat.Leave: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.Leave: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.Leave: finished")
 		}
 	}()
@@ -214,9 +214,9 @@ func (_d ChatWithLog) Leave(ctx context.Context, userId uint, channelId uint) (e
 
 // ReadMessage implements store.Chat
 func (_d ChatWithLog) ReadMessage() {
-	log.Debug().Msg("store.Chat.ReadMessage: calling")
+	log.Trace().Msg("store.Chat.ReadMessage: calling")
 	defer func() {
-		log.Debug().
+		log.Trace().
 			Msg("store.Chat.ReadMessage: finished")
 	}()
 	_d._base.ReadMessage()
@@ -225,7 +225,7 @@ func (_d ChatWithLog) ReadMessage() {
 
 // SendMessage implements store.Chat
 func (_d ChatWithLog) SendMessage(ctx context.Context, userId uint, channelId uint, content string, isAction bool) (cp1 *entity.ChatMessage, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("channelId", channelId).
@@ -234,10 +234,10 @@ func (_d ChatWithLog) SendMessage(ctx context.Context, userId uint, channelId ui
 		Msg("store.Chat.SendMessage: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.Chat.SendMessage: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.Chat.SendMessage: finished")
 		}
 	}()

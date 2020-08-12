@@ -21,30 +21,30 @@ func New{{$decorator}}(base {{.Interface.Type}}) {{.Interface.Type}} {
   // {{$method.Name}} implements {{$.Interface.Type}}
   func (_d {{$decorator}}) {{$method.Declaration}} {
       {{- if $method.HasParams}}
-        log.Debug().
+        log.Trace().
         {{range $result := $method.Params}}
           Interface("{{$result.Name}}", {{$result.Name}}).
         {{end}}
           Msg("store.{{$interface}}.{{$method.Name}}: calling")
       {{else}}
-        log.Debug().Msg("store.{{$interface}}.{{$method.Name}}: calling")
+        log.Trace().Msg("store.{{$interface}}.{{$method.Name}}: calling")
       {{end -}}
       defer func() {
         {{- if $method.HasResults}}
           {{- if $method.ReturnsError}}
             if err != nil {
-              log.Debug().Err(err).
+              log.Trace().Err(err).
                 Msg("store.{{$interface}}.{{$method.Name}}: returned an error")
             } else {
-              log.Debug().
+              log.Trace().
                 Msg("store.{{$interface}}.{{$method.Name}}: finished")
             }
           {{else}}
-            log.Debug().
+            log.Trace().
               Msg("store.{{$interface}}.{{$method.Name}}: finished")
           {{end -}}
         {{else}}
-          log.Debug().
+          log.Trace().
             Msg("store.{{$interface}}.{{$method.Name}}: finished")
         {{end -}}
       }()

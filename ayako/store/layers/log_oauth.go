@@ -25,17 +25,17 @@ func NewOAuthWithLog(base store.OAuth) store.OAuth {
 
 // CreateClient implements store.OAuth
 func (_d OAuthWithLog) CreateClient(ctx context.Context, name string, redirect string) (op1 *entity.OAuthClient, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("name", name).
 		Interface("redirect", redirect).
 		Msg("store.OAuth.CreateClient: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.OAuth.CreateClient: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.OAuth.CreateClient: finished")
 		}
 	}()
@@ -44,7 +44,7 @@ func (_d OAuthWithLog) CreateClient(ctx context.Context, name string, redirect s
 
 // CreateToken implements store.OAuth
 func (_d OAuthWithLog) CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (op1 *entity.OAuthToken, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("clientID", clientID).
@@ -53,10 +53,10 @@ func (_d OAuthWithLog) CreateToken(ctx context.Context, userId uint, clientID ui
 		Msg("store.OAuth.CreateToken: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.OAuth.CreateToken: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.OAuth.CreateToken: finished")
 		}
 	}()
@@ -65,17 +65,17 @@ func (_d OAuthWithLog) CreateToken(ctx context.Context, userId uint, clientID ui
 
 // GetClient implements store.OAuth
 func (_d OAuthWithLog) GetClient(ctx context.Context, id uint, secret string) (op1 *entity.OAuthClient, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("id", id).
 		Interface("secret", secret).
 		Msg("store.OAuth.GetClient: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.OAuth.GetClient: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.OAuth.GetClient: finished")
 		}
 	}()
@@ -84,7 +84,7 @@ func (_d OAuthWithLog) GetClient(ctx context.Context, id uint, secret string) (o
 
 // RefreshToken implements store.OAuth
 func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (op1 *entity.OAuthToken, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("refreshToken", refreshToken).
 		Interface("clientID", clientID).
@@ -92,10 +92,10 @@ func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string, cl
 		Msg("store.OAuth.RefreshToken: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.OAuth.RefreshToken: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.OAuth.RefreshToken: finished")
 		}
 	}()
@@ -104,17 +104,17 @@ func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string, cl
 
 // RevokeToken implements store.OAuth
 func (_d OAuthWithLog) RevokeToken(ctx context.Context, userId uint, accessToken string) (err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("accessToken", accessToken).
 		Msg("store.OAuth.RevokeToken: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.OAuth.RevokeToken: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.OAuth.RevokeToken: finished")
 		}
 	}()
@@ -123,16 +123,16 @@ func (_d OAuthWithLog) RevokeToken(ctx context.Context, userId uint, accessToken
 
 // ValidateToken implements store.OAuth
 func (_d OAuthWithLog) ValidateToken(ctx context.Context, accessToken string) (op1 *entity.OAuthToken, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("accessToken", accessToken).
 		Msg("store.OAuth.ValidateToken: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.OAuth.ValidateToken: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.OAuth.ValidateToken: finished")
 		}
 	}()

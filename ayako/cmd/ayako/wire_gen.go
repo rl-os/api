@@ -70,7 +70,7 @@ func main() {
 func setupLogger() {
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	if os.Getenv("env") != "production" {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		zerolog.SetGlobalLevel(zerolog.TraceLevel)
 	}
 	log.Logger = log.Output(zerolog.ConsoleWriter{
 		Out:        os.Stderr,

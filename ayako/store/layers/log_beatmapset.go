@@ -25,16 +25,16 @@ func NewBeatmapSetWithLog(base store.BeatmapSet) store.BeatmapSet {
 
 // ComputeFields implements store.BeatmapSet
 func (_d BeatmapSetWithLog) ComputeFields(ctx context.Context, set entity.BeatmapSetFull) (bp1 *entity.BeatmapSetFull, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("set", set).
 		Msg("store.BeatmapSet.ComputeFields: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.ComputeFields: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.ComputeFields: finished")
 		}
 	}()
@@ -43,16 +43,16 @@ func (_d BeatmapSetWithLog) ComputeFields(ctx context.Context, set entity.Beatma
 
 // Create implements store.BeatmapSet
 func (_d BeatmapSetWithLog) Create(ctx context.Context, from interface{}) (bp1 *entity.BeatmapSetFull, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("from", from).
 		Msg("store.BeatmapSet.Create: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.Create: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.Create: finished")
 		}
 	}()
@@ -61,16 +61,16 @@ func (_d BeatmapSetWithLog) Create(ctx context.Context, from interface{}) (bp1 *
 
 // Delete implements store.BeatmapSet
 func (_d BeatmapSetWithLog) Delete(ctx context.Context, id uint) (err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("id", id).
 		Msg("store.BeatmapSet.Delete: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.Delete: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.Delete: finished")
 		}
 	}()
@@ -79,16 +79,16 @@ func (_d BeatmapSetWithLog) Delete(ctx context.Context, id uint) (err error) {
 
 // FetchFromBancho implements store.BeatmapSet
 func (_d BeatmapSetWithLog) FetchFromBancho(ctx context.Context, id uint) (bp1 *entity.BeatmapSetFull, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("id", id).
 		Msg("store.BeatmapSet.FetchFromBancho: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.FetchFromBancho: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.FetchFromBancho: finished")
 		}
 	}()
@@ -97,16 +97,16 @@ func (_d BeatmapSetWithLog) FetchFromBancho(ctx context.Context, id uint) (bp1 *
 
 // Get implements store.BeatmapSet
 func (_d BeatmapSetWithLog) Get(ctx context.Context, id uint) (bp1 *entity.BeatmapSetFull, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("id", id).
 		Msg("store.BeatmapSet.Get: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.Get: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.Get: finished")
 		}
 	}()
@@ -115,17 +115,17 @@ func (_d BeatmapSetWithLog) Get(ctx context.Context, id uint) (bp1 *entity.Beatm
 
 // GetAll implements store.BeatmapSet
 func (_d BeatmapSetWithLog) GetAll(ctx context.Context, page int, limit int) (bap1 *[]entity.BeatmapSet, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("page", page).
 		Interface("limit", limit).
 		Msg("store.BeatmapSet.GetAll: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.GetAll: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.GetAll: finished")
 		}
 	}()
@@ -134,16 +134,16 @@ func (_d BeatmapSetWithLog) GetAll(ctx context.Context, page int, limit int) (ba
 
 // GetIdsForUpdate implements store.BeatmapSet
 func (_d BeatmapSetWithLog) GetIdsForUpdate(ctx context.Context, limit int) (ua1 []uint, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("limit", limit).
 		Msg("store.BeatmapSet.GetIdsForUpdate: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.GetIdsForUpdate: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.GetIdsForUpdate: finished")
 		}
 	}()
@@ -152,15 +152,15 @@ func (_d BeatmapSetWithLog) GetIdsForUpdate(ctx context.Context, limit int) (ua1
 
 // GetLatestId implements store.BeatmapSet
 func (_d BeatmapSetWithLog) GetLatestId(ctx context.Context) (u1 uint, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Msg("store.BeatmapSet.GetLatestId: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.GetLatestId: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.GetLatestId: finished")
 		}
 	}()
@@ -169,17 +169,17 @@ func (_d BeatmapSetWithLog) GetLatestId(ctx context.Context) (u1 uint, err error
 
 // SetFavourite implements store.BeatmapSet
 func (_d BeatmapSetWithLog) SetFavourite(ctx context.Context, userId uint, id uint) (u1 uint, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("id", id).
 		Msg("store.BeatmapSet.SetFavourite: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.SetFavourite: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.SetFavourite: finished")
 		}
 	}()
@@ -188,17 +188,17 @@ func (_d BeatmapSetWithLog) SetFavourite(ctx context.Context, userId uint, id ui
 
 // SetUnFavourite implements store.BeatmapSet
 func (_d BeatmapSetWithLog) SetUnFavourite(ctx context.Context, userId uint, id uint) (u1 uint, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("id", id).
 		Msg("store.BeatmapSet.SetUnFavourite: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.SetUnFavourite: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.SetUnFavourite: finished")
 		}
 	}()
@@ -207,17 +207,17 @@ func (_d BeatmapSetWithLog) SetUnFavourite(ctx context.Context, userId uint, id 
 
 // Update implements store.BeatmapSet
 func (_d BeatmapSetWithLog) Update(ctx context.Context, id uint, from interface{}) (bp1 *entity.BeatmapSetFull, err error) {
-	log.Debug().
+	log.Trace().
 		Interface("ctx", ctx).
 		Interface("id", id).
 		Interface("from", from).
 		Msg("store.BeatmapSet.Update: calling")
 	defer func() {
 		if err != nil {
-			log.Debug().Err(err).
+			log.Trace().Err(err).
 				Msg("store.BeatmapSet.Update: returned an error")
 		} else {
-			log.Debug().
+			log.Trace().
 				Msg("store.BeatmapSet.Update: finished")
 		}
 	}()
