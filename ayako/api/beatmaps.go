@@ -2,15 +2,15 @@ package api
 
 import (
 	"context"
+	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/entity"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
 )
 
 type BeatmapHandlers struct {
-	Store store.Store
+	*app.App
 }
 
 func (h *BeatmapHandlers) Show(c echo.Context) error {

@@ -19,4 +19,6 @@ type SqlStore interface {
 	User() store.User
 	Friend() store.Friend
 	Chat() store.Chat
+
+	Close()
 }

@@ -3,6 +3,7 @@ package sql
 import (
 	osu "github.com/deissh/osu-go-client"
 	"github.com/deissh/rl/ayako/config"
+	"github.com/deissh/rl/ayako/services"
 	"github.com/deissh/rl/ayako/store"
 	"github.com/deissh/rl/ayako/store/layers"
 	"github.com/jmoiron/sqlx"
@@ -30,14 +31,14 @@ type Supplier struct {
 
 // Init new store
 // Using with DI
-func Init(cfg *config.Config, osuClient *osu.OsuAPI) store.Store {
+func Init(cfg *config.Config, services *services.Services) store.Store {
 	log.Debug().Msg("Creating new SQL store")
 	supplier := &Supplier{
 		cfg:       cfg,
-		osuClient: osuClient,
+		osuClient: services.Bancho,
 	}
 
-	supplier.initConnection(cfg)
+	supplier.initConnection()
 
 	supplier.stores.beatmap = layers.NewBeatmapWithLog(
 		newSqlBeatmapStore(supplier),
@@ -61,8 +62,8 @@ func Init(cfg *config.Config, osuClient *osu.OsuAPI) store.Store {
 	return supplier
 }
 
-func (ss *Supplier) initConnection(cfg *config.Config) {
-	conn, err := sqlx.Connect(cfg.Database.Driver, cfg.Database.DSN)
+func (ss *Supplier) initConnection() {
+	conn, err := sqlx.Connect(ss.cfg.Database.Driver, ss.cfg.Database.DSN)
 	if err != nil {
 		log.Fatal().
 			Err(err).
@@ -79,7 +80,7 @@ func (ss *Supplier) initConnection(cfg *config.Config) {
 
 	stats := ss.master.Stats()
 	log.Info().
-		Str("driver", cfg.Database.Driver).
+		Str("driver", ss.cfg.Database.Driver).
 		Int("open_connections", stats.OpenConnections).
 		Int("max_open_connections", stats.MaxOpenConnections).
 		Int("idle", stats.Idle).
@@ -91,6 +92,8 @@ func (ss *Supplier) GetMaster() *sqlx.DB       { return ss.master }
 func (ss *Supplier) GetConfig() *config.Config { return ss.cfg }
 
 func (ss *Supplier) GetOsuClient() *osu.OsuAPI { return ss.osuClient }
+
+func (ss *Supplier) Close() { _ = ss.master.Close() }
 
 func (ss *Supplier) Beatmap() store.Beatmap       { return ss.stores.beatmap }
 func (ss *Supplier) BeatmapSet() store.BeatmapSet { return ss.stores.beatmapSet }

@@ -2,14 +2,14 @@ package api
 
 import (
 	"context"
+	"github.com/deissh/rl/ayako/app"
 	myctx "github.com/deissh/rl/ayako/ctx"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
 type MeHandlers struct {
-	Store store.Store
+	*app.App
 }
 
 func (h *MeHandlers) Me(c echo.Context) error {

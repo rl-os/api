@@ -1,25 +1,25 @@
 package api
 
 import (
+	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/middlewares/permission"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 )
 
-func New(store store.Store, router *echo.Echo) {
-	signup := router.Group("/users")
+func New(app *app.App, root *echo.Group) {
+	signup := root.Group("/users")
 	{
-		h := RegistrationHandlers{store}
+		h := RegistrationHandlers{app}
 		signup.POST("", h.Create)
 	}
 
-	oauth := router.Group("/oauth")
+	oauth := root.Group("/oauth")
 	{
-		h := OAuthTokenHandlers{store}
+		h := OAuthTokenHandlers{app}
 		oauth.POST("/token", h.Create)
 	}
 
-	v2 := router.Group("/api/v2")
+	v2 := root.Group("/api/v2")
 	{
 		// Health status
 		// хз для чего я пишу в каждой версии свой пинг
@@ -28,7 +28,7 @@ func New(store store.Store, router *echo.Echo) {
 		// === Me ===
 		me := v2.Group("/me", permission.MustLogin)
 		{
-			h := MeHandlers{store}
+			h := MeHandlers{app}
 			me.GET("/", h.Me)
 			me.GET("/:mode", h.Me)
 			me.GET("/me/download-quota-check", echo.MethodNotAllowedHandler)
@@ -37,7 +37,7 @@ func New(store store.Store, router *echo.Echo) {
 		// === Friends ===
 		friends := v2.Group("/friends", permission.MustLogin)
 		{
-			h := FriendHandlers{store}
+			h := FriendHandlers{app}
 			friends.GET("", h.GetAll)
 			friends.PUT("", h.Add)
 			friends.DELETE("", h.Remove)
@@ -46,7 +46,7 @@ func New(store store.Store, router *echo.Echo) {
 		// === Users ===
 		users := v2.Group("/users")
 		{
-			h := UsersHandlers{store}
+			h := UsersHandlers{app}
 			users.GET("/:user/kudosu", echo.MethodNotAllowedHandler)
 			users.GET("/:user/scores/:type", echo.MethodNotAllowedHandler)
 			users.GET("/:user/beatmapsets/:type", echo.MethodNotAllowedHandler)
@@ -59,7 +59,7 @@ func New(store store.Store, router *echo.Echo) {
 		// === Beatmaps ===
 		bmaps := v2.Group("/beatmaps")
 		{
-			h := BeatmapHandlers{store}
+			h := BeatmapHandlers{app}
 			bmaps.GET("/beatmaps/lookup", h.Lookup)
 			bmaps.GET("/beatmaps/:beatmap", h.Show)
 			bmaps.GET("/beatmaps/:beatmap/scores", h.Scores)
@@ -68,7 +68,7 @@ func New(store store.Store, router *echo.Echo) {
 		// === Beatmapsets ===
 		bmsets := v2.Group("/beatmapsets")
 		{
-			h := BeatmapSetHandlers{store}
+			h := BeatmapSetHandlers{app}
 			bmsets.GET("/lookup", h.Lookup)
 			bmsets.GET("/search", h.Search)
 			bmsets.GET("/search/:filters", h.Search) // ???
@@ -98,7 +98,7 @@ func New(store store.Store, router *echo.Echo) {
 		// === Chats ===
 		chat := v2.Group("/chat", permission.MustLogin)
 		{
-			h := ChatHandlers{store}
+			h := ChatHandlers{app}
 			chat.POST("/new", h.NewPm)
 			chat.GET("/updates", h.Updates)
 			chat.GET("/presence", echo.MethodNotAllowedHandler) // ???

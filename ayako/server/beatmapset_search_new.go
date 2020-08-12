@@ -1,4 +1,4 @@
-package app
+package server
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func (s *App) DoBeatmapSetSearchNew() {
+func (s *Server) DoBeatmapSetSearchNew() {
 	log.Info().
 		Str("job", "DoBeatmapSetSearchNew").
 		Msg("start beatmapset search")
@@ -14,7 +14,7 @@ func (s *App) DoBeatmapSetSearchNew() {
 	ctx, cancel := context.WithTimeout(s.Context, time.Minute)
 	defer cancel()
 
-	id, err := s.Store.BeatmapSet().GetLatestId(ctx)
+	id, err := s.GetStore().BeatmapSet().GetLatestId(ctx)
 	if err != nil {
 		log.Error().
 			Err(err).
@@ -24,7 +24,7 @@ func (s *App) DoBeatmapSetSearchNew() {
 	}
 
 	search := func(id uint) {
-		data, err := s.Store.BeatmapSet().FetchFromBancho(ctx, id)
+		data, err := s.GetStore().BeatmapSet().FetchFromBancho(ctx, id)
 		if err != nil {
 			log.Debug().
 				Err(err).
@@ -33,7 +33,7 @@ func (s *App) DoBeatmapSetSearchNew() {
 		}
 
 		data.LastChecked = time.Now()
-		_, err = s.Store.BeatmapSet().Create(ctx, data)
+		_, err = s.GetStore().BeatmapSet().Create(ctx, data)
 		if err != nil {
 			log.Error().
 				Err(err).
@@ -51,7 +51,7 @@ func (s *App) DoBeatmapSetSearchNew() {
 	// trying get 10 beatmaps with id + i
 	for i := 1; i <= 10; i++ {
 		select {
-		case <-s.goroutineExitSignal:
+		case <-s.GoroutineExitSignal:
 		case <-ctx.Done():
 			break
 		default:

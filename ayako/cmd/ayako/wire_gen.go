@@ -8,22 +8,27 @@ package main
 import (
 	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/config"
+	"github.com/deissh/rl/ayako/server"
+	"github.com/deissh/rl/ayako/services"
 	"github.com/deissh/rl/ayako/services/bancho"
 	"github.com/deissh/rl/ayako/store/sql"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"
+	"os/signal"
 	"time"
 )
 
 // Injectors from main.go:
 
-func Injector(configPath string) *app.App {
+func Injector(configPath string) *server.Server {
 	configConfig := config.Init(configPath)
 	osuAPI := bancho.Init(configConfig)
-	store := sql.Init(configConfig, osuAPI)
-	appApp := app.NewApp(configConfig, store)
-	return appApp
+	servicesServices := services.NewServices(osuAPI)
+	store := sql.Init(configConfig, servicesServices)
+	appApp := app.NewApp(store, servicesServices)
+	serverServer := server.NewServer(configConfig, appApp)
+	return serverServer
 }
 
 // main.go:
@@ -45,10 +50,19 @@ func main() {
 		Str("build_timestamp", BuildTimestamp).
 		Send()
 	log.Debug().Msg("Start initialize dependencies")
-	app2 := Injector("config.yaml")
+
+	srv := Injector("config.yaml")
 	log.Debug().Msg("Initialize dependencies successful done")
 
-	if err := app2.Start(); err != nil {
+	if err := srv.Start(); err != nil {
+		log.Fatal().Err(err).Send()
+	}
+
+	quit := make(chan os.Signal)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+
+	if err := srv.Shutdown(); err != nil {
 		log.Fatal().Err(err).Send()
 	}
 }

@@ -6,12 +6,14 @@ package main
 import (
 	"github.com/deissh/rl/ayako/app"
 	"github.com/deissh/rl/ayako/config"
+	"github.com/deissh/rl/ayako/server"
 	"github.com/deissh/rl/ayako/services"
 	"github.com/deissh/rl/ayako/store/sql"
 	"github.com/google/wire"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"
+	"os/signal"
 	"time"
 )
 
@@ -32,11 +34,21 @@ func main() {
 
 	log.Debug().Msg("Start initialize dependencies")
 
-	app := Injector("config.yaml")
+	srv := Injector("config.yaml")
 
 	log.Debug().Msg("Initialize dependencies successful done")
 
-	if err := app.Start(); err != nil {
+	if err := srv.Start(); err != nil {
+		log.Fatal().Err(err).Send()
+	}
+
+	// Wait for interrupt signal to gracefully shutdown the server with
+	// a timeout of 10 seconds.
+	quit := make(chan os.Signal)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+
+	if err := srv.Shutdown(); err != nil {
 		log.Fatal().Err(err).Send()
 	}
 }
@@ -56,11 +68,12 @@ func setupLogger() {
 	).With().Caller().Logger()
 }
 
-func Injector(configPath string) *app.App {
+func Injector(configPath string) *server.Server {
 	wire.Build(
 		config.Init,
 		sql.Init,
-		app.ProviderSet,
+		app.NewApp,
+		server.NewServer,
 		services.ProviderSet,
 	)
 

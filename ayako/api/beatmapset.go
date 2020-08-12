@@ -2,17 +2,17 @@ package api
 
 import (
 	"context"
+	"github.com/deissh/rl/ayako/app"
 	myctx "github.com/deissh/rl/ayako/ctx"
 	"github.com/deissh/rl/ayako/entity"
 	"github.com/deissh/rl/ayako/errors"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
 )
 
 type BeatmapSetHandlers struct {
-	Store store.Store
+	*app.App
 }
 
 func (h *BeatmapSetHandlers) Get(c echo.Context) error {
@@ -80,7 +80,7 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 	//	ctx = context.WithValue(context.Background(), "current_user_id", userId)
 	//}
 
-	//beatmapSets, err := h.Store.BeatmapSet().Get(ctx, 1118896)
+	//beatmapSets, err := h.GetStore.BeatmapSet().Get(ctx, 1118896)
 	//if err != nil {
 	//	return err
 	//}

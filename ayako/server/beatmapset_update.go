@@ -1,4 +1,4 @@
-package app
+package server
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func (s *App) DoBeatmapSetUpdate() {
+func (s *Server) DoBeatmapSetUpdate() {
 	log.Info().
 		Str("job", "DoBeatmapSetUpdate").
 		Uint("batch_size", 100).
@@ -15,7 +15,7 @@ func (s *App) DoBeatmapSetUpdate() {
 	ctx, cancel := context.WithCancel(s.Context)
 	defer cancel()
 
-	ids, err := s.Store.BeatmapSet().GetIdsForUpdate(ctx, 100)
+	ids, err := s.GetStore().BeatmapSet().GetIdsForUpdate(ctx, 100)
 	if err != nil {
 		log.Error().
 			Err(err).
@@ -30,7 +30,7 @@ func (s *App) DoBeatmapSetUpdate() {
 			Uint("beatmap_set_id", id).
 			Msg("fetching")
 
-		data, err := s.Store.BeatmapSet().FetchFromBancho(ctx, id)
+		data, err := s.GetStore().BeatmapSet().FetchFromBancho(ctx, id)
 		if err != nil {
 			log.Error().
 				Err(err).
@@ -42,7 +42,7 @@ func (s *App) DoBeatmapSetUpdate() {
 
 		data.LastChecked = time.Now()
 
-		_, err = s.Store.BeatmapSet().Update(ctx, id, *data)
+		_, err = s.GetStore().BeatmapSet().Update(ctx, id, *data)
 		if err != nil {
 			log.Error().
 				Err(err).
@@ -60,7 +60,7 @@ func (s *App) DoBeatmapSetUpdate() {
 
 	for _, id := range ids {
 		select {
-		case <-s.goroutineExitSignal:
+		case <-s.GoroutineExitSignal:
 		case <-ctx.Done():
 			break
 		default:
