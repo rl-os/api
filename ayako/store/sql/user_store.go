@@ -187,9 +187,12 @@ func (u UserStore) UpdateLastVisit(ctx context.Context, userId uint) error {
 }
 
 func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity.User, error) {
+	tx, _ := u.GetMaster().BeginTxx(ctx, nil)
+	defer tx.Commit()
+
 	// =========================
 	// followers
-	_ = u.GetMaster().GetContext(
+	_ = tx.GetContext(
 		ctx,
 		&user.FollowerCount,
 		`SELECT count(*) FROM user_relation WHERE target_id = $1`,
@@ -198,7 +201,7 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 
 	// =========================
 	// favourite beatmapsets count
-	_ = u.GetMaster().GetContext(
+	_ = tx.GetContext(
 		ctx,
 		&user.FavouriteBeatmapsetCount,
 		`SELECT count(*) FROM favouritemaps WHERE user_id = $1`,
@@ -208,7 +211,7 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 	// =========================
 	// getting MonthlyPlayCounts
 	user.MonthlyPlaycounts = make([]entity.MonthlyPlaycounts, 0)
-	err := u.GetMaster().SelectContext(
+	err := tx.SelectContext(
 		ctx,
 		&user.MonthlyPlaycounts,
 		`SELECT playcount, year_month FROM user_month_playcount WHERE user_id = $1`,
@@ -232,7 +235,7 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 	// =========================
 	// getting UserAchievements
 	user.UserAchievements = make([]entity.UserAchievements, 0)
-	err = u.GetMaster().SelectContext(
+	err = tx.SelectContext(
 		ctx,
 		&user.UserAchievements,
 		`SELECT achievement_id, created_at FROM user_achievements WHERE user_id = $1`,
@@ -244,7 +247,7 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 
 	// =========================
 	// getting UserStatistics
-	err = u.GetMaster().GetContext(
+	err = tx.GetContext(
 		ctx,
 		&user.Statistics,
 		`SELECT
@@ -263,17 +266,21 @@ func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity
 
 	// =========================
 	// getting UserRank
-	err = u.GetMaster().GetContext(
+	err = tx.GetContext(
 		ctx,
 		&user.Statistics.Rank,
 		`SELECT country, global
 		FROM (
-			SELECT rank() over (PARTITION BY t.country_code ORDER BY t.pp DESC) as country,
-				rank() over (ORDER BY t.pp DESC) as global, t.user_id
-			FROM (SELECT us.user_id, us.pp, u.country_code
+			SELECT row_number() over (PARTITION BY t.country_code ORDER BY t.pp DESC) as country,
+				row_number() over (ORDER BY t.pp DESC) as global,
+				t.user_id
+			FROM (
+				SELECT us.user_id, us.pp, u.country_code
 				FROM user_statistics us
-				JOIN users u on us.user_id = u.id) as t
-			) as rt
+				JOIN users u on us.user_id = u.id
+				WHERE u.is_active = true
+			) as t
+		) as rt
 		WHERE rt.user_id = $1;`,
 		user.ID,
 	)
