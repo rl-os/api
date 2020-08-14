@@ -32,3 +32,7 @@ func NewApp(
 
 	return app
 }
+
+func (a *App) SetContext(ctx context.Context) {
+	a.Context = ctx
+}

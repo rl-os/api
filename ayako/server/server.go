@@ -13,6 +13,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
+	"net/http"
+	"net/http/pprof"
 	"sync"
 	"time"
 )
@@ -58,9 +60,13 @@ func NewServer(
 	config *config.Config,
 	app *app.App,
 ) *Server {
+	ctx := context.Background()
+
+	app.SetContext(ctx)
+
 	srv := &Server{
 		App:                 app,
-		Context:             context.Background(),
+		Context:             ctx,
 		Config:              config,
 		GoroutineCount:      0,
 		GoroutineExitSignal: make(chan struct{}, 1),
@@ -81,6 +87,16 @@ func (s *Server) Start() error {
 
 	if s.Config.Server.EnableJobs {
 		s.StartTasks()
+	}
+
+	if s.Config.Server.EnableProfile {
+		r := http.NewServeMux()
+		r.HandleFunc("/debug/pprof/", pprof.Index)
+		r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+		r.HandleFunc("/debug/pprof/profile", pprof.Profile)
+		r.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+		r.HandleFunc("/debug/pprof/trace", pprof.Trace)
+		go http.ListenAndServe(":8080", r)
 	}
 
 	return nil

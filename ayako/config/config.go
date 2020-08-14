@@ -17,9 +17,10 @@ type Config struct {
 
 	// Configurations
 	Server struct {
-		Host       string `default:"0.0.0.0"`
-		Port       string `default:"2400"`
-		EnableJobs bool   `default:"false"`
+		Host          string `default:"0.0.0.0"`
+		Port          string `default:"2400"`
+		EnableProfile bool   `default:"false"`
+		EnableJobs    bool   `default:"false"`
 	}
 	JWT struct {
 		Secret            string `default:"somesupersecretstring"`
