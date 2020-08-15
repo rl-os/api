@@ -10,7 +10,7 @@ import (
 )
 
 type ChatHandlers struct {
-	*app.App
+	App *app.App
 }
 
 // newPmRequestData contain incoming data
@@ -33,7 +33,7 @@ func (h *ChatHandlers) NewPm(c echo.Context) error {
 		return err
 	}
 
-	channels, err := h.Store.Chat().CreatePM(
+	channels, err := h.App.Store.Chat().CreatePM(
 		ctx, userId, params.TargetId, params.Message, params.IsAction,
 	)
 	if err != nil {
@@ -63,7 +63,7 @@ func (h *ChatHandlers) Updates(c echo.Context) error {
 		return err
 	}
 
-	updates, err := h.Store.Chat().GetUpdates(
+	updates, err := h.App.Store.Chat().GetUpdates(
 		ctx, userId, params.Since, params.ChannelId, params.Limit,
 	)
 	if err != nil {
@@ -91,7 +91,7 @@ func (h *ChatHandlers) Messages(c echo.Context) error {
 		return err
 	}
 
-	messages, err := h.Store.Chat().GetMessages(
+	messages, err := h.App.Store.Chat().GetMessages(
 		ctx, userId, params.Limit,
 	)
 	if err != nil {
@@ -125,7 +125,7 @@ func (h *ChatHandlers) Send(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	messages, err := h.Store.Chat().SendMessage(
+	messages, err := h.App.Store.Chat().SendMessage(
 		ctx, userId, uint(channelId), params.Message, params.IsAction,
 	)
 	if err != nil {
@@ -138,7 +138,7 @@ func (h *ChatHandlers) Send(c echo.Context) error {
 func (h *ChatHandlers) GetAll(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
-	channels, err := h.Store.Chat().GetPublic(ctx)
+	channels, err := h.App.Store.Chat().GetPublic(ctx)
 	if err != nil {
 		return err
 	}
@@ -154,7 +154,7 @@ func (h *ChatHandlers) GetJoined(c echo.Context) error {
 		return err
 	}
 
-	channels, err := h.Store.Chat().GetJoined(ctx, userId)
+	channels, err := h.App.Store.Chat().GetJoined(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -176,7 +176,7 @@ func (h *ChatHandlers) Join(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	channel, err := h.Store.Chat().Join(ctx, userId, uint(channelId))
+	channel, err := h.App.Store.Chat().Join(ctx, userId, uint(channelId))
 	if err != nil {
 		return err
 	}
@@ -197,7 +197,7 @@ func (h *ChatHandlers) Leave(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	err = h.Store.Chat().Leave(ctx, userId, uint(channelId))
+	err = h.App.Store.Chat().Leave(ctx, userId, uint(channelId))
 	if err != nil {
 		return err
 	}

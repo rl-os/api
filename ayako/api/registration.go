@@ -8,7 +8,7 @@ import (
 )
 
 type RegistrationHandlers struct {
-	*app.App
+	App *app.App
 }
 
 func (h *RegistrationHandlers) Create(c echo.Context) error {
@@ -26,11 +26,11 @@ func (h *RegistrationHandlers) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "User info not found")
 	}
 
-	if err := h.Validator.Struct(params); err != nil {
+	if err := h.App.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid user information")
 	}
 
-	user, err := h.Store.User().Create(ctx, params.Username, params.Email, params.Password)
+	user, err := h.App.Store.User().Create(ctx, params.Username, params.Email, params.Password)
 	if err != nil {
 		return err
 	}

@@ -2,7 +2,7 @@ package entity
 
 import "time"
 
-type BeatmapSearch struct {
+type BeatmapsetSearch struct {
 	ID                int          `json:"id"`
 	Title             string       `json:"title"`
 	Artist            string       `json:"artist"`
@@ -32,4 +32,20 @@ type BeatmapSearch struct {
 	Tags              string       `json:"tags"`
 	HasFavourited     bool         `json:"has_favourited"`
 	Beatmaps          []Beatmap    `json:"beatmaps"`
+}
+
+type BeatmapsetSearchParams struct {
+	Query    string `json:"q" query:"q"`
+	Mode     int    `json:"m" query:"m"`
+	Status   string `json:"s" query:"s"`
+	Genre    string `json:"g" query:"g"`
+	Language string `json:"l" query:"l"`
+	Sort     string `json:"sort" query:"sort"`
+}
+
+type BeatmapsetSearchResult struct {
+	Beatmapsets           *[]BeatmapsetSearch `json:"beatmapsets"`
+	RecommendedDifficulty float32             `json:"recommended_difficulty"`
+	Error                 error               `json:"error"`
+	Total                 uint                `json:"total"`
 }

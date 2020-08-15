@@ -10,7 +10,7 @@ import (
 )
 
 type OAuthTokenHandlers struct {
-	*app.App
+	App *app.App
 }
 
 func (h *OAuthTokenHandlers) Create(c echo.Context) error {
@@ -36,19 +36,19 @@ func (h *OAuthTokenHandlers) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Token info not found")
 	}
 
-	if err := h.Validator.Struct(params); err != nil {
+	if err := h.App.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid token information")
 	}
 
 	var token *entity.OAuthToken
 
 	if params.GrantType == "password" {
-		user, err := h.Store.User().GetByBasic(ctx, params.Username, params.Password)
+		user, err := h.App.Store.User().GetByBasic(ctx, params.Username, params.Password)
 		if err != nil {
 			return err
 		}
 
-		token, err = h.Store.OAuth().CreateToken(
+		token, err = h.App.Store.OAuth().CreateToken(
 			ctx,
 			user.ID,
 			params.ClientID,
@@ -60,7 +60,7 @@ func (h *OAuthTokenHandlers) Create(c echo.Context) error {
 		}
 	} else if params.GrantType == "refresh_token" {
 		var err error
-		token, err = h.Store.OAuth().RefreshToken(ctx, params.RefreshToken, params.ClientID, params.ClientSecret)
+		token, err = h.App.Store.OAuth().RefreshToken(ctx, params.RefreshToken, params.ClientID, params.ClientSecret)
 		if err != nil {
 			return err
 		}

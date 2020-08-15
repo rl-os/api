@@ -9,7 +9,7 @@ import (
 )
 
 type UsersHandlers struct {
-	*app.App
+	App *app.App
 }
 
 func (h *UsersHandlers) Get(c echo.Context) error {
@@ -22,7 +22,7 @@ func (h *UsersHandlers) Get(c echo.Context) error {
 
 	mode := c.Param("mode")
 
-	user, err := h.Store.User().Get(ctx, uint(userId), mode)
+	user, err := h.App.Store.User().Get(ctx, uint(userId), mode)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "User not found")
 	}
