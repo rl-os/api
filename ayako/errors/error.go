@@ -3,6 +3,7 @@ package errors
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // Interface assertion
@@ -29,6 +30,12 @@ type ResponseFormat struct {
 	ErrorID          string `json:"error_id"`
 	ErrorDescription string `json:"error_description"`
 	Message          string `json:"message"`
+}
+
+func (e *Error) WithCause(err error, messages ...string) *Error {
+	e.CauseErr = err
+	e.CauseMsg = strings.Join(messages, "; ")
+	return e
 }
 
 // Error print custom errors

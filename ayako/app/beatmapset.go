@@ -2,15 +2,26 @@ package app
 
 import (
 	"context"
+	"net/http"
+
 	myctx "github.com/deissh/rl/ayako/ctx"
 	"github.com/deissh/rl/ayako/entity"
-	"github.com/labstack/echo/v4"
-	"net/http"
+	"github.com/deissh/rl/ayako/errors"
 )
 
+// BMS = beatmapset
+var (
+	ErrNotFoundBMS = errors.New("beatmapset", http.StatusNotFound, "Beatmapset not found")
+)
+
+// GetBeatmapset from store and return 404 error if not exist
 func (a *App) GetBeatmapset(ctx context.Context, beatmapsetID uint) (*entity.BeatmapSetFull, error) {
-	// todo: check error
-	return a.Store.BeatmapSet().Get(ctx, beatmapsetID)
+	data, err := a.Store.BeatmapSet().Get(ctx, beatmapsetID)
+	if err != nil {
+		return nil, ErrNotFoundBMS.WithCause(err)
+	}
+
+	return data, nil
 }
 
 func (a *App) LookupBeatmapset(ctx context.Context, beatmapId uint) (*entity.BeatmapSetFull, error) {
@@ -30,7 +41,7 @@ func (a *App) SearchBeatmapset(ctx context.Context) (*entity.BeatmapsetSearchRes
 func (a *App) FavouriteBeatmapset(ctx context.Context, action string, beatmapsetID uint) (uint, error) {
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {
-		return 0, err
+		return 0, ErrNotFoundBMS.WithCause(err)
 	}
 
 	switch action {
@@ -39,6 +50,6 @@ func (a *App) FavouriteBeatmapset(ctx context.Context, action string, beatmapset
 	case "unfavourite":
 		return a.Store.BeatmapSet().SetFavourite(ctx, userId, beatmapsetID)
 	default:
-		return 0, echo.NewHTTPError(http.StatusBadRequest, "Invalid action")
+		return 0, errors.New("beatmapset", http.StatusBadRequest, "Invalid action")
 	}
 }
