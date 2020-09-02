@@ -2,8 +2,8 @@ package permission
 
 import (
 	"context"
-	myctx "github.com/deissh/rl/ayako/ctx"
 	"github.com/labstack/echo/v4"
+	myctx "github.com/rl-os/api/ctx"
 	"net/http"
 )
 

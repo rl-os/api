@@ -2,12 +2,12 @@ package sql
 
 import (
 	osu "github.com/deissh/osu-go-client"
-	"github.com/deissh/rl/ayako/config"
-	"github.com/deissh/rl/ayako/services"
-	"github.com/deissh/rl/ayako/store"
-	"github.com/deissh/rl/ayako/store/layers"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"github.com/rl-os/api/config"
+	"github.com/rl-os/api/services"
+	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/store/layers"
 	"github.com/rs/zerolog/log"
 )
 

@@ -1,4 +1,4 @@
-module github.com/deissh/rl/ayako
+module github.com/rl-os/api
 
 go 1.13
 

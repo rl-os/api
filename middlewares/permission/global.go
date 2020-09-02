@@ -2,8 +2,8 @@ package permission
 
 import (
 	"errors"
-	"github.com/deissh/rl/ayako/app"
 	"github.com/labstack/echo/v4"
+	"github.com/rl-os/api/app"
 	"github.com/rs/zerolog/log"
 )
 

@@ -2,9 +2,9 @@ package api
 
 import (
 	"context"
-	"github.com/deissh/rl/ayako/app"
-	myctx "github.com/deissh/rl/ayako/ctx"
 	"github.com/labstack/echo/v4"
+	"github.com/rl-os/api/app"
+	myctx "github.com/rl-os/api/ctx"
 	"net/http"
 )
 

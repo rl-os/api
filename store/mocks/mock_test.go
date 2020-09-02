@@ -3,9 +3,9 @@ package mock_store
 import (
 	"context"
 	"errors"
-	"github.com/deissh/rl/ayako/entity"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/golang/mock/gomock"
+	"github.com/rl-os/api/entity"
+	"github.com/rl-os/api/store"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

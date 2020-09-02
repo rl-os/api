@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	myctx "github.com/deissh/rl/ayako/ctx"
-	"github.com/deissh/rl/ayako/entity"
-	"github.com/deissh/rl/ayako/errors"
+	myctx "github.com/rl-os/api/ctx"
+	"github.com/rl-os/api/entity"
+	"github.com/rl-os/api/errors"
 )
 
 // BMS = beatmapset

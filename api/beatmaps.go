@@ -2,9 +2,9 @@ package api
 
 import (
 	"context"
-	"github.com/deissh/rl/ayako/app"
-	"github.com/deissh/rl/ayako/entity"
 	"github.com/labstack/echo/v4"
+	"github.com/rl-os/api/app"
+	"github.com/rl-os/api/entity"
 	"net/http"
 	"strconv"
 )

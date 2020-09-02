@@ -7,8 +7,8 @@ package layers
 import (
 	"context"
 
-	"github.com/deissh/rl/ayako/entity"
-	"github.com/deissh/rl/ayako/store"
+	"github.com/rl-os/api/entity"
+	"github.com/rl-os/api/store"
 	"github.com/rs/zerolog/log"
 )
 

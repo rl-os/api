@@ -2,9 +2,9 @@ package app
 
 import (
 	"context"
-	"github.com/deissh/rl/ayako/services"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/go-playground/validator/v10"
+	"github.com/rl-os/api/services"
+	"github.com/rl-os/api/store"
 )
 
 type App struct {

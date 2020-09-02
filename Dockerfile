@@ -7,7 +7,7 @@ RUN curl -fsSL -o /dbmate https://github.com/amacneil/dbmate/releases/download/v
 RUN chmod +x /dbmate
 
 # Copy the code from the host and compile it
-WORKDIR $GOPATH/src/github.com/deissh/rl/ayako
+WORKDIR $GOPATH/src/github.com/rl-os/api
 COPY ./ayako/go.mod ./ayako/go.sum ./ayako/Makefile ./
 RUN make install
 
@@ -15,7 +15,7 @@ RUN make install
 WORKDIR $GOPATH/src/github.com/deissh/rl
 COPY .git .git
 
-WORKDIR $GOPATH/src/github.com/deissh/rl/ayako
+WORKDIR $GOPATH/src/github.com/rl-os/api
 COPY ./ayako .
 RUN make build-prod && mv bin/* /
 

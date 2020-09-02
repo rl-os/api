@@ -2,8 +2,8 @@ package api
 
 import (
 	"context"
-	"github.com/deissh/rl/ayako/app"
 	"github.com/labstack/echo/v4"
+	"github.com/rl-os/api/app"
 	"net/http"
 )
 

@@ -1,8 +1,8 @@
 package customerror
 
 import (
-	"github.com/deissh/rl/ayako/errors"
 	"github.com/labstack/echo/v4"
+	"github.com/rl-os/api/errors"
 	"github.com/rs/zerolog/log"
 
 	"net/http"

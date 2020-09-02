@@ -3,9 +3,9 @@ package sql
 import (
 	"fmt"
 	"github.com/deissh/go-utils"
-	"github.com/deissh/rl/ayako/entity"
-	"github.com/deissh/rl/ayako/errors"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/rl-os/api/entity"
+	"github.com/rl-os/api/errors"
 	"time"
 )
 

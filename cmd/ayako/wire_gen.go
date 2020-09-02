@@ -6,12 +6,12 @@
 package main
 
 import (
-	"github.com/deissh/rl/ayako/app"
-	"github.com/deissh/rl/ayako/config"
-	"github.com/deissh/rl/ayako/server"
-	"github.com/deissh/rl/ayako/services"
-	"github.com/deissh/rl/ayako/services/bancho"
-	"github.com/deissh/rl/ayako/store/sql"
+	"github.com/rl-os/api/app"
+	"github.com/rl-os/api/config"
+	"github.com/rl-os/api/server"
+	"github.com/rl-os/api/services"
+	"github.com/rl-os/api/services/bancho"
+	"github.com/rl-os/api/store/sql"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"

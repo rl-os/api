@@ -2,11 +2,11 @@ package api
 
 import (
 	"errors"
-	"github.com/deissh/rl/ayako/app"
-	"github.com/deissh/rl/ayako/entity"
-	mock_store "github.com/deissh/rl/ayako/store/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"
+	"github.com/rl-os/api/app"
+	"github.com/rl-os/api/entity"
+	mock_store "github.com/rl-os/api/store/mocks"
 	"net/http"
 	"net/http/httptest"
 	"net/url"

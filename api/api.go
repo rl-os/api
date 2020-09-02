@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/deissh/rl/ayako/app"
-	"github.com/deissh/rl/ayako/middlewares/permission"
 	"github.com/labstack/echo/v4"
+	"github.com/rl-os/api/app"
+	"github.com/rl-os/api/middlewares/permission"
 )
 
 func New(app *app.App, root *echo.Group) {

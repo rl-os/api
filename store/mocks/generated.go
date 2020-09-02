@@ -6,9 +6,9 @@ package mock_store
 
 import (
 	context "context"
-	entity "github.com/deissh/rl/ayako/entity"
-	store "github.com/deissh/rl/ayako/store"
 	gomock "github.com/golang/mock/gomock"
+	entity "github.com/rl-os/api/entity"
+	store "github.com/rl-os/api/store"
 	reflect "reflect"
 	time "time"
 )

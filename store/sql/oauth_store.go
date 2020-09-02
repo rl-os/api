@@ -3,11 +3,11 @@ package sql
 import (
 	"context"
 	"github.com/deissh/go-utils"
-	myctx "github.com/deissh/rl/ayako/ctx"
-	"github.com/deissh/rl/ayako/entity"
-	"github.com/deissh/rl/ayako/errors"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/dgrijalva/jwt-go"
+	myctx "github.com/rl-os/api/ctx"
+	"github.com/rl-os/api/entity"
+	"github.com/rl-os/api/errors"
+	"github.com/rl-os/api/store"
 	"time"
 )
 

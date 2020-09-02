@@ -2,9 +2,9 @@ package sql
 
 import (
 	osu "github.com/deissh/osu-go-client"
-	"github.com/deissh/rl/ayako/config"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/jmoiron/sqlx"
+	"github.com/rl-os/api/config"
+	"github.com/rl-os/api/store"
 )
 
 type SqlStore interface {

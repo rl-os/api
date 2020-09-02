@@ -1,9 +1,9 @@
 package reqest_context
 
 import (
-	"github.com/deissh/rl/ayako/app"
-	myctx "github.com/deissh/rl/ayako/ctx"
 	"github.com/labstack/echo/v4"
+	"github.com/rl-os/api/app"
+	myctx "github.com/rl-os/api/ctx"
 )
 
 // GlobalMiddleware create new request reqest_context with all information about caller

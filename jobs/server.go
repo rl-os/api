@@ -1,8 +1,8 @@
 package jobs
 
 import (
-	"github.com/deissh/rl/ayako/app"
-	"github.com/deissh/rl/ayako/config"
+	"github.com/rl-os/api/app"
+	"github.com/rl-os/api/config"
 	"github.com/rs/zerolog/log"
 )
 

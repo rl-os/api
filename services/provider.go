@@ -2,8 +2,8 @@ package services
 
 import (
 	osu "github.com/deissh/osu-go-client"
-	"github.com/deissh/rl/ayako/services/bancho"
 	"github.com/google/wire"
+	"github.com/rl-os/api/services/bancho"
 )
 
 // Services struct contains all enabled services

@@ -10,7 +10,7 @@ package store
 
 import (
 	"context"
-	"github.com/deissh/rl/ayako/entity"
+	"github.com/rl-os/api/entity"
 	"time"
 )
 

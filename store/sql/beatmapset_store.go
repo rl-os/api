@@ -4,10 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"github.com/deissh/rl/ayako/entity"
-	"github.com/deissh/rl/ayako/errors"
-	"github.com/deissh/rl/ayako/store"
 	"github.com/jinzhu/copier"
+	"github.com/rl-os/api/entity"
+	"github.com/rl-os/api/errors"
+	"github.com/rl-os/api/store"
 	"time"
 )
 
