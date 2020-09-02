@@ -5,13 +5,10 @@
 <h1 align="center"></h1>
 
 <p align="center">
-  <a href="https://github.com/deissh/rl/actions?query=workflow%3A%22API+workflow%22"><img src="https://github.com/deissh/rl/workflows/API%20workflow/badge.svg"></a>
-  <a href="https://github.com/deissh/rl/actions?query=workflow%3A%22Ayako+workflow%22"><img src="https://github.com/deissh/rl/workflows/Ayako%20workflow/badge.svg"></a>
-  <br />
-  <a href="https://goreportcard.com/report/github.com/deissh/rl"><img alt="goreport" src="https://goreportcard.com/badge/github.com/deissh/rl"></a>
-  <a href="https://github.com/deissh/rl/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/deissh/osu-lazer"></a>
-  <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/deissh/osu-lazer">
-  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/w/deissh/osu-lazer">
+  <a href="https://goreportcard.com/report/github.com/rl-os/api"><img alt="goreport" src="https://goreportcard.com/badge/github.com/rl-os/api"></a>
+  <a href="https://github.com/rl-os/api/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/rl-os/api"></a>
+  <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/rl-os/api">
+  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/w/rl-os/api">
   <br />
 </p>
 
