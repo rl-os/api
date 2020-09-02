@@ -107,7 +107,6 @@ install:
 	$(GOGET) -u golang.org/x/lint/golint
 	$(GOGET) -u github.com/fzipp/gocyclo
 	$(GOGET) -u golang.org/x/tools/cmd/goimports
-	$(GOGET) -u github.com/git-chglog/git-chglog/cmd/git-chglog
 	wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.15.0
 
 
@@ -188,11 +187,6 @@ docker-push:
 	@$(DOCKERPUSH) $(DOCKER_IMAGE_DOMAIN)
 
 ## -- Utils --
-
-## Generate CHANGELOG.md based on git
-.PHONY: chglog
-chglog:
-	git-chglog -o CHANGELOG.md $(shell git describe --tags $(shell git rev-list --tags --max-count=1))
 
 .PHONY: message
 message:
