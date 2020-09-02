@@ -1,5 +1,0 @@
-aiormq==3.2.3
-click==7.1.2
-cool-config==0.2.3
-loguru==0.5.1
-asyncclick==7.0.9

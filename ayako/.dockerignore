@@ -1,7 +1,0 @@
-# will ignored in COPY . .
-config.yaml
-Dockerfile
-go.*
-bin
-Makefile
-docker-init.sh
