@@ -1,6 +1,6 @@
 module github.com/rl-os/api
 
-go 1.13
+go 1.15
 
 require (
 	github.com/BurntSushi/toml v0.3.1
