@@ -37,9 +37,9 @@ GOLIST				   := $(GOCMD) list
 GOVET				   := $(GOCMD) vet
 # ===============================================
 # build setting
-CMD_DIR                ?= ./cmd
+CMD_DIR                ?= $(PWD)/cmd
 BIN_DIR                ?= $(PWD)/bin
-BUILD_CMDS             := $(shell $(GOLIST) ./$(CMD_DIR)/...)
+BUILD_CMDS             := $(shell $(GOLIST) $(CMD_DIR)/...)
 GOFILES				   := $(shell find . -name "*.go" -type f)
 
 GOLDFLAGS += -X main.Version=$(VERSION)
@@ -71,19 +71,13 @@ clear:
 .PHONY: build
 build: clear generate
 	@echo -e "\e[1;34m> Building stage\e[0m"
-	@cd cmd ; for CMD in *; do \
-		$(GOBUILD) $(GOBUILDFLAGS) -o $(BIN_DIR)/$$CMD ./$$CMD/ ; \
-		echo "$$CMD build done" || exit 1; \
-	done
+	$(GOBUILD) $(GOBUILDFLAGS) -o $(BIN_DIR)/server $(CMD_DIR)
 
 ## Build all commands in cmd folder as prod-like
 .PHONY: build-prod
 build-prod: clear generate
 	@echo -e "\e[1;34m> Building stage\e[0m"
-	@cd cmd ; for CMD in *; do \
-		CGO_ENABLED=0 $(GOBUILD) $(GOBUILDFLAGS) -a -installsuffix nocgo -o $(BIN_DIR)/$$CMD ./$$CMD/ ; \
-		echo "$$CMD build done" || exit 1; \
-	done
+	CGO_ENABLED=0 $(GOBUILD) $(GOBUILDFLAGS) -a -installsuffix nocgo -o $(BIN_DIR)/server $(CMD_DIR)
 
 ## Run all checks
 .PHONY: lint

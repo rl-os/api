@@ -1,4 +1,4 @@
-FROM golang:1.13-alpine3.10 AS builder
+FROM golang:1.15-alpine AS builder
 
 ENV GO111MODULE="on"
 
@@ -8,15 +8,11 @@ RUN chmod +x /dbmate
 
 # Copy the code from the host and compile it
 WORKDIR $GOPATH/src/github.com/rl-os/api
-COPY ./ayako/go.mod ./ayako/go.sum ./ayako/Makefile ./
+COPY go.mod go.sum Makefile ./
 RUN make install
 
-# Copy .git folder (using to get versions and last commit id)
-WORKDIR $GOPATH/src/github.com/deissh/rl
-COPY .git .git
-
 WORKDIR $GOPATH/src/github.com/rl-os/api
-COPY ./ayako .
+COPY . .
 RUN make build-prod && mv bin/* /
 
 
@@ -26,10 +22,10 @@ RUN apk add --no-cache bash curl
 RUN curl -fsSL -o /bin/dbmate https://github.com/amacneil/dbmate/releases/download/v1.8.0/dbmate-linux-musl-amd64
 RUN chmod +x /bin/dbmate
 
-COPY --from=builder /ayako server
-COPY ./ayako/config.yaml .
-COPY ./ayako/migrations migrations
-COPY ./ayako/docker-init.sh docker-init.sh
+COPY --from=builder /server server
+COPY ./config.example.yaml config.yaml
+COPY ./migrations migrations
+COPY ./docker-init.sh docker-init.sh
 
 EXPOSE 2400
 CMD ["./docker-init.sh", "&&", "./server"]
