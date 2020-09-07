@@ -4,7 +4,8 @@ go 1.15
 
 require (
 	github.com/BurntSushi/toml v0.3.1
-	github.com/amacneil/dbmate v1.9.1 // indirect
+	github.com/ClickHouse/clickhouse-go v1.4.3 // indirect
+	github.com/amacneil/dbmate v1.10.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/deissh/go-utils v1.1.0
 	github.com/deissh/osu-go-client v1.1.3
@@ -25,15 +26,16 @@ require (
 	github.com/labstack/echo/v4 v4.1.16
 	github.com/lib/pq v1.8.0
 	github.com/mattn/go-colorable v0.1.7 // indirect
-	github.com/mattn/go-sqlite3 v1.14.0 // indirect
+	github.com/mattn/go-sqlite3 v1.14.2 // indirect
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.19.0
 	github.com/stretchr/testify v1.6.1
 	github.com/tsuyoshiwada/go-gitcmd v0.0.0-20180205145712-5f1f5f9475df // indirect
+	github.com/urfave/cli v1.22.4 // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/sys v0.0.0-20200810151505-1b9f1253b3ed // indirect
-	golang.org/x/tools v0.0.0-20200811032001-fd80f4dbb3ea // indirect
+	golang.org/x/tools v0.0.0-20200904185747-39188db58858 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
