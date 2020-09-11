@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	myctx "github.com/rl-os/api/ctx"
+	"github.com/rl-os/api/entity/request"
 	"net/http"
 )
 
@@ -29,12 +30,9 @@ func (h *FriendHandlers) GetAll(c echo.Context) error {
 }
 
 func (h *FriendHandlers) Add(c echo.Context) error {
-	// contain incoming data
-	type putFriendRequestData struct {
-		TargetId uint `json:"target_id" query:"target_id"`
-	}
+	ctx, _ := c.Get("context").(context.Context)
 
-	params := new(putFriendRequestData)
+	params := request.FriendTargetId{}
 	if err := c.Bind(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
@@ -42,8 +40,6 @@ func (h *FriendHandlers) Add(c echo.Context) error {
 	if err := h.App.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
-
-	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {
@@ -64,11 +60,9 @@ func (h *FriendHandlers) Add(c echo.Context) error {
 }
 
 func (h *FriendHandlers) Remove(c echo.Context) error {
-	type requestData struct {
-		TargetId uint `json:"target_id" query:"target_id"`
-	}
+	ctx, _ := c.Get("context").(context.Context)
 
-	params := new(requestData)
+	params := request.FriendTargetId{}
 	if err := c.Bind(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
@@ -76,8 +70,6 @@ func (h *FriendHandlers) Remove(c echo.Context) error {
 	if err := h.App.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
-
-	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {

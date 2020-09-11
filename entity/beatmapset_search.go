@@ -34,15 +34,6 @@ type BeatmapsetSearch struct {
 	Beatmaps          []Beatmap    `json:"beatmaps"`
 }
 
-type BeatmapsetSearchParams struct {
-	Query    string `json:"q" query:"q"`
-	Mode     int    `json:"m" query:"m"`
-	Status   string `json:"s" query:"s"`
-	Genre    string `json:"g" query:"g"`
-	Language string `json:"l" query:"l"`
-	Sort     string `json:"sort" query:"sort"`
-}
-
 type BeatmapsetSearchResult struct {
 	Beatmapsets           *[]BeatmapsetSearch `json:"beatmapsets"`
 	RecommendedDifficulty float32             `json:"recommended_difficulty"`

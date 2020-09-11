@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	myctx "github.com/rl-os/api/ctx"
+	"github.com/rl-os/api/entity/request"
 	"github.com/rl-os/api/errors"
 	"strconv"
 )
@@ -13,20 +14,13 @@ type ChatHandlers struct {
 	App *app.App
 }
 
-// newPmRequestData contain incoming data
-type newPmRequestData struct {
-	TargetId uint   `json:"target_id" query:"target_id" form:"target_id"`
-	Message  string `json:"message" query:"message" form:"message"`
-	IsAction bool   `json:"is_action" query:"is_action" form:"is_action"`
-}
-
 func (h *ChatHandlers) NewPm(c echo.Context) error {
-	params := new(newPmRequestData)
+	ctx, _ := c.Get("context").(context.Context)
+
+	params := request.CreateNewChat{}
 	if err := c.Bind(params); err != nil {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
-
-	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {
@@ -43,20 +37,13 @@ func (h *ChatHandlers) NewPm(c echo.Context) error {
 	return c.JSON(200, channels)
 }
 
-// getUpdatesRequestData contain incoming data
-type getUpdatesRequestData struct {
-	Since     uint `json:"since" query:"since"`
-	ChannelId uint `json:"channel_id" query:"channel_id"`
-	Limit     uint `json:"limit" query:"limit"`
-}
-
 func (h *ChatHandlers) Updates(c echo.Context) error {
-	params := new(getUpdatesRequestData)
+	ctx, _ := c.Get("context").(context.Context)
+
+	params := request.GetChatUpdates{}
 	if err := c.Bind(params); err != nil {
 		return errors.New("requires_params", 400, "invalid request params")
 	}
-
-	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {
@@ -73,18 +60,13 @@ func (h *ChatHandlers) Updates(c echo.Context) error {
 	return c.JSON(200, updates)
 }
 
-// getMessagesRequestData contain incoming data
-type getMessagesRequestData struct {
-	Limit uint `json:"limit" query:"limit"`
-}
-
 func (h *ChatHandlers) Messages(c echo.Context) error {
-	params := new(getMessagesRequestData)
+	ctx, _ := c.Get("context").(context.Context)
+
+	params := request.GetMessages{}
 	if err := c.Bind(params); err != nil {
 		return errors.New("requires_params", 400, "invalid request params")
 	}
-
-	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {
@@ -101,19 +83,13 @@ func (h *ChatHandlers) Messages(c echo.Context) error {
 	return c.JSON(200, messages)
 }
 
-// sendMessageRequestData contain incoming data
-type sendMessageRequestData struct {
-	Message  string `json:"message" form:"message" validate:"required"`
-	IsAction bool   `json:"is_action" form:"is_action"`
-}
-
 func (h *ChatHandlers) Send(c echo.Context) error {
-	params := new(sendMessageRequestData)
+	ctx, _ := c.Get("context").(context.Context)
+
+	params := request.SendMessage{}
 	if err := c.Bind(params); err != nil {
 		return errors.New("requires_params", 400, "invalid request params")
 	}
-
-	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {

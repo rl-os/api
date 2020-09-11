@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
-	"github.com/rl-os/api/entity"
+	"github.com/rl-os/api/entity/request"
 	"github.com/rl-os/api/errors"
 	"net/http"
 	"strconv"
@@ -31,9 +31,7 @@ func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 }
 
 func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
-	params := struct {
-		Id uint `query:"beatmap_id"`
-	}{}
+	params := request.BeatmapsetLookup{}
 	if err := c.Bind(&params); err != nil {
 		return errors.New("request_params", 400, "Invalid params")
 	}
@@ -49,7 +47,7 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 }
 
 func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
-	params := entity.BeatmapsetSearchParams{}
+	params := request.BeatmapsetSearch{}
 	if err := c.Bind(&params); err != nil {
 		return errors.New("request_params", 400, "Invalid params")
 	}

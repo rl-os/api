@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/entity"
+	"github.com/rl-os/api/entity/request"
 	"net/http"
 	"strconv"
 )
@@ -14,16 +15,11 @@ type BeatmapHandlers struct {
 }
 
 func (h *BeatmapHandlers) Show(c echo.Context) error {
+	ctx, _ := c.Get("context").(context.Context)
+
 	beatmapID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
-	}
-
-	ctx := context.Background()
-
-	userId, ok := c.Get("current_user_id").(uint)
-	if ok {
-		ctx = context.WithValue(context.Background(), "current_user_id", userId)
 	}
 
 	beatmaps, err := h.App.Store.Beatmap().Get(ctx, uint(beatmapID))
@@ -35,20 +31,11 @@ func (h *BeatmapHandlers) Show(c echo.Context) error {
 }
 
 func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
-	params := struct {
-		Id       uint   `query:"id"`
-		CheckSum string `query:"checksum"`
-		Filename string `query:"filename"`
-	}{}
+	ctx, _ := c.Get("context").(context.Context)
+
+	params := request.BeatmapLookup{}
 	if err := c.Bind(&params); err != nil {
 		return err
-	}
-
-	ctx := context.Background()
-
-	userId, ok := c.Get("current_user_id").(uint)
-	if ok {
-		ctx = context.WithValue(context.Background(), "current_user_id", userId)
 	}
 
 	var beatmap *entity.SingleBeatmap
@@ -74,10 +61,7 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 }
 
 func (h *BeatmapHandlers) Scores(c echo.Context) (err error) {
-	params := struct {
-		Type string `query:"type"`
-		Mode string `query:"mode"`
-	}{}
+	params := request.GetBeatmapScores{}
 	if err := c.Bind(&params); err != nil {
 		return err
 	}
