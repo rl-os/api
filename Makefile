@@ -42,23 +42,21 @@ BIN_DIR                ?= $(PWD)/bin
 BUILD_CMDS             := $(shell $(GOLIST) $(CMD_DIR)/...)
 GOFILES				   := $(shell find . -name "*.go" -type f)
 
-GOLDFLAGS += -X main.Version=$(VERSION)
-GOLDFLAGS += -X main.Commit=$(COMMIT)
-GOLDFLAGS += -X main.Branch=$(GIT_BRANCH_CLEAN)
-GOLDFLAGS += -X main.BuildTimestamp=$(BUILDTIME)
-GOBUILDFLAGS = -ldflags "-s -w $(GOLDFLAGS)"
+GOLDFLAGS 			   += -X main.Version=$(VERSION)
+GOLDFLAGS 			   += -X main.Commit=$(COMMIT)
+GOLDFLAGS  			   += -X main.Branch=$(GIT_BRANCH_CLEAN)
+GOLDFLAGS 			   += -X main.BuildTimestamp=$(BUILDTIME)
+GOBUILDFLAGS            = -ldflags "-s -w $(GOLDFLAGS)"
 
 # ===============================================
-GO = go
-.DEFAULT_GOAL := help
-MAKE_ENV += PACKAGE VERSION DOCKER_IMAGE DOCKER_IMAGE_DOMAIN
-SHELL_EXPORT := $(foreach v,$(MAKE_ENV),$(v)='$($(v))' )
+.DEFAULT_GOAL          := help
+MAKE_ENV 			   += PACKAGE VERSION DOCKER_IMAGE DOCKER_IMAGE_DOMAIN
+SHELL_EXPORT		   := $(foreach v,$(MAKE_ENV),$(v)='$($(v))' )
 # check requeres commands
-EXECUTABLES = wget
-_ := $(foreach exec,$(EXECUTABLES),\
-        $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
+EXECUTABLES             = wget
+_                      := $(foreach exec,$(EXECUTABLES), $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
 # pass all args
-args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
+args                    = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 # ===============================================
 
 ## Clear bin folder
