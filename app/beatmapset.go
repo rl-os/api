@@ -11,7 +11,8 @@ import (
 
 // BMS = beatmapset
 var (
-	ErrNotFoundBMS = errors.New("beatmapset", http.StatusNotFound, "Beatmapset not found")
+	ErrNotFoundBMS      = errors.New("beatmapset", http.StatusNotFound, "Beatmapset not found")
+	ErrInvalidBMSAction = errors.New("beatmapset", http.StatusBadRequest, "Invalid action")
 )
 
 // GetBeatmapset from store and return 404 error if not exist
@@ -48,8 +49,8 @@ func (a *App) FavouriteBeatmapset(ctx context.Context, action string, beatmapset
 	case "favourite":
 		return a.Store.BeatmapSet().SetFavourite(ctx, userId, beatmapsetID)
 	case "unfavourite":
-		return a.Store.BeatmapSet().SetFavourite(ctx, userId, beatmapsetID)
+		return a.Store.BeatmapSet().SetUnFavourite(ctx, userId, beatmapsetID)
 	default:
-		return 0, errors.New("beatmapset", http.StatusBadRequest, "Invalid action")
+		return 0, ErrInvalidBMSAction
 	}
 }
