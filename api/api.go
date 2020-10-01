@@ -1,12 +1,34 @@
+//go:generate swag init -o ../docs -g ./api/api.go --dir .././
+
 package api
 
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/middlewares/permission"
+	"github.com/swaggo/echo-swagger"
+
+	_ "github.com/rl-os/api/docs"
 )
 
+// New api endpoint
+//
+// @title osu!lazer API
+// @version 2.0
+// @description This is a simple server.
+// @host localhost:2400
+// @BasePath /
+//
+// @contact.name RL GitHub
+// @contact.url https://github.com/rl-os/api
+//
+// @securitydefinitions.oauth2.password OAuth2Password
+// @in request-body
+// @tokenUrl /oauth/token
+// @scope.* Grants all access
 func New(app *app.App, root *echo.Group) {
+	root.GET("/docs/*", echoSwagger.WrapHandler)
+
 	signup := root.Group("/users")
 	{
 		h := RegistrationHandlers{app}

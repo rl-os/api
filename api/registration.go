@@ -5,22 +5,32 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/entity/request"
-	"net/http"
+	"github.com/rl-os/api/errors"
 )
 
 type RegistrationHandlers struct {
 	App *app.App
 }
 
+// Create new user
+//
+// @Router /users [post]
+// @Tags users
+// @Summary Create new user
+// @Description get string by ID
+// @Param payload body request.CreateUser true "JSON payload"
+//
+// @Success 200 {object} entity.User
+// @Success 400 {object} errors.ResponseFormat
 func (h *RegistrationHandlers) Create(c echo.Context) error {
-	params := request.CreateUser{}
+	params := &request.CreateUser{}
 
 	if err := c.Bind(params); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "User info not found")
+		return errors.New("request_params", 400, "Invalid params")
 	}
 
 	if err := h.App.Validator.Struct(params); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid user information")
+		return errors.New("request_params", 400, "Invalid params")
 	}
 
 	ctx, _ := c.Get("context").(context.Context)

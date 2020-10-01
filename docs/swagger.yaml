@@ -1,0 +1,319 @@
+basePath: /
+definitions:
+  entity.Country:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    type: object
+  entity.Cover:
+    properties:
+      custom_url:
+        type: object
+      id:
+        type: string
+      url:
+        type: string
+    type: object
+  entity.GradeCounts:
+    properties:
+      a:
+        type: integer
+      s:
+        type: integer
+      sh:
+        type: integer
+      ss:
+        type: integer
+      ssh:
+        type: integer
+    type: object
+  entity.Kudosu:
+    properties:
+      available:
+        type: integer
+      total:
+        type: integer
+    type: object
+  entity.Level:
+    properties:
+      current:
+        type: integer
+      progress:
+        type: integer
+    type: object
+  entity.MonthlyPlaycounts:
+    properties:
+      count:
+        type: integer
+      start_date:
+        type: string
+    type: object
+  entity.Page:
+    properties:
+      html:
+        type: string
+      raw:
+        type: string
+    type: object
+  entity.Rank:
+    properties:
+      country:
+        type: integer
+      global:
+        type: integer
+    type: object
+  entity.RankHistory:
+    properties:
+      data:
+        items:
+          type: integer
+        type: array
+      mode:
+        type: string
+    type: object
+  entity.Statistics:
+    properties:
+      grade_counts:
+        $ref: '#/definitions/entity.GradeCounts'
+        type: object
+      hit_accuracy:
+        type: number
+      is_ranked:
+        type: boolean
+      level:
+        $ref: '#/definitions/entity.Level'
+        type: object
+      maximum_combo:
+        type: integer
+      play_count:
+        type: integer
+      play_time:
+        type: integer
+      pp:
+        type: number
+      pp_rank:
+        type: integer
+      rank:
+        $ref: '#/definitions/entity.Rank'
+        type: object
+      ranked_score:
+        type: integer
+      replays_watched_by_others:
+        type: integer
+      total_hits:
+        type: integer
+      total_score:
+        type: integer
+    type: object
+  entity.User:
+    properties:
+      account_history:
+        description: joins
+        items:
+          type: object
+        type: array
+      active_tournament_banner:
+        items:
+          type: object
+        type: array
+      avatar_url:
+        type: string
+      badges:
+        items:
+          type: object
+        type: array
+      can_moderate:
+        type: boolean
+      country:
+        $ref: '#/definitions/entity.Country'
+        type: object
+      country_code:
+        type: string
+      cover:
+        $ref: '#/definitions/entity.Cover'
+        type: object
+      cover_url:
+        type: string
+      default_group:
+        type: string
+      discord:
+        type: string
+      email:
+        type: string
+      favourite_beatmapset_count:
+        type: integer
+      follower_count:
+        type: integer
+      graveyard_beatmapset_count:
+        type: integer
+      has_supported:
+        type: boolean
+      id:
+        type: integer
+      interests:
+        type: string
+      is_active:
+        type: boolean
+      is_bng:
+        type: boolean
+      is_bot:
+        type: boolean
+      is_full_bn:
+        type: boolean
+      is_gmt:
+        description: computed
+        type: boolean
+      is_limited_bn:
+        type: boolean
+      is_nat:
+        type: boolean
+      is_online:
+        type: boolean
+      is_supporter:
+        type: boolean
+      join_date:
+        type: string
+      kudosu:
+        $ref: '#/definitions/entity.Kudosu'
+        type: object
+      last_visit:
+        type: string
+      lastfm:
+        type: string
+      location:
+        type: string
+      loved_beatmapset_count:
+        type: integer
+      max_blocks:
+        type: integer
+      max_friends:
+        type: integer
+      monthly_playcounts:
+        items:
+          $ref: '#/definitions/entity.MonthlyPlaycounts'
+        type: array
+      occupation:
+        type: string
+      page:
+        $ref: '#/definitions/entity.Page'
+        type: object
+      playmode:
+        type: string
+      playstyle:
+        type: string
+      pm_friends_only:
+        type: boolean
+      post_count:
+        type: integer
+      previous_usernames:
+        items:
+          type: string
+        type: array
+      profile_colour:
+        type: object
+      profile_order:
+        type: string
+      rankHistory:
+        $ref: '#/definitions/entity.RankHistory'
+        type: object
+      ranked_and_approved_beatmapset_count:
+        type: integer
+      replays_watched_counts:
+        items:
+          type: object
+        type: array
+      scores_first_count:
+        type: integer
+      skype:
+        type: string
+      statistics:
+        $ref: '#/definitions/entity.Statistics'
+        type: object
+      support_level:
+        type: integer
+      title:
+        type: string
+      twitter:
+        type: string
+      unranked_beatmapset_count:
+        type: integer
+      user_achievements:
+        items:
+          $ref: '#/definitions/entity.UserAchievements'
+        type: array
+      username:
+        type: string
+      website:
+        type: string
+    type: object
+  entity.UserAchievements:
+    properties:
+      achieved_at:
+        type: string
+      achievement_id:
+        type: integer
+    type: object
+  errors.ResponseFormat:
+    properties:
+      error_description:
+        type: string
+      error_id:
+        type: string
+      message:
+        type: string
+    type: object
+  request.CreateUser:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+host: localhost:2400
+info:
+  contact:
+    name: RL GitHub
+    url: https://github.com/rl-os/api
+  description: This is a simple server.
+  license: {}
+  title: osu!lazer API
+  version: "2.0"
+paths:
+  /users:
+    post:
+      description: get string by ID
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateUser'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Create new user
+      tags:
+      - users
+securityDefinitions:
+  OAuth2Password:
+    flow: password
+    scopes:
+      '*': ' Grants all access'
+    tokenUrl: /oauth/token
+    type: oauth2
+swagger: "2.0"

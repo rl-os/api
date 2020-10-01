@@ -96,6 +96,7 @@ install:
 	$(GOGET) -u github.com/golang/mock/mockgen@latest
 	$(GOGET) -u github.com/hexdigest/gowrap/cmd/gowrap
 	@echo -e "\e[1;34m> Installing unnessosory packages\e[0m"
+	$(GOGET) -u github.com/swaggo/swag/cmd/swag
 	$(GOGET) -u golang.org/x/lint/golint
 	$(GOGET) -u github.com/fzipp/gocyclo
 	$(GOGET) -u golang.org/x/tools/cmd/goimports
