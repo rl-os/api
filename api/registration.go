@@ -15,7 +15,6 @@ type RegistrationHandlers struct {
 // Create new user
 //
 // @Router /users [post]
-// @Tags users
 // @Summary Create new user
 // @Description get string by ID
 // @Param payload body request.CreateUser true "JSON payload"

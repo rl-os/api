@@ -22,7 +22,7 @@ import (
 // @contact.name RL GitHub
 // @contact.url https://github.com/rl-os/api
 //
-// @securitydefinitions.oauth2.password OAuth2Password
+// @securitydefinitions.oauth2.password OAuth2
 // @in request-body
 // @tokenUrl /oauth/token
 // @scope.* Grants all access

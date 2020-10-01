@@ -10,8 +10,6 @@ import (
 	"time"
 )
 
-var modes = []string{"std", "mania", "catch", "taiko"}
-
 type UserStore struct {
 	SqlStore
 }
@@ -43,9 +41,6 @@ func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.U
 }
 
 func (u UserStore) Get(ctx context.Context, userId uint, mode string) (*entity.User, error) {
-	if !utils.ContainsString(modes, mode) {
-		mode = "std"
-	}
 	user := entity.User{Mode: mode}
 
 	err := u.GetMaster().GetContext(

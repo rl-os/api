@@ -287,6 +287,28 @@ info:
   title: osu!lazer API
   version: "2.0"
 paths:
+  /api/v2/me/{mode}:
+    get:
+      description: get string by ID
+      parameters:
+      - description: game mod
+        in: path
+        name: mode
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Create new user
+      tags:
+      - Current user
   /users:
     post:
       description: get string by ID
@@ -307,10 +329,8 @@ paths:
           schema:
             $ref: '#/definitions/errors.ResponseFormat'
       summary: Create new user
-      tags:
-      - users
 securityDefinitions:
-  OAuth2Password:
+  OAuth2:
     flow: password
     scopes:
       '*': ' Grants all access'

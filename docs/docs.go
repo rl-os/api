@@ -28,12 +28,45 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v2/me/{mode}": {
+            "get": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "description": "get string by ID",
+                "tags": [
+                    "Current user"
+                ],
+                "summary": "Create new user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "game mod",
+                        "name": "mode",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "post": {
                 "description": "get string by ID",
-                "tags": [
-                    "users"
-                ],
                 "summary": "Create new user",
                 "parameters": [
                     {
@@ -482,7 +515,7 @@ var doc = `{
         }
     },
     "securityDefinitions": {
-        "OAuth2Password": {
+        "OAuth2": {
             "type": "oauth2",
             "flow": "password",
             "tokenUrl": "/oauth/token",
