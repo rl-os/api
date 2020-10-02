@@ -21,9 +21,9 @@ func (h *FriendHandlers) GetAll(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.App.Store.Friend().GetSubscriptions(ctx, userId)
+	users, err := h.App.GetAllFriends(ctx, userId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "User not found")
+		return err
 	}
 
 	return c.JSON(200, users)
@@ -46,14 +46,9 @@ func (h *FriendHandlers) Add(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	err = h.App.Store.Friend().Add(ctx, userId, params.TargetId)
+	users, err := h.App.AddFriend(ctx, userId, params.TargetId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "User not found")
-	}
-
-	users, err := h.App.Store.Friend().GetSubscriptions(ctx, userId)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "User not found")
+		return err
 	}
 
 	return c.JSON(200, users)
@@ -76,12 +71,7 @@ func (h *FriendHandlers) Remove(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	err = h.App.Store.Friend().Remove(ctx, userId, params.TargetId)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "User not found")
-	}
-
-	users, err := h.App.Store.Friend().GetSubscriptions(ctx, userId)
+	users, err := h.App.RemoveFriend(ctx, userId, params.TargetId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "User not found")
 	}
