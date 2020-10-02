@@ -1,5 +1,89 @@
 basePath: /
 definitions:
+  entity.Availability:
+    properties:
+      download_disabled:
+        type: boolean
+      more_information:
+        type: object
+    type: object
+  entity.BeatmapSet:
+    properties:
+      artist:
+        type: string
+      availability:
+        $ref: '#/definitions/entity.Availability'
+        type: object
+      bpm:
+        type: integer
+      can_be_hyped:
+        type: boolean
+      covers:
+        $ref: '#/definitions/entity.Covers'
+        type: object
+      creator:
+        type: string
+      description:
+        $ref: '#/definitions/entity.Description'
+        type: object
+      discussion_enabled:
+        type: boolean
+      discussion_locked:
+        type: boolean
+      favourite_count:
+        type: integer
+      genre:
+        $ref: '#/definitions/entity.Genre'
+        type: object
+      has_favourited:
+        type: boolean
+      hype:
+        $ref: '#/definitions/entity.Hype'
+        type: object
+      id:
+        type: integer
+      is_scoreable:
+        type: boolean
+      language:
+        $ref: '#/definitions/entity.Genre'
+        type: object
+      last_checked:
+        type: string
+      last_updated:
+        type: string
+      legacy_thread_url:
+        type: string
+      nominations:
+        $ref: '#/definitions/entity.Hype'
+        type: object
+      play_count:
+        type: integer
+      preview_url:
+        type: string
+      ranked:
+        type: integer
+      ranked_date:
+        type: string
+      source:
+        type: string
+      status:
+        type: string
+      storyboard:
+        type: boolean
+      submitted_date:
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+      user:
+        $ref: '#/definitions/entity.UserShortField'
+        type: object
+      user_id:
+        type: integer
+      video:
+        type: boolean
+    type: object
   entity.Country:
     properties:
       code:
@@ -16,6 +100,48 @@ definitions:
       url:
         type: string
     type: object
+  entity.Covers:
+    properties:
+      card:
+        type: string
+      card@2x:
+        type: string
+      cover:
+        type: string
+      cover@2x:
+        type: string
+      list:
+        type: string
+      list@2x:
+        type: string
+      slimcover:
+        type: string
+      slimcover@2x:
+        type: string
+    type: object
+  entity.Description:
+    properties:
+      description:
+        type: string
+    type: object
+  entity.Failtimes:
+    properties:
+      exit:
+        items:
+          type: integer
+        type: array
+      fail:
+        items:
+          type: integer
+        type: array
+    type: object
+  entity.Genre:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   entity.GradeCounts:
     properties:
       a:
@@ -27,6 +153,13 @@ definitions:
       ss:
         type: integer
       ssh:
+        type: integer
+    type: object
+  entity.Hype:
+    properties:
+      current:
+        type: integer
+      required:
         type: integer
     type: object
   entity.Kudosu:
@@ -71,6 +204,69 @@ definitions:
           type: integer
         type: array
       mode:
+        type: string
+    type: object
+  entity.SingleBeatmap:
+    properties:
+      accuracy:
+        type: integer
+      ar:
+        type: integer
+      beatmapset:
+        $ref: '#/definitions/entity.BeatmapSet'
+        type: object
+      beatmapset_id:
+        type: integer
+      bpm:
+        type: integer
+      convert:
+        type: boolean
+      count_circles:
+        type: integer
+      count_sliders:
+        type: integer
+      count_spinners:
+        type: integer
+      count_total:
+        type: integer
+      cs:
+        type: integer
+      deleted_at:
+        type: string
+      difficulty_rating:
+        type: number
+      drain:
+        type: integer
+      failtimes:
+        $ref: '#/definitions/entity.Failtimes'
+        type: object
+      hit_length:
+        type: integer
+      id:
+        type: integer
+      is_scoreable:
+        type: boolean
+      last_updated:
+        type: string
+      max_combo:
+        type: integer
+      mode:
+        type: string
+      mode_int:
+        type: integer
+      passcount:
+        type: integer
+      playcount:
+        type: integer
+      ranked:
+        type: integer
+      status:
+        type: string
+      total_length:
+        type: integer
+      url:
+        type: string
+      version:
         type: string
     type: object
   entity.Statistics:
@@ -255,6 +451,41 @@ definitions:
       achievement_id:
         type: integer
     type: object
+  entity.UserShort:
+    properties:
+      avatar_url:
+        type: string
+      country_code:
+        type: string
+      default_group:
+        type: string
+      email:
+        type: string
+      has_supported:
+        type: boolean
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      is_bot:
+        type: boolean
+      is_online:
+        type: boolean
+      is_supporter:
+        type: boolean
+      join_date:
+        type: string
+      last_visit:
+        type: string
+      pm_friends_only:
+        type: boolean
+      support_level:
+        type: integer
+      username:
+        type: string
+    type: object
+  entity.UserShortField:
+    $ref: '#/definitions/entity.UserShort'
   errors.ResponseFormat:
     properties:
       error_description:
@@ -287,9 +518,83 @@ info:
   title: osu!lazer API
   version: "2.0"
 paths:
+  /api/v2/beatmaps/{beatmap_id}:
+    get:
+      parameters:
+      - description: beatmap id
+        in: path
+        name: beatmap_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.SingleBeatmap'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Return beatmap by id
+      tags:
+      - Beatmap
+  /api/v2/beatmaps/{beatmap}/scores:
+    get:
+      parameters:
+      - description: beatmap id
+        in: path
+        name: beatmap_id
+        required: true
+        type: string
+      - description: score type
+        in: query
+        name: type
+        type: string
+      - description: osu! game mode (std, mania, ctb and etc)
+        in: query
+        name: mode
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.SingleBeatmap'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Scores submitted to selected beatmap
+      tags:
+      - Beatmap
+  /api/v2/beatmaps/lookup:
+    get:
+      parameters:
+      - description: beatmap id
+        in: query
+        name: id
+        type: string
+      - description: beatmap file md5
+        in: query
+        name: checksum
+        type: string
+      - description: beatmap filename (legacy)
+        in: query
+        name: filename
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.SingleBeatmap'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Lookup beatmap by id, checksum, filename
+      tags:
+      - Beatmap
   /api/v2/me/{mode}:
     get:
-      description: get string by ID
       parameters:
       - description: game mod
         in: path
@@ -306,7 +611,7 @@ paths:
             $ref: '#/definitions/errors.ResponseFormat'
       security:
       - OAuth2: []
-      summary: Create new user
+      summary: Return current user
       tags:
       - Current user
   /users:

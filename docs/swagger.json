@@ -13,6 +13,122 @@
     "host": "localhost:2400",
     "basePath": "/",
     "paths": {
+        "/api/v2/beatmaps/lookup": {
+            "get": {
+                "tags": [
+                    "Beatmap"
+                ],
+                "summary": "Lookup beatmap by id, checksum, filename",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "beatmap id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "beatmap file md5",
+                        "name": "checksum",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "beatmap filename (legacy)",
+                        "name": "filename",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.SingleBeatmap"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/beatmaps/{beatmap_id}": {
+            "get": {
+                "tags": [
+                    "Beatmap"
+                ],
+                "summary": "Return beatmap by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "beatmap id",
+                        "name": "beatmap_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.SingleBeatmap"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/beatmaps/{beatmap}/scores": {
+            "get": {
+                "tags": [
+                    "Beatmap"
+                ],
+                "summary": "Scores submitted to selected beatmap",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "beatmap id",
+                        "name": "beatmap_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "score type",
+                        "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "osu! game mode (std, mania, ctb and etc)",
+                        "name": "mode",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.SingleBeatmap"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v2/me/{mode}": {
             "get": {
                 "security": [
@@ -20,11 +136,10 @@
                         "OAuth2": []
                     }
                 ],
-                "description": "get string by ID",
                 "tags": [
                     "Current user"
                 ],
-                "summary": "Create new user",
+                "summary": "Return current user",
                 "parameters": [
                     {
                         "type": "string",
@@ -82,6 +197,129 @@
         }
     },
     "definitions": {
+        "entity.Availability": {
+            "type": "object",
+            "properties": {
+                "download_disabled": {
+                    "type": "boolean"
+                },
+                "more_information": {
+                    "type": "object"
+                }
+            }
+        },
+        "entity.BeatmapSet": {
+            "type": "object",
+            "properties": {
+                "artist": {
+                    "type": "string"
+                },
+                "availability": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Availability"
+                },
+                "bpm": {
+                    "type": "integer"
+                },
+                "can_be_hyped": {
+                    "type": "boolean"
+                },
+                "covers": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Covers"
+                },
+                "creator": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Description"
+                },
+                "discussion_enabled": {
+                    "type": "boolean"
+                },
+                "discussion_locked": {
+                    "type": "boolean"
+                },
+                "favourite_count": {
+                    "type": "integer"
+                },
+                "genre": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Genre"
+                },
+                "has_favourited": {
+                    "type": "boolean"
+                },
+                "hype": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Hype"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_scoreable": {
+                    "type": "boolean"
+                },
+                "language": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Genre"
+                },
+                "last_checked": {
+                    "type": "string"
+                },
+                "last_updated": {
+                    "type": "string"
+                },
+                "legacy_thread_url": {
+                    "type": "string"
+                },
+                "nominations": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Hype"
+                },
+                "play_count": {
+                    "type": "integer"
+                },
+                "preview_url": {
+                    "type": "string"
+                },
+                "ranked": {
+                    "type": "integer"
+                },
+                "ranked_date": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "storyboard": {
+                    "type": "boolean"
+                },
+                "submitted_date": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.UserShortField"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "video": {
+                    "type": "boolean"
+                }
+            }
+        },
         "entity.Country": {
             "type": "object",
             "properties": {
@@ -107,6 +345,71 @@
                 }
             }
         },
+        "entity.Covers": {
+            "type": "object",
+            "properties": {
+                "card": {
+                    "type": "string"
+                },
+                "card@2x": {
+                    "type": "string"
+                },
+                "cover": {
+                    "type": "string"
+                },
+                "cover@2x": {
+                    "type": "string"
+                },
+                "list": {
+                    "type": "string"
+                },
+                "list@2x": {
+                    "type": "string"
+                },
+                "slimcover": {
+                    "type": "string"
+                },
+                "slimcover@2x": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Description": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Failtimes": {
+            "type": "object",
+            "properties": {
+                "exit": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "fail": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "entity.Genre": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "entity.GradeCounts": {
             "type": "object",
             "properties": {
@@ -123,6 +426,17 @@
                     "type": "integer"
                 },
                 "ssh": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.Hype": {
+            "type": "object",
+            "properties": {
+                "current": {
+                    "type": "integer"
+                },
+                "required": {
                     "type": "integer"
                 }
             }
@@ -192,6 +506,100 @@
                     }
                 },
                 "mode": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.SingleBeatmap": {
+            "type": "object",
+            "properties": {
+                "accuracy": {
+                    "type": "integer"
+                },
+                "ar": {
+                    "type": "integer"
+                },
+                "beatmapset": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.BeatmapSet"
+                },
+                "beatmapset_id": {
+                    "type": "integer"
+                },
+                "bpm": {
+                    "type": "integer"
+                },
+                "convert": {
+                    "type": "boolean"
+                },
+                "count_circles": {
+                    "type": "integer"
+                },
+                "count_sliders": {
+                    "type": "integer"
+                },
+                "count_spinners": {
+                    "type": "integer"
+                },
+                "count_total": {
+                    "type": "integer"
+                },
+                "cs": {
+                    "type": "integer"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "difficulty_rating": {
+                    "type": "number"
+                },
+                "drain": {
+                    "type": "integer"
+                },
+                "failtimes": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Failtimes"
+                },
+                "hit_length": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_scoreable": {
+                    "type": "boolean"
+                },
+                "last_updated": {
+                    "type": "string"
+                },
+                "max_combo": {
+                    "type": "integer"
+                },
+                "mode": {
+                    "type": "string"
+                },
+                "mode_int": {
+                    "type": "integer"
+                },
+                "passcount": {
+                    "type": "integer"
+                },
+                "playcount": {
+                    "type": "integer"
+                },
+                "ranked": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "total_length": {
+                    "type": "integer"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "version": {
                     "type": "string"
                 }
             }
@@ -464,6 +872,59 @@
                     "type": "integer"
                 }
             }
+        },
+        "entity.UserShort": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "country_code": {
+                    "type": "string"
+                },
+                "default_group": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "has_supported": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "is_bot": {
+                    "type": "boolean"
+                },
+                "is_online": {
+                    "type": "boolean"
+                },
+                "is_supporter": {
+                    "type": "boolean"
+                },
+                "join_date": {
+                    "type": "string"
+                },
+                "last_visit": {
+                    "type": "string"
+                },
+                "pm_friends_only": {
+                    "type": "boolean"
+                },
+                "support_level": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.UserShortField": {
+            "$ref": "#/definitions/entity.UserShort"
         },
         "errors.ResponseFormat": {
             "type": "object",

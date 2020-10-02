@@ -82,9 +82,9 @@ func New(app *app.App, root *echo.Group) {
 		bmaps := v2.Group("/beatmaps")
 		{
 			h := BeatmapHandlers{app}
-			bmaps.GET("/beatmaps/lookup", h.Lookup)
-			bmaps.GET("/beatmaps/:beatmap", h.Show)
-			bmaps.GET("/beatmaps/:beatmap/scores", h.Scores)
+			bmaps.GET("/lookup", h.Lookup)
+			bmaps.GET("/:beatmap", h.Show)
+			bmaps.GET("/:beatmap/scores", h.Scores)
 		}
 
 		// === Beatmapsets ===
