@@ -7,6 +7,66 @@ definitions:
       more_information:
         type: object
     type: object
+  entity.Beatmap:
+    properties:
+      accuracy:
+        type: integer
+      ar:
+        type: integer
+      beatmapset_id:
+        type: integer
+      bpm:
+        type: integer
+      convert:
+        type: boolean
+      count_circles:
+        type: integer
+      count_sliders:
+        type: integer
+      count_spinners:
+        type: integer
+      count_total:
+        type: integer
+      cs:
+        type: integer
+      deleted_at:
+        type: string
+      difficulty_rating:
+        type: number
+      drain:
+        type: integer
+      failtimes:
+        $ref: '#/definitions/entity.Failtimes'
+        type: object
+      hit_length:
+        type: integer
+      id:
+        type: integer
+      is_scoreable:
+        type: boolean
+      last_updated:
+        type: string
+      max_combo:
+        type: integer
+      mode:
+        type: string
+      mode_int:
+        type: integer
+      passcount:
+        type: integer
+      playcount:
+        type: integer
+      ranked:
+        type: integer
+      status:
+        type: string
+      total_length:
+        type: integer
+      url:
+        type: string
+      version:
+        type: string
+    type: object
   entity.BeatmapSet:
     properties:
       artist:
@@ -84,6 +144,182 @@ definitions:
       video:
         type: boolean
     type: object
+  entity.BeatmapSetFull:
+    properties:
+      artist:
+        type: string
+      availability:
+        $ref: '#/definitions/entity.Availability'
+        type: object
+      beatmaps:
+        items:
+          $ref: '#/definitions/entity.Beatmap'
+        type: array
+      bpm:
+        type: integer
+      can_be_hyped:
+        type: boolean
+      converts:
+        items:
+          $ref: '#/definitions/entity.Beatmap'
+        type: array
+      covers:
+        $ref: '#/definitions/entity.Covers'
+        type: object
+      creator:
+        type: string
+      current_user_attributes:
+        $ref: '#/definitions/entity.CurrentUserAttributes'
+        type: object
+      description:
+        $ref: '#/definitions/entity.Description'
+        type: object
+      discussion_enabled:
+        type: boolean
+      discussion_locked:
+        type: boolean
+      favourite_count:
+        type: integer
+      genre:
+        $ref: '#/definitions/entity.Genre'
+        type: object
+      has_favourited:
+        type: boolean
+      hype:
+        $ref: '#/definitions/entity.Hype'
+        type: object
+      id:
+        type: integer
+      is_scoreable:
+        type: boolean
+      language:
+        $ref: '#/definitions/entity.Genre'
+        type: object
+      last_checked:
+        type: string
+      last_updated:
+        type: string
+      legacy_thread_url:
+        type: string
+      nominations:
+        $ref: '#/definitions/entity.Hype'
+        type: object
+      play_count:
+        type: integer
+      preview_url:
+        type: string
+      ranked:
+        type: integer
+      ranked_date:
+        type: string
+      ratings:
+        items:
+          type: integer
+        type: array
+      recent_favourites:
+        items:
+          $ref: '#/definitions/entity.UserShortField'
+        type: array
+      source:
+        type: string
+      status:
+        type: string
+      storyboard:
+        type: boolean
+      submitted_date:
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+      user:
+        $ref: '#/definitions/entity.UserShortField'
+        type: object
+      user_id:
+        type: integer
+      video:
+        type: boolean
+    type: object
+  entity.BeatmapsetSearch:
+    properties:
+      artist:
+        type: string
+      availability:
+        $ref: '#/definitions/entity.Availability'
+        type: object
+      beatmaps:
+        items:
+          $ref: '#/definitions/entity.Beatmap'
+        type: array
+      bpm:
+        type: integer
+      can_be_hyped:
+        type: boolean
+      covers:
+        $ref: '#/definitions/entity.Covers'
+        type: object
+      creator:
+        type: string
+      discussion_enabled:
+        type: boolean
+      discussion_locked:
+        type: boolean
+      favourite_count:
+        type: integer
+      has_favourited:
+        type: boolean
+      hype:
+        $ref: '#/definitions/entity.Hype'
+        type: object
+      id:
+        type: integer
+      is_scoreable:
+        type: boolean
+      last_updated:
+        type: string
+      legacy_thread_url:
+        type: string
+      nominations:
+        $ref: '#/definitions/entity.Nominations'
+        type: object
+      play_count:
+        type: integer
+      preview_url:
+        type: string
+      ranked:
+        type: integer
+      ranked_date:
+        type: string
+      source:
+        type: string
+      status:
+        type: string
+      storyboard:
+        type: boolean
+      submitted_date:
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+      video:
+        type: boolean
+    type: object
+  entity.BeatmapsetSearchResult:
+    properties:
+      beatmapsets:
+        items:
+          $ref: '#/definitions/entity.BeatmapsetSearch'
+        type: array
+      error:
+        type: error
+      recommended_difficulty:
+        type: number
+      total:
+        type: integer
+    type: object
   entity.Country:
     properties:
       code:
@@ -118,6 +354,23 @@ definitions:
         type: string
       slimcover@2x:
         type: string
+    type: object
+  entity.CurrentUserAttributes:
+    properties:
+      can_delete:
+        type: boolean
+      can_hype:
+        type: boolean
+      can_hype_reason:
+        type: object
+      can_love:
+        type: boolean
+      is_watching:
+        type: boolean
+      new_hype_time:
+        type: object
+      remaining_hype:
+        type: integer
     type: object
   entity.Description:
     properties:
@@ -182,6 +435,13 @@ definitions:
         type: integer
       start_date:
         type: string
+    type: object
+  entity.Nominations:
+    properties:
+      current:
+        type: integer
+      required:
+        type: integer
     type: object
   entity.Page:
     properties:
@@ -518,12 +778,12 @@ info:
   title: osu!lazer API
   version: "2.0"
 paths:
-  /api/v2/beatmaps/{beatmap_id}:
+  /api/v2/beatmaps/{id}:
     get:
       parameters:
       - description: beatmap id
         in: path
-        name: beatmap_id
+        name: id
         required: true
         type: string
       responses:
@@ -538,12 +798,12 @@ paths:
       summary: Return beatmap by id
       tags:
       - Beatmap
-  /api/v2/beatmaps/{beatmap}/scores:
+  /api/v2/beatmaps/{id}/scores:
     get:
       parameters:
       - description: beatmap id
         in: path
-        name: beatmap_id
+        name: beatmap
         required: true
         type: string
       - description: score type
@@ -572,7 +832,7 @@ paths:
       - description: beatmap id
         in: query
         name: id
-        type: string
+        type: integer
       - description: beatmap file md5
         in: query
         name: checksum
@@ -593,6 +853,113 @@ paths:
       summary: Lookup beatmap by id, checksum, filename
       tags:
       - Beatmap
+  /api/v2/beatmapsets/{id}:
+    get:
+      parameters:
+      - description: beatmapset id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.BeatmapSetFull'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Get beatmap by id
+      tags:
+      - Beatmapset
+  /api/v2/beatmapsets/{id}/favourites:
+    post:
+      parameters:
+      - description: beatmapset id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: action
+        enum:
+        - favourite
+        - unfavourite
+        in: query
+        name: action
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Favourite beatmapset
+      tags:
+      - Beatmapset
+  /api/v2/beatmapsets/lookup:
+    get:
+      parameters:
+      - description: beatmap id
+        in: query
+        name: beatmap_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.BeatmapSetFull'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Lookup beatmapset by beatmap id
+      tags:
+      - Beatmapset
+  /api/v2/beatmapsets/search:
+    get:
+      parameters:
+      - description: query
+        in: query
+        name: q
+        type: string
+      - description: mode
+        in: query
+        name: m
+        type: integer
+      - description: status
+        in: query
+        name: s
+        type: string
+      - description: genre
+        in: query
+        name: g
+        type: string
+      - description: lang
+        in: query
+        name: l
+        type: string
+      - description: sort
+        in: query
+        name: sort
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.BeatmapsetSearchResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Search Beatmapset
+      tags:
+      - Beatmapset
   /api/v2/me/{mode}:
     get:
       parameters:

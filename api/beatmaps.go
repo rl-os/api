@@ -15,10 +15,10 @@ type BeatmapHandlers struct {
 
 // Get beatmap by id
 //
-// @Router /api/v2/beatmaps/{beatmap_id} [get]
+// @Router /api/v2/beatmaps/{id} [get]
 // @Tags Beatmap
 // @Summary Return beatmap by id
-// @Param beatmap_id path string true "beatmap id"
+// @Param id path string true "beatmap id"
 //
 // @Success 200 {object} entity.SingleBeatmap
 // @Success 400 {object} errors.ResponseFormat
@@ -67,10 +67,10 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 
 // Scores submitted to selected beatmap
 //
-// @Router /api/v2/beatmaps/{beatmap}/scores [get]
+// @Router /api/v2/beatmaps/{id}/scores [get]
 // @Tags Beatmap
 // @Summary Scores submitted to selected beatmap
-// @Param beatmap_id path string true "beatmap id"
+// @Param beatmap path string true "beatmap id"
 // @Param type query string false "score type"
 // @Param mode query string false "osu! game mode (std, mania, ctb and etc)"
 //

@@ -36,7 +36,7 @@ var doc = `{
                 "summary": "Lookup beatmap by id, checksum, filename",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "beatmap id",
                         "name": "id",
                         "in": "query"
@@ -70,7 +70,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v2/beatmaps/{beatmap_id}": {
+        "/api/v2/beatmaps/{id}": {
             "get": {
                 "tags": [
                     "Beatmap"
@@ -80,7 +80,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "beatmap id",
-                        "name": "beatmap_id",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -101,7 +101,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v2/beatmaps/{beatmap}/scores": {
+        "/api/v2/beatmaps/{id}/scores": {
             "get": {
                 "tags": [
                     "Beatmap"
@@ -111,7 +111,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "beatmap id",
-                        "name": "beatmap_id",
+                        "name": "beatmap",
                         "in": "path",
                         "required": true
                     },
@@ -133,6 +133,173 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/entity.SingleBeatmap"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/beatmapsets/lookup": {
+            "get": {
+                "tags": [
+                    "Beatmapset"
+                ],
+                "summary": "Lookup beatmapset by beatmap id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "beatmap id",
+                        "name": "beatmap_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.BeatmapSetFull"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/beatmapsets/search": {
+            "get": {
+                "tags": [
+                    "Beatmapset"
+                ],
+                "summary": "Search Beatmapset",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "query",
+                        "name": "q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "mode",
+                        "name": "m",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "s",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "genre",
+                        "name": "g",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "lang",
+                        "name": "l",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.BeatmapsetSearchResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/beatmapsets/{id}": {
+            "get": {
+                "tags": [
+                    "Beatmapset"
+                ],
+                "summary": "Get beatmap by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "beatmapset id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.BeatmapSetFull"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/beatmapsets/{id}/favourites": {
+            "post": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Beatmapset"
+                ],
+                "summary": "Favourite beatmapset",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "beatmapset id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "favourite",
+                            "unfavourite"
+                        ],
+                        "type": "string",
+                        "description": "action",
+                        "name": "action",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
                         }
                     },
                     "400": {
@@ -220,6 +387,96 @@ var doc = `{
                 },
                 "more_information": {
                     "type": "object"
+                }
+            }
+        },
+        "entity.Beatmap": {
+            "type": "object",
+            "properties": {
+                "accuracy": {
+                    "type": "integer"
+                },
+                "ar": {
+                    "type": "integer"
+                },
+                "beatmapset_id": {
+                    "type": "integer"
+                },
+                "bpm": {
+                    "type": "integer"
+                },
+                "convert": {
+                    "type": "boolean"
+                },
+                "count_circles": {
+                    "type": "integer"
+                },
+                "count_sliders": {
+                    "type": "integer"
+                },
+                "count_spinners": {
+                    "type": "integer"
+                },
+                "count_total": {
+                    "type": "integer"
+                },
+                "cs": {
+                    "type": "integer"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "difficulty_rating": {
+                    "type": "number"
+                },
+                "drain": {
+                    "type": "integer"
+                },
+                "failtimes": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Failtimes"
+                },
+                "hit_length": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_scoreable": {
+                    "type": "boolean"
+                },
+                "last_updated": {
+                    "type": "string"
+                },
+                "max_combo": {
+                    "type": "integer"
+                },
+                "mode": {
+                    "type": "string"
+                },
+                "mode_int": {
+                    "type": "integer"
+                },
+                "passcount": {
+                    "type": "integer"
+                },
+                "playcount": {
+                    "type": "integer"
+                },
+                "ranked": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "total_length": {
+                    "type": "integer"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
                 }
             }
         },
@@ -335,6 +592,265 @@ var doc = `{
                 }
             }
         },
+        "entity.BeatmapSetFull": {
+            "type": "object",
+            "properties": {
+                "artist": {
+                    "type": "string"
+                },
+                "availability": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Availability"
+                },
+                "beatmaps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Beatmap"
+                    }
+                },
+                "bpm": {
+                    "type": "integer"
+                },
+                "can_be_hyped": {
+                    "type": "boolean"
+                },
+                "converts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Beatmap"
+                    }
+                },
+                "covers": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Covers"
+                },
+                "creator": {
+                    "type": "string"
+                },
+                "current_user_attributes": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.CurrentUserAttributes"
+                },
+                "description": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Description"
+                },
+                "discussion_enabled": {
+                    "type": "boolean"
+                },
+                "discussion_locked": {
+                    "type": "boolean"
+                },
+                "favourite_count": {
+                    "type": "integer"
+                },
+                "genre": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Genre"
+                },
+                "has_favourited": {
+                    "type": "boolean"
+                },
+                "hype": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Hype"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_scoreable": {
+                    "type": "boolean"
+                },
+                "language": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Genre"
+                },
+                "last_checked": {
+                    "type": "string"
+                },
+                "last_updated": {
+                    "type": "string"
+                },
+                "legacy_thread_url": {
+                    "type": "string"
+                },
+                "nominations": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Hype"
+                },
+                "play_count": {
+                    "type": "integer"
+                },
+                "preview_url": {
+                    "type": "string"
+                },
+                "ranked": {
+                    "type": "integer"
+                },
+                "ranked_date": {
+                    "type": "string"
+                },
+                "ratings": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "recent_favourites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.UserShortField"
+                    }
+                },
+                "source": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "storyboard": {
+                    "type": "boolean"
+                },
+                "submitted_date": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.UserShortField"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "video": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "entity.BeatmapsetSearch": {
+            "type": "object",
+            "properties": {
+                "artist": {
+                    "type": "string"
+                },
+                "availability": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Availability"
+                },
+                "beatmaps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Beatmap"
+                    }
+                },
+                "bpm": {
+                    "type": "integer"
+                },
+                "can_be_hyped": {
+                    "type": "boolean"
+                },
+                "covers": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Covers"
+                },
+                "creator": {
+                    "type": "string"
+                },
+                "discussion_enabled": {
+                    "type": "boolean"
+                },
+                "discussion_locked": {
+                    "type": "boolean"
+                },
+                "favourite_count": {
+                    "type": "integer"
+                },
+                "has_favourited": {
+                    "type": "boolean"
+                },
+                "hype": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Hype"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_scoreable": {
+                    "type": "boolean"
+                },
+                "last_updated": {
+                    "type": "string"
+                },
+                "legacy_thread_url": {
+                    "type": "string"
+                },
+                "nominations": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Nominations"
+                },
+                "play_count": {
+                    "type": "integer"
+                },
+                "preview_url": {
+                    "type": "string"
+                },
+                "ranked": {
+                    "type": "integer"
+                },
+                "ranked_date": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "storyboard": {
+                    "type": "boolean"
+                },
+                "submitted_date": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "video": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "entity.BeatmapsetSearchResult": {
+            "type": "object",
+            "properties": {
+                "beatmapsets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.BeatmapsetSearch"
+                    }
+                },
+                "error": {
+                    "type": "error"
+                },
+                "recommended_difficulty": {
+                    "type": "number"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "entity.Country": {
             "type": "object",
             "properties": {
@@ -386,6 +902,32 @@ var doc = `{
                 },
                 "slimcover@2x": {
                     "type": "string"
+                }
+            }
+        },
+        "entity.CurrentUserAttributes": {
+            "type": "object",
+            "properties": {
+                "can_delete": {
+                    "type": "boolean"
+                },
+                "can_hype": {
+                    "type": "boolean"
+                },
+                "can_hype_reason": {
+                    "type": "object"
+                },
+                "can_love": {
+                    "type": "boolean"
+                },
+                "is_watching": {
+                    "type": "boolean"
+                },
+                "new_hype_time": {
+                    "type": "object"
+                },
+                "remaining_hype": {
+                    "type": "integer"
                 }
             }
         },
@@ -486,6 +1028,17 @@ var doc = `{
                 },
                 "start_date": {
                     "type": "string"
+                }
+            }
+        },
+        "entity.Nominations": {
+            "type": "object",
+            "properties": {
+                "current": {
+                    "type": "integer"
+                },
+                "required": {
+                    "type": "integer"
                 }
             }
         },
