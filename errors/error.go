@@ -32,14 +32,14 @@ type ResponseFormat struct {
 	Message          string `json:"message"`
 }
 
-func (e *Error) WithCause(err error, messages ...string) *Error {
+func (e Error) WithCause(err error, messages ...string) Error {
 	e.CauseErr = err
 	e.CauseMsg = strings.Join(messages, "; ")
 	return e
 }
 
 // Error print custom errors
-func (e *Error) Error() string {
+func (e Error) Error() string {
 	mes := fmt.Sprintf("%s %s", e.Id, e.Msg)
 	if e.Args != "" {
 		mes = fmt.Sprintf("%s with %s", mes, e.Args)
