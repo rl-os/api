@@ -311,6 +311,281 @@ var doc = `{
                 }
             }
         },
+        "/api/v2/chat/channels": {
+            "get": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Get all public chats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.Channel"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/chat/channels/joined": {
+            "get": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Get joined chats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.Channel"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/chat/channels/{id}/messages": {
+            "get": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Returns Messages in all joined chats",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit 1-100, default 50",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.ChatMessage"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Send message to chat",
+                "parameters": [
+                    {
+                        "description": "JSON payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SendMessage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ChatMessage"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/chat/channels/{id}/users/{user}": {
+            "put": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Join to chat",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Channel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Leave from chat",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/chat/new": {
+            "post": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Create new PM channel between 2 users",
+                "parameters": [
+                    {
+                        "description": "JSON payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateNewChat"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ChannelNewPm"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/chat/updates": {
+            "get": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Returns updates in channel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "since (last message id)",
+                        "name": "since",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "channel id",
+                        "name": "channel_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit 1-100, default 50",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ChannelUpdates"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v2/friends": {
             "get": {
                 "security": [
@@ -966,6 +1241,91 @@ var doc = `{
                 },
                 "total": {
                     "type": "integer"
+                }
+            }
+        },
+        "entity.Channel": {
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "users": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.ChannelNewPm": {
+            "type": "object",
+            "properties": {
+                "messages": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.ChatMessage"
+                },
+                "new_channel_id": {
+                    "type": "integer"
+                },
+                "presence": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Channel"
+                    }
+                }
+            }
+        },
+        "entity.ChannelUpdates": {
+            "type": "object",
+            "properties": {
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.ChatMessage"
+                    }
+                },
+                "presence": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Channel"
+                    }
+                }
+            }
+        },
+        "entity.ChatMessage": {
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "is_action": {
+                    "type": "boolean"
+                },
+                "message_id": {
+                    "type": "integer"
+                },
+                "sender": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.UserShortField"
+                },
+                "sender_id": {
+                    "type": "integer"
+                },
+                "timestamp": {
+                    "type": "string"
                 }
             }
         },
@@ -1626,6 +1986,20 @@ var doc = `{
                 }
             }
         },
+        "request.CreateNewChat": {
+            "type": "object",
+            "properties": {
+                "is_action": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "target_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "request.CreateUser": {
             "type": "object",
             "required": [
@@ -1650,6 +2024,20 @@ var doc = `{
             "properties": {
                 "target_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "request.SendMessage": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "is_action": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
                 }
             }
         }

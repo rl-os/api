@@ -320,6 +320,62 @@ definitions:
       total:
         type: integer
     type: object
+  entity.Channel:
+    properties:
+      channel_id:
+        type: integer
+      description:
+        type: string
+      icon:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      users:
+        type: string
+    type: object
+  entity.ChannelNewPm:
+    properties:
+      messages:
+        $ref: '#/definitions/entity.ChatMessage'
+        type: object
+      new_channel_id:
+        type: integer
+      presence:
+        items:
+          $ref: '#/definitions/entity.Channel'
+        type: array
+    type: object
+  entity.ChannelUpdates:
+    properties:
+      messages:
+        items:
+          $ref: '#/definitions/entity.ChatMessage'
+        type: array
+      presence:
+        items:
+          $ref: '#/definitions/entity.Channel'
+        type: array
+    type: object
+  entity.ChatMessage:
+    properties:
+      channel_id:
+        type: integer
+      content:
+        type: string
+      is_action:
+        type: boolean
+      message_id:
+        type: integer
+      sender:
+        $ref: '#/definitions/entity.UserShortField'
+        type: object
+      sender_id:
+        type: integer
+      timestamp:
+        type: string
+    type: object
   entity.Country:
     properties:
       code:
@@ -755,6 +811,15 @@ definitions:
       message:
         type: string
     type: object
+  request.CreateNewChat:
+    properties:
+      is_action:
+        type: boolean
+      message:
+        type: string
+      target_id:
+        type: integer
+    type: object
   request.CreateUser:
     properties:
       email:
@@ -772,6 +837,15 @@ definitions:
     properties:
       target_id:
         type: integer
+    type: object
+  request.SendMessage:
+    properties:
+      is_action:
+        type: boolean
+      message:
+        type: string
+    required:
+    - message
     type: object
 host: localhost:2400
 info:
@@ -965,6 +1039,174 @@ paths:
       summary: Search Beatmapset
       tags:
       - Beatmapset
+  /api/v2/chat/channels:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Channel'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Get all public chats
+      tags:
+      - Chat
+  /api/v2/chat/channels/{id}/messages:
+    get:
+      parameters:
+      - description: limit 1-100, default 50
+        in: query
+        name: limit
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.ChatMessage'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Returns Messages in all joined chats
+      tags:
+      - Chat
+    post:
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.SendMessage'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.ChatMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Send message to chat
+      tags:
+      - Chat
+  /api/v2/chat/channels/{id}/users/{user}:
+    delete:
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Leave from chat
+      tags:
+      - Chat
+    put:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Channel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Join to chat
+      tags:
+      - Chat
+  /api/v2/chat/channels/joined:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Channel'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Get joined chats
+      tags:
+      - Chat
+  /api/v2/chat/new:
+    post:
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateNewChat'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.ChannelNewPm'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Create new PM channel between 2 users
+      tags:
+      - Chat
+  /api/v2/chat/updates:
+    get:
+      parameters:
+      - description: since (last message id)
+        in: query
+        name: since
+        required: true
+        type: integer
+      - description: channel id
+        in: query
+        name: channel_id
+        required: true
+        type: integer
+      - description: limit 1-100, default 50
+        in: query
+        name: limit
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.ChannelUpdates'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Returns updates in channel
+      tags:
+      - Chat
   /api/v2/friends:
     delete:
       parameters:

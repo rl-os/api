@@ -14,6 +14,16 @@ type ChatHandlers struct {
 	App *app.App
 }
 
+// NewPm between 2 users
+//
+// @Router /api/v2/chat/new [post]
+// @Tags Chat
+// @Summary Create new PM channel between 2 users
+// @Security OAuth2
+// @Param payload body request.CreateNewChat true "JSON payload"
+//
+// @Success 200 {object} entity.ChannelNewPm
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) NewPm(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -35,6 +45,18 @@ func (h *ChatHandlers) NewPm(c echo.Context) error {
 	return c.JSON(200, channels)
 }
 
+// Updates in channel
+//
+// @Router /api/v2/chat/updates [get]
+// @Tags Chat
+// @Summary Returns updates in channel
+// @Security OAuth2
+// @Param since query integer true "since (last message id)"
+// @Param channel_id query integer true "channel id"
+// @Param limit query integer true "limit 1-100, default 50"
+//
+// @Success 200 {object} entity.ChannelUpdates
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) Updates(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -58,6 +80,16 @@ func (h *ChatHandlers) Updates(c echo.Context) error {
 	return c.JSON(200, updates)
 }
 
+// Messages in all joined chats
+//
+// @Router /api/v2/chat/channels/{id}/messages [get]
+// @Tags Chat
+// @Summary Returns Messages in all joined chats
+// @Security OAuth2
+// @Param limit query integer true "limit 1-100, default 50"
+//
+// @Success 200 {array} entity.ChatMessage
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) Messages(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -81,6 +113,16 @@ func (h *ChatHandlers) Messages(c echo.Context) error {
 	return c.JSON(200, messages)
 }
 
+// Send message to chat
+//
+// @Router /api/v2/chat/channels/{id}/messages [post]
+// @Tags Chat
+// @Summary Send message to chat
+// @Security OAuth2
+// @Param payload body request.SendMessage true "JSON payload"
+//
+// @Success 200 {object} entity.ChatMessage
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) Send(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -109,6 +151,15 @@ func (h *ChatHandlers) Send(c echo.Context) error {
 	return c.JSON(200, messages)
 }
 
+// GetAll public chats
+//
+// @Router /api/v2/chat/channels [get]
+// @Tags Chat
+// @Summary Get all public chats
+// @Security OAuth2
+//
+// @Success 200 {array} entity.Channel
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) GetAll(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -120,6 +171,15 @@ func (h *ChatHandlers) GetAll(c echo.Context) error {
 	return c.JSON(200, channels)
 }
 
+// GetJoined chats
+//
+// @Router /api/v2/chat/channels/joined [get]
+// @Tags Chat
+// @Summary Get joined chats
+// @Security OAuth2
+//
+// @Success 200 {array} entity.Channel
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) GetJoined(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -136,6 +196,15 @@ func (h *ChatHandlers) GetJoined(c echo.Context) error {
 	return c.JSON(200, channels)
 }
 
+// Join to chat
+//
+// @Router /api/v2/chat/channels/{id}/users/{user} [put]
+// @Tags Chat
+// @Summary Join to chat
+// @Security OAuth2
+//
+// @Success 200 {object} entity.Channel
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) Join(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -157,6 +226,15 @@ func (h *ChatHandlers) Join(c echo.Context) error {
 	return c.JSON(200, channel)
 }
 
+// Leave from chat
+//
+// @Router /api/v2/chat/channels/{id}/users/{user} [delete]
+// @Tags Chat
+// @Summary Leave from chat
+// @Security OAuth2
+//
+// @Success 200 {object} interface{}
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) Leave(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
