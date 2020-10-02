@@ -83,7 +83,7 @@ func New(app *app.App, root *echo.Group) {
 		{
 			h := BeatmapHandlers{app}
 			bmaps.GET("/lookup", h.Lookup)
-			bmaps.GET("/:beatmap", h.Show)
+			bmaps.GET("/:beatmap", h.Get)
 			bmaps.GET("/:beatmap/scores", h.Scores)
 		}
 

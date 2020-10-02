@@ -74,8 +74,8 @@ func TestBeatmapHandlers_Show(t *testing.T) {
 			c.SetParamValues(tt.args.id)
 			c.Set("current_user_id", uint(103))
 
-			if err := h.Show(c); (err != nil) != tt.wantErr {
-				t.Errorf("Show() error = %v, wantErr %v", err, tt.wantErr)
+			if err := h.Get(c); (err != nil) != tt.wantErr {
+				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

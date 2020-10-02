@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
-	"github.com/rl-os/api/entity"
 	"github.com/rl-os/api/entity/request"
 	"net/http"
 	"strconv"
@@ -14,7 +13,7 @@ type BeatmapHandlers struct {
 	App *app.App
 }
 
-// Show beatmap by id
+// Get beatmap by id
 //
 // @Router /api/v2/beatmaps/{beatmap_id} [get]
 // @Tags Beatmap
@@ -23,7 +22,7 @@ type BeatmapHandlers struct {
 //
 // @Success 200 {object} entity.SingleBeatmap
 // @Success 400 {object} errors.ResponseFormat
-func (h *BeatmapHandlers) Show(c echo.Context) error {
+func (h *BeatmapHandlers) Get(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	beatmapID, err := strconv.ParseUint(c.Param("beatmap"), 10, 32)
@@ -31,9 +30,9 @@ func (h *BeatmapHandlers) Show(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
 	}
 
-	beatmaps, err := h.App.Store.Beatmap().Get(ctx, uint(beatmapID))
+	beatmaps, err := h.App.GetBeatmap(ctx, uint(beatmapID))
 	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
+		return err
 	}
 
 	return c.JSON(200, beatmaps)
@@ -44,7 +43,7 @@ func (h *BeatmapHandlers) Show(c echo.Context) error {
 // @Router /api/v2/beatmaps/lookup [get]
 // @Tags Beatmap
 // @Summary Lookup beatmap by id, checksum, filename
-// @Param id query string false "beatmap id"
+// @Param id query integer false "beatmap id"
 // @Param checksum query string false "beatmap file md5"
 // @Param filename query string false "beatmap filename (legacy)"
 //
@@ -58,23 +57,9 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 		return err
 	}
 
-	var beatmap *entity.SingleBeatmap
-	if params.CheckSum != "" {
-		// todo: search by md5
-		beatmap, err = h.App.Store.Beatmap().Get(ctx, params.Id)
-	}
-
-	if beatmap == nil && params.Id != 0 {
-		beatmap, err = h.App.Store.Beatmap().Get(ctx, params.Id)
-	}
-
-	if beatmap == nil && params.Filename != "" {
-		// todo: search by filename
-		beatmap, err = h.App.Store.Beatmap().Get(ctx, params.Id)
-	}
-
-	if err != nil || beatmap == nil {
-		return echo.NewHTTPError(http.StatusNotFound, "Beatmap not found")
+	beatmap, err := h.App.LookupBeatmap(ctx, params.Id, params.CheckSum, params.Filename)
+	if err != nil {
+		return err
 	}
 
 	return c.JSON(200, beatmap)
