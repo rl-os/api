@@ -13,6 +13,15 @@ type FriendHandlers struct {
 	App *app.App
 }
 
+// GetAll friends/subscriptions
+//
+// @Router /api/v2/friends [get]
+// @Tags Friends
+// @Summary Return all friends/subscriptions
+// @Security OAuth2
+//
+// @Success 200 {array} entity.UserShort
+// @Success 400 {object} errors.ResponseFormat
 func (h *FriendHandlers) GetAll(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -29,6 +38,17 @@ func (h *FriendHandlers) GetAll(c echo.Context) error {
 	return c.JSON(200, users)
 }
 
+// Add friend/subscription
+//
+// @Router /api/v2/friends [put]
+// @Tags Friends
+// @Summary Add friend/subscription
+// @Security OAuth2
+// @Param payload body request.FriendTargetId false "JSON payload"
+// @Param target_id query string false "Target id (user)"
+//
+// @Success 200 {array} entity.UserShort
+// @Success 400 {object} errors.ResponseFormat
 func (h *FriendHandlers) Add(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -54,6 +74,17 @@ func (h *FriendHandlers) Add(c echo.Context) error {
 	return c.JSON(200, users)
 }
 
+// Remove friend/subscription
+//
+// @Router /api/v2/friends [delete]
+// @Tags Friends
+// @Summary Remove friend/subscription
+// @Security OAuth2
+// @Param payload body request.FriendTargetId false "JSON payload"
+// @Param target_id query string false "Target id (user)"
+//
+// @Success 200 {array} entity.UserShort
+// @Success 400 {object} errors.ResponseFormat
 func (h *FriendHandlers) Remove(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -73,7 +104,7 @@ func (h *FriendHandlers) Remove(c echo.Context) error {
 
 	users, err := h.App.RemoveFriend(ctx, userId, params.TargetId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "User not found")
+		return err
 	}
 
 	return c.JSON(200, users)

@@ -296,6 +296,124 @@
                 }
             }
         },
+        "/api/v2/friends": {
+            "get": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "Return all friends/subscriptions",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.UserShort"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "Add friend/subscription",
+                "parameters": [
+                    {
+                        "description": "JSON payload",
+                        "name": "payload",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/request.FriendTargetId"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Target id (user)",
+                        "name": "target_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.UserShort"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "Remove friend/subscription",
+                "parameters": [
+                    {
+                        "description": "JSON payload",
+                        "name": "payload",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/request.FriendTargetId"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Target id (user)",
+                        "name": "target_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.UserShort"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v2/me/{mode}": {
             "get": {
                 "security": [
@@ -1509,6 +1627,14 @@
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "request.FriendTargetId": {
+            "type": "object",
+            "properties": {
+                "target_id": {
+                    "type": "integer"
                 }
             }
         }

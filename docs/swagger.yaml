@@ -768,6 +768,11 @@ definitions:
     - password
     - username
     type: object
+  request.FriendTargetId:
+    properties:
+      target_id:
+        type: integer
+    type: object
 host: localhost:2400
 info:
   contact:
@@ -960,6 +965,78 @@ paths:
       summary: Search Beatmapset
       tags:
       - Beatmapset
+  /api/v2/friends:
+    delete:
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        schema:
+          $ref: '#/definitions/request.FriendTargetId'
+      - description: Target id (user)
+        in: query
+        name: target_id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.UserShort'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Remove friend/subscription
+      tags:
+      - Friends
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.UserShort'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Return all friends/subscriptions
+      tags:
+      - Friends
+    put:
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        schema:
+          $ref: '#/definitions/request.FriendTargetId'
+      - description: Target id (user)
+        in: query
+        name: target_id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.UserShort'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Add friend/subscription
+      tags:
+      - Friends
   /api/v2/me/{mode}:
     get:
       parameters:
