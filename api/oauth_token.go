@@ -17,7 +17,7 @@ type OAuthTokenHandlers struct {
 func (h *OAuthTokenHandlers) Create(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
-	params := request.CreateOauthToken{}
+	params := &request.CreateOauthToken{}
 	if err := c.Bind(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Token info not found")
 	}

@@ -21,6 +21,6 @@ func New(id string, code int, msg string, args ...interface{}) *Error {
 }
 
 // WithCause - create new custom errors with cause
-func WithCause(id string, code int, msg string, causeErr error, args ...interface{}) *Error {
+func WithCause(id string, code int, msg string, causeErr error, args ...interface{}) Error {
 	return New(id, code, msg, args).WithCause(causeErr)
 }

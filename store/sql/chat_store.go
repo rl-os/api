@@ -156,9 +156,6 @@ func (c ChatStore) GetMessages(ctx context.Context, userId, since uint) (*[]enti
 
 func (c ChatStore) GetUpdates(ctx context.Context, userId, since, channelId, limit uint) (*entity.ChannelUpdates, error) {
 	var updates entity.ChannelUpdates
-	if limit <= 0 || limit > 50 {
-		limit = 25
-	}
 
 	if channelId == 0 {
 		channels, err := c.Chat().GetJoined(ctx, userId)

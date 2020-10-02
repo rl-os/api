@@ -1,0 +1,1330 @@
+basePath: /
+definitions:
+  entity.Availability:
+    properties:
+      download_disabled:
+        type: boolean
+      more_information:
+        type: object
+    type: object
+  entity.Beatmap:
+    properties:
+      accuracy:
+        type: integer
+      ar:
+        type: integer
+      beatmapset_id:
+        type: integer
+      bpm:
+        type: integer
+      convert:
+        type: boolean
+      count_circles:
+        type: integer
+      count_sliders:
+        type: integer
+      count_spinners:
+        type: integer
+      count_total:
+        type: integer
+      cs:
+        type: integer
+      deleted_at:
+        type: string
+      difficulty_rating:
+        type: number
+      drain:
+        type: integer
+      failtimes:
+        $ref: '#/definitions/entity.Failtimes'
+        type: object
+      hit_length:
+        type: integer
+      id:
+        type: integer
+      is_scoreable:
+        type: boolean
+      last_updated:
+        type: string
+      max_combo:
+        type: integer
+      mode:
+        type: string
+      mode_int:
+        type: integer
+      passcount:
+        type: integer
+      playcount:
+        type: integer
+      ranked:
+        type: integer
+      status:
+        type: string
+      total_length:
+        type: integer
+      url:
+        type: string
+      version:
+        type: string
+    type: object
+  entity.BeatmapSet:
+    properties:
+      artist:
+        type: string
+      availability:
+        $ref: '#/definitions/entity.Availability'
+        type: object
+      bpm:
+        type: integer
+      can_be_hyped:
+        type: boolean
+      covers:
+        $ref: '#/definitions/entity.Covers'
+        type: object
+      creator:
+        type: string
+      description:
+        $ref: '#/definitions/entity.Description'
+        type: object
+      discussion_enabled:
+        type: boolean
+      discussion_locked:
+        type: boolean
+      favourite_count:
+        type: integer
+      genre:
+        $ref: '#/definitions/entity.Genre'
+        type: object
+      has_favourited:
+        type: boolean
+      hype:
+        $ref: '#/definitions/entity.Hype'
+        type: object
+      id:
+        type: integer
+      is_scoreable:
+        type: boolean
+      language:
+        $ref: '#/definitions/entity.Genre'
+        type: object
+      last_checked:
+        type: string
+      last_updated:
+        type: string
+      legacy_thread_url:
+        type: string
+      nominations:
+        $ref: '#/definitions/entity.Hype'
+        type: object
+      play_count:
+        type: integer
+      preview_url:
+        type: string
+      ranked:
+        type: integer
+      ranked_date:
+        type: string
+      source:
+        type: string
+      status:
+        type: string
+      storyboard:
+        type: boolean
+      submitted_date:
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+      user:
+        $ref: '#/definitions/entity.UserShortField'
+        type: object
+      user_id:
+        type: integer
+      video:
+        type: boolean
+    type: object
+  entity.BeatmapSetFull:
+    properties:
+      artist:
+        type: string
+      availability:
+        $ref: '#/definitions/entity.Availability'
+        type: object
+      beatmaps:
+        items:
+          $ref: '#/definitions/entity.Beatmap'
+        type: array
+      bpm:
+        type: integer
+      can_be_hyped:
+        type: boolean
+      converts:
+        items:
+          $ref: '#/definitions/entity.Beatmap'
+        type: array
+      covers:
+        $ref: '#/definitions/entity.Covers'
+        type: object
+      creator:
+        type: string
+      current_user_attributes:
+        $ref: '#/definitions/entity.CurrentUserAttributes'
+        type: object
+      description:
+        $ref: '#/definitions/entity.Description'
+        type: object
+      discussion_enabled:
+        type: boolean
+      discussion_locked:
+        type: boolean
+      favourite_count:
+        type: integer
+      genre:
+        $ref: '#/definitions/entity.Genre'
+        type: object
+      has_favourited:
+        type: boolean
+      hype:
+        $ref: '#/definitions/entity.Hype'
+        type: object
+      id:
+        type: integer
+      is_scoreable:
+        type: boolean
+      language:
+        $ref: '#/definitions/entity.Genre'
+        type: object
+      last_checked:
+        type: string
+      last_updated:
+        type: string
+      legacy_thread_url:
+        type: string
+      nominations:
+        $ref: '#/definitions/entity.Hype'
+        type: object
+      play_count:
+        type: integer
+      preview_url:
+        type: string
+      ranked:
+        type: integer
+      ranked_date:
+        type: string
+      ratings:
+        items:
+          type: integer
+        type: array
+      recent_favourites:
+        items:
+          $ref: '#/definitions/entity.UserShortField'
+        type: array
+      source:
+        type: string
+      status:
+        type: string
+      storyboard:
+        type: boolean
+      submitted_date:
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+      user:
+        $ref: '#/definitions/entity.UserShortField'
+        type: object
+      user_id:
+        type: integer
+      video:
+        type: boolean
+    type: object
+  entity.BeatmapsetSearch:
+    properties:
+      artist:
+        type: string
+      availability:
+        $ref: '#/definitions/entity.Availability'
+        type: object
+      beatmaps:
+        items:
+          $ref: '#/definitions/entity.Beatmap'
+        type: array
+      bpm:
+        type: integer
+      can_be_hyped:
+        type: boolean
+      covers:
+        $ref: '#/definitions/entity.Covers'
+        type: object
+      creator:
+        type: string
+      discussion_enabled:
+        type: boolean
+      discussion_locked:
+        type: boolean
+      favourite_count:
+        type: integer
+      has_favourited:
+        type: boolean
+      hype:
+        $ref: '#/definitions/entity.Hype'
+        type: object
+      id:
+        type: integer
+      is_scoreable:
+        type: boolean
+      last_updated:
+        type: string
+      legacy_thread_url:
+        type: string
+      nominations:
+        $ref: '#/definitions/entity.Nominations'
+        type: object
+      play_count:
+        type: integer
+      preview_url:
+        type: string
+      ranked:
+        type: integer
+      ranked_date:
+        type: string
+      source:
+        type: string
+      status:
+        type: string
+      storyboard:
+        type: boolean
+      submitted_date:
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+      video:
+        type: boolean
+    type: object
+  entity.BeatmapsetSearchResult:
+    properties:
+      beatmapsets:
+        items:
+          $ref: '#/definitions/entity.BeatmapsetSearch'
+        type: array
+      error:
+        type: error
+      recommended_difficulty:
+        type: number
+      total:
+        type: integer
+    type: object
+  entity.Channel:
+    properties:
+      channel_id:
+        type: integer
+      description:
+        type: string
+      icon:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      users:
+        type: string
+    type: object
+  entity.ChannelNewPm:
+    properties:
+      messages:
+        $ref: '#/definitions/entity.ChatMessage'
+        type: object
+      new_channel_id:
+        type: integer
+      presence:
+        items:
+          $ref: '#/definitions/entity.Channel'
+        type: array
+    type: object
+  entity.ChannelUpdates:
+    properties:
+      messages:
+        items:
+          $ref: '#/definitions/entity.ChatMessage'
+        type: array
+      presence:
+        items:
+          $ref: '#/definitions/entity.Channel'
+        type: array
+    type: object
+  entity.ChatMessage:
+    properties:
+      channel_id:
+        type: integer
+      content:
+        type: string
+      is_action:
+        type: boolean
+      message_id:
+        type: integer
+      sender:
+        $ref: '#/definitions/entity.UserShortField'
+        type: object
+      sender_id:
+        type: integer
+      timestamp:
+        type: string
+    type: object
+  entity.Country:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    type: object
+  entity.Cover:
+    properties:
+      custom_url:
+        type: object
+      id:
+        type: string
+      url:
+        type: string
+    type: object
+  entity.Covers:
+    properties:
+      card:
+        type: string
+      card@2x:
+        type: string
+      cover:
+        type: string
+      cover@2x:
+        type: string
+      list:
+        type: string
+      list@2x:
+        type: string
+      slimcover:
+        type: string
+      slimcover@2x:
+        type: string
+    type: object
+  entity.CurrentUserAttributes:
+    properties:
+      can_delete:
+        type: boolean
+      can_hype:
+        type: boolean
+      can_hype_reason:
+        type: object
+      can_love:
+        type: boolean
+      is_watching:
+        type: boolean
+      new_hype_time:
+        type: object
+      remaining_hype:
+        type: integer
+    type: object
+  entity.Description:
+    properties:
+      description:
+        type: string
+    type: object
+  entity.Failtimes:
+    properties:
+      exit:
+        items:
+          type: integer
+        type: array
+      fail:
+        items:
+          type: integer
+        type: array
+    type: object
+  entity.Genre:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  entity.GradeCounts:
+    properties:
+      a:
+        type: integer
+      s:
+        type: integer
+      sh:
+        type: integer
+      ss:
+        type: integer
+      ssh:
+        type: integer
+    type: object
+  entity.Hype:
+    properties:
+      current:
+        type: integer
+      required:
+        type: integer
+    type: object
+  entity.Kudosu:
+    properties:
+      available:
+        type: integer
+      total:
+        type: integer
+    type: object
+  entity.Level:
+    properties:
+      current:
+        type: integer
+      progress:
+        type: integer
+    type: object
+  entity.MonthlyPlaycounts:
+    properties:
+      count:
+        type: integer
+      start_date:
+        type: string
+    type: object
+  entity.Nominations:
+    properties:
+      current:
+        type: integer
+      required:
+        type: integer
+    type: object
+  entity.Page:
+    properties:
+      html:
+        type: string
+      raw:
+        type: string
+    type: object
+  entity.Rank:
+    properties:
+      country:
+        type: integer
+      global:
+        type: integer
+    type: object
+  entity.RankHistory:
+    properties:
+      data:
+        items:
+          type: integer
+        type: array
+      mode:
+        type: string
+    type: object
+  entity.SingleBeatmap:
+    properties:
+      accuracy:
+        type: integer
+      ar:
+        type: integer
+      beatmapset:
+        $ref: '#/definitions/entity.BeatmapSet'
+        type: object
+      beatmapset_id:
+        type: integer
+      bpm:
+        type: integer
+      convert:
+        type: boolean
+      count_circles:
+        type: integer
+      count_sliders:
+        type: integer
+      count_spinners:
+        type: integer
+      count_total:
+        type: integer
+      cs:
+        type: integer
+      deleted_at:
+        type: string
+      difficulty_rating:
+        type: number
+      drain:
+        type: integer
+      failtimes:
+        $ref: '#/definitions/entity.Failtimes'
+        type: object
+      hit_length:
+        type: integer
+      id:
+        type: integer
+      is_scoreable:
+        type: boolean
+      last_updated:
+        type: string
+      max_combo:
+        type: integer
+      mode:
+        type: string
+      mode_int:
+        type: integer
+      passcount:
+        type: integer
+      playcount:
+        type: integer
+      ranked:
+        type: integer
+      status:
+        type: string
+      total_length:
+        type: integer
+      url:
+        type: string
+      version:
+        type: string
+    type: object
+  entity.Statistics:
+    properties:
+      grade_counts:
+        $ref: '#/definitions/entity.GradeCounts'
+        type: object
+      hit_accuracy:
+        type: number
+      is_ranked:
+        type: boolean
+      level:
+        $ref: '#/definitions/entity.Level'
+        type: object
+      maximum_combo:
+        type: integer
+      play_count:
+        type: integer
+      play_time:
+        type: integer
+      pp:
+        type: number
+      pp_rank:
+        type: integer
+      rank:
+        $ref: '#/definitions/entity.Rank'
+        type: object
+      ranked_score:
+        type: integer
+      replays_watched_by_others:
+        type: integer
+      total_hits:
+        type: integer
+      total_score:
+        type: integer
+    type: object
+  entity.User:
+    properties:
+      account_history:
+        description: joins
+        items:
+          type: object
+        type: array
+      active_tournament_banner:
+        items:
+          type: object
+        type: array
+      avatar_url:
+        type: string
+      badges:
+        items:
+          type: object
+        type: array
+      can_moderate:
+        type: boolean
+      country:
+        $ref: '#/definitions/entity.Country'
+        type: object
+      country_code:
+        type: string
+      cover:
+        $ref: '#/definitions/entity.Cover'
+        type: object
+      cover_url:
+        type: string
+      default_group:
+        type: string
+      discord:
+        type: string
+      email:
+        type: string
+      favourite_beatmapset_count:
+        type: integer
+      follower_count:
+        type: integer
+      graveyard_beatmapset_count:
+        type: integer
+      has_supported:
+        type: boolean
+      id:
+        type: integer
+      interests:
+        type: string
+      is_active:
+        type: boolean
+      is_bng:
+        type: boolean
+      is_bot:
+        type: boolean
+      is_full_bn:
+        type: boolean
+      is_gmt:
+        description: computed
+        type: boolean
+      is_limited_bn:
+        type: boolean
+      is_nat:
+        type: boolean
+      is_online:
+        type: boolean
+      is_supporter:
+        type: boolean
+      join_date:
+        type: string
+      kudosu:
+        $ref: '#/definitions/entity.Kudosu'
+        type: object
+      last_visit:
+        type: string
+      lastfm:
+        type: string
+      location:
+        type: string
+      loved_beatmapset_count:
+        type: integer
+      max_blocks:
+        type: integer
+      max_friends:
+        type: integer
+      monthly_playcounts:
+        items:
+          $ref: '#/definitions/entity.MonthlyPlaycounts'
+        type: array
+      occupation:
+        type: string
+      page:
+        $ref: '#/definitions/entity.Page'
+        type: object
+      playmode:
+        type: string
+      playstyle:
+        type: string
+      pm_friends_only:
+        type: boolean
+      post_count:
+        type: integer
+      previous_usernames:
+        items:
+          type: string
+        type: array
+      profile_colour:
+        type: object
+      profile_order:
+        type: string
+      rankHistory:
+        $ref: '#/definitions/entity.RankHistory'
+        type: object
+      ranked_and_approved_beatmapset_count:
+        type: integer
+      replays_watched_counts:
+        items:
+          type: object
+        type: array
+      scores_first_count:
+        type: integer
+      skype:
+        type: string
+      statistics:
+        $ref: '#/definitions/entity.Statistics'
+        type: object
+      support_level:
+        type: integer
+      title:
+        type: string
+      twitter:
+        type: string
+      unranked_beatmapset_count:
+        type: integer
+      user_achievements:
+        items:
+          $ref: '#/definitions/entity.UserAchievements'
+        type: array
+      username:
+        type: string
+      website:
+        type: string
+    type: object
+  entity.UserAchievements:
+    properties:
+      achieved_at:
+        type: string
+      achievement_id:
+        type: integer
+    type: object
+  entity.UserShort:
+    properties:
+      avatar_url:
+        type: string
+      country_code:
+        type: string
+      default_group:
+        type: string
+      email:
+        type: string
+      has_supported:
+        type: boolean
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      is_bot:
+        type: boolean
+      is_online:
+        type: boolean
+      is_supporter:
+        type: boolean
+      join_date:
+        type: string
+      last_visit:
+        type: string
+      pm_friends_only:
+        type: boolean
+      support_level:
+        type: integer
+      username:
+        type: string
+    type: object
+  entity.UserShortField:
+    $ref: '#/definitions/entity.UserShort'
+  errors.ResponseFormat:
+    properties:
+      error_description:
+        type: string
+      error_id:
+        type: string
+      message:
+        type: string
+    type: object
+  request.CreateNewChat:
+    properties:
+      is_action:
+        type: boolean
+      message:
+        type: string
+      target_id:
+        type: integer
+    type: object
+  request.CreateUser:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  request.FriendTargetId:
+    properties:
+      target_id:
+        type: integer
+    type: object
+  request.SendMessage:
+    properties:
+      is_action:
+        type: boolean
+      message:
+        type: string
+    required:
+    - message
+    type: object
+host: localhost:2400
+info:
+  contact:
+    name: RL GitHub
+    url: https://github.com/rl-os/api
+  description: This is a simple server.
+  license: {}
+  title: osu!lazer API
+  version: "2.0"
+paths:
+  /api/v2/beatmaps/{id}:
+    get:
+      parameters:
+      - description: beatmap id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.SingleBeatmap'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Return beatmap by id
+      tags:
+      - Beatmap
+  /api/v2/beatmaps/{id}/scores:
+    get:
+      parameters:
+      - description: beatmap id
+        in: path
+        name: beatmap
+        required: true
+        type: string
+      - description: score type
+        in: query
+        name: type
+        type: string
+      - description: osu! game mode (std, mania, ctb and etc)
+        in: query
+        name: mode
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.SingleBeatmap'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Scores submitted to selected beatmap
+      tags:
+      - Beatmap
+  /api/v2/beatmaps/lookup:
+    get:
+      parameters:
+      - description: beatmap id
+        in: query
+        name: id
+        type: integer
+      - description: beatmap file md5
+        in: query
+        name: checksum
+        type: string
+      - description: beatmap filename (legacy)
+        in: query
+        name: filename
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.SingleBeatmap'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Lookup beatmap by id, checksum, filename
+      tags:
+      - Beatmap
+  /api/v2/beatmapsets/{id}:
+    get:
+      parameters:
+      - description: beatmapset id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.BeatmapSetFull'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Get beatmap by id
+      tags:
+      - Beatmapset
+  /api/v2/beatmapsets/{id}/favourites:
+    post:
+      parameters:
+      - description: beatmapset id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: action
+        enum:
+        - favourite
+        - unfavourite
+        in: query
+        name: action
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Favourite beatmapset
+      tags:
+      - Beatmapset
+  /api/v2/beatmapsets/lookup:
+    get:
+      parameters:
+      - description: beatmap id
+        in: query
+        name: beatmap_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.BeatmapSetFull'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Lookup beatmapset by beatmap id
+      tags:
+      - Beatmapset
+  /api/v2/beatmapsets/search:
+    get:
+      parameters:
+      - description: query
+        in: query
+        name: q
+        type: string
+      - description: mode
+        in: query
+        name: m
+        type: integer
+      - description: status
+        in: query
+        name: s
+        type: string
+      - description: genre
+        in: query
+        name: g
+        type: string
+      - description: lang
+        in: query
+        name: l
+        type: string
+      - description: sort
+        in: query
+        name: sort
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.BeatmapsetSearchResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Search Beatmapset
+      tags:
+      - Beatmapset
+  /api/v2/chat/channels:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Channel'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Get all public chats
+      tags:
+      - Chat
+  /api/v2/chat/channels/{id}/messages:
+    get:
+      parameters:
+      - description: limit 1-100, default 50
+        in: query
+        name: limit
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.ChatMessage'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Returns Messages in all joined chats
+      tags:
+      - Chat
+    post:
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.SendMessage'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.ChatMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Send message to chat
+      tags:
+      - Chat
+  /api/v2/chat/channels/{id}/users/{user}:
+    delete:
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Leave from chat
+      tags:
+      - Chat
+    put:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Channel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Join to chat
+      tags:
+      - Chat
+  /api/v2/chat/channels/joined:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Channel'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Get joined chats
+      tags:
+      - Chat
+  /api/v2/chat/new:
+    post:
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateNewChat'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.ChannelNewPm'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Create new PM channel between 2 users
+      tags:
+      - Chat
+  /api/v2/chat/updates:
+    get:
+      parameters:
+      - description: since (last message id)
+        in: query
+        name: since
+        required: true
+        type: integer
+      - description: channel id
+        in: query
+        name: channel_id
+        required: true
+        type: integer
+      - description: limit 1-100, default 50
+        in: query
+        name: limit
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.ChannelUpdates'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Returns updates in channel
+      tags:
+      - Chat
+  /api/v2/friends:
+    delete:
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        schema:
+          $ref: '#/definitions/request.FriendTargetId'
+      - description: Target id (user)
+        in: query
+        name: target_id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.UserShort'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Remove friend/subscription
+      tags:
+      - Friends
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.UserShort'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Return all friends/subscriptions
+      tags:
+      - Friends
+    put:
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        schema:
+          $ref: '#/definitions/request.FriendTargetId'
+      - description: Target id (user)
+        in: query
+        name: target_id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.UserShort'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Add friend/subscription
+      tags:
+      - Friends
+  /api/v2/me/{mode}:
+    get:
+      parameters:
+      - description: game mod
+        in: path
+        name: mode
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Return current user
+      tags:
+      - Current user
+  /users:
+    post:
+      description: get string by ID
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateUser'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      summary: Create new user
+securityDefinitions:
+  OAuth2:
+    flow: password
+    scopes:
+      '*': ' Grants all access'
+    tokenUrl: /oauth/token
+    type: oauth2
+swagger: "2.0"

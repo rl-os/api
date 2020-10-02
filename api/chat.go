@@ -14,6 +14,16 @@ type ChatHandlers struct {
 	App *app.App
 }
 
+// NewPm between 2 users
+//
+// @Router /api/v2/chat/new [post]
+// @Tags Chat
+// @Summary Create new PM channel between 2 users
+// @Security OAuth2
+// @Param payload body request.CreateNewChat true "JSON payload"
+//
+// @Success 200 {object} entity.ChannelNewPm
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) NewPm(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -27,9 +37,7 @@ func (h *ChatHandlers) NewPm(c echo.Context) error {
 		return err
 	}
 
-	channels, err := h.App.Store.Chat().CreatePM(
-		ctx, userId, params.TargetId, params.Message, params.IsAction,
-	)
+	channels, err := h.App.CreateChat(ctx, userId, params.TargetId, params.Message, params.IsAction)
 	if err != nil {
 		return err
 	}
@@ -37,6 +45,18 @@ func (h *ChatHandlers) NewPm(c echo.Context) error {
 	return c.JSON(200, channels)
 }
 
+// Updates in channel
+//
+// @Router /api/v2/chat/updates [get]
+// @Tags Chat
+// @Summary Returns updates in channel
+// @Security OAuth2
+// @Param since query integer true "since (last message id)"
+// @Param channel_id query integer true "channel id"
+// @Param limit query integer true "limit 1-100, default 50"
+//
+// @Success 200 {object} entity.ChannelUpdates
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) Updates(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -50,7 +70,7 @@ func (h *ChatHandlers) Updates(c echo.Context) error {
 		return err
 	}
 
-	updates, err := h.App.Store.Chat().GetUpdates(
+	updates, err := h.App.GetUpdatesInChat(
 		ctx, userId, params.Since, params.ChannelId, params.Limit,
 	)
 	if err != nil {
@@ -60,6 +80,16 @@ func (h *ChatHandlers) Updates(c echo.Context) error {
 	return c.JSON(200, updates)
 }
 
+// Messages in all joined chats
+//
+// @Router /api/v2/chat/channels/{id}/messages [get]
+// @Tags Chat
+// @Summary Returns Messages in all joined chats
+// @Security OAuth2
+// @Param limit query integer true "limit 1-100, default 50"
+//
+// @Success 200 {array} entity.ChatMessage
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) Messages(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -73,7 +103,7 @@ func (h *ChatHandlers) Messages(c echo.Context) error {
 		return err
 	}
 
-	messages, err := h.App.Store.Chat().GetMessages(
+	messages, err := h.App.GetMessages(
 		ctx, userId, params.Limit,
 	)
 	if err != nil {
@@ -83,6 +113,16 @@ func (h *ChatHandlers) Messages(c echo.Context) error {
 	return c.JSON(200, messages)
 }
 
+// Send message to chat
+//
+// @Router /api/v2/chat/channels/{id}/messages [post]
+// @Tags Chat
+// @Summary Send message to chat
+// @Security OAuth2
+// @Param payload body request.SendMessage true "JSON payload"
+//
+// @Success 200 {object} entity.ChatMessage
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) Send(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -101,7 +141,7 @@ func (h *ChatHandlers) Send(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	messages, err := h.App.Store.Chat().SendMessage(
+	messages, err := h.App.SendMessage(
 		ctx, userId, uint(channelId), params.Message, params.IsAction,
 	)
 	if err != nil {
@@ -111,10 +151,19 @@ func (h *ChatHandlers) Send(c echo.Context) error {
 	return c.JSON(200, messages)
 }
 
+// GetAll public chats
+//
+// @Router /api/v2/chat/channels [get]
+// @Tags Chat
+// @Summary Get all public chats
+// @Security OAuth2
+//
+// @Success 200 {array} entity.Channel
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) GetAll(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
-	channels, err := h.App.Store.Chat().GetPublic(ctx)
+	channels, err := h.App.GetAllPublicChats(ctx)
 	if err != nil {
 		return err
 	}
@@ -122,6 +171,15 @@ func (h *ChatHandlers) GetAll(c echo.Context) error {
 	return c.JSON(200, channels)
 }
 
+// GetJoined chats
+//
+// @Router /api/v2/chat/channels/joined [get]
+// @Tags Chat
+// @Summary Get joined chats
+// @Security OAuth2
+//
+// @Success 200 {array} entity.Channel
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) GetJoined(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -130,7 +188,7 @@ func (h *ChatHandlers) GetJoined(c echo.Context) error {
 		return err
 	}
 
-	channels, err := h.App.Store.Chat().GetJoined(ctx, userId)
+	channels, err := h.App.GetAllChats(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -138,10 +196,18 @@ func (h *ChatHandlers) GetJoined(c echo.Context) error {
 	return c.JSON(200, channels)
 }
 
+// Join to chat
+//
+// @Router /api/v2/chat/channels/{id}/users/{user} [put]
+// @Tags Chat
+// @Summary Join to chat
+// @Security OAuth2
+//
+// @Success 200 {object} entity.Channel
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) Join(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
-	// todo: parse from request and if current user is admin remove by userId
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {
 		return err
@@ -152,7 +218,7 @@ func (h *ChatHandlers) Join(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	channel, err := h.App.Store.Chat().Join(ctx, userId, uint(channelId))
+	channel, err := h.App.JoinToChat(ctx, userId, uint(channelId))
 	if err != nil {
 		return err
 	}
@@ -160,6 +226,15 @@ func (h *ChatHandlers) Join(c echo.Context) error {
 	return c.JSON(200, channel)
 }
 
+// Leave from chat
+//
+// @Router /api/v2/chat/channels/{id}/users/{user} [delete]
+// @Tags Chat
+// @Summary Leave from chat
+// @Security OAuth2
+//
+// @Success 200 {object} interface{}
+// @Success 400 {object} errors.ResponseFormat
 func (h *ChatHandlers) Leave(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
@@ -173,7 +248,7 @@ func (h *ChatHandlers) Leave(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	err = h.App.Store.Chat().Leave(ctx, userId, uint(channelId))
+	err = h.App.LeaveFromChat(ctx, userId, uint(channelId))
 	if err != nil {
 		return err
 	}
