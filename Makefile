@@ -73,7 +73,7 @@ build-prod: generate
 
 ## Run all checks
 .PHONY: lint
-lint: vet fmt-check
+lint: vet
 	@for PKG in $(PACKAGES); do golint -set_exit_status $$PKG || exit 1; done;
 	@$(GOIMPORT) -d $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 	@$(GOCYCLO) -over 55 $(shell find . -iname '*.go' -type f | grep -v /vendor/)

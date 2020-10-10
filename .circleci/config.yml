@@ -49,6 +49,7 @@ jobs:
       - restore_cache:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
+      - run: make install
       - run: make build-prod
 
   try-build:
@@ -59,6 +60,7 @@ jobs:
       - restore_cache:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
+      - run: make install
       - run: make build
 
 workflows:
