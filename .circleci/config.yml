@@ -51,6 +51,25 @@ jobs:
       - run: make install-ci
       - run: make lint
 
+  unit-test:
+    docker:
+      - image: circleci/golang:1.15
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v2-{{ checksum "go.sum" }}
+            - go-mod-v2-
+
+      - run: make install-ci
+      - run: make test
+      - run:
+          command: |-
+            go tool cover -html=coverage.txt -o coverage.html
+            cp coverage.html /tmp/artifacts
+      - store_artifacts:
+          path: /tmp/artifacts
+
   try-build-prod:
     docker:
       - image: circleci/golang:1.15
@@ -84,10 +103,15 @@ workflows:
       - lint:
           requires:
             - install
+      - unit-test:
+          requires:
+            - install
       - try-build:
           requires:
             - lint
+            - unit-test
       - try-build-prod:
           requires:
             - lint
+            - unit-test
 
