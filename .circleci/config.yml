@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  install-deps:
+  install:
     docker:
       - image: circleci/golang:1.15
 
@@ -64,17 +64,14 @@ jobs:
 workflows:
   pr-test-workflow:
     jobs:
-      - install-deps:
-          name: Restore deps and setup env
+      - install
       - lint:
-          name: Lint code
           requires:
-            - install-deps
+            - install
       - try-build:
-          name: Build go app with debug symbols
           requires:
             - lint
       - try-build-prod:
-          name: Build production-like app
           requires:
             - lint
+
