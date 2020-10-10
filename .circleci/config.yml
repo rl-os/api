@@ -37,7 +37,6 @@ jobs:
           key: go-mod-v1-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
-            - "/go/bin"
 
   lint:
     docker:
@@ -49,6 +48,7 @@ jobs:
             - go-mod-v1-{{ checksum "go.sum" }}
             - go-mod-v1-
 
+      - run: make install-ci
       - run: make lint
 
   try-build-prod:
@@ -61,6 +61,7 @@ jobs:
             - go-mod-v1-{{ checksum "go.sum" }}
             - go-mod-v1-
 
+      - run: make install
       - run: make build-prod
 
   try-build:
@@ -73,6 +74,7 @@ jobs:
             - go-mod-v1-{{ checksum "go.sum" }}
             - go-mod-v1-
 
+      - run: make install
       - run: make build
 
 workflows:
