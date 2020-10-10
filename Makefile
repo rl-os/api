@@ -95,10 +95,10 @@ install:
 .PHONY: install-ci
 install-ci:
 	@echo -e "\e[1;34m> Installing CI packages\e[0m"
-    	$(GOGET) golang.org/x/lint/golint
-    	$(GOGET) github.com/fzipp/gocyclo
-    	$(GOGET) golang.org/x/tools/cmd/goimports
-    	$(GOGET) github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
+	$(GOGET) golang.org/x/lint/golint
+	$(GOGET) github.com/fzipp/gocyclo
+	$(GOGET) golang.org/x/tools/cmd/goimports
+	$(GOGET) github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
 
 ## This help message
 ## Which can also be multiline
