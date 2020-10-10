@@ -85,17 +85,20 @@ install:
 	@echo -e "\e[1;34m> Checking if there is any missing dependencies...\e[0m"
 	$(GOMOD) download
 	@echo -e "\e[1;34m> Installing generators and etc packages\e[0m"
-	$(GOGET) -u github.com/amacneil/dbmate
-	$(GOGET) -u github.com/google/wire/cmd/wire
-	$(GOGET) -u github.com/golang/mock/mockgen@latest
-	$(GOGET) -u github.com/hexdigest/gowrap/cmd/gowrap
-	@echo -e "\e[1;34m> Installing unnessosory packages\e[0m"
-	$(GOGET) -u github.com/swaggo/swag/cmd/swag
-	$(GOGET) -u golang.org/x/lint/golint
-	$(GOGET) -u github.com/fzipp/gocyclo
-	$(GOGET) -u golang.org/x/tools/cmd/goimports
-	$(GOGET) github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
+	$(GOGET) github.com/amacneil/dbmate
+	$(GOGET) github.com/google/wire/cmd/wire
+	$(GOGET) github.com/golang/mock/mockgen@latest
+	$(GOGET) github.com/hexdigest/gowrap/cmd/gowrap
+	$(GOGET) github.com/swaggo/swag/cmd/swag
 
+## Install CI deps
+.PHONY: install-ci
+install-ci:
+	@echo -e "\e[1;34m> Installing CI packages\e[0m"
+    	$(GOGET) golang.org/x/lint/golint
+    	$(GOGET) github.com/fzipp/gocyclo
+    	$(GOGET) golang.org/x/tools/cmd/goimports
+    	$(GOGET) github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
 
 ## This help message
 ## Which can also be multiline
