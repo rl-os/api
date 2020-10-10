@@ -20,8 +20,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - go-mod-v1-{{ checksum "go.sum" }}
-            - go-mod-v1-
+            - go-mod-{{ checksum "go.sum" }}
+            - go-mod-
 
       - run:
           name: "Install dependencies"
@@ -34,7 +34,7 @@ jobs:
       # restore all changes
       - checkout
       - save_cache:
-          key: go-mod-v1-{{ checksum "go.sum" }}
+          key: go-mod-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
 
@@ -45,8 +45,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - go-mod-v1-{{ checksum "go.sum" }}
-            - go-mod-v1-
+            - go-mod-{{ checksum "go.sum" }}
+            - go-mod-
 
       - run: make install-ci
       - run: make lint
@@ -58,8 +58,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - go-mod-v1-{{ checksum "go.sum" }}
-            - go-mod-v1-
+            - go-mod-{{ checksum "go.sum" }}
+            - go-mod-
 
       - run: make install
       - run: make build-prod
@@ -71,8 +71,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - go-mod-v1-{{ checksum "go.sum" }}
-            - go-mod-v1-
+            - go-mod-{{ checksum "go.sum" }}
+            - go-mod-
 
       - run: make install
       - run: make build
