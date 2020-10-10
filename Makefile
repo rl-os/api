@@ -94,7 +94,7 @@ install:
 	$(GOGET) -u golang.org/x/lint/golint
 	$(GOGET) -u github.com/fzipp/gocyclo
 	$(GOGET) -u golang.org/x/tools/cmd/goimports
-	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
+	$(GOGET) github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
 
 
 ## This help message
