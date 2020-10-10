@@ -20,7 +20,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - go-mod-v4-{{ checksum "go.sum" }}
+            - go-mod-v1-{{ checksum "go.sum" }}
+            - go-mod-v1-
 
       - run:
           name: "Install dependencies"
@@ -30,6 +31,8 @@ jobs:
           name: "Install CI dependencies"
           command: make install-ci
 
+      # restore all changes
+      - checkout
       - save_cache:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
@@ -43,7 +46,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - go-mod-v4-{{ checksum "go.sum" }}
+            - go-mod-v1-{{ checksum "go.sum" }}
+            - go-mod-v1-
+
       - run: make lint
 
   try-build-prod:
@@ -53,7 +58,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - go-mod-v4-{{ checksum "go.sum" }}
+            - go-mod-v1-{{ checksum "go.sum" }}
+            - go-mod-v1-
+
       - run: make build-prod
 
   try-build:
@@ -63,7 +70,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - go-mod-v4-{{ checksum "go.sum" }}
+            - go-mod-v1-{{ checksum "go.sum" }}
+            - go-mod-v1-
+
       - run: make build
 
 workflows:

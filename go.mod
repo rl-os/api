@@ -5,6 +5,7 @@ go 1.15
 require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
+	github.com/amacneil/dbmate v1.10.0 // indirect
 	github.com/deissh/go-utils v1.1.0
 	github.com/deissh/osu-go-client v1.1.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -14,6 +15,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golang/mock v1.4.4
 	github.com/google/wire v0.4.0
+	github.com/hexdigest/gowrap v1.1.10 // indirect
 	github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/labstack/echo/v4 v4.1.16
