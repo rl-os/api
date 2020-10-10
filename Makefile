@@ -59,27 +59,21 @@ _                      := $(foreach exec,$(EXECUTABLES), $(if $(shell which $(ex
 args                    = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 # ===============================================
 
-## Clear bin folder
-.PHONY: clear
-clear:
-	@echo -e "\e[1;34m> Cleaning stage\e[0m"
-	@rm -rf bin
-
 ## Set impotants flags and then build all commands in cmd folder
 .PHONY: build
-build: clear generate
+build: generate
 	@echo -e "\e[1;34m> Building stage\e[0m"
 	$(GOBUILD) $(GOBUILDFLAGS) -o $(BIN_DIR)/server $(CMD_DIR)
 
 ## Build all commands in cmd folder as prod-like
 .PHONY: build-prod
-build-prod: clear generate
+build-prod: generate
 	@echo -e "\e[1;34m> Building stage\e[0m"
 	CGO_ENABLED=0 $(GOBUILD) $(GOBUILDFLAGS) -a -installsuffix nocgo -o $(BIN_DIR)/server $(CMD_DIR)
 
 ## Run all checks
 .PHONY: lint
-lint: vet fmt-check
+lint: vet
 	@for PKG in $(PACKAGES); do golint -set_exit_status $$PKG || exit 1; done;
 	@$(GOIMPORT) -d $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 	@$(GOCYCLO) -over 55 $(shell find . -iname '*.go' -type f | grep -v /vendor/)
@@ -91,17 +85,20 @@ install:
 	@echo -e "\e[1;34m> Checking if there is any missing dependencies...\e[0m"
 	$(GOMOD) download
 	@echo -e "\e[1;34m> Installing generators and etc packages\e[0m"
-	$(GOGET) -u github.com/amacneil/dbmate
-	$(GOGET) -u github.com/google/wire/cmd/wire
-	$(GOGET) -u github.com/golang/mock/mockgen@latest
-	$(GOGET) -u github.com/hexdigest/gowrap/cmd/gowrap
-	@echo -e "\e[1;34m> Installing unnessosory packages\e[0m"
-	$(GOGET) -u github.com/swaggo/swag/cmd/swag
-	$(GOGET) -u golang.org/x/lint/golint
-	$(GOGET) -u github.com/fzipp/gocyclo
-	$(GOGET) -u golang.org/x/tools/cmd/goimports
-	wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.15.0
+	$(GOGET) github.com/amacneil/dbmate
+	$(GOGET) github.com/google/wire/cmd/wire
+	$(GOGET) github.com/golang/mock/mockgen@latest
+	$(GOGET) github.com/hexdigest/gowrap/cmd/gowrap
+	$(GOGET) github.com/swaggo/swag/cmd/swag
 
+## Install CI deps
+.PHONY: install-ci
+install-ci:
+	@echo -e "\e[1;34m> Installing CI packages\e[0m"
+	$(GOGET) golang.org/x/lint/golint
+	$(GOGET) github.com/fzipp/gocyclo
+	$(GOGET) golang.org/x/tools/cmd/goimports
+	$(GOGET) github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
 
 ## This help message
 ## Which can also be multiline

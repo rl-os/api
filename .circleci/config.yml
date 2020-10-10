@@ -1,0 +1,117 @@
+version: 2.1
+
+jobs:
+  install:
+    docker:
+      - image: circleci/golang:1.15
+
+    steps:
+      - checkout
+      - run:
+          command: |-
+            echo "TRIGGERER: ${CIRCLE_USERNAME}"
+            echo "BUILD_NUMBER: ${CIRCLE_BUILD_NUM}"
+            echo "BUILD_URL: ${CIRCLE_BUILD_URL}"
+            echo "BRANCH: ${CIRCLE_BRANCH}"
+            echo "RUNNING JOB: ${CIRCLE_JOB}"
+            echo "JOB PARALLELISM: ${CIRCLE_NODE_TOTAL}"
+            echo "CIRCLE_REPOSITORY_URL: ${CIRCLE_REPOSITORY_URL}"
+          name: CircleCI runtime
+
+      - restore_cache:
+          keys:
+            - go-mod-v2-{{ checksum "go.sum" }}
+            - go-mod-v2-
+
+      - run:
+          name: "Install dependencies"
+          command: make install
+
+      - run:
+          name: "Install CI dependencies"
+          command: make install-ci
+
+      # restore all changes
+      - checkout
+      - save_cache:
+          key: go-mod-v2-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+
+  lint:
+    docker:
+      - image: circleci/golang:1.15
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v2-{{ checksum "go.sum" }}
+            - go-mod-v2-
+
+      - run: make install-ci
+      - run: make lint
+
+  unit-test:
+    docker:
+      - image: circleci/golang:1.15
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v2-{{ checksum "go.sum" }}
+            - go-mod-v2-
+
+      - run: make install-ci
+      - run: make test
+      - run:
+          command: |-
+            go tool cover -html=coverage.txt -o coverage.html
+            cp coverage.html /tmp/artifacts
+      - store_artifacts:
+          path: /tmp/artifacts
+
+  try-build-prod:
+    docker:
+      - image: circleci/golang:1.15
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v2-{{ checksum "go.sum" }}
+            - go-mod-v2-
+
+      - run: make install
+      - run: make build-prod
+
+  try-build:
+    docker:
+      - image: circleci/golang:1.15
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v2-{{ checksum "go.sum" }}
+            - go-mod-v2-
+
+      - run: make install
+      - run: make build
+
+workflows:
+  pr-test-workflow:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - unit-test:
+          requires:
+            - install
+      - try-build:
+          requires:
+            - lint
+            - unit-test
+      - try-build-prod:
+          requires:
+            - lint
+            - unit-test
+
