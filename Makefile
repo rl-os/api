@@ -59,21 +59,15 @@ _                      := $(foreach exec,$(EXECUTABLES), $(if $(shell which $(ex
 args                    = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 # ===============================================
 
-## Clear bin folder
-.PHONY: clear
-clear:
-	@echo -e "\e[1;34m> Cleaning stage\e[0m"
-	@rm -rf bin
-
 ## Set impotants flags and then build all commands in cmd folder
 .PHONY: build
-build: clear generate
+build: generate
 	@echo -e "\e[1;34m> Building stage\e[0m"
 	$(GOBUILD) $(GOBUILDFLAGS) -o $(BIN_DIR)/server $(CMD_DIR)
 
 ## Build all commands in cmd folder as prod-like
 .PHONY: build-prod
-build-prod: clear generate
+build-prod: generate
 	@echo -e "\e[1;34m> Building stage\e[0m"
 	CGO_ENABLED=0 $(GOBUILD) $(GOBUILDFLAGS) -a -installsuffix nocgo -o $(BIN_DIR)/server $(CMD_DIR)
 
@@ -100,7 +94,7 @@ install:
 	$(GOGET) -u golang.org/x/lint/golint
 	$(GOGET) -u github.com/fzipp/gocyclo
 	$(GOGET) -u golang.org/x/tools/cmd/goimports
-	wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.15.0
+	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
 
 
 ## This help message
