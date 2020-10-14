@@ -5,17 +5,15 @@ SHELL := /bin/bash
 export GO111MODULE := on
 export PATH := bin:$(PATH)
 
-PACKAGE				   = ayako
+PACKAGE                 = rl-api
 VERSION       	       ?= $(shell git describe --tags --always --match="v*" 2> /dev/null || cat $(CURDIR)/.version 2> /dev/null || echo v1.0.0)
 COMMIT                 ?= $(shell git rev-parse HEAD)
 GIT_BRANCH             := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
 GIT_BRANCH_CLEAN       := $(shell echo $(GIT_BRANCH) | sed -e "s/[^[:alnum:]]/-/g")
 BUILDTIME              := $(shell date -u '+%Y-%m-%dT%H:%M:%SZ')
 
-DOCKER_REGISTRY_DOMAIN ?= docker.pkg.github.com
-DOCKER_REGISTRY_PATH   ?= deissh/osu-lazer
+DOCKER_REGISTRY_PATH   ?= deissh
 DOCKER_IMAGE           ?= $(DOCKER_REGISTRY_PATH)/$(PACKAGE):$(VERSION)
-DOCKER_IMAGE_DOMAIN    ?= $(DOCKER_REGISTRY_DOMAIN)/$(DOCKER_IMAGE)
 
 # ===============================================
 DOCKER                  = docker
@@ -23,35 +21,35 @@ DOCKERBUILD            := $(DOCKER) build
 DOCKERPUSH             := $(DOCKER) push
 # ===============================================
 GOCMD                   = go
-GOLINT				   := $(shell which golint)
-GOIMPORT			   := $(shell which goimports)
-GOFMT				   := $(shell which gofmt)
-GOCYCLO				   := $(shell which gocyclo)
-GOGENERATE 			   := $(GOCMD) generate
-GOBUILD				   := $(GOCMD) build
-GOCLEAN				   := $(GOCMD) clean
-GOTEST				   := $(GOCMD) test
-GOMOD				   := $(GOCMD) mod
-GOGET				   := $(GOCMD) get
-GOLIST				   := $(GOCMD) list
-GOVET				   := $(GOCMD) vet
+GOLINT                 := $(shell which golint)
+GOIMPORT               := $(shell which goimports)
+GOFMT                  := $(shell which gofmt)
+GOCYCLO                := $(shell which gocyclo)
+GOGENERATE             := $(GOCMD) generate
+GOBUILD                := $(GOCMD) build
+GOCLEAN                := $(GOCMD) clean
+GOTEST                 := $(GOCMD) test
+GOMOD                  := $(GOCMD) mod
+GOGET                  := $(GOCMD) get
+GOLIST                 := $(GOCMD) list
+GOVET                  := $(GOCMD) vet
 # ===============================================
 # build setting
 CMD_DIR                ?= $(PWD)/cmd
 BIN_DIR                ?= $(PWD)/bin
 BUILD_CMDS             := $(shell $(GOLIST) $(CMD_DIR)/...)
-GOFILES				   := $(shell find . -name "*.go" -type f)
+GOFILES                := $(shell find . -name "*.go" -type f)
 
-GOLDFLAGS 			   += -X main.Version=$(VERSION)
-GOLDFLAGS 			   += -X main.Commit=$(COMMIT)
-GOLDFLAGS  			   += -X main.Branch=$(GIT_BRANCH_CLEAN)
-GOLDFLAGS 			   += -X main.BuildTimestamp=$(BUILDTIME)
+GOLDFLAGS              += -X main.Version=$(VERSION)
+GOLDFLAGS              += -X main.Commit=$(COMMIT)
+GOLDFLAGS              += -X main.Branch=$(GIT_BRANCH_CLEAN)
+GOLDFLAGS              += -X main.BuildTimestamp=$(BUILDTIME)
 GOBUILDFLAGS            = -ldflags "-s -w $(GOLDFLAGS)"
 
 # ===============================================
 .DEFAULT_GOAL          := help
-MAKE_ENV 			   += PACKAGE VERSION DOCKER_IMAGE DOCKER_IMAGE_DOMAIN
-SHELL_EXPORT		   := $(foreach v,$(MAKE_ENV),$(v)='$($(v))' )
+MAKE_ENV               += PACKAGE VERSION DOCKER_IMAGE DOCKER_IMAGE_DOMAIN
+SHELL_EXPORT           := $(foreach v,$(MAKE_ENV),$(v)='$($(v))' )
 # check requeres commands
 EXECUTABLES             = wget
 _                      := $(foreach exec,$(EXECUTABLES), $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
@@ -169,12 +167,12 @@ db-status:
 ## Build docker container
 .PHONY: docker-build
 docker-build:
-	@$(DOCKERBUILD) -t $(DOCKER_IMAGE_DOMAIN) -f Dockerfile ..
+	@$(DOCKERBUILD) -t $(DOCKER_IMAGE) -f Dockerfile .
 
 ## Push docker container to registry
 .PHONY: docker-push
 docker-push:
-	@$(DOCKERPUSH) $(DOCKER_IMAGE_DOMAIN)
+	@$(DOCKERPUSH) $(DOCKER_IMAGE)
 
 ## -- Utils --
 
