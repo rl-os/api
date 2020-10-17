@@ -6,7 +6,7 @@ x-postgres-env: &x-postgres-env
   POSTGRES_DB: 'osuserver'
 
 x-app-env: &x-app-env
-  CONFIG__DATABASE__DSN: 'postgres://postgres:postgres@/rl-database?sslmode=disable'
+  CONFIG__DATABASE__DSN: 'postgres://postgres:postgres@rl-database/osuserver?sslmode=disable'
 
 volumes:
   rl-psql-data:
@@ -37,4 +37,5 @@ services:
       - 127.0.0.1:2400:2400
     environment:
       <<: *x-app-env
+      CONFIG__SERVER__HOST: '0.0.0.0'
 
