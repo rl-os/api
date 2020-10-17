@@ -67,7 +67,8 @@ func (ss *Supplier) initConnection() {
 	if err != nil {
 		log.Fatal().
 			Err(err).
-			Msg("initialize database")
+			Str("dsn", ss.cfg.Database.DSN).
+			Msg("initialize database with ")
 	}
 
 	if err = conn.Ping(); err != nil {
