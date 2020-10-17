@@ -83,20 +83,22 @@ install:
 	@echo -e "\e[1;34m> Checking if there is any missing dependencies...\e[0m"
 	$(GOMOD) download
 	@echo -e "\e[1;34m> Installing generators and etc packages\e[0m"
-	$(GOGET) github.com/amacneil/dbmate
-	$(GOGET) github.com/google/wire/cmd/wire
-	$(GOGET) github.com/golang/mock/mockgen@latest
-	$(GOGET) github.com/hexdigest/gowrap/cmd/gowrap
-	$(GOGET) github.com/swaggo/swag/cmd/swag
+	$(GOGET) -u github.com/swaggo/swag/cmd/swag@v1.6.7
+	$(GOGET) -u github.com/amacneil/dbmate
+	$(GOGET) -u github.com/google/wire/cmd/wire
+	$(GOGET) -u github.com/golang/mock/mockgen
+	$(GOGET) -u github.com/hexdigest/gowrap/cmd/gowrap
+	# reset changes in go.mod
+	$(GOMOD) tidy
 
 ## Install CI deps
 .PHONY: install-ci
 install-ci:
 	@echo -e "\e[1;34m> Installing CI packages\e[0m"
-	$(GOGET) golang.org/x/lint/golint
-	$(GOGET) github.com/fzipp/gocyclo
-	$(GOGET) golang.org/x/tools/cmd/goimports
-	$(GOGET) github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
+	GO111MODULE=off $(GOGET) -u golang.org/x/lint/golint
+	GO111MODULE=off $(GOGET) -u github.com/fzipp/gocyclo
+	GO111MODULE=off $(GOGET) -u golang.org/x/tools/cmd/goimports
+	GO111MODULE=off $(GOGET) -u github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
 
 ## This help message
 ## Which can also be multiline
@@ -167,7 +169,7 @@ db-status:
 ## Build docker container
 .PHONY: docker-build
 docker-build:
-	@$(DOCKERBUILD) -t $(DOCKER_IMAGE) -f Dockerfile .
+	@$(DOCKERBUILD) -t $(DOCKER_IMAGE) -f Dockerfile.api .
 
 ## Push docker container to registry
 .PHONY: docker-push
