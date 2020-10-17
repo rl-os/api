@@ -98,7 +98,7 @@ install-ci:
 	$(GOGET) -u golang.org/x/lint/golint
 	$(GOGET) -u github.com/fzipp/gocyclo
 	$(GOGET) -u golang.org/x/tools/cmd/goimports
-	$(GOGET) -u github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
+	$(GOGET) github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
 	# reset changes in go.mod
 	$(GOMOD) tidy
 
