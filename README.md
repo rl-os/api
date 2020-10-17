@@ -5,7 +5,10 @@
 <h1 align="center"></h1>
 
 <p align="center">
+  <a href="https://circleci.com/gh/rl-os/api"><img src="https://circleci.com/gh/rl-os/api.svg?style=svg"></a>
   <a href="https://goreportcard.com/report/github.com/rl-os/api"><img alt="goreport" src="https://goreportcard.com/badge/github.com/rl-os/api"></a>
+</p>
+<p align="center">
   <a href="https://github.com/rl-os/api/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/rl-os/api"></a>
   <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/rl-os/api">
   <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/w/rl-os/api">
