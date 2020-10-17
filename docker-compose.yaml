@@ -1,4 +1,40 @@
 version: '3.5'
 
+x-postgres-env: &x-postgres-env
+  POSTGRES_PASSWORD: 'postgres'
+  POSTGRES_USER: 'postgres'
+  POSTGRES_DB: 'osuserver'
+
+x-app-env: &x-app-env
+  CONFIG__DATABASE__DSN: 'postgres://postgres:postgres@/rl-database?sslmode=disable'
+
+volumes:
+  rl-psql-data:
+
 services:
+  rl-database:
+    image: 'postgres:11-alpine'
+    restart: unless-stopped
+    environment:
+      <<: *x-postgres-env
+    volumes:
+      - rl-psql-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  rl-api:
+    image: 'deissh/rl-api:${RL_VERSION:-latest}'
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    restart: unless-stopped
+    depends_on:
+      - rl-database
+    ports:
+      - 127.0.0.1:2400:2400
+    environment:
+      <<: *x-app-env
 
