@@ -95,10 +95,12 @@ install:
 .PHONY: install-ci
 install-ci:
 	@echo -e "\e[1;34m> Installing CI packages\e[0m"
-	GO111MODULE=off $(GOGET) -u golang.org/x/lint/golint
-	GO111MODULE=off $(GOGET) -u github.com/fzipp/gocyclo
-	GO111MODULE=off $(GOGET) -u golang.org/x/tools/cmd/goimports
-	GO111MODULE=off $(GOGET) -u github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
+	$(GOGET) -u golang.org/x/lint/golint
+	$(GOGET) -u github.com/fzipp/gocyclo
+	$(GOGET) -u golang.org/x/tools/cmd/goimports
+	$(GOGET) -u github.com/golangci/golangci-lint/cmd/golangci-lint@v1.31.0
+	# reset changes in go.mod
+	$(GOMOD) tidy
 
 ## This help message
 ## Which can also be multiline

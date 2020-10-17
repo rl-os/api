@@ -24,6 +24,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  rl-migration:
+    image: 'deissh/rl-api:${RL_VERSION:-latest}'
+    restart: 'no'
+    depends_on:
+      - rl-database
+    environment:
+      <<: *x-app-env
+    command: |
+      dbmate --wait --env CONFIG__DATABASE__DSN -d /migrations up
   
   rl-api:
     image: 'deissh/rl-api:${RL_VERSION:-latest}'
@@ -33,6 +43,7 @@ services:
     restart: unless-stopped
     depends_on:
       - rl-database
+      - rl-migration
     ports:
       - 127.0.0.1:2400:2400
     environment:
