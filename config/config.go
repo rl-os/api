@@ -19,6 +19,7 @@ type Config struct {
 	Server struct {
 		Host          string `default:"0.0.0.0"`
 		Port          string `default:"2400"`
+		APIAddr       string `default:"NOTSET"`
 		EnableProfile bool   `default:"false"`
 		EnableJobs    bool   `default:"false"`
 	}

@@ -7,12 +7,15 @@ import (
 	"github.com/rl-os/api/api"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/config"
+	"github.com/rl-os/api/docs"
+	_ "github.com/rl-os/api/docs"
 	"github.com/rl-os/api/middlewares/customerror"
 	"github.com/rl-os/api/middlewares/customlogger"
 	"github.com/rl-os/api/middlewares/permission"
 	"github.com/rl-os/api/middlewares/reqest_context"
 	"github.com/rl-os/api/store"
 	"github.com/rs/zerolog/log"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"net/http"
 	"net/http/pprof"
 	"sync"
@@ -161,6 +164,16 @@ func (s *Server) StartHTTPServer() {
 	s.RootRouter = srv.Group("")
 
 	api.New(s.App, s.RootRouter)
+
+	{
+		if s.Config.Server.APIAddr == "NOTSET" {
+			log.Warn().Msg("APIAddr not set!")
+			s.Config.Server.APIAddr = "localhost:2400"
+		}
+
+		docs.SwaggerInfo.Host = s.Config.Server.APIAddr
+		s.RootRouter.GET("/docs/*", echoSwagger.WrapHandler)
+	}
 
 	// log all routes
 	for _, route := range s.Server.Routes() {

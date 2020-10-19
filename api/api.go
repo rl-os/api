@@ -6,9 +6,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/middlewares/permission"
-	"github.com/swaggo/echo-swagger"
-
-	_ "github.com/rl-os/api/docs"
 )
 
 // New api endpoint
@@ -27,8 +24,6 @@ import (
 // @tokenUrl /oauth/token
 // @scope.* Grants all access
 func New(app *app.App, root *echo.Group) {
-	root.GET("/docs/*", echoSwagger.WrapHandler)
-
 	signup := root.Group("/users")
 	{
 		h := RegistrationHandlers{app}
