@@ -1,12 +1,12 @@
 version: '3.5'
 
 x-postgres-env: &x-postgres-env
-  POSTGRES_PASSWORD: 'postgres'
   POSTGRES_USER: 'postgres'
-  POSTGRES_DB: 'osuserver'
+  POSTGRES_PASSWORD: ${APP_DB_PWD:-postgres}
+  POSTGRES_DB: ${APP_DB_NAME:-osuserver-dev}
 
 x-app-env: &x-app-env
-  CONFIG__DATABASE__DSN: 'postgres://postgres:postgres@rl-database/osuserver?sslmode=disable'
+  CONFIG__DATABASE__DSN: 'postgres://postgres:${DB_PWD:-postgres}@rl-database/${DB_NAME:-osuserver}?sslmode=disable'
 
 volumes:
   rl-psql-data:
@@ -27,7 +27,7 @@ services:
 
   rl-migration:
     image: 'deissh/rl-api:${RL_VERSION:-latest}'
-    restart: 'no'
+    restart: on-failure
     depends_on:
       - rl-database
     environment:
