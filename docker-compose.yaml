@@ -6,7 +6,12 @@ x-postgres-env: &x-postgres-env
   POSTGRES_DB: ${APP_DB_NAME:-osuserver-dev}
 
 x-app-env: &x-app-env
+  CONFIG__SERVER__APIADDR: ${APP_SERVER_API_ADDR:-dev.risu.life}
+  CONFIG__JWT__SECRET: ${APP_JWT_SECRET}
+  CONFIG__JWT__HOURSBEFOREREVOKE: 12
   CONFIG__DATABASE__DSN: 'postgres://postgres:${DB_PWD:-postgres}@rl-database/${DB_NAME:-osuserver-dev}?sslmode=disable'
+  CONFIG__MIRROR__BANCHO__USERNAME: ${APP_BANCHO_USERNAME:-not}
+  CONFIG__MIRROR__BANCHO__PASSWORD: ${APP_BANCHO_PASSWORD:-set}
 
 volumes:
   rl-psql-data:
@@ -48,6 +53,3 @@ services:
       - 127.0.0.1:2400:2400
     environment:
       <<: *x-app-env
-      CONFIG__SERVER__HOST: '0.0.0.0'
-      CONFIG__SERVER__APIADDR: 'dev.risu.life'
-
