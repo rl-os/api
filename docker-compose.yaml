@@ -9,7 +9,7 @@ x-app-env: &x-app-env
   CONFIG__SERVER__APIADDR: ${APP_SERVER_API_ADDR:-dev.risu.life}
   CONFIG__JWT__SECRET: ${APP_JWT_SECRET}
   CONFIG__JWT__HOURSBEFOREREVOKE: 12
-  CONFIG__DATABASE__DSN: 'postgres://postgres:${DB_PWD:-postgres}@rl-database/${DB_NAME:-osuserver-dev}?sslmode=disable'
+  CONFIG__DATABASE__DSN: 'postgres://postgres:${APP_DB_PWD:-postgres}@rl-database/${APP_DB_NAME:-osuserver-dev}?sslmode=disable'
   CONFIG__MIRROR__BANCHO__USERNAME: ${APP_BANCHO_USERNAME:-not}
   CONFIG__MIRROR__BANCHO__PASSWORD: ${APP_BANCHO_PASSWORD:-set}
 
