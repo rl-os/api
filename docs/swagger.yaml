@@ -451,19 +451,6 @@ definitions:
       name:
         type: string
     type: object
-  entity.GradeCounts:
-    properties:
-      a:
-        type: integer
-      s:
-        type: integer
-      sh:
-        type: integer
-      ss:
-        type: integer
-      ssh:
-        type: integer
-    type: object
   entity.Hype:
     properties:
       current:
@@ -505,13 +492,6 @@ definitions:
         type: string
       raw:
         type: string
-    type: object
-  entity.Rank:
-    properties:
-      country:
-        type: integer
-      global:
-        type: integer
     type: object
   entity.RankHistory:
     properties:
@@ -588,7 +568,17 @@ definitions:
   entity.Statistics:
     properties:
       grade_counts:
-        $ref: '#/definitions/entity.GradeCounts'
+        properties:
+          a:
+            type: integer
+          s:
+            type: integer
+          sh:
+            type: integer
+          ss:
+            type: integer
+          ssh:
+            type: integer
         type: object
       hit_accuracy:
         type: number
@@ -608,7 +598,11 @@ definitions:
       pp_rank:
         type: integer
       rank:
-        $ref: '#/definitions/entity.Rank'
+        properties:
+          country:
+            type: integer
+          global:
+            type: integer
         type: object
       ranked_score:
         type: integer
@@ -622,7 +616,6 @@ definitions:
   entity.User:
     properties:
       account_history:
-        description: joins
         items:
           type: object
         type: array
@@ -636,8 +629,8 @@ definitions:
         items:
           type: object
         type: array
-      can_moderate:
-        type: boolean
+      beatmap_playcounts_count:
+        type: integer
       country:
         $ref: '#/definitions/entity.Country'
         type: object
@@ -648,11 +641,11 @@ definitions:
         type: object
       cover_url:
         type: string
+      current_mode_rank:
+        type: integer
       default_group:
         type: string
       discord:
-        type: string
-      email:
         type: string
       favourite_beatmapset_count:
         type: integer
@@ -660,6 +653,10 @@ definitions:
         type: integer
       graveyard_beatmapset_count:
         type: integer
+      groups:
+        items:
+          type: object
+        type: array
       has_supported:
         type: boolean
       id:
@@ -668,18 +665,7 @@ definitions:
         type: string
       is_active:
         type: boolean
-      is_bng:
-        type: boolean
       is_bot:
-        type: boolean
-      is_full_bn:
-        type: boolean
-      is_gmt:
-        description: computed
-        type: boolean
-      is_limited_bn:
-        type: boolean
-      is_nat:
         type: boolean
       is_online:
         type: boolean
@@ -691,8 +677,6 @@ definitions:
         $ref: '#/definitions/entity.Kudosu'
         type: object
       last_visit:
-        type: string
-      lastfm:
         type: string
       location:
         type: string
@@ -714,7 +698,9 @@ definitions:
       playmode:
         type: string
       playstyle:
-        type: string
+        items:
+          type: string
+        type: array
       pm_friends_only:
         type: boolean
       post_count:
@@ -726,8 +712,10 @@ definitions:
       profile_colour:
         type: object
       profile_order:
-        type: string
-      rankHistory:
+        items:
+          type: string
+        type: array
+      rank_history:
         $ref: '#/definitions/entity.RankHistory'
         type: object
       ranked_and_approved_beatmapset_count:
@@ -736,7 +724,11 @@ definitions:
         items:
           type: object
         type: array
+      scores_best_count:
+        type: integer
       scores_first_count:
+        type: integer
+      scores_recent_count:
         type: integer
       skype:
         type: string
@@ -746,6 +738,8 @@ definitions:
       support_level:
         type: integer
       title:
+        type: string
+      title_url:
         type: string
       twitter:
         type: string
@@ -771,14 +765,22 @@ definitions:
     properties:
       avatar_url:
         type: string
+      country:
+        $ref: '#/definitions/entity.Country'
+        type: object
       country_code:
         type: string
+      cover:
+        $ref: '#/definitions/entity.Cover'
+        type: object
+      current_mode_rank:
+        type: integer
       default_group:
         type: string
-      email:
-        type: string
-      has_supported:
-        type: boolean
+      groups:
+        items:
+          type: object
+        type: array
       id:
         type: integer
       is_active:
@@ -789,12 +791,12 @@ definitions:
         type: boolean
       is_supporter:
         type: boolean
-      join_date:
-        type: string
       last_visit:
         type: string
       pm_friends_only:
         type: boolean
+      profile_colour:
+        type: object
       support_level:
         type: integer
       username:

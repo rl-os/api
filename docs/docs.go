@@ -1445,26 +1445,6 @@ var doc = `{
                 }
             }
         },
-        "entity.GradeCounts": {
-            "type": "object",
-            "properties": {
-                "a": {
-                    "type": "integer"
-                },
-                "s": {
-                    "type": "integer"
-                },
-                "sh": {
-                    "type": "integer"
-                },
-                "ss": {
-                    "type": "integer"
-                },
-                "ssh": {
-                    "type": "integer"
-                }
-            }
-        },
         "entity.Hype": {
             "type": "object",
             "properties": {
@@ -1528,17 +1508,6 @@ var doc = `{
                 },
                 "raw": {
                     "type": "string"
-                }
-            }
-        },
-        "entity.Rank": {
-            "type": "object",
-            "properties": {
-                "country": {
-                    "type": "integer"
-                },
-                "global": {
-                    "type": "integer"
                 }
             }
         },
@@ -1655,7 +1624,23 @@ var doc = `{
             "properties": {
                 "grade_counts": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.GradeCounts"
+                    "properties": {
+                        "a": {
+                            "type": "integer"
+                        },
+                        "s": {
+                            "type": "integer"
+                        },
+                        "sh": {
+                            "type": "integer"
+                        },
+                        "ss": {
+                            "type": "integer"
+                        },
+                        "ssh": {
+                            "type": "integer"
+                        }
+                    }
                 },
                 "hit_accuracy": {
                     "type": "number"
@@ -1684,7 +1669,14 @@ var doc = `{
                 },
                 "rank": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.Rank"
+                    "properties": {
+                        "country": {
+                            "type": "integer"
+                        },
+                        "global": {
+                            "type": "integer"
+                        }
+                    }
                 },
                 "ranked_score": {
                     "type": "integer"
@@ -1704,7 +1696,6 @@ var doc = `{
             "type": "object",
             "properties": {
                 "account_history": {
-                    "description": "joins",
                     "type": "array",
                     "items": {
                         "type": "object"
@@ -1725,8 +1716,8 @@ var doc = `{
                         "type": "object"
                     }
                 },
-                "can_moderate": {
-                    "type": "boolean"
+                "beatmap_playcounts_count": {
+                    "type": "integer"
                 },
                 "country": {
                     "type": "object",
@@ -1742,13 +1733,13 @@ var doc = `{
                 "cover_url": {
                     "type": "string"
                 },
+                "current_mode_rank": {
+                    "type": "integer"
+                },
                 "default_group": {
                     "type": "string"
                 },
                 "discord": {
-                    "type": "string"
-                },
-                "email": {
                     "type": "string"
                 },
                 "favourite_beatmapset_count": {
@@ -1759,6 +1750,12 @@ var doc = `{
                 },
                 "graveyard_beatmapset_count": {
                     "type": "integer"
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
                 },
                 "has_supported": {
                     "type": "boolean"
@@ -1772,23 +1769,7 @@ var doc = `{
                 "is_active": {
                     "type": "boolean"
                 },
-                "is_bng": {
-                    "type": "boolean"
-                },
                 "is_bot": {
-                    "type": "boolean"
-                },
-                "is_full_bn": {
-                    "type": "boolean"
-                },
-                "is_gmt": {
-                    "description": "computed",
-                    "type": "boolean"
-                },
-                "is_limited_bn": {
-                    "type": "boolean"
-                },
-                "is_nat": {
                     "type": "boolean"
                 },
                 "is_online": {
@@ -1805,9 +1786,6 @@ var doc = `{
                     "$ref": "#/definitions/entity.Kudosu"
                 },
                 "last_visit": {
-                    "type": "string"
-                },
-                "lastfm": {
                     "type": "string"
                 },
                 "location": {
@@ -1839,7 +1817,10 @@ var doc = `{
                     "type": "string"
                 },
                 "playstyle": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "pm_friends_only": {
                     "type": "boolean"
@@ -1857,9 +1838,12 @@ var doc = `{
                     "type": "object"
                 },
                 "profile_order": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
-                "rankHistory": {
+                "rank_history": {
                     "type": "object",
                     "$ref": "#/definitions/entity.RankHistory"
                 },
@@ -1872,7 +1856,13 @@ var doc = `{
                         "type": "object"
                     }
                 },
+                "scores_best_count": {
+                    "type": "integer"
+                },
                 "scores_first_count": {
+                    "type": "integer"
+                },
+                "scores_recent_count": {
                     "type": "integer"
                 },
                 "skype": {
@@ -1886,6 +1876,9 @@ var doc = `{
                     "type": "integer"
                 },
                 "title": {
+                    "type": "string"
+                },
+                "title_url": {
                     "type": "string"
                 },
                 "twitter": {
@@ -1925,17 +1918,28 @@ var doc = `{
                 "avatar_url": {
                     "type": "string"
                 },
+                "country": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Country"
+                },
                 "country_code": {
                     "type": "string"
+                },
+                "cover": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Cover"
+                },
+                "current_mode_rank": {
+                    "type": "integer"
                 },
                 "default_group": {
                     "type": "string"
                 },
-                "email": {
-                    "type": "string"
-                },
-                "has_supported": {
-                    "type": "boolean"
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
                 },
                 "id": {
                     "type": "integer"
@@ -1952,14 +1956,14 @@ var doc = `{
                 "is_supporter": {
                     "type": "boolean"
                 },
-                "join_date": {
-                    "type": "string"
-                },
                 "last_visit": {
                     "type": "string"
                 },
                 "pm_friends_only": {
                     "type": "boolean"
+                },
+                "profile_colour": {
+                    "type": "object"
                 },
                 "support_level": {
                     "type": "integer"

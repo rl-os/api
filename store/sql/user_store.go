@@ -19,7 +19,7 @@ func newSqlUserStore(sqlStore SqlStore) store.User {
 }
 
 func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.UserShort, error) {
-	var baseUser entity.User
+	var baseUser entity.UserAuthBase
 
 	err := u.GetMaster().GetContext(
 		ctx,
@@ -37,7 +37,7 @@ func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.U
 		return nil, errors.WithCause("user_get", 401, "user credentials were incorrect", err)
 	}
 
-	return baseUser.GetShort(), nil
+	return &baseUser.UserShort, nil
 }
 
 func (u UserStore) Get(ctx context.Context, userId uint, mode string) (*entity.User, error) {
