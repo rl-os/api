@@ -479,6 +479,22 @@ definitions:
       required:
         type: integer
     type: object
+  entity.Page:
+    properties:
+      html:
+        type: string
+      raw:
+        type: string
+    type: object
+  entity.RankHistory:
+    properties:
+      data:
+        items:
+          type: integer
+        type: array
+      mode:
+        type: string
+    type: object
   entity.SingleBeatmap:
     properties:
       accuracy:
@@ -544,8 +560,22 @@ definitions:
     type: object
   entity.User:
     properties:
+      account_history:
+        items:
+          type: object
+        type: array
+      active_tournament_banner:
+        items:
+          type: object
+        type: array
       avatar_url:
         type: string
+      badges:
+        items:
+          type: object
+        type: array
+      beatmap_playcounts_count:
+        type: integer
       country:
         $ref: '#/definitions/entity.Country'
         type: object
@@ -560,6 +590,12 @@ definitions:
         type: string
       discord:
         type: string
+      favourite_beatmapset_count:
+        type: integer
+      follower_count:
+        type: integer
+      graveyard_beatmapset_count:
+        type: integer
       groups:
         type: string
       has_supported:
@@ -583,14 +619,56 @@ definitions:
         type: object
       last_visit:
         type: string
+      location:
+        type: string
+      loved_beatmapset_count:
+        type: integer
+      max_blocks:
+        type: integer
+      max_friends:
+        type: integer
       monthly_playcounts:
         items:
           $ref: '#/definitions/entity.MonthlyPlaycounts'
         type: array
+      occupation:
+        type: string
+      page:
+        $ref: '#/definitions/entity.Page'
+        type: object
+      playmode:
+        type: string
+      playstyle:
+        items:
+          type: string
+        type: array
       pm_friends_only:
         type: boolean
+      post_count:
+        type: integer
+      previous_usernames:
+        items:
+          type: string
+        type: array
       profile_colour:
         type: string
+      profile_order:
+        items:
+          type: string
+        type: array
+      rank_history:
+        $ref: '#/definitions/entity.RankHistory'
+        type: object
+      ranked_and_approved_beatmapset_count:
+        type: integer
+      replays_watched_counts:
+        type: integer
+      scores_best_count:
+        type: integer
+      scores_first_count:
+        type: integer
+      scores_recent_count:
+        type: integer
       skype:
         type: string
       statistics:
@@ -604,11 +682,26 @@ definitions:
         type: string
       twitter:
         type: string
+      unranked_beatmapset_count:
+        type: integer
       updated_at:
         type: string
+      user_achievements:
+        items:
+          $ref: '#/definitions/entity.UserAchievements'
+        type: array
       username:
         type: string
       website:
+        type: string
+    type: object
+  entity.UserAchievements:
+    properties:
+      achieved_at:
+        type: string
+      achievement_id:
+        type: integer
+      updated_at:
         type: string
     type: object
   entity.UserShort:

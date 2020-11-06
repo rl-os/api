@@ -14,41 +14,41 @@ type User struct {
 
 	Statistics        UserStatistics      `json:"statistics" gorm:"foreignkey:user_id;references:id"`
 	MonthlyPlaycounts []MonthlyPlaycounts `json:"monthly_playcounts" gorm:"foreignkey:user_id;references:id"`
+	UserAchievements  []UserAchievements  `json:"user_achievements" gorm:"foreignkey:user_id;references:id"`
 
-	Discord                          utils.NullString   `json:"discord"`
-	Skype                            utils.NullString   `json:"skype"`
-	Title                            utils.NullString   `json:"title"`
-	TitleURL                         utils.NullString   `json:"title_url"`
-	Twitter                          utils.NullString   `json:"twitter"`
-	Website                          utils.NullString   `json:"website"`
-	Interests                        utils.NullString   `json:"interests"`
-	Kudosu                           Kudosu             `json:"kudosu"`
-	Location                         utils.NullString   `json:"location"`
-	MaxBlocks                        int                `json:"max_blocks"`
-	MaxFriends                       int                `json:"max_friends"`
-	Occupation                       string             `json:"occupation"`
-	Playmode                         string             `json:"playmode"`
-	Playstyle                        string             `json:"playstyle"`
-	PostCount                        int                `json:"post_count"`
-	ProfileOrder                     []string           `json:"profile_order"`
-	AccountHistory                   []interface{}      `json:"account_history"`
-	ActiveTournamentBanner           []interface{}      `json:"active_tournament_banner"`
-	Badges                           []interface{}      `json:"badges"`
-	BeatmapPlaycountsCount           int                `json:"beatmap_playcounts_count"`
-	FavouriteBeatmapsetCount         int                `json:"favourite_beatmapset_count"`
-	FollowerCount                    int                `json:"follower_count"`
-	GraveyardBeatmapsetCount         int                `json:"graveyard_beatmapset_count"`
-	LovedBeatmapsetCount             int                `json:"loved_beatmapset_count"`
-	Page                             Page               `json:"page"`
-	PreviousUsernames                []string           `json:"previous_usernames"`
-	RankedAndApprovedBeatmapsetCount int                `json:"ranked_and_approved_beatmapset_count"`
-	ReplaysWatchedCounts             int                `json:"replays_watched_counts"`
-	ScoresBestCount                  int                `json:"scores_best_count"`
-	ScoresFirstCount                 int                `json:"scores_first_count"`
-	ScoresRecentCount                int                `json:"scores_recent_count"`
-	UnrankedBeatmapsetCount          int                `json:"unranked_beatmapset_count"`
-	UserAchievements                 []UserAchievements `json:"user_achievements"`
-	RankHistory                      RankHistory        `json:"rank_history"`
+	Discord                          utils.NullString `json:"discord"`
+	Skype                            utils.NullString `json:"skype"`
+	Title                            utils.NullString `json:"title"`
+	TitleURL                         utils.NullString `json:"title_url"`
+	Twitter                          utils.NullString `json:"twitter"`
+	Website                          utils.NullString `json:"website"`
+	Interests                        utils.NullString `json:"interests"`
+	Kudosu                           Kudosu           `json:"kudosu"`
+	Location                         utils.NullString `json:"location"`
+	MaxBlocks                        int              `json:"max_blocks"`
+	MaxFriends                       int              `json:"max_friends"`
+	Occupation                       string           `json:"occupation"`
+	Playmode                         string           `json:"playmode"`
+	Playstyle                        []string         `json:"playstyle"`
+	PostCount                        int              `json:"post_count"`
+	ProfileOrder                     []string         `json:"profile_order"`
+	AccountHistory                   []interface{}    `json:"account_history"`
+	ActiveTournamentBanner           []interface{}    `json:"active_tournament_banner"`
+	Badges                           []interface{}    `json:"badges"`
+	BeatmapPlaycountsCount           int              `json:"beatmap_playcounts_count"`
+	FavouriteBeatmapsetCount         int              `json:"favourite_beatmapset_count"`
+	FollowerCount                    int              `json:"follower_count"`
+	GraveyardBeatmapsetCount         int              `json:"graveyard_beatmapset_count"`
+	LovedBeatmapsetCount             int              `json:"loved_beatmapset_count"`
+	Page                             Page             `json:"page"`
+	PreviousUsernames                []string         `json:"previous_usernames"`
+	RankedAndApprovedBeatmapsetCount int              `json:"ranked_and_approved_beatmapset_count"`
+	ReplaysWatchedCounts             int              `json:"replays_watched_counts"`
+	ScoresBestCount                  int              `json:"scores_best_count"`
+	ScoresFirstCount                 int              `json:"scores_first_count"`
+	ScoresRecentCount                int              `json:"scores_recent_count"`
+	UnrankedBeatmapsetCount          int              `json:"unranked_beatmapset_count"`
+	RankHistory                      RankHistory      `json:"rank_history"`
 
 	// internal fields
 	Mode      string    `json:"-" gorm:"-"`
@@ -108,32 +108,6 @@ type Page struct {
 func (c Page) Value() (driver.Value, error) { return json.Marshal(c) }
 func (c *Page) Scan(value interface{}) error {
 	result := Page{}
-	err := json.Unmarshal(value.([]byte), &result)
-	return err
-}
-
-// UserAchievements with datetime
-type UserAchievements struct {
-	AchievedAt    time.Time `json:"achieved_at" db:"created_at"`
-	AchievementID int       `json:"achievement_id" db:"achievement_id"`
-}
-
-func (c UserAchievements) Value() (driver.Value, error) { return json.Marshal(c) }
-func (c *UserAchievements) Scan(value interface{}) error {
-	result := UserAchievements{}
-	err := json.Unmarshal(value.([]byte), &result)
-	return err
-}
-
-// RankHistory recor
-type RankHistory struct {
-	Mode string `json:"mode"`
-	Data []int  `json:"data"`
-}
-
-func (c RankHistory) Value() (driver.Value, error) { return json.Marshal(c) }
-func (c *RankHistory) Scan(value interface{}) error {
-	result := RankHistory{}
 	err := json.Unmarshal(value.([]byte), &result)
 	return err
 }

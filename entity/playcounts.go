@@ -2,10 +2,10 @@ package entity
 
 // MonthlyPlaycounts record
 type MonthlyPlaycounts struct {
-	Id        uint   `json:"-" gorm:"id"`
-	UserId    uint   `json:"-" gorm:"user_id"`
-	StartDate string `json:"start_date"`
-	Count     int    `json:"count"`
+	Id        uint   `json:"-"`
+	UserId    uint   `json:"-"`
+	StartDate string `json:"start_date" gorm:"column:year_month"`
+	Count     int    `json:"count" gorm:"column:playcount"`
 }
 
 func (MonthlyPlaycounts) TableName() string {

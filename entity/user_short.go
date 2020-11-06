@@ -3,6 +3,7 @@ package entity
 import (
 	"database/sql/driver"
 	"github.com/deissh/go-utils"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -25,6 +26,13 @@ type UserShort struct {
 	SupportLevel    int       `json:"support_level"`
 	AvatarURL       string    `json:"avatar_url"`
 	DefaultGroup    string    `json:"default_group"`
+}
+
+func (u *UserShort) AfterFind(tx *gorm.DB) (err error) {
+	if u.LastVisit.Add(time.Minute * 15).After(time.Now()) {
+		u.IsOnline = true
+	}
+	return
 }
 
 type UserShortField UserShort

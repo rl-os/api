@@ -1474,6 +1474,31 @@
                 }
             }
         },
+        "entity.Page": {
+            "type": "object",
+            "properties": {
+                "html": {
+                    "type": "string"
+                },
+                "raw": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.RankHistory": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "mode": {
+                    "type": "string"
+                }
+            }
+        },
         "entity.SingleBeatmap": {
             "type": "object",
             "properties": {
@@ -1571,8 +1596,29 @@
         "entity.User": {
             "type": "object",
             "properties": {
+                "account_history": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "active_tournament_banner": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
                 "avatar_url": {
                     "type": "string"
+                },
+                "badges": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "beatmap_playcounts_count": {
+                    "type": "integer"
                 },
                 "country": {
                     "type": "object",
@@ -1593,6 +1639,15 @@
                 },
                 "discord": {
                     "type": "string"
+                },
+                "favourite_beatmapset_count": {
+                    "type": "integer"
+                },
+                "follower_count": {
+                    "type": "integer"
+                },
+                "graveyard_beatmapset_count": {
+                    "type": "integer"
                 },
                 "groups": {
                     "type": "string"
@@ -1628,17 +1683,79 @@
                 "last_visit": {
                     "type": "string"
                 },
+                "location": {
+                    "type": "string"
+                },
+                "loved_beatmapset_count": {
+                    "type": "integer"
+                },
+                "max_blocks": {
+                    "type": "integer"
+                },
+                "max_friends": {
+                    "type": "integer"
+                },
                 "monthly_playcounts": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/entity.MonthlyPlaycounts"
                     }
                 },
+                "occupation": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Page"
+                },
+                "playmode": {
+                    "type": "string"
+                },
+                "playstyle": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "pm_friends_only": {
                     "type": "boolean"
                 },
+                "post_count": {
+                    "type": "integer"
+                },
+                "previous_usernames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "profile_colour": {
                     "type": "string"
+                },
+                "profile_order": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "rank_history": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.RankHistory"
+                },
+                "ranked_and_approved_beatmapset_count": {
+                    "type": "integer"
+                },
+                "replays_watched_counts": {
+                    "type": "integer"
+                },
+                "scores_best_count": {
+                    "type": "integer"
+                },
+                "scores_first_count": {
+                    "type": "integer"
+                },
+                "scores_recent_count": {
+                    "type": "integer"
                 },
                 "skype": {
                     "type": "string"
@@ -1659,13 +1776,36 @@
                 "twitter": {
                     "type": "string"
                 },
+                "unranked_beatmapset_count": {
+                    "type": "integer"
+                },
                 "updated_at": {
                     "type": "string"
+                },
+                "user_achievements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.UserAchievements"
+                    }
                 },
                 "username": {
                     "type": "string"
                 },
                 "website": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.UserAchievements": {
+            "type": "object",
+            "properties": {
+                "achieved_at": {
+                    "type": "string"
+                },
+                "achievement_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
                     "type": "string"
                 }
             }
