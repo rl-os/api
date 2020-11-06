@@ -1,12 +1,12 @@
 package store
 
-//go:generate mockgen -destination=./mocks/generated.go -source=store.go
-//go:generate gowrap gen -g -p . -i OAuth -t layers/log.tmpl -o layers/log_oauth.go
-//go:generate gowrap gen -g -p . -i Beatmap -t layers/log.tmpl -o layers/log_beatmap.go
-//go:generate gowrap gen -g -p . -i BeatmapSet -t layers/log.tmpl -o layers/log_beatmapset.go
-//go:generate gowrap gen -g -p . -i User -t layers/log.tmpl -o layers/log_user.go
-//go:generate gowrap gen -g -p . -i Friend -t layers/log.tmpl -o layers/log_friends.go
-//go:generate gowrap gen -g -p . -i Chat -t layers/log.tmpl -o layers/log_chat.go
+// go:generate mockgen -destination=./mocks/generated.go -source=store.go
+// go:generate gowrap gen -g -p . -i OAuth -t layers/log.tmpl -o layers/log_oauth.go
+// go:generate gowrap gen -g -p . -i Beatmap -t layers/log.tmpl -o layers/log_beatmap.go
+// go:generate gowrap gen -g -p . -i BeatmapSet -t layers/log.tmpl -o layers/log_beatmapset.go
+// go:generate gowrap gen -g -p . -i User -t layers/log.tmpl -o layers/log_user.go
+// go:generate gowrap gen -g -p . -i Friend -t layers/log.tmpl -o layers/log_friends.go
+// go:generate gowrap gen -g -p . -i Chat -t layers/log.tmpl -o layers/log_chat.go
 
 import (
 	"context"

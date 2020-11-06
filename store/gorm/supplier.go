@@ -10,6 +10,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type SupplierStores struct {
@@ -89,7 +90,9 @@ func (ss *Supplier) initConnection() {
 
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		Conn: conn.DB,
-	}), &gorm.Config{})
+	}), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 
 	ss.master = db
 }

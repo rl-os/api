@@ -1,16 +1,14 @@
 package entity
 
-import (
-	"database/sql/driver"
-	"encoding/json"
-)
-
-// Statistics in profile
-type Statistics struct {
+// UserStatistics in profile
+type UserStatistics struct {
 	Id     uint `json:"-" gorm:"id"`
 	UserId uint `json:"-" gorm:"user_id"`
 
-	Level                  Level   `json:"level"`
+	Level struct {
+		Current  int `json:"current"`
+		Progress int `json:"progress"`
+	} `json:"level" gorm:"embedded;embeddedPrefix:level_"`
 	Pp                     float64 `json:"pp"`
 	PpRank                 int     `json:"pp_rank"`
 	RankedScore            int     `json:"ranked_score"`
@@ -28,31 +26,13 @@ type Statistics struct {
 		S   int `json:"s"`
 		Sh  int `json:"sh"`
 		A   int `json:"a"`
-	} `json:"grade_counts"`
+	} `json:"grade_counts" gorm:"embedded;embeddedPrefix:grade_"`
 	Rank struct {
-		Global  int `json:"global" db:"global"`
-		Country int `json:"country" db:"country"`
-	} `json:"rank"`
+		Global  int `json:"global"`
+		Country int `json:"country"`
+	} `json:"rank" gorm:"-"`
 }
 
-type StatisticField Statistics
-
-func (c StatisticField) Value() (driver.Value, error) { return json.Marshal(c) }
-func (c *StatisticField) Scan(value interface{}) error {
-	result := StatisticField{}
-	err := json.Unmarshal(value.([]byte), &result)
-	return err
-}
-
-// Level progress and current value in user profile
-type Level struct {
-	Current  int `json:"current"`
-	Progress int `json:"progress"`
-}
-
-func (c Level) Value() (driver.Value, error) { return json.Marshal(c) }
-func (c *Level) Scan(value interface{}) error {
-	result := Level{}
-	err := json.Unmarshal(value.([]byte), &result)
-	return err
+func (UserStatistics) TableName() string {
+	return "user_statistics"
 }

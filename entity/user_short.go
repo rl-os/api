@@ -6,25 +6,25 @@ import (
 	"time"
 )
 
-// UserShort data struct
+// UserShort selector from database
 type UserShort struct {
-	ID              uint          `json:"id"`
-	IsActive        bool          `json:"is_active"`
-	IsBot           bool          `json:"is_bot"`
-	IsOnline        bool          `json:"is_online"`
-	IsSupporter     bool          `json:"is_supporter"`
-	LastVisit       time.Time     `json:"last_visit"`
-	PmFriendsOnly   bool          `json:"pm_friends_only"`
-	ProfileColour   interface{}   `json:"profile_colour"`
-	Username        string        `json:"username"`
-	Country         Country       `json:"country" gorm:"foreignkey:id"`
-	Cover           Cover         `json:"cover"`
-	CurrentModeRank int           `json:"current_mode_rank"`
-	Groups          []interface{} `json:"groups"`
-	SupportLevel    int           `json:"support_level"`
-	AvatarURL       string        `json:"avatar_url"`
-	CountryCode     string        `json:"country_code"`
-	DefaultGroup    string        `json:"default_group"`
+	ID              uint      `json:"id"`
+	IsActive        bool      `json:"is_active"`
+	IsBot           bool      `json:"is_bot"`
+	IsOnline        bool      `json:"is_online"`
+	IsSupporter     bool      `json:"is_supporter"`
+	LastVisit       time.Time `json:"last_visit"`
+	PmFriendsOnly   bool      `json:"pm_friends_only"`
+	ProfileColour   string    `json:"profile_colour"`
+	Username        string    `json:"username"`
+	CountryCode     string    `json:"country_code"`
+	Country         Country   `json:"country" gorm:"foreignkey:code;references:country_code"`
+	Cover           Cover     `json:"cover"`
+	CurrentModeRank int       `json:"current_mode_rank"`
+	Groups          string    `json:"groups"`
+	SupportLevel    int       `json:"support_level"`
+	AvatarURL       string    `json:"avatar_url"`
+	DefaultGroup    string    `json:"default_group"`
 }
 
 type UserShortField UserShort

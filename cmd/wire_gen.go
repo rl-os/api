@@ -11,7 +11,7 @@ import (
 	"github.com/rl-os/api/server"
 	"github.com/rl-os/api/services"
 	"github.com/rl-os/api/services/bancho"
-	"github.com/rl-os/api/store/sql"
+	"github.com/rl-os/api/store/gorm"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"

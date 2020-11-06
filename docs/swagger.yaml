@@ -465,13 +465,6 @@ definitions:
       total:
         type: integer
     type: object
-  entity.Level:
-    properties:
-      current:
-        type: integer
-      progress:
-        type: integer
-    type: object
   entity.MonthlyPlaycounts:
     properties:
       count:
@@ -485,22 +478,6 @@ definitions:
         type: integer
       required:
         type: integer
-    type: object
-  entity.Page:
-    properties:
-      html:
-        type: string
-      raw:
-        type: string
-    type: object
-  entity.RankHistory:
-    properties:
-      data:
-        items:
-          type: integer
-        type: array
-      mode:
-        type: string
     type: object
   entity.SingleBeatmap:
     properties:
@@ -565,7 +542,117 @@ definitions:
       version:
         type: string
     type: object
-  entity.Statistics:
+  entity.User:
+    properties:
+      avatar_url:
+        type: string
+      country:
+        $ref: '#/definitions/entity.Country'
+        type: object
+      country_code:
+        type: string
+      cover:
+        $ref: '#/definitions/entity.Cover'
+        type: object
+      current_mode_rank:
+        type: integer
+      default_group:
+        type: string
+      discord:
+        type: string
+      groups:
+        type: string
+      has_supported:
+        type: boolean
+      id:
+        type: integer
+      interests:
+        type: string
+      is_active:
+        type: boolean
+      is_bot:
+        type: boolean
+      is_online:
+        type: boolean
+      is_supporter:
+        type: boolean
+      join_date:
+        type: string
+      kudosu:
+        $ref: '#/definitions/entity.Kudosu'
+        type: object
+      last_visit:
+        type: string
+      monthly_playcounts:
+        items:
+          $ref: '#/definitions/entity.MonthlyPlaycounts'
+        type: array
+      pm_friends_only:
+        type: boolean
+      profile_colour:
+        type: string
+      skype:
+        type: string
+      statistics:
+        $ref: '#/definitions/entity.UserStatistics'
+        type: object
+      support_level:
+        type: integer
+      title:
+        type: string
+      title_url:
+        type: string
+      twitter:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+      website:
+        type: string
+    type: object
+  entity.UserShort:
+    properties:
+      avatar_url:
+        type: string
+      country:
+        $ref: '#/definitions/entity.Country'
+        type: object
+      country_code:
+        type: string
+      cover:
+        $ref: '#/definitions/entity.Cover'
+        type: object
+      current_mode_rank:
+        type: integer
+      default_group:
+        type: string
+      groups:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      is_bot:
+        type: boolean
+      is_online:
+        type: boolean
+      is_supporter:
+        type: boolean
+      last_visit:
+        type: string
+      pm_friends_only:
+        type: boolean
+      profile_colour:
+        type: string
+      support_level:
+        type: integer
+      username:
+        type: string
+    type: object
+  entity.UserShortField:
+    $ref: '#/definitions/entity.UserShort'
+  entity.UserStatistics:
     properties:
       grade_counts:
         properties:
@@ -585,7 +672,11 @@ definitions:
       is_ranked:
         type: boolean
       level:
-        $ref: '#/definitions/entity.Level'
+        properties:
+          current:
+            type: integer
+          progress:
+            type: integer
         type: object
       maximum_combo:
         type: integer
@@ -613,197 +704,6 @@ definitions:
       total_score:
         type: integer
     type: object
-  entity.User:
-    properties:
-      account_history:
-        items:
-          type: object
-        type: array
-      active_tournament_banner:
-        items:
-          type: object
-        type: array
-      avatar_url:
-        type: string
-      badges:
-        items:
-          type: object
-        type: array
-      beatmap_playcounts_count:
-        type: integer
-      country:
-        $ref: '#/definitions/entity.Country'
-        type: object
-      country_code:
-        type: string
-      cover:
-        $ref: '#/definitions/entity.Cover'
-        type: object
-      cover_url:
-        type: string
-      current_mode_rank:
-        type: integer
-      default_group:
-        type: string
-      discord:
-        type: string
-      favourite_beatmapset_count:
-        type: integer
-      follower_count:
-        type: integer
-      graveyard_beatmapset_count:
-        type: integer
-      groups:
-        items:
-          type: object
-        type: array
-      has_supported:
-        type: boolean
-      id:
-        type: integer
-      interests:
-        type: string
-      is_active:
-        type: boolean
-      is_bot:
-        type: boolean
-      is_online:
-        type: boolean
-      is_supporter:
-        type: boolean
-      join_date:
-        type: string
-      kudosu:
-        $ref: '#/definitions/entity.Kudosu'
-        type: object
-      last_visit:
-        type: string
-      location:
-        type: string
-      loved_beatmapset_count:
-        type: integer
-      max_blocks:
-        type: integer
-      max_friends:
-        type: integer
-      monthly_playcounts:
-        items:
-          $ref: '#/definitions/entity.MonthlyPlaycounts'
-        type: array
-      occupation:
-        type: string
-      page:
-        $ref: '#/definitions/entity.Page'
-        type: object
-      playmode:
-        type: string
-      playstyle:
-        items:
-          type: string
-        type: array
-      pm_friends_only:
-        type: boolean
-      post_count:
-        type: integer
-      previous_usernames:
-        items:
-          type: string
-        type: array
-      profile_colour:
-        type: object
-      profile_order:
-        items:
-          type: string
-        type: array
-      rank_history:
-        $ref: '#/definitions/entity.RankHistory'
-        type: object
-      ranked_and_approved_beatmapset_count:
-        type: integer
-      replays_watched_counts:
-        items:
-          type: object
-        type: array
-      scores_best_count:
-        type: integer
-      scores_first_count:
-        type: integer
-      scores_recent_count:
-        type: integer
-      skype:
-        type: string
-      statistics:
-        $ref: '#/definitions/entity.Statistics'
-        type: object
-      support_level:
-        type: integer
-      title:
-        type: string
-      title_url:
-        type: string
-      twitter:
-        type: string
-      unranked_beatmapset_count:
-        type: integer
-      user_achievements:
-        items:
-          $ref: '#/definitions/entity.UserAchievements'
-        type: array
-      username:
-        type: string
-      website:
-        type: string
-    type: object
-  entity.UserAchievements:
-    properties:
-      achieved_at:
-        type: string
-      achievement_id:
-        type: integer
-    type: object
-  entity.UserShort:
-    properties:
-      avatar_url:
-        type: string
-      country:
-        $ref: '#/definitions/entity.Country'
-        type: object
-      country_code:
-        type: string
-      cover:
-        $ref: '#/definitions/entity.Cover'
-        type: object
-      current_mode_rank:
-        type: integer
-      default_group:
-        type: string
-      groups:
-        items:
-          type: object
-        type: array
-      id:
-        type: integer
-      is_active:
-        type: boolean
-      is_bot:
-        type: boolean
-      is_online:
-        type: boolean
-      is_supporter:
-        type: boolean
-      last_visit:
-        type: string
-      pm_friends_only:
-        type: boolean
-      profile_colour:
-        type: object
-      support_level:
-        type: integer
-      username:
-        type: string
-    type: object
-  entity.UserShortField:
-    $ref: '#/definitions/entity.UserShort'
   errors.ResponseFormat:
     properties:
       error_description:

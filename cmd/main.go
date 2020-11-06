@@ -9,7 +9,7 @@ import (
 	"github.com/rl-os/api/config"
 	"github.com/rl-os/api/server"
 	"github.com/rl-os/api/services"
-	"github.com/rl-os/api/store/sql"
+	sql "github.com/rl-os/api/store/gorm"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"

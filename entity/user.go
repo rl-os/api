@@ -1,42 +1,19 @@
 package entity
 
 import (
-	"encoding/json"
-	"gorm.io/gorm"
-
 	"database/sql/driver"
+	"encoding/json"
 	"github.com/deissh/go-utils"
 	"time"
 )
 
 type User struct {
-	gorm.Model
-
-	// internal field
-	Mode string `json:"-" db:"-"`
-
-	ID              uint          `json:"id"`
-	IsActive        bool          `json:"is_active"`
-	IsBot           bool          `json:"is_bot"`
-	IsOnline        bool          `json:"is_online"`
-	IsSupporter     bool          `json:"is_supporter"`
-	LastVisit       time.Time     `json:"last_visit"`
-	PmFriendsOnly   bool          `json:"pm_friends_only"`
-	ProfileColour   interface{}   `json:"profile_colour"`
-	Username        string        `json:"username"`
-	Country         Country       `json:"country"`
-	Cover           Cover         `json:"cover"`
-	CurrentModeRank int           `json:"current_mode_rank"`
-	Groups          []interface{} `json:"groups"`
-	SupportLevel    int           `json:"support_level"`
-	AvatarURL       string        `json:"avatar_url"`
-	CountryCode     string        `json:"country_code"`
-	DefaultGroup    string        `json:"default_group"`
-
-	CoverURL string    `json:"cover_url"`
-	JoinDate time.Time `json:"join_date"`
+	UserShort
 
 	HasSupported bool `json:"has_supported"`
+
+	Statistics        UserStatistics      `json:"statistics" gorm:"foreignkey:user_id;references:id"`
+	MonthlyPlaycounts []MonthlyPlaycounts `json:"monthly_playcounts" gorm:"foreignkey:user_id;references:id"`
 
 	Discord                          utils.NullString   `json:"discord"`
 	Skype                            utils.NullString   `json:"skype"`
@@ -51,7 +28,7 @@ type User struct {
 	MaxFriends                       int                `json:"max_friends"`
 	Occupation                       string             `json:"occupation"`
 	Playmode                         string             `json:"playmode"`
-	Playstyle                        []string           `json:"playstyle"`
+	Playstyle                        string             `json:"playstyle"`
 	PostCount                        int                `json:"post_count"`
 	ProfileOrder                     []string           `json:"profile_order"`
 	AccountHistory                   []interface{}      `json:"account_history"`
@@ -65,23 +42,34 @@ type User struct {
 	Page                             Page               `json:"page"`
 	PreviousUsernames                []string           `json:"previous_usernames"`
 	RankedAndApprovedBeatmapsetCount int                `json:"ranked_and_approved_beatmapset_count"`
-	ReplaysWatchedCounts             []interface{}      `json:"replays_watched_counts"`
+	ReplaysWatchedCounts             int                `json:"replays_watched_counts"`
 	ScoresBestCount                  int                `json:"scores_best_count"`
 	ScoresFirstCount                 int                `json:"scores_first_count"`
 	ScoresRecentCount                int                `json:"scores_recent_count"`
-	Statistics                       Statistics         `json:"statistics"`
 	UnrankedBeatmapsetCount          int                `json:"unranked_beatmapset_count"`
 	UserAchievements                 []UserAchievements `json:"user_achievements"`
 	RankHistory                      RankHistory        `json:"rank_history"`
 
-	MonthlyPlaycounts []MonthlyPlaycountsField `json:"monthly_playcounts" gorm:"foreignkey:UserName;references:name"`
+	// internal fields
+	Mode      string    `json:"-" gorm:"-"`
+	CreatedAt time.Time `json:"join_date"`
+	UpdatedAt time.Time `json:"updated_at"`
+	DeletedAt time.Time `json:"-"`
+}
+
+func (User) TableName() string {
+	return "users"
 }
 
 // Country with code
 type Country struct {
-	Id   uint   `json:"id"`
+	Id   uint   `json:"-"`
 	Code string `json:"code"`
 	Name string `json:"name"`
+}
+
+func (Country) TableName() string {
+	return "countries"
 }
 
 // Cover file url

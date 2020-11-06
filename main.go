@@ -11,11 +11,11 @@ import (
 func main() {
 	cfg := config.Init("config.yaml")
 
-	store := sql.Init(cfg, &services.Services{Bancho:nil})
+	store := sql.Init(cfg, &services.Services{Bancho: nil})
 
 	user, err := store.
 		User().
 		Get(context.TODO(), 100, "")
 
-	log.Info(user, err)
+	log.Info(user.Country, err)
 }

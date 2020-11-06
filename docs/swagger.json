@@ -1452,17 +1452,6 @@
                 }
             }
         },
-        "entity.Level": {
-            "type": "object",
-            "properties": {
-                "current": {
-                    "type": "integer"
-                },
-                "progress": {
-                    "type": "integer"
-                }
-            }
-        },
         "entity.MonthlyPlaycounts": {
             "type": "object",
             "properties": {
@@ -1482,31 +1471,6 @@
                 },
                 "required": {
                     "type": "integer"
-                }
-            }
-        },
-        "entity.Page": {
-            "type": "object",
-            "properties": {
-                "html": {
-                    "type": "string"
-                },
-                "raw": {
-                    "type": "string"
-                }
-            }
-        },
-        "entity.RankHistory": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "mode": {
-                    "type": "string"
                 }
             }
         },
@@ -1604,7 +1568,170 @@
                 }
             }
         },
-        "entity.Statistics": {
+        "entity.User": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Country"
+                },
+                "country_code": {
+                    "type": "string"
+                },
+                "cover": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Cover"
+                },
+                "current_mode_rank": {
+                    "type": "integer"
+                },
+                "default_group": {
+                    "type": "string"
+                },
+                "discord": {
+                    "type": "string"
+                },
+                "groups": {
+                    "type": "string"
+                },
+                "has_supported": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "interests": {
+                    "type": "string"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "is_bot": {
+                    "type": "boolean"
+                },
+                "is_online": {
+                    "type": "boolean"
+                },
+                "is_supporter": {
+                    "type": "boolean"
+                },
+                "join_date": {
+                    "type": "string"
+                },
+                "kudosu": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Kudosu"
+                },
+                "last_visit": {
+                    "type": "string"
+                },
+                "monthly_playcounts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.MonthlyPlaycounts"
+                    }
+                },
+                "pm_friends_only": {
+                    "type": "boolean"
+                },
+                "profile_colour": {
+                    "type": "string"
+                },
+                "skype": {
+                    "type": "string"
+                },
+                "statistics": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.UserStatistics"
+                },
+                "support_level": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "title_url": {
+                    "type": "string"
+                },
+                "twitter": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "website": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.UserShort": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Country"
+                },
+                "country_code": {
+                    "type": "string"
+                },
+                "cover": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Cover"
+                },
+                "current_mode_rank": {
+                    "type": "integer"
+                },
+                "default_group": {
+                    "type": "string"
+                },
+                "groups": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "is_bot": {
+                    "type": "boolean"
+                },
+                "is_online": {
+                    "type": "boolean"
+                },
+                "is_supporter": {
+                    "type": "boolean"
+                },
+                "last_visit": {
+                    "type": "string"
+                },
+                "pm_friends_only": {
+                    "type": "boolean"
+                },
+                "profile_colour": {
+                    "type": "string"
+                },
+                "support_level": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.UserShortField": {
+            "$ref": "#/definitions/entity.UserShort"
+        },
+        "entity.UserStatistics": {
             "type": "object",
             "properties": {
                 "grade_counts": {
@@ -1635,7 +1762,14 @@
                 },
                 "level": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.Level"
+                    "properties": {
+                        "current": {
+                            "type": "integer"
+                        },
+                        "progress": {
+                            "type": "integer"
+                        }
+                    }
                 },
                 "maximum_combo": {
                     "type": "integer"
@@ -1676,290 +1810,6 @@
                     "type": "integer"
                 }
             }
-        },
-        "entity.User": {
-            "type": "object",
-            "properties": {
-                "account_history": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                },
-                "active_tournament_banner": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                },
-                "avatar_url": {
-                    "type": "string"
-                },
-                "badges": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                },
-                "beatmap_playcounts_count": {
-                    "type": "integer"
-                },
-                "country": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Country"
-                },
-                "country_code": {
-                    "type": "string"
-                },
-                "cover": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Cover"
-                },
-                "cover_url": {
-                    "type": "string"
-                },
-                "current_mode_rank": {
-                    "type": "integer"
-                },
-                "default_group": {
-                    "type": "string"
-                },
-                "discord": {
-                    "type": "string"
-                },
-                "favourite_beatmapset_count": {
-                    "type": "integer"
-                },
-                "follower_count": {
-                    "type": "integer"
-                },
-                "graveyard_beatmapset_count": {
-                    "type": "integer"
-                },
-                "groups": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                },
-                "has_supported": {
-                    "type": "boolean"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "interests": {
-                    "type": "string"
-                },
-                "is_active": {
-                    "type": "boolean"
-                },
-                "is_bot": {
-                    "type": "boolean"
-                },
-                "is_online": {
-                    "type": "boolean"
-                },
-                "is_supporter": {
-                    "type": "boolean"
-                },
-                "join_date": {
-                    "type": "string"
-                },
-                "kudosu": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Kudosu"
-                },
-                "last_visit": {
-                    "type": "string"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "loved_beatmapset_count": {
-                    "type": "integer"
-                },
-                "max_blocks": {
-                    "type": "integer"
-                },
-                "max_friends": {
-                    "type": "integer"
-                },
-                "monthly_playcounts": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/entity.MonthlyPlaycounts"
-                    }
-                },
-                "occupation": {
-                    "type": "string"
-                },
-                "page": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Page"
-                },
-                "playmode": {
-                    "type": "string"
-                },
-                "playstyle": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "pm_friends_only": {
-                    "type": "boolean"
-                },
-                "post_count": {
-                    "type": "integer"
-                },
-                "previous_usernames": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "profile_colour": {
-                    "type": "object"
-                },
-                "profile_order": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "rank_history": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.RankHistory"
-                },
-                "ranked_and_approved_beatmapset_count": {
-                    "type": "integer"
-                },
-                "replays_watched_counts": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                },
-                "scores_best_count": {
-                    "type": "integer"
-                },
-                "scores_first_count": {
-                    "type": "integer"
-                },
-                "scores_recent_count": {
-                    "type": "integer"
-                },
-                "skype": {
-                    "type": "string"
-                },
-                "statistics": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Statistics"
-                },
-                "support_level": {
-                    "type": "integer"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "title_url": {
-                    "type": "string"
-                },
-                "twitter": {
-                    "type": "string"
-                },
-                "unranked_beatmapset_count": {
-                    "type": "integer"
-                },
-                "user_achievements": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/entity.UserAchievements"
-                    }
-                },
-                "username": {
-                    "type": "string"
-                },
-                "website": {
-                    "type": "string"
-                }
-            }
-        },
-        "entity.UserAchievements": {
-            "type": "object",
-            "properties": {
-                "achieved_at": {
-                    "type": "string"
-                },
-                "achievement_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "entity.UserShort": {
-            "type": "object",
-            "properties": {
-                "avatar_url": {
-                    "type": "string"
-                },
-                "country": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Country"
-                },
-                "country_code": {
-                    "type": "string"
-                },
-                "cover": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Cover"
-                },
-                "current_mode_rank": {
-                    "type": "integer"
-                },
-                "default_group": {
-                    "type": "string"
-                },
-                "groups": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "is_active": {
-                    "type": "boolean"
-                },
-                "is_bot": {
-                    "type": "boolean"
-                },
-                "is_online": {
-                    "type": "boolean"
-                },
-                "is_supporter": {
-                    "type": "boolean"
-                },
-                "last_visit": {
-                    "type": "string"
-                },
-                "pm_friends_only": {
-                    "type": "boolean"
-                },
-                "profile_colour": {
-                    "type": "object"
-                },
-                "support_level": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "entity.UserShortField": {
-            "$ref": "#/definitions/entity.UserShort"
         },
         "errors.ResponseFormat": {
             "type": "object",
