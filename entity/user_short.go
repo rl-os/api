@@ -7,23 +7,27 @@ import (
 	"time"
 )
 
-// UserShort selector from database
-type UserShort struct {
+type UserBasic struct {
 	ID           uint   `json:"id"`
 	Email        string `json:"-"`
 	Username     string `json:"username"`
 	PasswordHash string `json:"-"`
+}
+
+// UserShort selector from database
+type UserShort struct {
+	UserBasic
 
 	IsActive        bool      `json:"is_active"`
 	IsBot           bool      `json:"is_bot"`
-	IsOnline        bool      `json:"is_online"`
+	IsOnline        bool      `json:"is_online" gorm:"-"`
 	IsSupporter     bool      `json:"is_supporter"`
 	LastVisit       time.Time `json:"last_visit"`
 	PmFriendsOnly   bool      `json:"pm_friends_only"`
 	ProfileColour   string    `json:"profile_colour"`
 	CountryCode     string    `json:"country_code"`
 	Country         Country   `json:"country" gorm:"foreignkey:code;references:country_code"`
-	Cover           Cover     `json:"cover"`
+	Cover           Cover     `json:"cover"  gorm:"embedded;embeddedPrefix:cover_"`
 	CurrentModeRank int       `json:"current_mode_rank"`
 	Groups          string    `json:"groups"`
 	SupportLevel    int       `json:"support_level"`

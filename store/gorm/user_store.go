@@ -88,16 +88,15 @@ func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity
 		)
 	}
 
-	user := entity.User{
-		UserShort: entity.UserShort{
-			Username:     name,
-			Email:        email,
-			PasswordHash: hashed,
-		},
+	user := entity.UserBasic{
+		Username:     name,
+		Email:        email,
+		PasswordHash: hashed,
 	}
 
 	err = u.GetMaster().Transaction(func(tx *gorm.DB) error {
 		err := tx.WithContext(ctx).
+			Table("users").
 			Create(&user).
 			Error
 		if err != nil {
@@ -105,6 +104,7 @@ func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity
 		}
 
 		err = tx.WithContext(ctx).
+			Table("user_month_playcount").
 			Create(&entity.MonthlyPlaycounts{
 				UserId:    user.ID,
 				Count:     0,
@@ -114,11 +114,28 @@ func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity
 			return err
 		}
 
-		err = tx.WithContext(ctx).
-			Create(&entity.UserStatistics{UserId: user.ID}).
-			Error
-		if err != nil {
-			return err
+		for _, mode := range entity.Modes {
+			err = tx.WithContext(ctx).
+				Table("user_statistics").
+				Create(map[string]interface{}{
+					"user_id": user.ID,
+					"mode":    mode,
+				}).
+				Error
+			if err != nil {
+				return err
+			}
+
+			err = tx.WithContext(ctx).
+				Table("user_performance_ranks").
+				Create(map[string]interface{}{
+					"user_id": user.ID,
+					"mode":    mode,
+				}).
+				Error
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil

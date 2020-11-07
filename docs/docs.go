@@ -1344,7 +1344,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "custom_url": {
-                    "type": "object"
+                    "type": "string"
                 },
                 "id": {
                     "type": "string"

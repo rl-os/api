@@ -5,7 +5,7 @@ import "time"
 type Beatmap struct {
 	ID               int64     `json:"id"`
 	BeatmapsetID     int64     `json:"beatmapset_id" db:"beatmapset_id"`
-	Mode             Mode      `json:"mode"`
+	Mode             string    `json:"mode"`
 	ModeInt          int64     `json:"mode_int" db:"mode_int"`
 	Convert          bool      `json:"convert"`
 	DifficultyRating float64   `json:"difficulty_rating" db:"difficulty_rating"`
@@ -43,16 +43,14 @@ type Failtimes struct {
 	Exit []int64 `json:"exit"`
 }
 
-type Mode string
-
 const (
-	Fruits Mode = "fruits"
-	Mania  Mode = "mania"
-	Osu    Mode = "osu"
-	Taiko  Mode = "taiko"
+	Fruits string = "fruits"
+	Mania  string = "mania"
+	Osu    string = "osu"
+	Taiko  string = "taiko"
 )
 
-var Modes = []Mode{Osu, Taiko, Fruits, Mania}
+var Modes = []string{Osu, Taiko, Fruits, Mania}
 
 type Status string
 

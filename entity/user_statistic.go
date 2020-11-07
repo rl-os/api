@@ -11,7 +11,7 @@ type UserStatistics struct {
 		Progress int `json:"progress"`
 	} `json:"level" gorm:"embedded;embeddedPrefix:level_"`
 	Pp                     float64 `json:"pp"`
-	PpRank                 int     `json:"pp_rank"`
+	PpRank                 int     `json:"pp_rank" gorm:"-"`
 	RankedScore            int     `json:"ranked_score"`
 	HitAccuracy            float64 `json:"hit_accuracy"`
 	PlayCount              int     `json:"play_count"`
@@ -27,7 +27,7 @@ type UserStatistics struct {
 		S   int `json:"s"`
 		Sh  int `json:"sh"`
 		A   int `json:"a"`
-	} `json:"grade_counts" gorm:"embedded;embeddedPrefix:grade_"`
+	} `json:"grade_counts" gorm:"embedded;embeddedPrefix:grade_counts_"`
 	Rank struct {
 		Global  int `json:"global"`
 		Country int `json:"country"`

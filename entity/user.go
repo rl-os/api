@@ -75,16 +75,9 @@ func (Country) TableName() string {
 
 // Cover file url
 type Cover struct {
-	CustomURL interface{} `json:"custom_url"`
-	URL       string      `json:"url"`
-	ID        string      `json:"id"`
-}
-
-func (c Cover) Value() (driver.Value, error) { return json.Marshal(c) }
-func (c *Cover) Scan(value interface{}) error {
-	result := Cover{}
-	err := json.Unmarshal(value.([]byte), &result)
-	return err
+	CustomURL string `json:"custom_url" gorm:"-"`
+	URL       string `json:"url"`
+	ID        string `json:"id" gorm:"-"`
 }
 
 // Kudosu value in user profile
@@ -111,22 +104,4 @@ func (c *Page) Scan(value interface{}) error {
 	result := Page{}
 	err := json.Unmarshal(value.([]byte), &result)
 	return err
-}
-
-// GetShort version of user
-func (u *User) GetShort() *UserShort {
-	return &UserShort{
-		ID:            u.ID,
-		Username:      u.Username,
-		IsBot:         u.IsBot,
-		IsActive:      u.IsActive,
-		IsSupporter:   u.IsSupporter,
-		SupportLevel:  u.SupportLevel,
-		PmFriendsOnly: u.PmFriendsOnly,
-		AvatarURL:     u.AvatarURL,
-		CountryCode:   u.CountryCode,
-		DefaultGroup:  u.DefaultGroup,
-		LastVisit:     u.LastVisit,
-		IsOnline:      u.IsOnline,
-	}
 }
