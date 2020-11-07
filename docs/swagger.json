@@ -1827,15 +1827,15 @@
                 "default_group": {
                     "type": "string"
                 },
-                "groups": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "is_active": {
-                    "type": "boolean"
-                },
+              "groups": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "is_active": {
+                "type": "boolean"
+              },
               "is_bot": {
                 "type": "boolean"
               },

@@ -14,8 +14,8 @@ var (
 	ErrNotFoundUser = errors.New("user", http.StatusNotFound, "User not found")
 )
 
-// GetBeatmapset from store and return 404 error if not exist
-func (a *App) GetCurrentUser(ctx context.Context, userID uint, mode string) (*entity.User, error) {
+// GetUser from store and return 404 error if not exist
+func (a *App) GetUser(ctx context.Context, userID uint, mode string) (*entity.User, error) {
 	if !utils.ContainsString(modes, mode) {
 		mode = "std"
 	}
