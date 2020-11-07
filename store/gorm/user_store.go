@@ -49,6 +49,7 @@ func (u UserStore) Get(ctx context.Context, userId uint, mode string) (*entity.U
 		Table("users").
 		Where("id = ?", userId).
 		Preload("RankHistory", "mode = ?", mode).
+		Preload("Statistics", "mode = ?", mode).
 		Preload(clause.Associations).
 		First(&user).
 		Error

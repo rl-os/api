@@ -2,8 +2,9 @@ package entity
 
 // UserStatistics in profile
 type UserStatistics struct {
-	Id     uint `json:"-" gorm:"id"`
-	UserId uint `json:"-" gorm:"user_id"`
+	Id     uint   `json:"-" gorm:"id"`
+	UserId uint   `json:"-" gorm:"user_id"`
+	Mode   string `json:"-"`
 
 	Level struct {
 		Current  int `json:"current"`

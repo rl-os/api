@@ -1827,45 +1827,45 @@
                 "default_group": {
                     "type": "string"
                 },
-              "groups": {
-                "type": "string"
-              },
-              "id": {
-                "type": "integer"
-              },
-              "is_active": {
-                "type": "boolean"
-              },
-              "is_bot": {
-                "type": "boolean"
-              },
-              "is_online": {
-                "type": "boolean"
-              },
-              "is_supporter": {
-                "type": "boolean"
-              },
-              "join_date": {
-                "type": "string"
-              },
-              "last_visit": {
-                "type": "string"
-              },
-              "pm_friends_only": {
-                "type": "boolean"
-              },
-              "profile_colour": {
-                "type": "string"
-              },
-              "support_level": {
-                "type": "integer"
-              },
-              "updated_at": {
-                "type": "string"
-              },
-              "username": {
-                "type": "string"
-              }
+                "groups": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "is_bot": {
+                    "type": "boolean"
+                },
+                "is_online": {
+                    "type": "boolean"
+                },
+                "is_supporter": {
+                    "type": "boolean"
+                },
+                "join_date": {
+                    "type": "string"
+                },
+                "last_visit": {
+                    "type": "string"
+                },
+                "pm_friends_only": {
+                    "type": "boolean"
+                },
+                "profile_colour": {
+                    "type": "string"
+                },
+                "support_level": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
             }
         },
         "entity.UserShortField": {
