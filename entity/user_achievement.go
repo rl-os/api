@@ -4,9 +4,9 @@ import "time"
 
 // UserAchievements with datetime
 type UserAchievements struct {
-	ID            uint `json:"-" gorm:"primaryKey"`
+	ID            uint `json:"-"`
 	UserId        uint `json:"-"`
-	AchievementID int  `json:"achievement_id" db:"achievement_id"`
+	AchievementID int  `json:"achievement_id"`
 
 	CreatedAt time.Time `json:"achieved_at"`
 	UpdatedAt time.Time `json:"-"`

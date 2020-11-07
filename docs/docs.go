@@ -1504,10 +1504,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "string"
                 },
                 "mode": {
                     "type": "string"
@@ -1863,6 +1860,9 @@ var doc = `{
                 "is_supporter": {
                     "type": "boolean"
                 },
+                "join_date": {
+                    "type": "string"
+                },
                 "last_visit": {
                     "type": "string"
                 },
@@ -1874,6 +1874,9 @@ var doc = `{
                 },
                 "support_level": {
                     "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
                 },
                 "username": {
                     "type": "string"

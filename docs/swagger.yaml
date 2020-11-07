@@ -489,9 +489,7 @@ definitions:
   entity.RankHistory:
     properties:
       data:
-        items:
-          type: integer
-        type: array
+        type: string
       mode:
         type: string
     type: object
@@ -730,6 +728,8 @@ definitions:
         type: boolean
       is_supporter:
         type: boolean
+      join_date:
+        type: string
       last_visit:
         type: string
       pm_friends_only:
@@ -738,6 +738,8 @@ definitions:
         type: string
       support_level:
         type: integer
+      updated_at:
+        type: string
       username:
         type: string
     type: object

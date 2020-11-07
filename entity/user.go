@@ -4,7 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"github.com/deissh/go-utils"
-	"time"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -15,6 +15,7 @@ type User struct {
 	Statistics        UserStatistics      `json:"statistics" gorm:"foreignkey:user_id;references:id"`
 	MonthlyPlaycounts []MonthlyPlaycounts `json:"monthly_playcounts" gorm:"foreignkey:user_id;references:id"`
 	UserAchievements  []UserAchievements  `json:"user_achievements" gorm:"foreignkey:user_id;references:id"`
+	RankHistory       RankHistory         `json:"rank_history" gorm:"foreignkey:user_id;references:id"`
 
 	Discord                          utils.NullString `json:"discord"`
 	Skype                            utils.NullString `json:"skype"`
@@ -48,17 +49,17 @@ type User struct {
 	ScoresFirstCount                 int              `json:"scores_first_count"`
 	ScoresRecentCount                int              `json:"scores_recent_count"`
 	UnrankedBeatmapsetCount          int              `json:"unranked_beatmapset_count"`
-	RankHistory                      RankHistory      `json:"rank_history"`
-
-	// internal fields
-	Mode      string    `json:"-" gorm:"-"`
-	CreatedAt time.Time `json:"join_date"`
-	UpdatedAt time.Time `json:"updated_at"`
-	DeletedAt time.Time `json:"-"`
 }
 
 func (User) TableName() string {
 	return "users"
+}
+
+func (u *User) AfterFind(tx *gorm.DB) (err error) {
+	if err := u.UserShort.AfterFind(tx); err != nil {
+		return err
+	}
+	return
 }
 
 // Country with code

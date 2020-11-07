@@ -1,7 +1,19 @@
 package entity
 
-// RankHistory recor
+import (
+	"github.com/lib/pq"
+)
+
+// RankHistory record
 type RankHistory struct {
-	Mode string `json:"mode"`
-	Data []int  `json:"data"`
+	Id     uint `json:"-" gorm:"id"`
+	UserId uint `json:"-" gorm:"user_id"`
+
+	Mode string        `json:"mode"`
+	Data pq.Int64Array `json:"data" gorm:"type:int[]"`
+}
+
+// TableName of RankHistory
+func (r RankHistory) TableName() string {
+	return "user_performance_ranks"
 }

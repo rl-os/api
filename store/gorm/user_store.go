@@ -41,12 +41,14 @@ func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.U
 }
 
 func (u UserStore) Get(ctx context.Context, userId uint, mode string) (*entity.User, error) {
-	user := entity.User{Mode: mode}
+	user := entity.User{}
+	user.Mode = mode
 
 	err := u.GetMaster().
 		WithContext(ctx).
 		Table("users").
 		Where("id = ?", userId).
+		Preload("RankHistory", "mode = ? or mode = 'osu'", mode).
 		Preload(clause.Associations).
 		First(&user).
 		Error

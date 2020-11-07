@@ -29,6 +29,12 @@ type UserShort struct {
 	SupportLevel    int       `json:"support_level"`
 	AvatarURL       string    `json:"avatar_url"`
 	DefaultGroup    string    `json:"default_group"`
+
+	// internal fields
+	Mode      string    `json:"-" gorm:"-"`
+	CreatedAt time.Time `json:"join_date"`
+	UpdatedAt time.Time `json:"updated_at"`
+	DeletedAt time.Time `json:"-"`
 }
 
 func (u *UserShort) AfterFind(_ *gorm.DB) (err error) {

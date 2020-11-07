@@ -1489,10 +1489,7 @@
             "type": "object",
             "properties": {
                 "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "string"
                 },
                 "mode": {
                     "type": "string"
@@ -1839,30 +1836,36 @@
                 "is_active": {
                     "type": "boolean"
                 },
-                "is_bot": {
-                    "type": "boolean"
-                },
-                "is_online": {
-                    "type": "boolean"
-                },
-                "is_supporter": {
-                    "type": "boolean"
-                },
-                "last_visit": {
-                    "type": "string"
-                },
-                "pm_friends_only": {
-                    "type": "boolean"
-                },
-                "profile_colour": {
-                    "type": "string"
-                },
-                "support_level": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
+              "is_bot": {
+                "type": "boolean"
+              },
+              "is_online": {
+                "type": "boolean"
+              },
+              "is_supporter": {
+                "type": "boolean"
+              },
+              "join_date": {
+                "type": "string"
+              },
+              "last_visit": {
+                "type": "string"
+              },
+              "pm_friends_only": {
+                "type": "boolean"
+              },
+              "profile_colour": {
+                "type": "string"
+              },
+              "support_level": {
+                "type": "integer"
+              },
+              "updated_at": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              }
             }
         },
         "entity.UserShortField": {
