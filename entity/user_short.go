@@ -9,7 +9,11 @@ import (
 
 // UserShort selector from database
 type UserShort struct {
-	ID              uint      `json:"id"`
+	ID           uint   `json:"id"`
+	Email        string `json:"-"`
+	Username     string `json:"username"`
+	PasswordHash string `json:"-"`
+
 	IsActive        bool      `json:"is_active"`
 	IsBot           bool      `json:"is_bot"`
 	IsOnline        bool      `json:"is_online"`
@@ -17,7 +21,6 @@ type UserShort struct {
 	LastVisit       time.Time `json:"last_visit"`
 	PmFriendsOnly   bool      `json:"pm_friends_only"`
 	ProfileColour   string    `json:"profile_colour"`
-	Username        string    `json:"username"`
 	CountryCode     string    `json:"country_code"`
 	Country         Country   `json:"country" gorm:"foreignkey:code;references:country_code"`
 	Cover           Cover     `json:"cover"`
@@ -28,7 +31,7 @@ type UserShort struct {
 	DefaultGroup    string    `json:"default_group"`
 }
 
-func (u *UserShort) AfterFind(tx *gorm.DB) (err error) {
+func (u *UserShort) AfterFind(_ *gorm.DB) (err error) {
 	if u.LastVisit.Add(time.Minute * 15).After(time.Now()) {
 		u.IsOnline = true
 	}
@@ -39,10 +42,3 @@ type UserShortField UserShort
 
 func (c UserShortField) Value() (driver.Value, error)  { return utils.ValueOfStruct(c) }
 func (c *UserShortField) Scan(value interface{}) error { return utils.ScanToStruct(c, value) }
-
-type UserAuthBase struct {
-	UserShort
-
-	Email        string `json:"-"`
-	PasswordHash string `json:"-"`
-}

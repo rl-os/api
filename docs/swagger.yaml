@@ -701,8 +701,6 @@ definitions:
         type: string
       achievement_id:
         type: integer
-      updated_at:
-        type: string
     type: object
   entity.UserShort:
     properties:

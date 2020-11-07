@@ -1819,9 +1819,6 @@ var doc = `{
                 },
                 "achievement_id": {
                     "type": "integer"
-                },
-                "updated_at": {
-                    "type": "string"
                 }
             }
         },
