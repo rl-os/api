@@ -11,7 +11,7 @@ import (
 
 var (
 	modes           = []string{"std", "mania", "catch", "taiko"}
-	ErrNotFoundUser = errors.New("user", http.StatusNotFound, "User not found")
+	ErrNotFoundUser = errors.New("not_found_user", http.StatusNotFound, "Not found")
 )
 
 // GetUser from store and return 404 error if not exist

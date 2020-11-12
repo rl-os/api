@@ -24,7 +24,7 @@ func (h *UsersHandlers) Get(c echo.Context) error {
 
 	user, err := h.App.GetUser(ctx, uint(userId), mode)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, "User not found")
+		return err
 	}
 
 	return c.JSON(200, user)

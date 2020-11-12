@@ -33,6 +33,7 @@ type ResponseFormat struct {
 }
 
 func (e Error) WithCause(err error, messages ...string) Error {
+	e.Caller = caller(2)
 	e.CauseErr = err
 	e.CauseMsg = strings.Join(messages, "; ")
 	return e

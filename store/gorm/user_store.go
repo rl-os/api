@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/deissh/go-utils"
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/errors"
 	"github.com/rl-os/api/store"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -30,11 +29,11 @@ func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.U
 		First(&baseUser).
 		Error
 	if err != nil {
-		return nil, errors.WithCause("user_get", 401, "user credentials were incorrect", err)
+		return nil, err
 	}
 
 	if ok := utils.CompareHash(baseUser.PasswordHash, pwd); !ok {
-		return nil, errors.WithCause("user_get", 401, "user credentials were incorrect", err)
+		return nil, err
 	}
 
 	return &baseUser, nil
@@ -55,7 +54,7 @@ func (u UserStore) Get(ctx context.Context, userId uint, mode string) (*entity.U
 		Error
 
 	if err != nil {
-		return nil, errors.WithCause("user_get", 404, "user not found", err)
+		return nil, err
 	}
 
 	return u.ComputeFields(ctx, user)
@@ -72,7 +71,7 @@ func (u UserStore) GetShort(ctx context.Context, userId uint, mode string) (*ent
 		Error
 
 	if err != nil {
-		return nil, errors.WithCause("user_get", 404, "user not found", err)
+		return nil, err
 	}
 
 	return &user, nil
@@ -83,9 +82,7 @@ func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity
 
 	hashed, err := utils.GetHash(pwd)
 	if err != nil {
-		return nil, errors.WithCause(
-			"user_create", 500, "hashing password", err,
-		)
+		return nil, err
 	}
 
 	user := entity.UserBasic{
@@ -141,11 +138,7 @@ func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity
 		return nil
 	})
 	if err != nil {
-		return nil, errors.WithCause(
-			"user_create",
-			500,
-			"creating user, transaction not completed",
-			err)
+		return nil, err
 	}
 
 	return u.User().Get(ctx, user.ID, "")
@@ -163,7 +156,7 @@ func (u UserStore) Activate(ctx context.Context, userId uint) error {
 		Update("is_active", true).
 		Error
 	if err != nil {
-		return errors.WithCause("user_activate", 404, "User not found", err)
+		return err
 	}
 
 	return nil
@@ -178,7 +171,7 @@ func (u UserStore) Deactivate(ctx context.Context, userId uint) error {
 		Update("is_active", false).
 		Error
 	if err != nil {
-		return errors.WithCause("user_activate", 404, "User not found", err)
+		return err
 	}
 
 	return nil
@@ -210,7 +203,7 @@ func (u UserStore) UpdateLastVisit(ctx context.Context, userId uint) error {
 		Update("last_visit", currentTime).
 		Error
 	if err != nil {
-		return errors.WithCause("user_update_online", 404, "User not found", err)
+		return err
 	}
 
 	return nil

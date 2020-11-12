@@ -19,7 +19,19 @@ func (o OAuthStore) CreateClient(ctx context.Context, name string, redirect stri
 }
 
 func (o OAuthStore) GetClient(ctx context.Context, id uint, secret string) (*entity.OAuthClient, error) {
-	panic("implement me")
+	client := entity.OAuthClient{}
+
+	err := o.GetMaster().
+		WithContext(ctx).
+		Table("oauth_client").
+		Where("id = ? and secret = ?", id, secret).
+		First(&client).
+		Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &client, err
 }
 
 func (o OAuthStore) CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (*entity.OAuthToken, error) {
