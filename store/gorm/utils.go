@@ -10,12 +10,12 @@ import (
 )
 
 // tokenCreate and fill all fields in struct
-func tokenCreate(jwtSecret string, beforeRevoke time.Duration, userID uint, clientID uint, scopes string) (*entity.OAuthToken, error) {
+func tokenCreate(jwtSecret string, beforeRevoke time.Duration, userID uint, clientID uint, scopes string) (entity.OAuthToken, error) {
 	// generate random refresh_token
 	refreshToken, err := utils.GenerateRandomString(255)
 	jwtID, err := utils.GenerateRandomString(64)
 	if err != nil {
-		return nil, errors.WithCause("internal_signing", 500, "new refresh token generate", err)
+		return entity.OAuthToken{}, errors.WithCause("internal_signing", 500, "new refresh token generate", err)
 	}
 
 	now := time.Now()
@@ -32,7 +32,7 @@ func tokenCreate(jwtSecret string, beforeRevoke time.Duration, userID uint, clie
 
 	accessToken, err := tokenClaims.SignedString([]byte(jwtSecret))
 	if err != nil {
-		return nil, errors.WithCause("internal_signing", 500, "access token signing", err)
+		return entity.OAuthToken{}, errors.WithCause("internal_signing", 500, "access token signing", err)
 	}
 
 	// inserting new oauth_token
@@ -46,5 +46,5 @@ func tokenCreate(jwtSecret string, beforeRevoke time.Duration, userID uint, clie
 		ExpiresAt:    expireAt,
 	}
 
-	return &token, nil
+	return token, nil
 }

@@ -2,6 +2,7 @@ package sql
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/deissh/go-utils"
 	"github.com/rl-os/api/entity"
@@ -25,7 +26,7 @@ func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.U
 	err := u.GetMaster().
 		WithContext(ctx).
 		Table("users").
-		Where("username = ? OR email = ?", login).
+		Where("username = ? OR email = ?", login, login).
 		First(&baseUser).
 		Error
 	if err != nil {
@@ -33,7 +34,7 @@ func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.U
 	}
 
 	if ok := utils.CompareHash(baseUser.PasswordHash, pwd); !ok {
-		return nil, err
+		return nil, errors.New("Invalid password. ")
 	}
 
 	return &baseUser, nil
