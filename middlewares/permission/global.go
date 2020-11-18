@@ -34,12 +34,13 @@ func GlobalMiddleware(app *app.App) echo.MiddlewareFunc {
 
 			// check token and write to reqest_context if user send one
 			if key, err := extractor(c); err == nil {
-				token, err := app.Store.OAuth().ValidateToken(app.Context, key)
+				token, err := app.ValidateToken(app.Context, key)
 				if err != nil {
 					// todo
 					return next(c)
 				}
 
+				// fixme: remove it
 				if err = app.Store.User().UpdateLastVisit(app.Context, token.UserID); err != nil {
 					log.Error().Err(err).Msg("updating last visit")
 				}

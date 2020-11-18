@@ -122,19 +122,19 @@ func (_d OAuthWithLog) RevokeToken(ctx context.Context, userId uint, accessToken
 }
 
 // ValidateToken implements store.OAuth
-func (_d OAuthWithLog) ValidateToken(ctx context.Context, accessToken string) (op1 *entity.OAuthToken, err error) {
+func (_d OAuthWithLog) GetToken(ctx context.Context, accessToken string) (op1 *entity.OAuthToken, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
 		Interface("accessToken", accessToken).
-		Msg("store.OAuth.ValidateToken: calling")
+		Msg("store.OAuth.GetToken: calling")
 	defer func() {
 		if err != nil {
 			log.Trace().Err(err).
-				Msg("store.OAuth.ValidateToken: returned an error")
+				Msg("store.OAuth.GetToken: returned an error")
 		} else {
 			log.Trace().
-				Msg("store.OAuth.ValidateToken: finished")
+				Msg("store.OAuth.GetToken: finished")
 		}
 	}()
-	return _d._base.ValidateToken(ctx, accessToken)
+	return _d._base.GetToken(ctx, accessToken)
 }

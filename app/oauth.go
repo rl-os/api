@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"github.com/deissh/go-utils"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/rl-os/api/entity/request"
 	"net/http"
 
@@ -13,7 +14,30 @@ import (
 var (
 	OAuthGroundType      = []string{"password", "refresh_token"}
 	InvalidAuthParamsErr = errors.New("invalid_auth_params", http.StatusBadRequest, "Not found")
+	InvalidAuthTokenErr  = errors.New("oauth_validate_token", http.StatusUnauthorized, "Invalid access token")
+	ExpiredAuthTokenErr  = errors.New("oauth_expire_token", http.StatusUnauthorized, "Access token expired")
 )
+
+func (a *App) ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
+	_, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
+		return []byte(a.Config.JWT.Secret), nil
+	})
+
+	if err != nil {
+		return nil, InvalidAuthTokenErr.WithCause(err)
+	}
+
+	token, err := a.Store.OAuth().GetToken(ctx, accessToken)
+	if err != nil {
+		return nil, InvalidAuthTokenErr.WithCause(err, "Not found")
+	}
+
+	if token.Revoked {
+		return nil, ExpiredAuthTokenErr
+	}
+
+	return token, nil
+}
 
 // CreateOAuthToken and return it
 func (a *App) CreateOAuthToken(ctx context.Context, request request.CreateOauthToken) (*entity.OAuthToken, error) {

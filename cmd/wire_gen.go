@@ -26,7 +26,7 @@ func Injector(configPath string) *server.Server {
 	osuAPI := bancho.Init(configConfig)
 	servicesServices := services.NewServices(osuAPI)
 	store := sql.Init(configConfig, servicesServices)
-	appApp := app.NewApp(store, servicesServices)
+	appApp := app.NewApp(store, configConfig, servicesServices)
 	serverServer := server.NewServer(configConfig, appApp)
 	return serverServer
 }

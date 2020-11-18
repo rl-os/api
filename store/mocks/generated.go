@@ -230,9 +230,9 @@ func (mr *MockOAuthMockRecorder) RefreshToken(ctx, refreshToken, clientID, clien
 }
 
 // ValidateToken mocks base method
-func (m *MockOAuth) ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
+func (m *MockOAuth) GetToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ValidateToken", ctx, accessToken)
+	ret := m.ctrl.Call(m, "GetToken", ctx, accessToken)
 	ret0, _ := ret[0].(*entity.OAuthToken)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
@@ -241,7 +241,7 @@ func (m *MockOAuth) ValidateToken(ctx context.Context, accessToken string) (*ent
 // ValidateToken indicates an expected call of ValidateToken
 func (mr *MockOAuthMockRecorder) ValidateToken(ctx, accessToken interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidateToken", reflect.TypeOf((*MockOAuth)(nil).ValidateToken), ctx, accessToken)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetToken", reflect.TypeOf((*MockOAuth)(nil).GetToken), ctx, accessToken)
 }
 
 // MockBeatmap is a mock of Beatmap interface

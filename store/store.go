@@ -32,7 +32,7 @@ type OAuth interface {
 	CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (*entity.OAuthToken, error)
 	RevokeToken(ctx context.Context, userId uint, accessToken string) error
 	RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error)
-	ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error)
+	GetToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error)
 }
 
 type Beatmap interface {

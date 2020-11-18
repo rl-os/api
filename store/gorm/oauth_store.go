@@ -73,6 +73,18 @@ func (o OAuthStore) RefreshToken(ctx context.Context, refreshToken string, clien
 	panic("implement me")
 }
 
-func (o OAuthStore) ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
-	panic("implement me")
+func (o OAuthStore) GetToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
+	token := entity.OAuthToken{}
+
+	err := o.GetMaster().
+		WithContext(ctx).
+		Table("oauth_token").
+		Where("access_token = ?", accessToken).
+		First(&token).
+		Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &token, nil
 }
