@@ -739,6 +739,44 @@ var doc = `{
                 }
             }
         },
+        "/api/v2/oauth/client": {
+            "post": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "OAuth"
+                ],
+                "summary": "Create new oauth client",
+                "parameters": [
+                    {
+                        "description": "JSON payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateOAuthClient"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.OAuthClient"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "post": {
                 "description": "get string by ID",
@@ -1489,6 +1527,32 @@ var doc = `{
                 }
             }
         },
+        "entity.OAuthClient": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "redirect": {
+                    "type": "string"
+                },
+                "revoked": {
+                    "type": "boolean"
+                },
+                "secret": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "entity.Page": {
             "type": "object",
             "properties": {
@@ -1991,6 +2055,17 @@ var doc = `{
                 },
                 "target_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "request.CreateOAuthClient": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "redirect": {
+                    "type": "string"
                 }
             }
         },

@@ -30,6 +30,8 @@ func New(app *app.App, root *echo.Group) {
 		signup.POST("", h.Create)
 	}
 
+	// osu! lazer oauth2 support
+	// HACK: remove if possible
 	oauth := root.Group("/oauth")
 	{
 		h := OAuthTokenHandlers{app}
@@ -38,8 +40,6 @@ func New(app *app.App, root *echo.Group) {
 
 	v2 := root.Group("/api/v2")
 	{
-		// Health status
-		// хз для чего я пишу в каждой версии свой пинг
 		v2.GET("/ping", echo.MethodNotAllowedHandler)
 
 		// === Me ===
@@ -146,6 +146,16 @@ func New(app *app.App, root *echo.Group) {
 		{
 			notif.GET("/", echo.MethodNotAllowedHandler)
 			notif.POST("/mark-read", echo.MethodNotAllowedHandler)
+		}
+
+		// === Private OAuth configurations
+		oauth := v2.Group("/oauth")
+		{
+			client := oauth.Group("/client")
+			{
+				h := OAuthClientHandlers{app}
+				client.POST("", h.Create, permission.MustLogin)
+			}
 		}
 
 		// === Misc ===

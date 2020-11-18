@@ -1,12 +1,12 @@
 package store
 
-// go:generate mockgen -destination=./mocks/generated.go -source=store.go
-// go:generate gowrap gen -g -p . -i OAuth -t layers/log.tmpl -o layers/log_oauth.go
-// go:generate gowrap gen -g -p . -i Beatmap -t layers/log.tmpl -o layers/log_beatmap.go
-// go:generate gowrap gen -g -p . -i BeatmapSet -t layers/log.tmpl -o layers/log_beatmapset.go
-// go:generate gowrap gen -g -p . -i User -t layers/log.tmpl -o layers/log_user.go
-// go:generate gowrap gen -g -p . -i Friend -t layers/log.tmpl -o layers/log_friends.go
-// go:generate gowrap gen -g -p . -i Chat -t layers/log.tmpl -o layers/log_chat.go
+//go:generate mockgen -destination=./mocks/generated.go -source=store.go
+//go:generate gowrap gen -g -p . -i OAuth -t layers/log.tmpl -o layers/log_oauth.go
+//go:generate gowrap gen -g -p . -i Beatmap -t layers/log.tmpl -o layers/log_beatmap.go
+//go:generate gowrap gen -g -p . -i BeatmapSet -t layers/log.tmpl -o layers/log_beatmapset.go
+//go:generate gowrap gen -g -p . -i User -t layers/log.tmpl -o layers/log_user.go
+//go:generate gowrap gen -g -p . -i Friend -t layers/log.tmpl -o layers/log_friends.go
+//go:generate gowrap gen -g -p . -i Chat -t layers/log.tmpl -o layers/log_chat.go
 
 import (
 	"context"
@@ -26,11 +26,11 @@ type Store interface {
 }
 
 type OAuth interface {
-	CreateClient(ctx context.Context, name string, redirect string) (*entity.OAuthClient, error)
+	CreateClient(ctx context.Context, userId uint, name string, redirect string) (*entity.OAuthClient, error)
 	GetClient(ctx context.Context, id uint, secret string) (*entity.OAuthClient, error)
 
 	CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (*entity.OAuthToken, error)
-	RevokeToken(ctx context.Context, userId uint, accessToken string) error
+	RevokeAllTokens(ctx context.Context, userId uint) error
 	RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error)
 	GetToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error)
 }

@@ -156,18 +156,18 @@ func (m *MockOAuth) EXPECT() *MockOAuthMockRecorder {
 }
 
 // CreateClient mocks base method
-func (m *MockOAuth) CreateClient(ctx context.Context, name, redirect string) (*entity.OAuthClient, error) {
+func (m *MockOAuth) CreateClient(ctx context.Context, userId uint, name, redirect string) (*entity.OAuthClient, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateClient", ctx, name, redirect)
+	ret := m.ctrl.Call(m, "CreateClient", ctx, userId, name, redirect)
 	ret0, _ := ret[0].(*entity.OAuthClient)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateClient indicates an expected call of CreateClient
-func (mr *MockOAuthMockRecorder) CreateClient(ctx, name, redirect interface{}) *gomock.Call {
+func (mr *MockOAuthMockRecorder) CreateClient(ctx, userId, name, redirect interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateClient", reflect.TypeOf((*MockOAuth)(nil).CreateClient), ctx, name, redirect)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateClient", reflect.TypeOf((*MockOAuth)(nil).CreateClient), ctx, userId, name, redirect)
 }
 
 // GetClient mocks base method
@@ -200,18 +200,18 @@ func (mr *MockOAuthMockRecorder) CreateToken(ctx, userId, clientID, clientSecret
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateToken", reflect.TypeOf((*MockOAuth)(nil).CreateToken), ctx, userId, clientID, clientSecret, scopes)
 }
 
-// RevokeToken mocks base method
-func (m *MockOAuth) RevokeToken(ctx context.Context, userId uint, accessToken string) error {
+// RevokeAllTokens mocks base method
+func (m *MockOAuth) RevokeAllTokens(ctx context.Context, userId uint) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RevokeToken", ctx, userId, accessToken)
+	ret := m.ctrl.Call(m, "RevokeAllTokens", ctx, userId)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// RevokeToken indicates an expected call of RevokeToken
-func (mr *MockOAuthMockRecorder) RevokeToken(ctx, userId, accessToken interface{}) *gomock.Call {
+// RevokeAllTokens indicates an expected call of RevokeAllTokens
+func (mr *MockOAuthMockRecorder) RevokeAllTokens(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RevokeToken", reflect.TypeOf((*MockOAuth)(nil).RevokeToken), ctx, userId, accessToken)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RevokeAllTokens", reflect.TypeOf((*MockOAuth)(nil).RevokeAllTokens), ctx, userId)
 }
 
 // RefreshToken mocks base method
@@ -229,7 +229,7 @@ func (mr *MockOAuthMockRecorder) RefreshToken(ctx, refreshToken, clientID, clien
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RefreshToken", reflect.TypeOf((*MockOAuth)(nil).RefreshToken), ctx, refreshToken, clientID, clientSecret)
 }
 
-// ValidateToken mocks base method
+// GetToken mocks base method
 func (m *MockOAuth) GetToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetToken", ctx, accessToken)
@@ -238,8 +238,8 @@ func (m *MockOAuth) GetToken(ctx context.Context, accessToken string) (*entity.O
 	return ret0, ret1
 }
 
-// ValidateToken indicates an expected call of ValidateToken
-func (mr *MockOAuthMockRecorder) ValidateToken(ctx, accessToken interface{}) *gomock.Call {
+// GetToken indicates an expected call of GetToken
+func (mr *MockOAuthMockRecorder) GetToken(ctx, accessToken interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetToken", reflect.TypeOf((*MockOAuth)(nil).GetToken), ctx, accessToken)
 }

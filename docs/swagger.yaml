@@ -479,6 +479,23 @@ definitions:
       required:
         type: integer
     type: object
+  entity.OAuthClient:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      redirect:
+        type: string
+      revoked:
+        type: boolean
+      secret:
+        type: string
+      user_id:
+        type: integer
+    type: object
   entity.Page:
     properties:
       html:
@@ -814,6 +831,13 @@ definitions:
         type: string
       target_id:
         type: integer
+    type: object
+  request.CreateOAuthClient:
+    properties:
+      name:
+        type: string
+      redirect:
+        type: string
     type: object
   request.CreateUser:
     properties:
@@ -1291,20 +1315,43 @@ paths:
           schema:
             $ref: '#/definitions/errors.ResponseFormat'
       security:
-      - OAuth2: []
+        - OAuth2: [ ]
       summary: Return current user
       tags:
-      - Current user
+        - Current user
+  /api/v2/oauth/client:
+    post:
+      parameters:
+        - description: JSON payload
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/request.CreateOAuthClient'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.OAuthClient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+        - OAuth2: [ ]
+      summary: Create new oauth client
+      tags:
+        - OAuth
   /users:
     post:
       description: get string by ID
       parameters:
-      - description: JSON payload
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/request.CreateUser'
+        - description: JSON payload
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/request.CreateUser'
       responses:
         "200":
           description: OK

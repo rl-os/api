@@ -709,26 +709,64 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entity.User"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ResponseFormat"
-                        }
+                  "200": {
+                    "description": "OK",
+                    "schema": {
+                      "$ref": "#/definitions/entity.User"
                     }
+                  },
+                  "400": {
+                    "description": "Bad Request",
+                    "schema": {
+                      "$ref": "#/definitions/errors.ResponseFormat"
+                    }
+                  }
                 }
             }
         },
-        "/users": {
-            "post": {
-                "description": "get string by ID",
-                "summary": "Create new user",
-                "parameters": [
+      "/api/v2/oauth/client": {
+        "post": {
+          "security": [
+            {
+              "OAuth2": []
+            }
+          ],
+          "tags": [
+            "OAuth"
+          ],
+          "summary": "Create new oauth client",
+          "parameters": [
+            {
+              "description": "JSON payload",
+              "name": "payload",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/request.CreateOAuthClient"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/entity.OAuthClient"
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "schema": {
+                "$ref": "#/definitions/errors.ResponseFormat"
+              }
+            }
+          }
+        }
+      },
+      "/users": {
+        "post": {
+          "description": "get string by ID",
+          "summary": "Create new user",
+          "parameters": [
                     {
                         "description": "JSON payload",
                         "name": "payload",
@@ -1463,24 +1501,50 @@
                 }
             }
         },
-        "entity.Nominations": {
-            "type": "object",
-            "properties": {
-                "current": {
-                    "type": "integer"
-                },
-                "required": {
-                    "type": "integer"
-                }
-            }
-        },
-        "entity.Page": {
-            "type": "object",
-            "properties": {
-                "html": {
-                    "type": "string"
-                },
-                "raw": {
+      "entity.Nominations": {
+        "type": "object",
+        "properties": {
+          "current": {
+            "type": "integer"
+          },
+          "required": {
+            "type": "integer"
+          }
+        }
+      },
+      "entity.OAuthClient": {
+        "type": "object",
+        "properties": {
+          "created_at": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "redirect": {
+            "type": "string"
+          },
+          "revoked": {
+            "type": "boolean"
+          },
+          "secret": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "entity.Page": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string"
+          },
+          "raw": {
                     "type": "string"
                 }
             }
@@ -1969,26 +2033,37 @@
             "type": "object",
             "properties": {
                 "is_action": {
-                    "type": "boolean"
+                  "type": "boolean"
                 },
-                "message": {
-                    "type": "string"
-                },
-                "target_id": {
-                    "type": "integer"
-                }
+              "message": {
+                "type": "string"
+              },
+              "target_id": {
+                "type": "integer"
+              }
             }
         },
-        "request.CreateUser": {
-            "type": "object",
-            "required": [
-                "email",
-                "password",
-                "username"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
+      "request.CreateOAuthClient": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "redirect": {
+            "type": "string"
+          }
+        }
+      },
+      "request.CreateUser": {
+        "type": "object",
+        "required": [
+          "email",
+          "password",
+          "username"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
                 },
                 "password": {
                     "type": "string"

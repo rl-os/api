@@ -9,7 +9,7 @@ type OAuthClient struct {
 	Name      string    `json:"name"`
 	Secret    string    `json:"secret"`
 	Redirect  string    `json:"redirect"`
-	Revoked   string    `json:"revoked"`
+	Revoked   bool      `json:"revoked"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
