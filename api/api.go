@@ -23,6 +23,9 @@ import (
 // @in request-body
 // @tokenUrl /oauth/token
 // @scope.* Grants all access
+// @scope.user.* Grants access as user (without system and admin api)
+// @scope.admin.* Grants access as admin
+// @scope.sys.* Grants access as system user (for example chatbot, worker and etc)
 func New(app *app.App, root *echo.Group) {
 	signup := root.Group("/users")
 	{
@@ -155,6 +158,12 @@ func New(app *app.App, root *echo.Group) {
 			{
 				h := OAuthClientHandlers{app}
 				client.POST("", h.Create, permission.MustLogin)
+			}
+
+			token := oauth.Group("/token")
+			{
+				h := OAuthTokenHandlers{app}
+				token.POST("", h.Create)
 			}
 		}
 

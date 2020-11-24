@@ -457,6 +457,20 @@ var doc = `{
                     "Chat"
                 ],
                 "summary": "Join to chat",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "channel id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "user",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -482,6 +496,20 @@ var doc = `{
                     "Chat"
                 ],
                 "summary": "Leave from chat",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "channel id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "user",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2117,7 +2145,10 @@ var doc = `{
             "flow": "password",
             "tokenUrl": "/oauth/token",
             "scopes": {
-                "*": " Grants all access"
+                "*": " Grants all access",
+                "admin.*": " Grants access as admin",
+                "sys.*": " Grants access as system user (for example chatbot, worker and etc)",
+                "user.*": " Grants access as user (without system and admin api)"
             }
         }
     }

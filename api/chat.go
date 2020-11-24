@@ -202,6 +202,8 @@ func (h *ChatHandlers) GetJoined(c echo.Context) error {
 // @Tags Chat
 // @Summary Join to chat
 // @Security OAuth2
+// @Param id path string false "channel id"
+// @Param user path string false "user id"
 //
 // @Success 200 {object} entity.Channel
 // @Success 400 {object} errors.ResponseFormat
@@ -232,6 +234,8 @@ func (h *ChatHandlers) Join(c echo.Context) error {
 // @Tags Chat
 // @Summary Leave from chat
 // @Security OAuth2
+// @Param id path string false "channel id"
+// @Param user path string false "user id"
 //
 // @Success 200 {object} interface{}
 // @Success 400 {object} errors.ResponseFormat

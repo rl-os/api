@@ -1124,6 +1124,15 @@ paths:
       - Chat
   /api/v2/chat/channels/{id}/users/{user}:
     delete:
+      parameters:
+      - description: channel id
+        in: path
+        name: id
+        type: string
+      - description: user id
+        in: path
+        name: user
+        type: string
       responses:
         "200":
           description: OK
@@ -1139,6 +1148,15 @@ paths:
       tags:
       - Chat
     put:
+      parameters:
+      - description: channel id
+        in: path
+        name: id
+        type: string
+      - description: user id
+        in: path
+        name: user
+        type: string
       responses:
         "200":
           description: OK
@@ -1315,19 +1333,19 @@ paths:
           schema:
             $ref: '#/definitions/errors.ResponseFormat'
       security:
-        - OAuth2: [ ]
+      - OAuth2: []
       summary: Return current user
       tags:
-        - Current user
+      - Current user
   /api/v2/oauth/client:
     post:
       parameters:
-        - description: JSON payload
-          in: body
-          name: payload
-          required: true
-          schema:
-            $ref: '#/definitions/request.CreateOAuthClient'
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateOAuthClient'
       responses:
         "200":
           description: OK
@@ -1338,20 +1356,20 @@ paths:
           schema:
             $ref: '#/definitions/errors.ResponseFormat'
       security:
-        - OAuth2: [ ]
+      - OAuth2: []
       summary: Create new oauth client
       tags:
-        - OAuth
+      - OAuth
   /users:
     post:
       description: get string by ID
       parameters:
-        - description: JSON payload
-          in: body
-          name: payload
-          required: true
-          schema:
-            $ref: '#/definitions/request.CreateUser'
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateUser'
       responses:
         "200":
           description: OK
@@ -1367,6 +1385,9 @@ securityDefinitions:
     flow: password
     scopes:
       '*': ' Grants all access'
+      admin.*: ' Grants access as admin'
+      sys.*: ' Grants access as system user (for example chatbot, worker and etc)'
+      user.*: ' Grants access as user (without system and admin api)'
     tokenUrl: /oauth/token
     type: oauth2
 swagger: "2.0"
