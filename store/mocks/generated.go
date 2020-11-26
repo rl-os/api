@@ -842,21 +842,6 @@ func (m *MockChat) EXPECT() *MockChatMockRecorder {
 	return m.recorder
 }
 
-// CreatePM mocks base method
-func (m *MockChat) CreatePM(ctx context.Context, userId, targetId uint, message string, isAction bool) (*entity.ChannelNewPm, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreatePM", ctx, userId, targetId, message, isAction)
-	ret0, _ := ret[0].(*entity.ChannelNewPm)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreatePM indicates an expected call of CreatePM
-func (mr *MockChatMockRecorder) CreatePM(ctx, userId, targetId, message, isAction interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePM", reflect.TypeOf((*MockChat)(nil).CreatePM), ctx, userId, targetId, message, isAction)
-}
-
 // Get mocks base method
 func (m *MockChat) Get(ctx context.Context, channelId uint) (*entity.Channel, error) {
 	m.ctrl.T.Helper()
@@ -872,19 +857,19 @@ func (mr *MockChatMockRecorder) Get(ctx, channelId interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockChat)(nil).Get), ctx, channelId)
 }
 
-// GetOrCreatePm mocks base method
-func (m *MockChat) GetOrCreatePm(ctx context.Context, userId, targetId uint) (*entity.Channel, error) {
+// CreatePm mocks base method
+func (m *MockChat) CreatePm(ctx context.Context, userId, targetId uint) (*entity.Channel, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetOrCreatePm", ctx, userId, targetId)
+	ret := m.ctrl.Call(m, "CreatePm", ctx, userId, targetId)
 	ret0, _ := ret[0].(*entity.Channel)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetOrCreatePm indicates an expected call of GetOrCreatePm
-func (mr *MockChatMockRecorder) GetOrCreatePm(ctx, userId, targetId interface{}) *gomock.Call {
+// CreatePm indicates an expected call of CreatePm
+func (mr *MockChatMockRecorder) CreatePm(ctx, userId, targetId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrCreatePm", reflect.TypeOf((*MockChat)(nil).GetOrCreatePm), ctx, userId, targetId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePm", reflect.TypeOf((*MockChat)(nil).CreatePm), ctx, userId, targetId)
 }
 
 // GetPublic mocks base method

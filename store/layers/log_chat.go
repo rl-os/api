@@ -23,25 +23,23 @@ func NewChatWithLog(base store.Chat) store.Chat {
 	}
 }
 
-// CreatePM implements store.Chat
-func (_d ChatWithLog) CreatePM(ctx context.Context, userId uint, targetId uint, message string, isAction bool) (cp1 *entity.ChannelNewPm, err error) {
+// CreatePm implements store.Chat
+func (_d ChatWithLog) CreatePm(ctx context.Context, userId uint, targetId uint) (cp1 *entity.Channel, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("targetId", targetId).
-		Interface("message", message).
-		Interface("isAction", isAction).
-		Msg("store.Chat.CreatePM: calling")
+		Msg("store.Chat.CreatePm: calling")
 	defer func() {
 		if err != nil {
 			log.Trace().Err(err).
-				Msg("store.Chat.CreatePM: returned an error")
+				Msg("store.Chat.CreatePm: returned an error")
 		} else {
 			log.Trace().
-				Msg("store.Chat.CreatePM: finished")
+				Msg("store.Chat.CreatePm: finished")
 		}
 	}()
-	return _d._base.CreatePM(ctx, userId, targetId, message, isAction)
+	return _d._base.CreatePm(ctx, userId, targetId)
 }
 
 // Get implements store.Chat
@@ -115,25 +113,6 @@ func (_d ChatWithLog) GetMessages(ctx context.Context, userId uint, since uint) 
 		}
 	}()
 	return _d._base.GetMessages(ctx, userId, since)
-}
-
-// GetOrCreatePm implements store.Chat
-func (_d ChatWithLog) GetOrCreatePm(ctx context.Context, userId uint, targetId uint) (cp1 *entity.Channel, err error) {
-	log.Trace().
-		Interface("ctx", ctx).
-		Interface("userId", userId).
-		Interface("targetId", targetId).
-		Msg("store.Chat.GetOrCreatePm: calling")
-	defer func() {
-		if err != nil {
-			log.Trace().Err(err).
-				Msg("store.Chat.GetOrCreatePm: returned an error")
-		} else {
-			log.Trace().
-				Msg("store.Chat.GetOrCreatePm: finished")
-		}
-	}()
-	return _d._base.GetOrCreatePm(ctx, userId, targetId)
 }
 
 // GetPublic implements store.Chat

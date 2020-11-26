@@ -87,6 +87,7 @@ func (h *ChatHandlers) Updates(c echo.Context) error {
 // @Summary Returns Messages in all joined chats
 // @Security OAuth2
 // @Param limit query integer true "limit 1-100, default 50"
+// @Param id path string false "channel id"
 //
 // @Success 200 {array} entity.ChatMessage
 // @Success 400 {object} errors.ResponseFormat
@@ -120,6 +121,7 @@ func (h *ChatHandlers) Messages(c echo.Context) error {
 // @Summary Send message to chat
 // @Security OAuth2
 // @Param payload body request.SendMessage true "JSON payload"
+// @Param id path string false "channel id"
 //
 // @Success 200 {object} entity.ChatMessage
 // @Success 400 {object} errors.ResponseFormat

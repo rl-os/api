@@ -16,6 +16,8 @@ type User struct {
 	MonthlyPlaycounts []MonthlyPlaycounts `json:"monthly_playcounts" gorm:"foreignkey:user_id;references:id"`
 	UserAchievements  []UserAchievements  `json:"user_achievements" gorm:"foreignkey:user_id;references:id"`
 	RankHistory       RankHistory         `json:"rank_history" gorm:"foreignkey:user_id;references:id"`
+	// todo: this
+	ReplaysWatchedCounts []interface{} `json:"replays_watched_counts" gorm:"-"`
 
 	Discord                          utils.NullString `json:"discord"`
 	Skype                            utils.NullString `json:"skype"`
@@ -44,7 +46,6 @@ type User struct {
 	Page                             Page             `json:"page"`
 	PreviousUsernames                []string         `json:"previous_usernames"`
 	RankedAndApprovedBeatmapsetCount int              `json:"ranked_and_approved_beatmapset_count"`
-	ReplaysWatchedCounts             int              `json:"replays_watched_counts"`
 	ScoresBestCount                  int              `json:"scores_best_count"`
 	ScoresFirstCount                 int              `json:"scores_first_count"`
 	ScoresRecentCount                int              `json:"scores_recent_count"`

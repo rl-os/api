@@ -1,8 +1,6 @@
 package entity
 
 import (
-	"database/sql/driver"
-	"github.com/deissh/go-utils"
 	"gorm.io/gorm"
 	"time"
 )
@@ -47,8 +45,3 @@ func (u *UserShort) AfterFind(_ *gorm.DB) (err error) {
 	}
 	return
 }
-
-type UserShortField UserShort
-
-func (c UserShortField) Value() (driver.Value, error)  { return utils.ValueOfStruct(c) }
-func (c *UserShortField) Scan(value interface{}) error { return utils.ScanToStruct(c, value) }

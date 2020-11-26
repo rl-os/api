@@ -11,16 +11,33 @@ import (
 var (
 	ErrNotFoundChat = errors.New("chat", http.StatusNotFound, "Chat not found")
 	ErrEmptyMessage = errors.New("chat", http.StatusBadRequest, "Message content must be not empty")
+
+	InvalidPMBodyErr      = errors.New("create_pm", http.StatusBadRequest, "Invalid chat information")
+	InvalidMessageBodyErr = errors.New("send_message_chat", http.StatusBadRequest, "Invalud message body")
 )
 
 // CreateChat
 func (a *App) CreateChat(ctx context.Context, userId, targetId uint, message string, isAction bool) (*entity.ChannelNewPm, error) {
-	data, err := a.Store.Chat().CreatePM(ctx, userId, targetId, message, isAction)
+	channel, err := a.Store.Chat().CreatePm(ctx, userId, targetId)
 	if err != nil {
-		return nil, ErrNotFoundChat.WithCause(err)
+		return nil, InvalidPMBodyErr.WithCause(err)
 	}
 
-	return data, nil
+	msg, err := a.Store.Chat().SendMessage(ctx, userId, channel.ID, message, isAction)
+	if err != nil {
+		return nil, InvalidMessageBodyErr.WithCause(err)
+	}
+
+	presence, err := a.Store.Chat().GetJoined(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &entity.ChannelNewPm{
+		Id:       channel.ID,
+		Presence: *presence,
+		Messages: *msg,
+	}, nil
 }
 
 // GetUpdatesInChat

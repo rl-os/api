@@ -137,7 +137,7 @@ definitions:
       title:
         type: string
       user:
-        $ref: '#/definitions/entity.UserShortField'
+        $ref: '#/definitions/entity.UserShort'
         type: object
       user_id:
         type: integer
@@ -218,7 +218,7 @@ definitions:
         type: array
       recent_favourites:
         items:
-          $ref: '#/definitions/entity.UserShortField'
+          $ref: '#/definitions/entity.UserShort'
         type: array
       source:
         type: string
@@ -233,7 +233,7 @@ definitions:
       title:
         type: string
       user:
-        $ref: '#/definitions/entity.UserShortField'
+        $ref: '#/definitions/entity.UserShort'
         type: object
       user_id:
         type: integer
@@ -369,7 +369,7 @@ definitions:
       message_id:
         type: integer
       sender:
-        $ref: '#/definitions/entity.UserShortField'
+        $ref: '#/definitions/entity.UserShort'
         type: object
       sender_id:
         type: integer
@@ -677,7 +677,10 @@ definitions:
       ranked_and_approved_beatmapset_count:
         type: integer
       replays_watched_counts:
-        type: integer
+        description: 'todo: this'
+        items:
+          type: object
+        type: array
       scores_best_count:
         type: integer
       scores_first_count:
@@ -760,8 +763,6 @@ definitions:
       username:
         type: string
     type: object
-  entity.UserShortField:
-    $ref: '#/definitions/entity.UserShort'
   entity.UserStatistics:
     properties:
       grade_counts:
@@ -1079,11 +1080,15 @@ paths:
   /api/v2/chat/channels/{id}/messages:
     get:
       parameters:
-      - description: limit 1-100, default 50
-        in: query
-        name: limit
-        required: true
-        type: integer
+        - description: limit 1-100, default 50
+          in: query
+          name: limit
+          required: true
+          type: integer
+        - description: channel id
+          in: path
+          name: id
+          type: string
       responses:
         "200":
           description: OK
@@ -1102,12 +1107,16 @@ paths:
       - Chat
     post:
       parameters:
-      - description: JSON payload
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/request.SendMessage'
+        - description: JSON payload
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/request.SendMessage'
+        - description: channel id
+          in: path
+          name: id
+          type: string
       responses:
         "200":
           description: OK

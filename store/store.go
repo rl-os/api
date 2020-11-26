@@ -88,10 +88,8 @@ type Friend interface {
 }
 
 type Chat interface {
-	CreatePM(ctx context.Context, userId, targetId uint, message string, isAction bool) (*entity.ChannelNewPm, error)
-
 	Get(ctx context.Context, channelId uint) (*entity.Channel, error)
-	GetOrCreatePm(ctx context.Context, userId, targetId uint) (*entity.Channel, error)
+	CreatePm(ctx context.Context, userId, targetId uint) (*entity.Channel, error)
 	GetPublic(ctx context.Context) (*[]entity.Channel, error)
 	GetJoined(ctx context.Context, userId uint) (*[]entity.Channel, error)
 	GetMessage(ctx context.Context, messageId uint) (*entity.ChatMessage, error)

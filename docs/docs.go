@@ -389,6 +389,12 @@ var doc = `{
                         "name": "limit",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "channel id",
+                        "name": "id",
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -428,6 +434,12 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/request.SendMessage"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "channel id",
+                        "name": "id",
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -1041,7 +1053,7 @@ var doc = `{
                 },
                 "user": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.UserShortField"
+                    "$ref": "#/definitions/entity.UserShort"
                 },
                 "user_id": {
                     "type": "integer"
@@ -1158,7 +1170,7 @@ var doc = `{
                 "recent_favourites": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.UserShortField"
+                        "$ref": "#/definitions/entity.UserShort"
                     }
                 },
                 "source": {
@@ -1181,7 +1193,7 @@ var doc = `{
                 },
                 "user": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.UserShortField"
+                    "$ref": "#/definitions/entity.UserShort"
                 },
                 "user_id": {
                     "type": "integer"
@@ -1385,7 +1397,7 @@ var doc = `{
                 },
                 "sender": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.UserShortField"
+                    "$ref": "#/definitions/entity.UserShort"
                 },
                 "sender_id": {
                     "type": "integer"
@@ -1850,7 +1862,11 @@ var doc = `{
                     "type": "integer"
                 },
                 "replays_watched_counts": {
-                    "type": "integer"
+                    "description": "todo: this",
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
                 },
                 "scores_best_count": {
                     "type": "integer"
@@ -1974,9 +1990,6 @@ var doc = `{
                     "type": "string"
                 }
             }
-        },
-        "entity.UserShortField": {
-            "$ref": "#/definitions/entity.UserShort"
         },
         "entity.UserStatistics": {
             "type": "object",

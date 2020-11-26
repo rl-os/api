@@ -368,13 +368,19 @@
                 ],
                 "summary": "Returns Messages in all joined chats",
                 "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "limit 1-100, default 50",
-                        "name": "limit",
-                        "in": "query",
-                        "required": true
-                    }
+                  {
+                    "type": "integer",
+                    "description": "limit 1-100, default 50",
+                    "name": "limit",
+                    "in": "query",
+                    "required": true
+                  },
+                  {
+                    "type": "string",
+                    "description": "channel id",
+                    "name": "id",
+                    "in": "path"
+                  }
                 ],
                 "responses": {
                     "200": {
@@ -405,15 +411,21 @@
                 ],
                 "summary": "Send message to chat",
                 "parameters": [
-                    {
-                        "description": "JSON payload",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.SendMessage"
-                        }
+                  {
+                    "description": "JSON payload",
+                    "name": "payload",
+                    "in": "body",
+                    "required": true,
+                    "schema": {
+                      "$ref": "#/definitions/request.SendMessage"
                     }
+                  },
+                  {
+                    "type": "string",
+                    "description": "channel id",
+                    "name": "id",
+                    "in": "path"
+                  }
                 ],
                 "responses": {
                     "200": {
@@ -1026,7 +1038,7 @@
                 },
                 "user": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.UserShortField"
+                  "$ref": "#/definitions/entity.UserShort"
                 },
                 "user_id": {
                     "type": "integer"
@@ -1143,7 +1155,7 @@
                 "recent_favourites": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.UserShortField"
+                      "$ref": "#/definitions/entity.UserShort"
                     }
                 },
                 "source": {
@@ -1166,7 +1178,7 @@
                 },
                 "user": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.UserShortField"
+                  "$ref": "#/definitions/entity.UserShort"
                 },
                 "user_id": {
                     "type": "integer"
@@ -1370,7 +1382,7 @@
                 },
                 "sender": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.UserShortField"
+                  "$ref": "#/definitions/entity.UserShort"
                 },
                 "sender_id": {
                     "type": "integer"
@@ -1835,7 +1847,11 @@
                     "type": "integer"
                 },
                 "replays_watched_counts": {
-                    "type": "integer"
+                  "description": "todo: this",
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
                 },
                 "scores_best_count": {
                     "type": "integer"
@@ -1959,9 +1975,6 @@
                     "type": "string"
                 }
             }
-        },
-        "entity.UserShortField": {
-            "$ref": "#/definitions/entity.UserShort"
         },
         "entity.UserStatistics": {
             "type": "object",
