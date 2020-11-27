@@ -60,7 +60,7 @@ func (a *App) GetMessages(ctx context.Context, userId, limit uint) (*[]entity.Ch
 		limit = 25
 	}
 
-	data, err := a.Store.Chat().GetMessages(ctx, userId, limit)
+	data, err := a.Store.Chat().GetMessages(ctx, userId, limit, limit)
 	if err != nil {
 		return nil, ErrNotFoundChat.WithCause(err)
 	}

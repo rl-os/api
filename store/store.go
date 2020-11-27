@@ -93,7 +93,7 @@ type Chat interface {
 	GetPublic(ctx context.Context) (*[]entity.Channel, error)
 	GetJoined(ctx context.Context, userId uint) (*[]entity.Channel, error)
 	GetMessage(ctx context.Context, messageId uint) (*entity.ChatMessage, error)
-	GetMessages(ctx context.Context, userId, since uint) (*[]entity.ChatMessage, error)
+	GetMessages(ctx context.Context, userId, since, limit uint) (*[]entity.ChatMessage, error)
 	GetUpdates(ctx context.Context, userId, since, channelId, limit uint) (*entity.ChannelUpdates, error)
 
 	SendMessage(ctx context.Context, userId, channelId uint, content string, isAction bool) (*entity.ChatMessage, error)

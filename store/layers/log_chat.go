@@ -97,11 +97,12 @@ func (_d ChatWithLog) GetMessage(ctx context.Context, messageId uint) (cp1 *enti
 }
 
 // GetMessages implements store.Chat
-func (_d ChatWithLog) GetMessages(ctx context.Context, userId uint, since uint) (cap1 *[]entity.ChatMessage, err error) {
+func (_d ChatWithLog) GetMessages(ctx context.Context, userId uint, since uint, limit uint) (cap1 *[]entity.ChatMessage, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
 		Interface("since", since).
+		Interface("limit", limit).
 		Msg("store.Chat.GetMessages: calling")
 	defer func() {
 		if err != nil {
@@ -112,7 +113,7 @@ func (_d ChatWithLog) GetMessages(ctx context.Context, userId uint, since uint) 
 				Msg("store.Chat.GetMessages: finished")
 		}
 	}()
-	return _d._base.GetMessages(ctx, userId, since)
+	return _d._base.GetMessages(ctx, userId, since, limit)
 }
 
 // GetPublic implements store.Chat

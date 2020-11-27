@@ -918,18 +918,18 @@ func (mr *MockChatMockRecorder) GetMessage(ctx, messageId interface{}) *gomock.C
 }
 
 // GetMessages mocks base method
-func (m *MockChat) GetMessages(ctx context.Context, userId, since uint) (*[]entity.ChatMessage, error) {
+func (m *MockChat) GetMessages(ctx context.Context, userId, since, limit uint) (*[]entity.ChatMessage, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetMessages", ctx, userId, since)
+	ret := m.ctrl.Call(m, "GetMessages", ctx, userId, since, limit)
 	ret0, _ := ret[0].(*[]entity.ChatMessage)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetMessages indicates an expected call of GetMessages
-func (mr *MockChatMockRecorder) GetMessages(ctx, userId, since interface{}) *gomock.Call {
+func (mr *MockChatMockRecorder) GetMessages(ctx, userId, since, limit interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMessages", reflect.TypeOf((*MockChat)(nil).GetMessages), ctx, userId, since)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMessages", reflect.TypeOf((*MockChat)(nil).GetMessages), ctx, userId, since, limit)
 }
 
 // GetUpdates mocks base method

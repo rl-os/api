@@ -91,7 +91,7 @@ func (c ChatStore) GetJoined(ctx context.Context, userId uint) (*[]entity.Channe
 	return &channels, nil
 }
 
-func (c ChatStore) GetMessages(ctx context.Context, userId, since uint) (*[]entity.ChatMessage, error) {
+func (c ChatStore) GetMessages(ctx context.Context, userId, since, limit uint) (*[]entity.ChatMessage, error) {
 	var msgs []entity.ChatMessage
 
 	err := c.GetMaster().
@@ -99,6 +99,7 @@ func (c ChatStore) GetMessages(ctx context.Context, userId, since uint) (*[]enti
 		Table("channels").
 		Where("id > ? AND c.active_users @> ARRAY[?]::int[]", since, userId).
 		Preload(clause.Associations).
+		Limit(int(limit)).
 		Find(&msgs).
 		Error
 
@@ -110,7 +111,20 @@ func (c ChatStore) GetMessages(ctx context.Context, userId, since uint) (*[]enti
 }
 
 func (c ChatStore) GetUpdates(ctx context.Context, userId, since, channelId, limit uint) (*entity.ChannelUpdates, error) {
-	panic("implement me")
+	channels, err := c.Chat().GetJoined(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	messages, err := c.Chat().GetMessages(ctx, userId, since, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	return &entity.ChannelUpdates{
+		Presence: channels,
+		Messages: messages,
+	}, nil
 }
 
 func (c ChatStore) SendMessage(ctx context.Context, userId, channelId uint, content string, isAction bool) (*entity.ChatMessage, error) {
