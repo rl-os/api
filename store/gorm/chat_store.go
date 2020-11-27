@@ -7,6 +7,7 @@ import (
 	"github.com/rl-os/api/store"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"time"
 )
 
 type ChatStore struct {
@@ -128,11 +129,44 @@ func (c ChatStore) GetUpdates(ctx context.Context, userId, since, channelId, lim
 }
 
 func (c ChatStore) SendMessage(ctx context.Context, userId, channelId uint, content string, isAction bool) (*entity.ChatMessage, error) {
-	panic("implement me")
+	msg := entity.ChatMessage{
+		SenderId:  userId,
+		ChannelId: channelId,
+		Timestamp: time.Now(),
+		Content:   content,
+		IsAction:  isAction,
+	}
+
+	err := c.GetMaster().Transaction(func(tx *gorm.DB) error {
+		return c.GetMaster().
+			WithContext(ctx).
+			Table("message").
+			Create(&msg).
+			Error
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &msg, nil
 }
 
 func (c ChatStore) GetMessage(ctx context.Context, messageId uint) (*entity.ChatMessage, error) {
-	panic("implement me")
+	var msg entity.ChatMessage
+
+	err := c.GetMaster().
+		WithContext(ctx).
+		Table("channels").
+		Where("id", messageId).
+		Preload(clause.Associations).
+		First(&msg).
+		Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &msg, nil
 }
 
 func (c ChatStore) Join(ctx context.Context, userId, channelId uint) (*entity.Channel, error) {
