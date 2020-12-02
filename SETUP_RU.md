@@ -40,6 +40,12 @@ $ brew install golang
 $ make
 
 
+# установить все зависимости
+$ make install
+# зависимости необходимые для работы CICD
+$ make install-ci
+
+
 # запускаем миграцию базы данных
 # для работы используется переменная окружения CONFIG__DATABASE__DSN
 $ make db-migrate
@@ -50,14 +56,6 @@ $ make db-status
 # открат изменений
 $ make db-rollback
 
-
-# установить все зависимости
-$ make install
-
 $ make build
 # после сборки в папке `bin/` появится `ayako`
 ```
-
-## Production Ready установка
-
-TODO
