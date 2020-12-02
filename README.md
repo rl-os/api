@@ -16,8 +16,7 @@
 </p>
 
 <p align="center">
-  <b>Rhythm is just a click away. Open source game server for osu!lazer.</b></br>
-  <span>This README outlines the details of collaborating on this application.</span></br>
+  <b>Rhythm is just a click away. Open source game server for osu!lazer.</b></br></br>
   <sub>Made with ❤️ by <a href="https://github.com/deissh">@deissh</a> and <a href="https://github.com/rl-os/api/graphs/contributors">contributors</a></sub>
 </p>
 
