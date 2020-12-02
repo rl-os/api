@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://301222.selcdn.ru/akasi/assets/rl-logo/logo-grey.svg" alt="logo" width="300" />
+  <img src="https://301222.selcdn.ru/akasi/assets/rl-logo/logo-grey.svg" alt="logo" width="200" />
 </p>
 
 <h1 align="center"></h1>
@@ -18,7 +18,7 @@
 <p align="center">
   <b>Rhythm is just a click away. Open source game server for osu!lazer.</b></br>
   <span>This README outlines the details of collaborating on this application.</span></br>
-  <sub>Made with ❤️ by <a href="https://github.com/deissh">@deissh</a> and may be you</sub>
+  <sub>Made with ❤️ by <a href="https://github.com/deissh">@deissh</a> and <a href="https://github.com/rl-os/api/graphs/contributors">contributors</a></sub>
 </p>
 
 <br />
