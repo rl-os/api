@@ -20,11 +20,45 @@ func (s BeatmapSetStore) Update(ctx context.Context, id uint, from interface{}) 
 }
 
 func (s BeatmapSetStore) SetFavourite(ctx context.Context, userId uint, id uint) (uint, error) {
-	panic("implement me")
+	_ = s.GetMaster().WithContext(ctx).
+		Table("user_beatmapset_favourite").
+		Create(map[string]interface{}{
+			"beatmapset_id": id,
+			"user_id":       userId,
+		})
+
+	var count int64
+	err := s.GetMaster().
+		Table("user_beatmapset_favourite").
+		Where("beatmapset_id = ? AND user_id = ?", id, userId).
+		Count(&count).
+		Error
+	if err != nil {
+		return 0, err
+	}
+
+	return uint(count), nil
 }
 
 func (s BeatmapSetStore) SetUnFavourite(ctx context.Context, userId uint, id uint) (uint, error) {
-	panic("implement me")
+	err := s.GetMaster().
+		Exec("DELETE FROM user_beatmapset_favourite WHERE beatmapset_id = ? AND user_id = ?", id, userId).
+		Error
+	if err != nil {
+		return 0, err
+	}
+
+	var count int64
+	err = s.GetMaster().
+		Table("user_beatmapset_favourite").
+		Where("beatmapset_id = ? AND user_id = ?", id, userId).
+		Count(&count).
+		Error
+	if err != nil {
+		return 0, err
+	}
+
+	return uint(count), nil
 }
 
 func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {

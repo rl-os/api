@@ -368,19 +368,19 @@
                 ],
                 "summary": "Returns Messages in all joined chats",
                 "parameters": [
-                  {
-                    "type": "integer",
-                    "description": "limit 1-100, default 50",
-                    "name": "limit",
-                    "in": "query",
-                    "required": true
-                  },
-                  {
-                    "type": "string",
-                    "description": "channel id",
-                    "name": "id",
-                    "in": "path"
-                  }
+                    {
+                        "type": "integer",
+                        "description": "limit 1-100, default 50",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "channel id",
+                        "name": "id",
+                        "in": "path"
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -411,21 +411,21 @@
                 ],
                 "summary": "Send message to chat",
                 "parameters": [
-                  {
-                    "description": "JSON payload",
-                    "name": "payload",
-                    "in": "body",
-                    "required": true,
-                    "schema": {
-                      "$ref": "#/definitions/request.SendMessage"
+                    {
+                        "description": "JSON payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SendMessage"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "channel id",
+                        "name": "id",
+                        "in": "path"
                     }
-                  },
-                  {
-                    "type": "string",
-                    "description": "channel id",
-                    "name": "id",
-                    "in": "path"
-                  }
                 ],
                 "responses": {
                     "200": {
@@ -858,54 +858,54 @@
                 "beatmapset_id": {
                     "type": "integer"
                 },
-              "bpm": {
-                "type": "integer"
-              },
-              "convert": {
-                "type": "boolean"
-              },
-              "count_circles": {
-                "type": "integer"
-              },
-              "count_sliders": {
-                "type": "integer"
-              },
-              "count_spinners": {
-                "type": "integer"
-              },
-              "count_total": {
-                "type": "integer"
-              },
-              "created_at": {
-                "type": "string"
-              },
-              "cs": {
-                "type": "integer"
-              },
-              "deleted_at": {
-                "type": "string"
-              },
-              "difficulty_rating": {
-                "type": "number"
-              },
-              "drain": {
-                "type": "integer"
-              },
-              "hit_length": {
-                "type": "integer"
-              },
-              "id": {
-                "type": "integer"
-              },
-              "is_scoreable": {
-                "type": "boolean"
+                "bpm": {
+                    "type": "integer"
+                },
+                "convert": {
+                    "type": "boolean"
+                },
+                "count_circles": {
+                    "type": "integer"
+                },
+                "count_sliders": {
+                    "type": "integer"
+                },
+                "count_spinners": {
+                    "type": "integer"
+                },
+                "count_total": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "cs": {
+                    "type": "integer"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "difficulty_rating": {
+                    "type": "number"
+                },
+                "drain": {
+                    "type": "integer"
+                },
+                "hit_length": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_scoreable": {
+                    "type": "boolean"
                 },
                 "last_updated": {
                     "type": "string"
                 },
                 "max_combo": {
-                  "description": "Failtimes      Failtimes `json:\"failtimes\"`",
-                  "type": "integer"
+                    "description": "Failtimes      Failtimes `json:\"failtimes\"`",
+                    "type": "integer"
                 },
                 "mode": {
                     "type": "string"
@@ -1038,7 +1038,7 @@
                 },
                 "user": {
                     "type": "object",
-                  "$ref": "#/definitions/entity.UserShort"
+                    "$ref": "#/definitions/entity.UserShort"
                 },
                 "user_id": {
                     "type": "integer"
@@ -1059,11 +1059,11 @@
                     "$ref": "#/definitions/entity.Availability"
                 },
                 "beatmaps": {
-                  "description": "RecentFavourites      []UserShort           `json:\"recent_favourites\" gorm:\"foreignkey:beatmapset_id;references:id\"`\nCurrentUserAttributes CurrentUserAttributes `json:\"current_user_attributes\"`",
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/entity.Beatmap"
-                  }
+                    "description": "RecentFavourites      []UserShort           `json:\"recent_favourites\" gorm:\"foreignkey:beatmapset_id;references:id\"`\nCurrentUserAttributes CurrentUserAttributes `json:\"current_user_attributes\"`",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Beatmap"
+                    }
                 },
                 "bpm": {
                     "type": "integer"
@@ -1157,7 +1157,7 @@
                 },
                 "user": {
                     "type": "object",
-                  "$ref": "#/definitions/entity.UserShort"
+                    "$ref": "#/definitions/entity.UserShort"
                 },
                 "user_id": {
                     "type": "integer"
@@ -1361,7 +1361,7 @@
                 },
                 "sender": {
                     "type": "object",
-                  "$ref": "#/definitions/entity.UserShort"
+                    "$ref": "#/definitions/entity.UserShort"
                 },
                 "sender_id": {
                     "type": "integer"
@@ -1552,54 +1552,54 @@
                 "beatmapset_id": {
                     "type": "integer"
                 },
-              "bpm": {
-                "type": "integer"
-              },
-              "convert": {
-                "type": "boolean"
-              },
-              "count_circles": {
-                "type": "integer"
-              },
-              "count_sliders": {
-                "type": "integer"
-              },
-              "count_spinners": {
-                "type": "integer"
-              },
-              "count_total": {
-                "type": "integer"
-              },
-              "created_at": {
-                "type": "string"
-              },
-              "cs": {
-                "type": "integer"
-              },
-              "deleted_at": {
-                "type": "string"
-              },
-              "difficulty_rating": {
-                "type": "number"
-              },
-              "drain": {
-                "type": "integer"
-              },
-              "hit_length": {
-                "type": "integer"
-              },
-              "id": {
-                "type": "integer"
-              },
-              "is_scoreable": {
-                "type": "boolean"
+                "bpm": {
+                    "type": "integer"
+                },
+                "convert": {
+                    "type": "boolean"
+                },
+                "count_circles": {
+                    "type": "integer"
+                },
+                "count_sliders": {
+                    "type": "integer"
+                },
+                "count_spinners": {
+                    "type": "integer"
+                },
+                "count_total": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "cs": {
+                    "type": "integer"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "difficulty_rating": {
+                    "type": "number"
+                },
+                "drain": {
+                    "type": "integer"
+                },
+                "hit_length": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_scoreable": {
+                    "type": "boolean"
                 },
                 "last_updated": {
                     "type": "string"
                 },
                 "max_combo": {
-                  "description": "Failtimes      Failtimes `json:\"failtimes\"`",
-                  "type": "integer"
+                    "description": "Failtimes      Failtimes `json:\"failtimes\"`",
+                    "type": "integer"
                 },
                 "mode": {
                     "type": "string"
@@ -1783,11 +1783,11 @@
                     "type": "integer"
                 },
                 "replays_watched_counts": {
-                  "description": "todo: this",
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                    "description": "todo: this",
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
                 },
                 "scores_best_count": {
                     "type": "integer"

@@ -45,12 +45,17 @@ func (a *App) FavouriteBeatmapset(ctx context.Context, action string, beatmapset
 		return 0, ErrNotFoundBMS.WithCause(err)
 	}
 
+	var count uint
+	store := a.Store.BeatmapSet()
+
 	switch action {
 	case "favourite":
-		return a.Store.BeatmapSet().SetFavourite(ctx, userId, beatmapsetID)
+		count, err = store.SetFavourite(ctx, userId, beatmapsetID)
 	case "unfavourite":
-		return a.Store.BeatmapSet().SetUnFavourite(ctx, userId, beatmapsetID)
+		count, err = store.SetUnFavourite(ctx, userId, beatmapsetID)
 	default:
 		return 0, ErrInvalidBMSAction
 	}
+
+	return count, nil
 }
