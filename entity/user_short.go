@@ -39,6 +39,10 @@ type UserShort struct {
 	DeletedAt time.Time `json:"-"`
 }
 
+func (UserShort) TableName() string {
+	return "users"
+}
+
 func (u *UserShort) AfterFind(_ *gorm.DB) (err error) {
 	if u.LastVisit.Add(time.Minute * 15).After(time.Now()) {
 		u.IsOnline = true

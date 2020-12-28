@@ -1,11 +1,4 @@
 -- migrate:up
-create table if not exists schema_migrations
-(
-    version varchar(255) not null
-        constraint schema_migrations_pkey
-            primary key
-);
-
 create table if not exists oauth_token
 (
     id            serial                              not null
@@ -203,7 +196,7 @@ create table if not exists achievements
     enabled            boolean default true not null,
     grouping           varchar              not null,
     image              varchar,
-    mode               varchar default 'std'::character varying,
+    mode               varchar default 'osu'::character varying,
     quest_instructions varchar,
     slug               varchar              not null
 );
@@ -355,7 +348,7 @@ create table if not exists beatmaps
 create unique index if not exists beatmaps_id_uindex
     on beatmaps (id);
 
-create table if not exists favouritemaps
+create table if not exists user_beatmapset_favourite
 (
     id            serial                                             not null
         constraint favouritemaps_pk
@@ -366,19 +359,19 @@ create table if not exists favouritemaps
 );
 
 create unique index if not exists favouritemaps_id_uindex
-    on favouritemaps (id);
+    on user_beatmapset_favourite (id);
 
 create unique index if not exists favouritemaps_user_record_index
-    on favouritemaps (user_id, beatmapset_id);
+    on user_beatmapset_favourite (user_id, beatmapset_id);
 
 create table if not exists user_performance_ranks
 (
-    id      serial                                      not null
+    id      serial                                     not null
         constraint user_performance_ranks_pk
             primary key,
-    mode    varchar   default 'std'::character varying  not null,
-    data    integer[] default array_fill(0, ARRAY [50]) not null,
-    user_id integer   default 0                         not null
+    mode    varchar   default 'std'::character varying not null,
+    data    integer[] default '{}'::integer[]          not null,
+    user_id integer   default 0                        not null
         constraint user_performance_ranks_users_id_fk
             references users
 );
@@ -388,6 +381,13 @@ create index if not exists user_performance_ranks_mode_index
 
 create unique index if not exists user_performance_ranks_id_uindex
     on user_performance_ranks (id);
+
+create table if not exists schema_migrations
+(
+    version varchar(255) not null
+        constraint schema_migrations_pkey
+            primary key
+);
 
 
 -- migrate:down
@@ -417,7 +417,7 @@ drop table beatmaps;
 
 drop table beatmap_set;
 
-drop table favouritemaps;
+drop table user_beatmapset_favourite;
 
 drop table user_performance_ranks;
 

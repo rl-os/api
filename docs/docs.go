@@ -1074,6 +1074,7 @@ var doc = `{
                     "$ref": "#/definitions/entity.Availability"
                 },
                 "beatmaps": {
+                    "description": "RecentFavourites      []UserShort           ` + "`" + `json:\"recent_favourites\" gorm:\"foreignkey:beatmapset_id;references:id\"` + "`" + `\nCurrentUserAttributes CurrentUserAttributes ` + "`" + `json:\"current_user_attributes\"` + "`" + `",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/entity.Beatmap"
@@ -1085,22 +1086,12 @@ var doc = `{
                 "can_be_hyped": {
                     "type": "boolean"
                 },
-                "converts": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/entity.Beatmap"
-                    }
-                },
                 "covers": {
                     "type": "object",
                     "$ref": "#/definitions/entity.Covers"
                 },
                 "creator": {
                     "type": "string"
-                },
-                "current_user_attributes": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.CurrentUserAttributes"
                 },
                 "description": {
                     "type": "object",
@@ -1160,18 +1151,6 @@ var doc = `{
                 },
                 "ranked_date": {
                     "type": "string"
-                },
-                "ratings": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "recent_favourites": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/entity.UserShort"
-                    }
                 },
                 "source": {
                     "type": "string"
@@ -1458,32 +1437,6 @@ var doc = `{
                 },
                 "slimcover@2x": {
                     "type": "string"
-                }
-            }
-        },
-        "entity.CurrentUserAttributes": {
-            "type": "object",
-            "properties": {
-                "can_delete": {
-                    "type": "boolean"
-                },
-                "can_hype": {
-                    "type": "boolean"
-                },
-                "can_hype_reason": {
-                    "type": "object"
-                },
-                "can_love": {
-                    "type": "boolean"
-                },
-                "is_watching": {
-                    "type": "boolean"
-                },
-                "new_hype_time": {
-                    "type": "object"
-                },
-                "remaining_hype": {
-                    "type": "integer"
                 }
             }
         },

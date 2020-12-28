@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/rl-os/api/entity"
 	"github.com/rl-os/api/store"
+	"gorm.io/gorm/clause"
 )
 
 type BeatmapSetStore struct {
@@ -27,7 +28,21 @@ func (s BeatmapSetStore) SetUnFavourite(ctx context.Context, userId uint, id uin
 }
 
 func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {
-	panic("implement me")
+	bms := entity.BeatmapSetFull{}
+
+	err := s.GetMaster().
+		WithContext(ctx).
+		Table("beatmap_set").
+		Where("id = ?", id).
+		Preload(clause.Associations).
+		First(&bms).
+		Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &bms, nil
 }
 
 func (s BeatmapSetStore) GetAll(ctx context.Context, page int, limit int) (*[]entity.BeatmapSet, error) {

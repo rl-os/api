@@ -39,7 +39,7 @@ type BeatmapSet struct {
 	Description       Description  `json:"description" db:"description"`
 	Genre             Genre        `json:"genre" db:"genre"`
 	Language          Genre        `json:"language" db:"language"`
-	User              UserShort    `json:"user" db:"user"`
+	User              UserShort    `json:"user" gorm:"foreignkey:user_id;references:id"`
 }
 
 func (BeatmapSet) TableName() string {
@@ -49,11 +49,11 @@ func (BeatmapSet) TableName() string {
 type BeatmapSetFull struct {
 	BeatmapSet
 
-	RecentFavourites      []UserShort           `json:"recent_favourites"  db:"-"`
-	CurrentUserAttributes CurrentUserAttributes `json:"current_user_attributes"`
-	Beatmaps              []Beatmap             `json:"beatmaps" db:"-"`
-	Ratings               []int64               `json:"ratings"`
-	Converts              []Beatmap             `json:"converts"`
+	//RecentFavourites      []UserShort           `json:"recent_favourites" gorm:"foreignkey:beatmapset_id;references:id"`
+	//CurrentUserAttributes CurrentUserAttributes `json:"current_user_attributes"`
+	Beatmaps []Beatmap `json:"beatmaps" gorm:"foreignkey:beatmapset_id;references:id"`
+	//Ratings               []int64               `json:"ratings"`
+	//Converts              []Beatmap             `json:"converts"`
 }
 
 type Availability struct {

@@ -858,15 +858,15 @@
                 "beatmapset_id": {
                     "type": "integer"
                 },
-                "bpm": {
-                    "type": "integer"
-                },
-                "convert": {
-                    "type": "boolean"
-                },
-                "count_circles": {
-                    "type": "integer"
-                },
+              "bpm": {
+                "type": "integer"
+              },
+              "convert": {
+                "type": "boolean"
+              },
+              "count_circles": {
+                "type": "integer"
+              },
               "count_sliders": {
                 "type": "integer"
               },
@@ -889,16 +889,16 @@
                 "type": "number"
               },
               "drain": {
-                    "type": "integer"
-                },
-                "hit_length": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "is_scoreable": {
-                    "type": "boolean"
+                "type": "integer"
+              },
+              "hit_length": {
+                "type": "integer"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "is_scoreable": {
+                "type": "boolean"
                 },
                 "last_updated": {
                     "type": "string"
@@ -1059,10 +1059,11 @@
                     "$ref": "#/definitions/entity.Availability"
                 },
                 "beatmaps": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/entity.Beatmap"
-                    }
+                  "description": "RecentFavourites      []UserShort           `json:\"recent_favourites\" gorm:\"foreignkey:beatmapset_id;references:id\"`\nCurrentUserAttributes CurrentUserAttributes `json:\"current_user_attributes\"`",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/entity.Beatmap"
+                  }
                 },
                 "bpm": {
                     "type": "integer"
@@ -1070,22 +1071,12 @@
                 "can_be_hyped": {
                     "type": "boolean"
                 },
-                "converts": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/entity.Beatmap"
-                    }
-                },
                 "covers": {
                     "type": "object",
                     "$ref": "#/definitions/entity.Covers"
                 },
                 "creator": {
                     "type": "string"
-                },
-                "current_user_attributes": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.CurrentUserAttributes"
                 },
                 "description": {
                     "type": "object",
@@ -1145,18 +1136,6 @@
                 },
                 "ranked_date": {
                     "type": "string"
-                },
-                "ratings": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "recent_favourites": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/entity.UserShort"
-                    }
                 },
                 "source": {
                     "type": "string"
@@ -1446,32 +1425,6 @@
                 }
             }
         },
-        "entity.CurrentUserAttributes": {
-            "type": "object",
-            "properties": {
-                "can_delete": {
-                    "type": "boolean"
-                },
-                "can_hype": {
-                    "type": "boolean"
-                },
-                "can_hype_reason": {
-                    "type": "object"
-                },
-                "can_love": {
-                    "type": "boolean"
-                },
-                "is_watching": {
-                    "type": "boolean"
-                },
-                "new_hype_time": {
-                    "type": "object"
-                },
-                "remaining_hype": {
-                    "type": "integer"
-                }
-            }
-        },
         "entity.Description": {
             "type": "object",
             "properties": {
@@ -1599,15 +1552,15 @@
                 "beatmapset_id": {
                     "type": "integer"
                 },
-                "bpm": {
-                    "type": "integer"
-                },
-                "convert": {
-                    "type": "boolean"
-                },
-                "count_circles": {
-                    "type": "integer"
-                },
+              "bpm": {
+                "type": "integer"
+              },
+              "convert": {
+                "type": "boolean"
+              },
+              "count_circles": {
+                "type": "integer"
+              },
               "count_sliders": {
                 "type": "integer"
               },
@@ -1630,16 +1583,16 @@
                 "type": "number"
               },
               "drain": {
-                    "type": "integer"
-                },
-                "hit_length": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "is_scoreable": {
-                    "type": "boolean"
+                "type": "integer"
+              },
+              "hit_length": {
+                "type": "integer"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "is_scoreable": {
+                "type": "boolean"
                 },
                 "last_updated": {
                     "type": "string"

@@ -152,6 +152,9 @@ definitions:
         $ref: '#/definitions/entity.Availability'
         type: object
       beatmaps:
+        description: |-
+          RecentFavourites      []UserShort           `json:"recent_favourites" gorm:"foreignkey:beatmapset_id;references:id"`
+          CurrentUserAttributes CurrentUserAttributes `json:"current_user_attributes"`
         items:
           $ref: '#/definitions/entity.Beatmap'
         type: array
@@ -159,18 +162,11 @@ definitions:
         type: integer
       can_be_hyped:
         type: boolean
-      converts:
-        items:
-          $ref: '#/definitions/entity.Beatmap'
-        type: array
       covers:
         $ref: '#/definitions/entity.Covers'
         type: object
       creator:
         type: string
-      current_user_attributes:
-        $ref: '#/definitions/entity.CurrentUserAttributes'
-        type: object
       description:
         $ref: '#/definitions/entity.Description'
         type: object
@@ -212,14 +208,6 @@ definitions:
         type: integer
       ranked_date:
         type: string
-      ratings:
-        items:
-          type: integer
-        type: array
-      recent_favourites:
-        items:
-          $ref: '#/definitions/entity.UserShort'
-        type: array
       source:
         type: string
       status:
@@ -410,23 +398,6 @@ definitions:
         type: string
       slimcover@2x:
         type: string
-    type: object
-  entity.CurrentUserAttributes:
-    properties:
-      can_delete:
-        type: boolean
-      can_hype:
-        type: boolean
-      can_hype_reason:
-        type: object
-      can_love:
-        type: boolean
-      is_watching:
-        type: boolean
-      new_hype_time:
-        type: object
-      remaining_hype:
-        type: integer
     type: object
   entity.Description:
     properties:
