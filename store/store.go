@@ -42,7 +42,7 @@ type Beatmap interface {
 	Delete(ctx context.Context, id uint) error
 
 	Get(ctx context.Context, id uint) (*entity.SingleBeatmap, error)
-	GetBySetId(ctx context.Context, beatmapsetId uint) []entity.Beatmap
+	GetBySetId(ctx context.Context, beatmapsetId uint) (*[]entity.Beatmap, error)
 }
 
 type BeatmapSet interface {

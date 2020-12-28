@@ -42,6 +42,10 @@ type BeatmapSet struct {
 	User              UserShort    `json:"user" db:"user"`
 }
 
+func (BeatmapSet) TableName() string {
+	return "beatmap_set"
+}
+
 type BeatmapSetFull struct {
 	BeatmapSet
 

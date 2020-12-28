@@ -891,6 +891,9 @@ var doc = `{
                 "count_total": {
                     "type": "integer"
                 },
+                "created_at": {
+                    "type": "string"
+                },
                 "cs": {
                     "type": "integer"
                 },
@@ -902,10 +905,6 @@ var doc = `{
                 },
                 "drain": {
                     "type": "integer"
-                },
-                "failtimes": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Failtimes"
                 },
                 "hit_length": {
                     "type": "integer"
@@ -920,6 +919,7 @@ var doc = `{
                     "type": "string"
                 },
                 "max_combo": {
+                    "description": "Failtimes      Failtimes ` + "`" + `json:\"failtimes\"` + "`" + `",
                     "type": "integer"
                 },
                 "mode": {
@@ -1495,23 +1495,6 @@ var doc = `{
                 }
             }
         },
-        "entity.Failtimes": {
-            "type": "object",
-            "properties": {
-                "exit": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "fail": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
         "entity.Genre": {
             "type": "object",
             "properties": {
@@ -1649,6 +1632,9 @@ var doc = `{
                 "count_total": {
                     "type": "integer"
                 },
+                "created_at": {
+                    "type": "string"
+                },
                 "cs": {
                     "type": "integer"
                 },
@@ -1660,10 +1646,6 @@ var doc = `{
                 },
                 "drain": {
                     "type": "integer"
-                },
-                "failtimes": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Failtimes"
                 },
                 "hit_length": {
                     "type": "integer"
@@ -1678,6 +1660,7 @@ var doc = `{
                     "type": "string"
                 },
                 "max_combo": {
+                    "description": "Failtimes      Failtimes ` + "`" + `json:\"failtimes\"` + "`" + `",
                     "type": "integer"
                 },
                 "mode": {

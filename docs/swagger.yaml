@@ -27,6 +27,8 @@ definitions:
         type: integer
       count_total:
         type: integer
+      created_at:
+        type: string
       cs:
         type: integer
       deleted_at:
@@ -35,9 +37,6 @@ definitions:
         type: number
       drain:
         type: integer
-      failtimes:
-        $ref: '#/definitions/entity.Failtimes'
-        type: object
       hit_length:
         type: integer
       id:
@@ -47,6 +46,7 @@ definitions:
       last_updated:
         type: string
       max_combo:
+        description: Failtimes      Failtimes `json:"failtimes"`
         type: integer
       mode:
         type: string
@@ -433,17 +433,6 @@ definitions:
       description:
         type: string
     type: object
-  entity.Failtimes:
-    properties:
-      exit:
-        items:
-          type: integer
-        type: array
-      fail:
-        items:
-          type: integer
-        type: array
-    type: object
   entity.Genre:
     properties:
       id:
@@ -533,6 +522,8 @@ definitions:
         type: integer
       count_total:
         type: integer
+      created_at:
+        type: string
       cs:
         type: integer
       deleted_at:
@@ -541,9 +532,6 @@ definitions:
         type: number
       drain:
         type: integer
-      failtimes:
-        $ref: '#/definitions/entity.Failtimes'
-        type: object
       hit_length:
         type: integer
       id:
@@ -553,6 +541,7 @@ definitions:
       last_updated:
         type: string
       max_combo:
+        description: Failtimes      Failtimes `json:"failtimes"`
         type: integer
       mode:
         type: string

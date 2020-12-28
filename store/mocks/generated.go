@@ -342,11 +342,12 @@ func (mr *MockBeatmapMockRecorder) Get(ctx, id interface{}) *gomock.Call {
 }
 
 // GetBySetId mocks base method
-func (m *MockBeatmap) GetBySetId(ctx context.Context, beatmapsetId uint) []entity.Beatmap {
+func (m *MockBeatmap) GetBySetId(ctx context.Context, beatmapsetId uint) (*[]entity.Beatmap, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetBySetId", ctx, beatmapsetId)
-	ret0, _ := ret[0].([]entity.Beatmap)
-	return ret0
+	ret0, _ := ret[0].(*[]entity.Beatmap)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // GetBySetId indicates an expected call of GetBySetId
