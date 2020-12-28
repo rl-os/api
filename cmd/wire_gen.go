@@ -6,6 +6,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/config"
 	"github.com/rl-os/api/server"
@@ -42,7 +43,10 @@ var Branch string
 var BuildTimestamp string
 
 func main() {
-	setupLogger()
+	logLevel := flag.String("log", "info", "sets log level")
+	configFile := flag.String("config", "config.yaml", "config file")
+	flag.Parse()
+	setupLogger(*logLevel)
 	log.Info().
 		Str("version", Version).
 		Str("branch", Branch).
@@ -51,7 +55,7 @@ func main() {
 		Send()
 	log.Debug().Msg("Start initialize dependencies")
 
-	srv := Injector("config.yaml")
+	srv := Injector(*configFile)
 	log.Debug().Msg("Initialize dependencies successful done")
 
 	if err := srv.Start(); err != nil {
@@ -67,10 +71,11 @@ func main() {
 	}
 }
 
-func setupLogger() {
-	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-	if os.Getenv("env") != "production" {
-		zerolog.SetGlobalLevel(zerolog.TraceLevel)
+func setupLogger(logLevel string) {
+	if level, err := zerolog.ParseLevel(logLevel); err != nil {
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	} else {
+		zerolog.SetGlobalLevel(level)
 	}
 	log.Logger = log.Output(zerolog.ConsoleWriter{
 		Out:        os.Stderr,
