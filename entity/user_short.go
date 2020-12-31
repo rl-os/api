@@ -1,33 +1,51 @@
 package entity
 
 import (
-	"database/sql/driver"
-	"github.com/deissh/go-utils"
+	"gorm.io/gorm"
 	"time"
 )
 
-// UserShort data struct
-type UserShort struct {
-	ID               uint      `json:"id" db:"id"`
-	Username         string    `json:"username" db:"username"`
-	Email            string    `json:"email" db:"email"`
-	PasswordHash     string    `json:"-" db:"password_hash"`
-	IsOnline         bool      `json:"is_online" db:"check_online"`
-	IsBot            bool      `json:"is_bot" db:"is_bot"`
-	IsActive         bool      `json:"is_active" db:"is_active"`
-	IsSupporter      bool      `json:"is_supporter" db:"is_supporter"`
-	HasSupported     bool      `json:"has_supported" db:"has_supported"`
-	SupportLevel     int       `json:"support_level" db:"support_level"`
-	PmFriendsOnly    bool      `json:"pm_friends_only" db:"pm_friends_only"`
-	AvatarURL        string    `json:"avatar_url" db:"avatar_url"`
-	CountryCode      string    `json:"country_code" db:"country_code"`
-	DefaultGroup     string    `json:"default_group" db:"default_group"`
-	LastVisit        time.Time `json:"last_visit" db:"last_visit"`
-	JoinDate         time.Time `json:"join_date" db:"created_at"`
-	SupportExpiredAt time.Time `json:"-" db:"support_expired_at"`
+type UserBasic struct {
+	ID           uint   `json:"id"`
+	Email        string `json:"-"`
+	Username     string `json:"username"`
+	PasswordHash string `json:"-"`
 }
 
-type UserShortField UserShort
+// UserShort selector from database
+type UserShort struct {
+	UserBasic
 
-func (c UserShortField) Value() (driver.Value, error)  { return utils.ValueOfStruct(c) }
-func (c *UserShortField) Scan(value interface{}) error { return utils.ScanToStruct(c, value) }
+	IsActive        bool      `json:"is_active"`
+	IsBot           bool      `json:"is_bot"`
+	IsOnline        bool      `json:"is_online" gorm:"-"`
+	IsSupporter     bool      `json:"is_supporter"`
+	LastVisit       time.Time `json:"last_visit"`
+	PmFriendsOnly   bool      `json:"pm_friends_only"`
+	ProfileColour   string    `json:"profile_colour"`
+	CountryCode     string    `json:"country_code"`
+	Country         Country   `json:"country" gorm:"foreignkey:code;references:country_code"`
+	Cover           Cover     `json:"cover"  gorm:"embedded;embeddedPrefix:cover_"`
+	CurrentModeRank int       `json:"current_mode_rank"`
+	Groups          string    `json:"groups"`
+	SupportLevel    int       `json:"support_level"`
+	AvatarURL       string    `json:"avatar_url"`
+	DefaultGroup    string    `json:"default_group"`
+
+	// internal fields
+	Mode      string    `json:"-" gorm:"-"`
+	CreatedAt time.Time `json:"join_date"`
+	UpdatedAt time.Time `json:"updated_at"`
+	DeletedAt time.Time `json:"-"`
+}
+
+func (UserShort) TableName() string {
+	return "users"
+}
+
+func (u *UserShort) AfterFind(_ *gorm.DB) (err error) {
+	if u.LastVisit.Add(time.Minute * 15).After(time.Now()) {
+		u.IsOnline = true
+	}
+	return
+}

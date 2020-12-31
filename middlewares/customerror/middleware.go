@@ -29,7 +29,7 @@ func CustomHTTPErrorHandler(err error, c echo.Context) {
 	}
 
 	// if custom errors
-	if he, ok := err.(*errors.Error); ok {
+	if he, ok := err.(errors.Error); ok {
 		res = he.ResponseFormat()
 		code = he.Code
 	}

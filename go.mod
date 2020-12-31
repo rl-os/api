@@ -14,9 +14,11 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golang/mock v1.4.4
 	github.com/google/wire v0.4.0
+	github.com/jackc/pgtype v1.5.0
 	github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/labstack/echo/v4 v4.1.17
+	github.com/labstack/gommon v0.3.0
 	github.com/lib/pq v1.8.0
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/mattn/go-sqlite3 v1.14.4 // indirect
@@ -25,8 +27,11 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/swaggo/echo-swagger v1.0.0
 	github.com/swaggo/swag v1.6.7
+	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
 	golang.org/x/net v0.0.0-20201016165138-7b1cca2348c0 // indirect
 	golang.org/x/tools v0.0.0-20201017001424-6003fad69a88 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v2 v2.3.0
+	gorm.io/driver/postgres v1.0.5
+	gorm.io/gorm v1.20.5
 )

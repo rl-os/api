@@ -26,13 +26,13 @@ type Store interface {
 }
 
 type OAuth interface {
-	CreateClient(ctx context.Context, name string, redirect string) (*entity.OAuthClient, error)
+	CreateClient(ctx context.Context, userId uint, name string, redirect string) (*entity.OAuthClient, error)
 	GetClient(ctx context.Context, id uint, secret string) (*entity.OAuthClient, error)
 
 	CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (*entity.OAuthToken, error)
-	RevokeToken(ctx context.Context, userId uint, accessToken string) error
+	RevokeAllTokens(ctx context.Context, userId uint) error
 	RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error)
-	ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error)
+	GetToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error)
 }
 
 type Beatmap interface {
@@ -42,24 +42,17 @@ type Beatmap interface {
 	Delete(ctx context.Context, id uint) error
 
 	Get(ctx context.Context, id uint) (*entity.SingleBeatmap, error)
-	GetBySetId(ctx context.Context, beatmapsetId uint) []entity.Beatmap
+	GetBySetId(ctx context.Context, beatmapsetId uint) (*[]entity.Beatmap, error)
 }
 
 type BeatmapSet interface {
+	Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error)
 	Create(ctx context.Context, from interface{}) (*entity.BeatmapSetFull, error)
 	Update(ctx context.Context, id uint, from interface{}) (*entity.BeatmapSetFull, error)
 	Delete(ctx context.Context, id uint) error
 
-	Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error)
-	GetAll(ctx context.Context, page int, limit int) (*[]entity.BeatmapSet, error)
-	ComputeFields(ctx context.Context, set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error)
 	SetFavourite(ctx context.Context, userId uint, id uint) (uint, error)
 	SetUnFavourite(ctx context.Context, userId uint, id uint) (uint, error)
-
-	GetLatestId(ctx context.Context) (uint, error)
-	GetIdsForUpdate(ctx context.Context, limit int) ([]uint, error)
-
-	FetchFromBancho(ctx context.Context, id uint) (*entity.BeatmapSetFull, error)
 }
 
 type User interface {
@@ -88,14 +81,12 @@ type Friend interface {
 }
 
 type Chat interface {
-	CreatePM(ctx context.Context, userId, targetId uint, message string, isAction bool) (*entity.ChannelNewPm, error)
-
 	Get(ctx context.Context, channelId uint) (*entity.Channel, error)
-	GetOrCreatePm(ctx context.Context, userId, targetId uint) (*entity.Channel, error)
+	CreatePm(ctx context.Context, userId, targetId uint) (*entity.Channel, error)
 	GetPublic(ctx context.Context) (*[]entity.Channel, error)
 	GetJoined(ctx context.Context, userId uint) (*[]entity.Channel, error)
 	GetMessage(ctx context.Context, messageId uint) (*entity.ChatMessage, error)
-	GetMessages(ctx context.Context, userId, since uint) (*[]entity.ChatMessage, error)
+	GetMessages(ctx context.Context, userId, since, limit uint) (*[]entity.ChatMessage, error)
 	GetUpdates(ctx context.Context, userId, since, channelId, limit uint) (*entity.ChannelUpdates, error)
 
 	SendMessage(ctx context.Context, userId, channelId uint, content string, isAction bool) (*entity.ChatMessage, error)

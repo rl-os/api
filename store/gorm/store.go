@@ -2,13 +2,13 @@ package sql
 
 import (
 	osu "github.com/deissh/osu-go-client"
-	"github.com/jmoiron/sqlx"
 	"github.com/rl-os/api/config"
 	"github.com/rl-os/api/store"
+	"gorm.io/gorm"
 )
 
 type SqlStore interface {
-	GetMaster() *sqlx.DB
+	GetMaster() *gorm.DB
 	GetConfig() *config.Config
 
 	GetOsuClient() *osu.OsuAPI

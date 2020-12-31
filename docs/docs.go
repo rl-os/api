@@ -389,6 +389,12 @@ var doc = `{
                         "name": "limit",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "channel id",
+                        "name": "id",
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -428,6 +434,12 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/request.SendMessage"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "channel id",
+                        "name": "id",
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -457,6 +469,20 @@ var doc = `{
                     "Chat"
                 ],
                 "summary": "Join to chat",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "channel id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "user",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -482,6 +508,20 @@ var doc = `{
                     "Chat"
                 ],
                 "summary": "Leave from chat",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "channel id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "user",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -739,6 +779,44 @@ var doc = `{
                 }
             }
         },
+        "/api/v2/oauth/client": {
+            "post": {
+                "security": [
+                    {
+                        "OAuth2": []
+                    }
+                ],
+                "tags": [
+                    "OAuth"
+                ],
+                "summary": "Create new oauth client",
+                "parameters": [
+                    {
+                        "description": "JSON payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateOAuthClient"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.OAuthClient"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ResponseFormat"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "post": {
                 "description": "get string by ID",
@@ -813,6 +891,9 @@ var doc = `{
                 "count_total": {
                     "type": "integer"
                 },
+                "created_at": {
+                    "type": "string"
+                },
                 "cs": {
                     "type": "integer"
                 },
@@ -824,10 +905,6 @@ var doc = `{
                 },
                 "drain": {
                     "type": "integer"
-                },
-                "failtimes": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Failtimes"
                 },
                 "hit_length": {
                     "type": "integer"
@@ -975,7 +1052,7 @@ var doc = `{
                 },
                 "user": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.UserShortField"
+                    "$ref": "#/definitions/entity.UserShort"
                 },
                 "user_id": {
                     "type": "integer"
@@ -1007,22 +1084,12 @@ var doc = `{
                 "can_be_hyped": {
                     "type": "boolean"
                 },
-                "converts": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/entity.Beatmap"
-                    }
-                },
                 "covers": {
                     "type": "object",
                     "$ref": "#/definitions/entity.Covers"
                 },
                 "creator": {
                     "type": "string"
-                },
-                "current_user_attributes": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.CurrentUserAttributes"
                 },
                 "description": {
                     "type": "object",
@@ -1084,15 +1151,12 @@ var doc = `{
                     "type": "string"
                 },
                 "ratings": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "string"
                 },
                 "recent_favourites": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.UserShortField"
+                        "$ref": "#/definitions/entity.UserShort"
                     }
                 },
                 "source": {
@@ -1115,7 +1179,7 @@ var doc = `{
                 },
                 "user": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.UserShortField"
+                    "$ref": "#/definitions/entity.UserShort"
                 },
                 "user_id": {
                     "type": "integer"
@@ -1319,7 +1383,7 @@ var doc = `{
                 },
                 "sender": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.UserShortField"
+                    "$ref": "#/definitions/entity.UserShort"
                 },
                 "sender_id": {
                     "type": "integer"
@@ -1344,7 +1408,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "custom_url": {
-                    "type": "object"
+                    "type": "string"
                 },
                 "id": {
                     "type": "string"
@@ -1383,32 +1447,6 @@ var doc = `{
                 }
             }
         },
-        "entity.CurrentUserAttributes": {
-            "type": "object",
-            "properties": {
-                "can_delete": {
-                    "type": "boolean"
-                },
-                "can_hype": {
-                    "type": "boolean"
-                },
-                "can_hype_reason": {
-                    "type": "object"
-                },
-                "can_love": {
-                    "type": "boolean"
-                },
-                "is_watching": {
-                    "type": "boolean"
-                },
-                "new_hype_time": {
-                    "type": "object"
-                },
-                "remaining_hype": {
-                    "type": "integer"
-                }
-            }
-        },
         "entity.Description": {
             "type": "object",
             "properties": {
@@ -1421,16 +1459,10 @@ var doc = `{
             "type": "object",
             "properties": {
                 "exit": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "string"
                 },
                 "fail": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "string"
                 }
             }
         },
@@ -1442,26 +1474,6 @@ var doc = `{
                 },
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "entity.GradeCounts": {
-            "type": "object",
-            "properties": {
-                "a": {
-                    "type": "integer"
-                },
-                "s": {
-                    "type": "integer"
-                },
-                "sh": {
-                    "type": "integer"
-                },
-                "ss": {
-                    "type": "integer"
-                },
-                "ssh": {
-                    "type": "integer"
                 }
             }
         },
@@ -1483,17 +1495,6 @@ var doc = `{
                     "type": "integer"
                 },
                 "total": {
-                    "type": "integer"
-                }
-            }
-        },
-        "entity.Level": {
-            "type": "object",
-            "properties": {
-                "current": {
-                    "type": "integer"
-                },
-                "progress": {
                     "type": "integer"
                 }
             }
@@ -1520,6 +1521,32 @@ var doc = `{
                 }
             }
         },
+        "entity.OAuthClient": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "redirect": {
+                    "type": "string"
+                },
+                "revoked": {
+                    "type": "boolean"
+                },
+                "secret": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "entity.Page": {
             "type": "object",
             "properties": {
@@ -1531,25 +1558,11 @@ var doc = `{
                 }
             }
         },
-        "entity.Rank": {
-            "type": "object",
-            "properties": {
-                "country": {
-                    "type": "integer"
-                },
-                "global": {
-                    "type": "integer"
-                }
-            }
-        },
         "entity.RankHistory": {
             "type": "object",
             "properties": {
                 "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "string"
                 },
                 "mode": {
                     "type": "string"
@@ -1589,6 +1602,9 @@ var doc = `{
                 },
                 "count_total": {
                     "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
                 },
                 "cs": {
                     "type": "integer"
@@ -1650,61 +1666,10 @@ var doc = `{
                 }
             }
         },
-        "entity.Statistics": {
-            "type": "object",
-            "properties": {
-                "grade_counts": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.GradeCounts"
-                },
-                "hit_accuracy": {
-                    "type": "number"
-                },
-                "is_ranked": {
-                    "type": "boolean"
-                },
-                "level": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Level"
-                },
-                "maximum_combo": {
-                    "type": "integer"
-                },
-                "play_count": {
-                    "type": "integer"
-                },
-                "play_time": {
-                    "type": "integer"
-                },
-                "pp": {
-                    "type": "number"
-                },
-                "pp_rank": {
-                    "type": "integer"
-                },
-                "rank": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Rank"
-                },
-                "ranked_score": {
-                    "type": "integer"
-                },
-                "replays_watched_by_others": {
-                    "type": "integer"
-                },
-                "total_hits": {
-                    "type": "integer"
-                },
-                "total_score": {
-                    "type": "integer"
-                }
-            }
-        },
         "entity.User": {
             "type": "object",
             "properties": {
                 "account_history": {
-                    "description": "joins",
                     "type": "array",
                     "items": {
                         "type": "object"
@@ -1725,8 +1690,8 @@ var doc = `{
                         "type": "object"
                     }
                 },
-                "can_moderate": {
-                    "type": "boolean"
+                "beatmap_playcounts_count": {
+                    "type": "integer"
                 },
                 "country": {
                     "type": "object",
@@ -1739,16 +1704,13 @@ var doc = `{
                     "type": "object",
                     "$ref": "#/definitions/entity.Cover"
                 },
-                "cover_url": {
-                    "type": "string"
+                "current_mode_rank": {
+                    "type": "integer"
                 },
                 "default_group": {
                     "type": "string"
                 },
                 "discord": {
-                    "type": "string"
-                },
-                "email": {
                     "type": "string"
                 },
                 "favourite_beatmapset_count": {
@@ -1759,6 +1721,9 @@ var doc = `{
                 },
                 "graveyard_beatmapset_count": {
                     "type": "integer"
+                },
+                "groups": {
+                    "type": "string"
                 },
                 "has_supported": {
                     "type": "boolean"
@@ -1772,23 +1737,7 @@ var doc = `{
                 "is_active": {
                     "type": "boolean"
                 },
-                "is_bng": {
-                    "type": "boolean"
-                },
                 "is_bot": {
-                    "type": "boolean"
-                },
-                "is_full_bn": {
-                    "type": "boolean"
-                },
-                "is_gmt": {
-                    "description": "computed",
-                    "type": "boolean"
-                },
-                "is_limited_bn": {
-                    "type": "boolean"
-                },
-                "is_nat": {
                     "type": "boolean"
                 },
                 "is_online": {
@@ -1805,9 +1754,6 @@ var doc = `{
                     "$ref": "#/definitions/entity.Kudosu"
                 },
                 "last_visit": {
-                    "type": "string"
-                },
-                "lastfm": {
                     "type": "string"
                 },
                 "location": {
@@ -1839,7 +1785,10 @@ var doc = `{
                     "type": "string"
                 },
                 "playstyle": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "pm_friends_only": {
                     "type": "boolean"
@@ -1854,12 +1803,15 @@ var doc = `{
                     }
                 },
                 "profile_colour": {
-                    "type": "object"
-                },
-                "profile_order": {
                     "type": "string"
                 },
-                "rankHistory": {
+                "profile_order": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "rank_history": {
                     "type": "object",
                     "$ref": "#/definitions/entity.RankHistory"
                 },
@@ -1867,12 +1819,19 @@ var doc = `{
                     "type": "integer"
                 },
                 "replays_watched_counts": {
+                    "description": "todo: this",
                     "type": "array",
                     "items": {
                         "type": "object"
                     }
                 },
+                "scores_best_count": {
+                    "type": "integer"
+                },
                 "scores_first_count": {
+                    "type": "integer"
+                },
+                "scores_recent_count": {
                     "type": "integer"
                 },
                 "skype": {
@@ -1880,7 +1839,7 @@ var doc = `{
                 },
                 "statistics": {
                     "type": "object",
-                    "$ref": "#/definitions/entity.Statistics"
+                    "$ref": "#/definitions/entity.UserStatistics"
                 },
                 "support_level": {
                     "type": "integer"
@@ -1888,11 +1847,17 @@ var doc = `{
                 "title": {
                     "type": "string"
                 },
+                "title_url": {
+                    "type": "string"
+                },
                 "twitter": {
                     "type": "string"
                 },
                 "unranked_beatmapset_count": {
                     "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
                 },
                 "user_achievements": {
                     "type": "array",
@@ -1925,17 +1890,25 @@ var doc = `{
                 "avatar_url": {
                     "type": "string"
                 },
+                "country": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Country"
+                },
                 "country_code": {
                     "type": "string"
+                },
+                "cover": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Cover"
+                },
+                "current_mode_rank": {
+                    "type": "integer"
                 },
                 "default_group": {
                     "type": "string"
                 },
-                "email": {
+                "groups": {
                     "type": "string"
-                },
-                "has_supported": {
-                    "type": "boolean"
                 },
                 "id": {
                     "type": "integer"
@@ -1961,16 +1934,99 @@ var doc = `{
                 "pm_friends_only": {
                     "type": "boolean"
                 },
+                "profile_colour": {
+                    "type": "string"
+                },
                 "support_level": {
                     "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
                 },
                 "username": {
                     "type": "string"
                 }
             }
         },
-        "entity.UserShortField": {
-            "$ref": "#/definitions/entity.UserShort"
+        "entity.UserStatistics": {
+            "type": "object",
+            "properties": {
+                "grade_counts": {
+                    "type": "object",
+                    "properties": {
+                        "a": {
+                            "type": "integer"
+                        },
+                        "s": {
+                            "type": "integer"
+                        },
+                        "sh": {
+                            "type": "integer"
+                        },
+                        "ss": {
+                            "type": "integer"
+                        },
+                        "ssh": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "hit_accuracy": {
+                    "type": "number"
+                },
+                "is_ranked": {
+                    "type": "boolean"
+                },
+                "level": {
+                    "type": "object",
+                    "properties": {
+                        "current": {
+                            "type": "integer"
+                        },
+                        "progress": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "maximum_combo": {
+                    "type": "integer"
+                },
+                "play_count": {
+                    "type": "integer"
+                },
+                "play_time": {
+                    "type": "integer"
+                },
+                "pp": {
+                    "type": "number"
+                },
+                "pp_rank": {
+                    "type": "integer"
+                },
+                "rank": {
+                    "type": "object",
+                    "properties": {
+                        "country": {
+                            "type": "integer"
+                        },
+                        "global": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "ranked_score": {
+                    "type": "integer"
+                },
+                "replays_watched_by_others": {
+                    "type": "integer"
+                },
+                "total_hits": {
+                    "type": "integer"
+                },
+                "total_score": {
+                    "type": "integer"
+                }
+            }
         },
         "errors.ResponseFormat": {
             "type": "object",
@@ -1997,6 +2053,17 @@ var doc = `{
                 },
                 "target_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "request.CreateOAuthClient": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "redirect": {
+                    "type": "string"
                 }
             }
         },
@@ -2048,7 +2115,10 @@ var doc = `{
             "flow": "password",
             "tokenUrl": "/oauth/token",
             "scopes": {
-                "*": " Grants all access"
+                "*": " Grants all access",
+                "admin.*": " Grants access as admin",
+                "sys.*": " Grants access as system user (for example chatbot, worker and etc)",
+                "user.*": " Grants access as user (without system and admin api)"
             }
         }
     }

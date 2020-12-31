@@ -4,17 +4,20 @@
 package main
 
 import (
+	"flag"
+	stdlog "log"
+	"os"
+	"os/signal"
+	"time"
+
 	"github.com/google/wire"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/config"
 	"github.com/rl-os/api/server"
 	"github.com/rl-os/api/services"
-	"github.com/rl-os/api/store/sql"
+	sql "github.com/rl-os/api/store/gorm"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"os"
-	"os/signal"
-	"time"
 )
 
 var Version string
@@ -23,7 +26,11 @@ var Branch string
 var BuildTimestamp string
 
 func main() {
-	setupLogger()
+	logLevel := flag.String("log", "info", "sets log level")
+	configFile := flag.String("config", "config.yaml", "config file")
+
+	flag.Parse()
+	setupLogger(*logLevel)
 
 	log.Info().
 		Str("version", Version).
@@ -34,7 +41,7 @@ func main() {
 
 	log.Debug().Msg("Start initialize dependencies")
 
-	srv := Injector("config.yaml")
+	srv := Injector(*configFile)
 
 	log.Debug().Msg("Initialize dependencies successful done")
 
@@ -53,10 +60,11 @@ func main() {
 	}
 }
 
-func setupLogger() {
-	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-	if os.Getenv("env") != "production" {
-		zerolog.SetGlobalLevel(zerolog.TraceLevel)
+func setupLogger(logLevel string) {
+	if level, err := zerolog.ParseLevel(logLevel); err != nil {
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	} else {
+		zerolog.SetGlobalLevel(level)
 	}
 
 	log.Logger = log.Output(
@@ -66,6 +74,9 @@ func setupLogger() {
 			TimeFormat: time.RFC3339,
 		},
 	).With().Caller().Logger()
+
+	stdlog.SetFlags(0)
+	stdlog.SetOutput(log.Logger)
 }
 
 func Injector(configPath string) *server.Server {

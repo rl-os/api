@@ -3,53 +3,58 @@ package entity
 import (
 	"database/sql/driver"
 	"github.com/deissh/go-utils"
+	"github.com/lib/pq"
 	"time"
 )
 
 type BeatmapSet struct {
-	ID                int64          `json:"id" db:"id"`
-	LastChecked       time.Time      `json:"last_checked" db:"last_checked"`
-	Title             string         `json:"title" db:"title"`
-	Artist            string         `json:"artist" db:"artist"`
-	PlayCount         int64          `json:"play_count" db:"play_count"`
-	FavouriteCount    int64          `json:"favourite_count" db:"favourite_count"`
-	HasFavourited     bool           `json:"has_favourited" db:"has_favourited"`
-	SubmittedDate     time.Time      `json:"submitted_date" db:"submitted_date"`
-	LastUpdated       time.Time      `json:"last_updated" db:"last_updated"`
-	RankedDate        time.Time      `json:"ranked_date" db:"ranked_date"`
-	Creator           string         `json:"creator" db:"creator"`
-	UserID            int64          `json:"user_id" db:"user_id"`
-	BPM               int64          `json:"bpm" db:"bpm"`
-	Source            string         `json:"source" db:"source"`
-	Covers            Covers         `json:"covers" db:"covers"`
-	PreviewURL        string         `json:"preview_url" db:"preview_url"`
-	Tags              string         `json:"tags" db:"tags"`
-	Video             bool           `json:"video" db:"video"`
-	Storyboard        bool           `json:"storyboard" db:"storyboard"`
-	Ranked            int64          `json:"ranked" db:"ranked"`
-	Status            Status         `json:"status" db:"status"`
-	IsScoreable       bool           `json:"is_scoreable" db:"is_scoreable"`
-	DiscussionEnabled bool           `json:"discussion_enabled" db:"discussion_enabled"`
-	DiscussionLocked  bool           `json:"discussion_locked" db:"discussion_locked"`
-	CanBeHyped        bool           `json:"can_be_hyped" db:"can_be_hyped"`
-	Availability      Availability   `json:"availability" db:"availability"`
-	Hype              Hype           `json:"hype" db:"hype"`
-	Nominations       Hype           `json:"nominations" db:"nominations"`
-	LegacyThreadURL   string         `json:"legacy_thread_url" db:"legacy_thread_url"`
-	Description       Description    `json:"description" db:"description"`
-	Genre             Genre          `json:"genre" db:"genre"`
-	Language          Genre          `json:"language" db:"language"`
-	User              UserShortField `json:"user" db:"user"`
+	ID                int64        `json:"id" db:"id"`
+	LastChecked       time.Time    `json:"last_checked" db:"last_checked"`
+	Title             string       `json:"title" db:"title"`
+	Artist            string       `json:"artist" db:"artist"`
+	PlayCount         int64        `json:"play_count" db:"play_count"`
+	FavouriteCount    int64        `json:"favourite_count" db:"favourite_count"`
+	HasFavourited     bool         `json:"has_favourited" db:"has_favourited"`
+	SubmittedDate     time.Time    `json:"submitted_date" db:"submitted_date"`
+	LastUpdated       time.Time    `json:"last_updated" db:"last_updated"`
+	RankedDate        time.Time    `json:"ranked_date" db:"ranked_date"`
+	Creator           string       `json:"creator" db:"creator"`
+	UserID            int64        `json:"user_id" db:"user_id"`
+	BPM               int64        `json:"bpm" db:"bpm"`
+	Source            string       `json:"source" db:"source"`
+	Covers            Covers       `json:"covers" db:"covers"`
+	PreviewURL        string       `json:"preview_url" db:"preview_url"`
+	Tags              string       `json:"tags" db:"tags"`
+	Video             bool         `json:"video" db:"video"`
+	Storyboard        bool         `json:"storyboard" db:"storyboard"`
+	Ranked            int64        `json:"ranked" db:"ranked"`
+	Status            Status       `json:"status" db:"status"`
+	IsScoreable       bool         `json:"is_scoreable" db:"is_scoreable"`
+	DiscussionEnabled bool         `json:"discussion_enabled" db:"discussion_enabled"`
+	DiscussionLocked  bool         `json:"discussion_locked" db:"discussion_locked"`
+	CanBeHyped        bool         `json:"can_be_hyped" db:"can_be_hyped"`
+	Availability      Availability `json:"availability" db:"availability"`
+	Hype              Hype         `json:"hype" db:"hype"`
+	Nominations       Hype         `json:"nominations" db:"nominations"`
+	LegacyThreadURL   string       `json:"legacy_thread_url" db:"legacy_thread_url"`
+	Description       Description  `json:"description" db:"description"`
+	Genre             Genre        `json:"genre" db:"genre"`
+	Language          Genre        `json:"language" db:"language"`
+	User              UserShort    `json:"user" gorm:"foreignkey:user_id;references:id"`
+}
+
+func (BeatmapSet) TableName() string {
+	return "beatmap_set"
 }
 
 type BeatmapSetFull struct {
 	BeatmapSet
 
-	RecentFavourites      []UserShortField      `json:"recent_favourites"  db:"-"`
-	CurrentUserAttributes CurrentUserAttributes `json:"current_user_attributes"`
-	Beatmaps              []Beatmap             `json:"beatmaps" db:"-"`
-	Ratings               []int64               `json:"ratings"`
-	Converts              []Beatmap             `json:"converts"`
+	Ratings          pq.Int64Array `json:"ratings" gorm:"type:int[]"`
+	RecentFavourites []UserShort   `json:"recent_favourites" gorm:"many2many:user_beatmapset_favourite;joinForeignKey:beatmapset_id;joinReferences:user_id"`
+	Beatmaps         []Beatmap     `json:"beatmaps" gorm:"foreignkey:beatmapset_id;references:id"`
+	//CurrentUserAttributes CurrentUserAttributes `json:"current_user_attributes"`
+	//Converts              []Beatmap             `json:"converts"`
 }
 
 type Availability struct {

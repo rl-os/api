@@ -12,5 +12,5 @@ type ChatMessage struct {
 	Content   string    `json:"content" db:"content"`
 	IsAction  bool      `json:"is_action" db:"is_action"`
 
-	Sender UserShortField `json:"sender"`
+	Sender UserShort `json:"sender" gorm:"foreignkey:id;references:sender_id"`
 }

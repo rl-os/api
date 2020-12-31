@@ -27,6 +27,8 @@ definitions:
         type: integer
       count_total:
         type: integer
+      created_at:
+        type: string
       cs:
         type: integer
       deleted_at:
@@ -35,9 +37,6 @@ definitions:
         type: number
       drain:
         type: integer
-      failtimes:
-        $ref: '#/definitions/entity.Failtimes'
-        type: object
       hit_length:
         type: integer
       id:
@@ -137,7 +136,7 @@ definitions:
       title:
         type: string
       user:
-        $ref: '#/definitions/entity.UserShortField'
+        $ref: '#/definitions/entity.UserShort'
         type: object
       user_id:
         type: integer
@@ -159,18 +158,11 @@ definitions:
         type: integer
       can_be_hyped:
         type: boolean
-      converts:
-        items:
-          $ref: '#/definitions/entity.Beatmap'
-        type: array
       covers:
         $ref: '#/definitions/entity.Covers'
         type: object
       creator:
         type: string
-      current_user_attributes:
-        $ref: '#/definitions/entity.CurrentUserAttributes'
-        type: object
       description:
         $ref: '#/definitions/entity.Description'
         type: object
@@ -213,12 +205,10 @@ definitions:
       ranked_date:
         type: string
       ratings:
-        items:
-          type: integer
-        type: array
+        type: string
       recent_favourites:
         items:
-          $ref: '#/definitions/entity.UserShortField'
+          $ref: '#/definitions/entity.UserShort'
         type: array
       source:
         type: string
@@ -233,7 +223,7 @@ definitions:
       title:
         type: string
       user:
-        $ref: '#/definitions/entity.UserShortField'
+        $ref: '#/definitions/entity.UserShort'
         type: object
       user_id:
         type: integer
@@ -369,7 +359,7 @@ definitions:
       message_id:
         type: integer
       sender:
-        $ref: '#/definitions/entity.UserShortField'
+        $ref: '#/definitions/entity.UserShort'
         type: object
       sender_id:
         type: integer
@@ -386,7 +376,7 @@ definitions:
   entity.Cover:
     properties:
       custom_url:
-        type: object
+        type: string
       id:
         type: string
       url:
@@ -411,23 +401,6 @@ definitions:
       slimcover@2x:
         type: string
     type: object
-  entity.CurrentUserAttributes:
-    properties:
-      can_delete:
-        type: boolean
-      can_hype:
-        type: boolean
-      can_hype_reason:
-        type: object
-      can_love:
-        type: boolean
-      is_watching:
-        type: boolean
-      new_hype_time:
-        type: object
-      remaining_hype:
-        type: integer
-    type: object
   entity.Description:
     properties:
       description:
@@ -436,13 +409,9 @@ definitions:
   entity.Failtimes:
     properties:
       exit:
-        items:
-          type: integer
-        type: array
+        type: string
       fail:
-        items:
-          type: integer
-        type: array
+        type: string
     type: object
   entity.Genre:
     properties:
@@ -450,19 +419,6 @@ definitions:
         type: integer
       name:
         type: string
-    type: object
-  entity.GradeCounts:
-    properties:
-      a:
-        type: integer
-      s:
-        type: integer
-      sh:
-        type: integer
-      ss:
-        type: integer
-      ssh:
-        type: integer
     type: object
   entity.Hype:
     properties:
@@ -476,13 +432,6 @@ definitions:
       available:
         type: integer
       total:
-        type: integer
-    type: object
-  entity.Level:
-    properties:
-      current:
-        type: integer
-      progress:
         type: integer
     type: object
   entity.MonthlyPlaycounts:
@@ -499,6 +448,23 @@ definitions:
       required:
         type: integer
     type: object
+  entity.OAuthClient:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      redirect:
+        type: string
+      revoked:
+        type: boolean
+      secret:
+        type: string
+      user_id:
+        type: integer
+    type: object
   entity.Page:
     properties:
       html:
@@ -506,19 +472,10 @@ definitions:
       raw:
         type: string
     type: object
-  entity.Rank:
-    properties:
-      country:
-        type: integer
-      global:
-        type: integer
-    type: object
   entity.RankHistory:
     properties:
       data:
-        items:
-          type: integer
-        type: array
+        type: string
       mode:
         type: string
     type: object
@@ -545,6 +502,8 @@ definitions:
         type: integer
       count_total:
         type: integer
+      created_at:
+        type: string
       cs:
         type: integer
       deleted_at:
@@ -585,44 +544,9 @@ definitions:
       version:
         type: string
     type: object
-  entity.Statistics:
-    properties:
-      grade_counts:
-        $ref: '#/definitions/entity.GradeCounts'
-        type: object
-      hit_accuracy:
-        type: number
-      is_ranked:
-        type: boolean
-      level:
-        $ref: '#/definitions/entity.Level'
-        type: object
-      maximum_combo:
-        type: integer
-      play_count:
-        type: integer
-      play_time:
-        type: integer
-      pp:
-        type: number
-      pp_rank:
-        type: integer
-      rank:
-        $ref: '#/definitions/entity.Rank'
-        type: object
-      ranked_score:
-        type: integer
-      replays_watched_by_others:
-        type: integer
-      total_hits:
-        type: integer
-      total_score:
-        type: integer
-    type: object
   entity.User:
     properties:
       account_history:
-        description: joins
         items:
           type: object
         type: array
@@ -636,8 +560,8 @@ definitions:
         items:
           type: object
         type: array
-      can_moderate:
-        type: boolean
+      beatmap_playcounts_count:
+        type: integer
       country:
         $ref: '#/definitions/entity.Country'
         type: object
@@ -646,13 +570,11 @@ definitions:
       cover:
         $ref: '#/definitions/entity.Cover'
         type: object
-      cover_url:
-        type: string
+      current_mode_rank:
+        type: integer
       default_group:
         type: string
       discord:
-        type: string
-      email:
         type: string
       favourite_beatmapset_count:
         type: integer
@@ -660,6 +582,8 @@ definitions:
         type: integer
       graveyard_beatmapset_count:
         type: integer
+      groups:
+        type: string
       has_supported:
         type: boolean
       id:
@@ -668,18 +592,7 @@ definitions:
         type: string
       is_active:
         type: boolean
-      is_bng:
-        type: boolean
       is_bot:
-        type: boolean
-      is_full_bn:
-        type: boolean
-      is_gmt:
-        description: computed
-        type: boolean
-      is_limited_bn:
-        type: boolean
-      is_nat:
         type: boolean
       is_online:
         type: boolean
@@ -691,8 +604,6 @@ definitions:
         $ref: '#/definitions/entity.Kudosu'
         type: object
       last_visit:
-        type: string
-      lastfm:
         type: string
       location:
         type: string
@@ -714,7 +625,9 @@ definitions:
       playmode:
         type: string
       playstyle:
-        type: string
+        items:
+          type: string
+        type: array
       pm_friends_only:
         type: boolean
       post_count:
@@ -724,33 +637,44 @@ definitions:
           type: string
         type: array
       profile_colour:
-        type: object
-      profile_order:
         type: string
-      rankHistory:
+      profile_order:
+        items:
+          type: string
+        type: array
+      rank_history:
         $ref: '#/definitions/entity.RankHistory'
         type: object
       ranked_and_approved_beatmapset_count:
         type: integer
       replays_watched_counts:
+        description: 'todo: this'
         items:
           type: object
         type: array
+      scores_best_count:
+        type: integer
       scores_first_count:
+        type: integer
+      scores_recent_count:
         type: integer
       skype:
         type: string
       statistics:
-        $ref: '#/definitions/entity.Statistics'
+        $ref: '#/definitions/entity.UserStatistics'
         type: object
       support_level:
         type: integer
       title:
         type: string
+      title_url:
+        type: string
       twitter:
         type: string
       unranked_beatmapset_count:
         type: integer
+      updated_at:
+        type: string
       user_achievements:
         items:
           $ref: '#/definitions/entity.UserAchievements'
@@ -771,14 +695,20 @@ definitions:
     properties:
       avatar_url:
         type: string
+      country:
+        $ref: '#/definitions/entity.Country'
+        type: object
       country_code:
         type: string
+      cover:
+        $ref: '#/definitions/entity.Cover'
+        type: object
+      current_mode_rank:
+        type: integer
       default_group:
         type: string
-      email:
+      groups:
         type: string
-      has_supported:
-        type: boolean
       id:
         type: integer
       is_active:
@@ -795,13 +725,67 @@ definitions:
         type: string
       pm_friends_only:
         type: boolean
+      profile_colour:
+        type: string
       support_level:
         type: integer
+      updated_at:
+        type: string
       username:
         type: string
     type: object
-  entity.UserShortField:
-    $ref: '#/definitions/entity.UserShort'
+  entity.UserStatistics:
+    properties:
+      grade_counts:
+        properties:
+          a:
+            type: integer
+          s:
+            type: integer
+          sh:
+            type: integer
+          ss:
+            type: integer
+          ssh:
+            type: integer
+        type: object
+      hit_accuracy:
+        type: number
+      is_ranked:
+        type: boolean
+      level:
+        properties:
+          current:
+            type: integer
+          progress:
+            type: integer
+        type: object
+      maximum_combo:
+        type: integer
+      play_count:
+        type: integer
+      play_time:
+        type: integer
+      pp:
+        type: number
+      pp_rank:
+        type: integer
+      rank:
+        properties:
+          country:
+            type: integer
+          global:
+            type: integer
+        type: object
+      ranked_score:
+        type: integer
+      replays_watched_by_others:
+        type: integer
+      total_hits:
+        type: integer
+      total_score:
+        type: integer
+    type: object
   errors.ResponseFormat:
     properties:
       error_description:
@@ -819,6 +803,13 @@ definitions:
         type: string
       target_id:
         type: integer
+    type: object
+  request.CreateOAuthClient:
+    properties:
+      name:
+        type: string
+      redirect:
+        type: string
     type: object
   request.CreateUser:
     properties:
@@ -1060,11 +1051,15 @@ paths:
   /api/v2/chat/channels/{id}/messages:
     get:
       parameters:
-      - description: limit 1-100, default 50
-        in: query
-        name: limit
-        required: true
-        type: integer
+        - description: limit 1-100, default 50
+          in: query
+          name: limit
+          required: true
+          type: integer
+        - description: channel id
+          in: path
+          name: id
+          type: string
       responses:
         "200":
           description: OK
@@ -1083,12 +1078,16 @@ paths:
       - Chat
     post:
       parameters:
-      - description: JSON payload
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/request.SendMessage'
+        - description: JSON payload
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/request.SendMessage'
+        - description: channel id
+          in: path
+          name: id
+          type: string
       responses:
         "200":
           description: OK
@@ -1105,6 +1104,15 @@ paths:
       - Chat
   /api/v2/chat/channels/{id}/users/{user}:
     delete:
+      parameters:
+      - description: channel id
+        in: path
+        name: id
+        type: string
+      - description: user id
+        in: path
+        name: user
+        type: string
       responses:
         "200":
           description: OK
@@ -1120,6 +1128,15 @@ paths:
       tags:
       - Chat
     put:
+      parameters:
+      - description: channel id
+        in: path
+        name: id
+        type: string
+      - description: user id
+        in: path
+        name: user
+        type: string
       responses:
         "200":
           description: OK
@@ -1300,6 +1317,29 @@ paths:
       summary: Return current user
       tags:
       - Current user
+  /api/v2/oauth/client:
+    post:
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateOAuthClient'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.OAuthClient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ResponseFormat'
+      security:
+      - OAuth2: []
+      summary: Create new oauth client
+      tags:
+      - OAuth
   /users:
     post:
       description: get string by ID
@@ -1325,6 +1365,9 @@ securityDefinitions:
     flow: password
     scopes:
       '*': ' Grants all access'
+      admin.*: ' Grants access as admin'
+      sys.*: ' Grants access as system user (for example chatbot, worker and etc)'
+      user.*: ' Grants access as user (without system and admin api)'
     tokenUrl: /oauth/token
     type: oauth2
 swagger: "2.0"

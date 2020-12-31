@@ -96,14 +96,19 @@ func (_d BeatmapWithLog) Get(ctx context.Context, id uint) (sp1 *entity.SingleBe
 }
 
 // GetBySetId implements store.Beatmap
-func (_d BeatmapWithLog) GetBySetId(ctx context.Context, beatmapsetId uint) (ba1 []entity.Beatmap) {
+func (_d BeatmapWithLog) GetBySetId(ctx context.Context, beatmapsetId uint) (bap1 *[]entity.Beatmap, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
 		Interface("beatmapsetId", beatmapsetId).
 		Msg("store.Beatmap.GetBySetId: calling")
 	defer func() {
-		log.Trace().
-			Msg("store.Beatmap.GetBySetId: finished")
+		if err != nil {
+			log.Trace().Err(err).
+				Msg("store.Beatmap.GetBySetId: returned an error")
+		} else {
+			log.Trace().
+				Msg("store.Beatmap.GetBySetId: finished")
+		}
 	}()
 	return _d._base.GetBySetId(ctx, beatmapsetId)
 }

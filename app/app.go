@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"github.com/go-playground/validator/v10"
+	"github.com/rl-os/api/config"
 	"github.com/rl-os/api/services"
 	"github.com/rl-os/api/store"
 )
@@ -12,6 +13,8 @@ type App struct {
 	Context context.Context
 	// Global validation context
 	Validator *validator.Validate
+	// Global configuration
+	Config *config.Config
 
 	// Store contains active implementation
 	Store store.Store
@@ -22,10 +25,12 @@ type App struct {
 // NewApp with DI
 func NewApp(
 	store store.Store,
+	config *config.Config,
 	services *services.Services,
 ) *App {
 	app := &App{
 		Store:     store,
+		Config:    config,
 		Services:  services,
 		Validator: validator.New(),
 	}

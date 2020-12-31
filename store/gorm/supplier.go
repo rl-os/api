@@ -3,12 +3,14 @@ package sql
 import (
 	osu "github.com/deissh/osu-go-client"
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 	"github.com/rl-os/api/config"
 	"github.com/rl-os/api/services"
 	"github.com/rl-os/api/store"
 	"github.com/rl-os/api/store/layers"
 	"github.com/rs/zerolog/log"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type SupplierStores struct {
@@ -21,7 +23,7 @@ type SupplierStores struct {
 }
 
 type Supplier struct {
-	master *sqlx.DB
+	master *gorm.DB
 	cfg    *config.Config
 
 	osuClient *osu.OsuAPI
@@ -77,9 +79,7 @@ func (ss *Supplier) initConnection() {
 			Msg("database ping")
 	}
 
-	ss.master = conn
-
-	stats := ss.master.Stats()
+	stats := conn.Stats()
 	log.Info().
 		Str("driver", ss.cfg.Database.Driver).
 		Int("open_connections", stats.OpenConnections).
@@ -87,14 +87,24 @@ func (ss *Supplier) initConnection() {
 		Int("idle", stats.Idle).
 		Int("in_use", stats.InUse).
 		Msg("master database connected")
+
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		Conn: conn.DB,
+	}), &gorm.Config{
+		Logger: logger.New(&log.Logger, logger.Config{
+			LogLevel: logger.Info,
+		}),
+	})
+
+	ss.master = db
 }
 
-func (ss *Supplier) GetMaster() *sqlx.DB       { return ss.master }
+func (ss *Supplier) GetMaster() *gorm.DB       { return ss.master }
 func (ss *Supplier) GetConfig() *config.Config { return ss.cfg }
 
 func (ss *Supplier) GetOsuClient() *osu.OsuAPI { return ss.osuClient }
 
-func (ss *Supplier) Close() { _ = ss.master.Close() }
+func (ss *Supplier) Close() { log.Warn().Msg("TODO") }
 
 func (ss *Supplier) Beatmap() store.Beatmap       { return ss.stores.beatmap }
 func (ss *Supplier) BeatmapSet() store.BeatmapSet { return ss.stores.beatmapSet }
