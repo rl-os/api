@@ -3,6 +3,7 @@ package entity
 import (
 	"database/sql/driver"
 	"github.com/deissh/go-utils"
+	"github.com/lib/pq"
 	"time"
 )
 
@@ -49,10 +50,10 @@ func (BeatmapSet) TableName() string {
 type BeatmapSetFull struct {
 	BeatmapSet
 
-	//RecentFavourites      []UserShort           `json:"recent_favourites" gorm:"foreignkey:beatmapset_id;references:id"`
+	Ratings          pq.Int64Array `json:"ratings" gorm:"type:int[]"`
+	RecentFavourites []UserShort   `json:"recent_favourites" gorm:"many2many:user_beatmapset_favourite;joinForeignKey:beatmapset_id;joinReferences:user_id"`
+	Beatmaps         []Beatmap     `json:"beatmaps" gorm:"foreignkey:beatmapset_id;references:id"`
 	//CurrentUserAttributes CurrentUserAttributes `json:"current_user_attributes"`
-	Beatmaps []Beatmap `json:"beatmaps" gorm:"foreignkey:beatmapset_id;references:id"`
-	//Ratings               []int64               `json:"ratings"`
 	//Converts              []Beatmap             `json:"converts"`
 }
 

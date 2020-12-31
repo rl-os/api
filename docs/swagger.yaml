@@ -37,9 +37,6 @@ definitions:
         type: number
       drain:
         type: integer
-      failtimes:
-        $ref: '#/definitions/entity.Failtimes'
-        type: object
       hit_length:
         type: integer
       id:
@@ -154,9 +151,6 @@ definitions:
         $ref: '#/definitions/entity.Availability'
         type: object
       beatmaps:
-        description: |-
-          RecentFavourites      []UserShort           `json:"recent_favourites" gorm:"foreignkey:beatmapset_id;references:id"`
-          CurrentUserAttributes CurrentUserAttributes `json:"current_user_attributes"`
         items:
           $ref: '#/definitions/entity.Beatmap'
         type: array
@@ -210,6 +204,12 @@ definitions:
         type: integer
       ranked_date:
         type: string
+      ratings:
+        type: string
+      recent_favourites:
+        items:
+          $ref: '#/definitions/entity.UserShort'
+        type: array
       source:
         type: string
       status:

@@ -906,10 +906,6 @@ var doc = `{
                 "drain": {
                     "type": "integer"
                 },
-                "failtimes": {
-                    "type": "object",
-                    "$ref": "#/definitions/entity.Failtimes"
-                },
                 "hit_length": {
                     "type": "integer"
                 },
@@ -1077,7 +1073,6 @@ var doc = `{
                     "$ref": "#/definitions/entity.Availability"
                 },
                 "beatmaps": {
-                    "description": "RecentFavourites      []UserShort           ` + "`" + `json:\"recent_favourites\" gorm:\"foreignkey:beatmapset_id;references:id\"` + "`" + `\nCurrentUserAttributes CurrentUserAttributes ` + "`" + `json:\"current_user_attributes\"` + "`" + `",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/entity.Beatmap"
@@ -1154,6 +1149,15 @@ var doc = `{
                 },
                 "ranked_date": {
                     "type": "string"
+                },
+                "ratings": {
+                    "type": "string"
+                },
+                "recent_favourites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.UserShort"
+                    }
                 },
                 "source": {
                     "type": "string"
