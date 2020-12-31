@@ -891,6 +891,10 @@
                 "drain": {
                     "type": "integer"
                 },
+                "failtimes": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Failtimes"
+                },
                 "hit_length": {
                     "type": "integer"
                 },
@@ -904,7 +908,6 @@
                     "type": "string"
                 },
                 "max_combo": {
-                    "description": "Failtimes      Failtimes `json:\"failtimes\"`",
                     "type": "integer"
                 },
                 "mode": {
@@ -1433,6 +1436,17 @@
                 }
             }
         },
+        "entity.Failtimes": {
+            "type": "object",
+            "properties": {
+                "exit": {
+                    "type": "string"
+                },
+                "fail": {
+                    "type": "string"
+                }
+            }
+        },
         "entity.Genre": {
             "type": "object",
             "properties": {
@@ -1585,6 +1599,10 @@
                 "drain": {
                     "type": "integer"
                 },
+                "failtimes": {
+                    "type": "object",
+                    "$ref": "#/definitions/entity.Failtimes"
+                },
                 "hit_length": {
                     "type": "integer"
                 },
@@ -1598,7 +1616,6 @@
                     "type": "string"
                 },
                 "max_combo": {
-                    "description": "Failtimes      Failtimes `json:\"failtimes\"`",
                     "type": "integer"
                 },
                 "mode": {

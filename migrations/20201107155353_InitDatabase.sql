@@ -389,6 +389,20 @@ create table if not exists schema_migrations
             primary key
 );
 
+create table if not exists beatmap_failtimes
+(
+    beatmap_id integer   not null
+        constraint beatmap_failtimes_pk
+            primary key
+        constraint beatmap_failtimes_beatmaps_id_fk
+            references beatmaps,
+    fail       integer[] not null,
+    exit       integer[] not null
+);
+
+create unique index if not exists beatmap_failtimes_beatmap_id_uindex
+    on beatmap_failtimes (beatmap_id);
+
 
 -- migrate:down
 drop table schema_migrations;
@@ -422,5 +436,7 @@ drop table user_beatmapset_favourite;
 drop table user_performance_ranks;
 
 drop table users;
+
+drop table beatmap_failtimes;
 
 

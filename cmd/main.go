@@ -5,6 +5,7 @@ package main
 
 import (
 	"flag"
+	stdlog "log"
 	"os"
 	"os/signal"
 	"time"
@@ -73,6 +74,9 @@ func setupLogger(logLevel string) {
 			TimeFormat: time.RFC3339,
 		},
 	).With().Caller().Logger()
+
+	stdlog.SetFlags(0)
+	stdlog.SetOutput(log.Logger)
 }
 
 func Injector(configPath string) *server.Server {

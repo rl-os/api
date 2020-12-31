@@ -15,6 +15,7 @@ import (
 	"github.com/rl-os/api/store/gorm"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	log2 "log"
 	"os"
 	"os/signal"
 	"time"
@@ -83,4 +84,6 @@ func setupLogger(logLevel string) {
 		TimeFormat: time.RFC3339,
 	},
 	).With().Caller().Logger()
+	log2.SetFlags(0)
+	log2.SetOutput(log.Logger)
 }

@@ -91,7 +91,9 @@ func (ss *Supplier) initConnection() {
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		Conn: conn.DB,
 	}), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: logger.New(&log.Logger, logger.Config{
+			LogLevel: logger.Info,
+		}),
 	})
 
 	ss.master = db
