@@ -46,20 +46,13 @@ type Beatmap interface {
 }
 
 type BeatmapSet interface {
+	Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error)
 	Create(ctx context.Context, from interface{}) (*entity.BeatmapSetFull, error)
 	Update(ctx context.Context, id uint, from interface{}) (*entity.BeatmapSetFull, error)
 	Delete(ctx context.Context, id uint) error
 
-	Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error)
-	GetAll(ctx context.Context, page int, limit int) (*[]entity.BeatmapSet, error)
-	ComputeFields(ctx context.Context, set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error)
 	SetFavourite(ctx context.Context, userId uint, id uint) (uint, error)
 	SetUnFavourite(ctx context.Context, userId uint, id uint) (uint, error)
-
-	GetLatestId(ctx context.Context) (uint, error)
-	GetIdsForUpdate(ctx context.Context, limit int) ([]uint, error)
-
-	FetchFromBancho(ctx context.Context, id uint) (*entity.BeatmapSetFull, error)
 }
 
 type User interface {

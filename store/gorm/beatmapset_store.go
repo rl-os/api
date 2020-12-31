@@ -15,10 +15,6 @@ func newSqlBeatmapSetStore(sqlStore SqlStore) store.BeatmapSet {
 	return &BeatmapSetStore{sqlStore}
 }
 
-func (s BeatmapSetStore) Update(ctx context.Context, id uint, from interface{}) (*entity.BeatmapSetFull, error) {
-	panic("implement me")
-}
-
 func (s BeatmapSetStore) SetFavourite(ctx context.Context, userId uint, id uint) (uint, error) {
 	_ = s.GetMaster().WithContext(ctx).
 		Table("user_beatmapset_favourite").
@@ -79,32 +75,14 @@ func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFu
 	return &bms, nil
 }
 
-func (s BeatmapSetStore) GetAll(ctx context.Context, page int, limit int) (*[]entity.BeatmapSet, error) {
-	panic("implement me")
-}
-
 func (s BeatmapSetStore) Create(ctx context.Context, from interface{}) (*entity.BeatmapSetFull, error) {
 	panic("implement me")
 }
 
+func (s BeatmapSetStore) Update(ctx context.Context, id uint, from interface{}) (*entity.BeatmapSetFull, error) {
+	panic("implement me")
+}
+
 func (s BeatmapSetStore) Delete(ctx context.Context, id uint) error {
-	panic("implement me")
-}
-
-// FetchFromBancho beatmapset from original api
-func (s BeatmapSetStore) FetchFromBancho(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {
-	panic("implement me")
-}
-
-// GetIdsForUpdate and return list of ids
-func (s BeatmapSetStore) GetIdsForUpdate(ctx context.Context, limit int) ([]uint, error) {
-	panic("implement me")
-}
-
-func (s BeatmapSetStore) GetLatestId(ctx context.Context) (uint, error) {
-	panic("implement me")
-}
-
-func (s BeatmapSetStore) ComputeFields(ctx context.Context, set entity.BeatmapSetFull) (*entity.BeatmapSetFull, error) {
 	panic("implement me")
 }

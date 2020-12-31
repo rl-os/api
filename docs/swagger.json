@@ -1126,34 +1126,34 @@
                 "play_count": {
                     "type": "integer"
                 },
-              "preview_url": {
-                "type": "string"
-              },
-              "ranked": {
-                "type": "integer"
-              },
-              "ranked_date": {
-                "type": "string"
-              },
-              "ratings": {
-                "type": "string"
-              },
-              "recent_favourites": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/entity.UserShort"
-                }
-              },
-              "source": {
-                "type": "string"
-              },
-              "status": {
-                "type": "string"
-              },
-              "storyboard": {
-                "type": "boolean"
-              },
-              "submitted_date": {
+                "preview_url": {
+                    "type": "string"
+                },
+                "ranked": {
+                    "type": "integer"
+                },
+                "ranked_date": {
+                    "type": "string"
+                },
+                "ratings": {
+                    "type": "string"
+                },
+                "recent_favourites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.UserShort"
+                    }
+                },
+                "source": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "storyboard": {
+                    "type": "boolean"
+                },
+                "submitted_date": {
                     "type": "string"
                 },
                 "tags": {

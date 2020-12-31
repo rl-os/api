@@ -133,14 +133,6 @@ func (s *Server) StartTasks() {
 
 	s.ScheduledTasks = append(
 		s.ScheduledTasks,
-		CreateRecurringTask("UpdateCheck", s.DoBeatmapSetUpdate, time.Minute*30),
-	)
-	s.ScheduledTasks = append(
-		s.ScheduledTasks,
-		CreateRecurringTask("SearchNew", s.DoBeatmapSetSearchNew, time.Hour),
-	)
-	s.ScheduledTasks = append(
-		s.ScheduledTasks,
 		CreateRecurringTask("Security", s.DoSecurityUpdateCheck, time.Hour*6),
 	)
 }
