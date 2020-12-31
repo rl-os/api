@@ -76,21 +76,6 @@ func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFu
 		return nil, err
 	}
 
-	// TODO: rewrite
-	//bms.RecentFavourites = make([]entity.UserShort, 0)
-	//err = s.GetMaster().
-	//	WithContext(ctx).
-	//	Table("users").
-	//	Joins("JOIN user_beatmapset_favourite ON user_beatmapset_favourite.user_id = users.id").
-	//	Where("user_beatmapset_favourite.beatmapset_id = ?", id).
-	//	Limit(50).
-	//	Scan(&bms.RecentFavourites).
-	//	Error
-	//
-	//if err != nil {
-	//	return nil, err
-	//}
-
 	return &bms, nil
 }
 
