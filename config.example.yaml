@@ -18,3 +18,8 @@ mirror:
     secret_id: 123
     secret_key: 321
     bucket: beatmaps
+
+metrics:
+  enable: true
+  host: 127.0.0.1
+  port: 2401

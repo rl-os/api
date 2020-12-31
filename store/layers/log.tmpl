@@ -1,10 +1,24 @@
 import (
   "io"
+  "time"
+
   "github.com/rs/zerolog/log"
+  "github.com/prometheus/client_golang/prometheus"
+  "github.com/prometheus/client_golang/prometheus/promauto"
 )
 
 {{ $decorator := (or .Vars.DecoratorName (printf "%sWithLog" .Interface.Name)) }}
+{{ $metric_name := (or .Vars.MetricName (printf "%s_duration_seconds" (down .Interface.Name))) }}
 {{ $interface := .Interface.Name }}
+
+var {{down .Interface.Name}}DurationSummaryVec = promauto.NewSummaryVec(
+  prometheus.SummaryOpts{
+    Name: "app_store_{{$metric_name}}",
+    Help: "{{ down .Interface.Name }} runtime duration and result",
+    MaxAge: time.Minute,
+    Objectives: map[float64]float64{0.5: 0.05, 0.9: 0.01, 0.99: 0.001},
+  },
+  []string{"instance_name", "method", "result"})
 
 // {{$decorator}} implements {{.Interface.Type}} that is instrumented with zerolog
 type {{$decorator}} struct {
@@ -20,6 +34,7 @@ func New{{$decorator}}(base {{.Interface.Type}}) {{.Interface.Type}} {
 {{range $method := .Interface.Methods}}
   // {{$method.Name}} implements {{$.Interface.Type}}
   func (_d {{$decorator}}) {{$method.Declaration}} {
+      _since := time.Now()
       {{- if $method.HasParams}}
         log.Trace().
         {{range $result := $method.Params}}
@@ -30,9 +45,12 @@ func New{{$decorator}}(base {{.Interface.Type}}) {{.Interface.Type}} {
         log.Trace().Msg("store.{{$interface}}.{{$method.Name}}: calling")
       {{end -}}
       defer func() {
+        result := "ok"
+
         {{- if $method.HasResults}}
           {{- if $method.ReturnsError}}
             if err != nil {
+              result = "error"
               log.Trace().Err(err).
                 Msg("store.{{$interface}}.{{$method.Name}}: returned an error")
             } else {
@@ -47,6 +65,8 @@ func New{{$decorator}}(base {{.Interface.Type}}) {{.Interface.Type}} {
           log.Trace().
             Msg("store.{{$interface}}.{{$method.Name}}: finished")
         {{end -}}
+
+        {{down $.Interface.Name}}DurationSummaryVec.WithLabelValues("{{$interface}}", "{{$method.Name}}", result).Observe(time.Since(_since).Seconds())
       }()
       {{ $method.Pass "_d._base." }}
   }

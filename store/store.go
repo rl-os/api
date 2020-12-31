@@ -66,9 +66,9 @@ type User interface {
 
 	Activate(ctx context.Context, userId uint) error
 	Deactivate(ctx context.Context, userId uint) error
-	Ban(ctx context.Context, userId uint, time time.Duration) error
+	Ban(ctx context.Context, userId uint, duration time.Duration) error
 	UnBan(ctx context.Context, userId uint) error
-	Mute(ctx context.Context, userId uint, time time.Duration) error
+	Mute(ctx context.Context, userId uint, duration time.Duration) error
 	UnMute(ctx context.Context, userId uint) error
 
 	UpdateLastVisit(ctx context.Context, userId uint) error

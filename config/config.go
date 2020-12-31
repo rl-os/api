@@ -42,4 +42,9 @@ type Config struct {
 			Password string
 		}
 	}
+	Metrics struct {
+		Enable bool   `default:"false"`
+		Host   string `default:"127.0.0.1"`
+		Port   string `default:"2401"`
+	}
 }
