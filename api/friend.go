@@ -30,7 +30,7 @@ func (h *FriendHandlers) GetAll(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.App.GetAllFriends(ctx, userId)
+	users, err := h.App.Friend.GetAll(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -66,7 +66,7 @@ func (h *FriendHandlers) Add(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.App.AddFriend(ctx, userId, params.TargetId)
+	users, err := h.App.Friend.Add(ctx, userId, params.TargetId)
 	if err != nil {
 		return err
 	}
@@ -102,7 +102,7 @@ func (h *FriendHandlers) Remove(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.App.RemoveFriend(ctx, userId, params.TargetId)
+	users, err := h.App.Friend.Remove(ctx, userId, params.TargetId)
 	if err != nil {
 		return err
 	}

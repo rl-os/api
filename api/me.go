@@ -30,7 +30,7 @@ func (h *MeHandlers) Me(c echo.Context) error {
 		return err
 	}
 
-	user, err := h.App.GetUser(ctx, userId, mode)
+	user, err := h.App.User.Get(ctx, userId, mode)
 	if err != nil {
 		return err
 	}

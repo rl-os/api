@@ -31,7 +31,7 @@ func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	beatmapset, err := h.App.GetBeatmapset(ctx, uint(beatmapsetID))
+	beatmapset, err := h.App.BeatmapSet.Get(ctx, uint(beatmapsetID))
 	if err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	beatmapset, err := h.App.LookupBeatmapset(ctx, params.Id)
+	beatmapset, err := h.App.BeatmapSet.Lookup(ctx, params.Id)
 	if err != nil {
 		return err
 	}
@@ -86,7 +86,7 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	result, err := h.App.SearchBeatmapset(ctx)
+	result, err := h.App.BeatmapSet.Search(ctx)
 	if err != nil {
 		return err
 	}
@@ -120,7 +120,7 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	total, err := h.App.FavouriteBeatmapset(ctx, params.Action, uint(beatmapsetID))
+	total, err := h.App.BeatmapSet.Favourite(ctx, params.Action, uint(beatmapsetID))
 	if err != nil {
 		return err
 	}

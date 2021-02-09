@@ -40,7 +40,7 @@ func (h OAuthClientHandlers) Create(c echo.Context) error {
 		return err
 	}
 
-	client, err := h.App.CreateOAuthClient(ctx, userId, *params)
+	client, err := h.App.OAuth.CreateClient(ctx, userId, *params)
 	if err != nil {
 		return err
 	}

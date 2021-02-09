@@ -30,7 +30,7 @@ func (h *BeatmapHandlers) Get(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
 	}
 
-	beatmaps, err := h.App.GetBeatmap(ctx, uint(beatmapID))
+	beatmaps, err := h.App.Beatmap.Get(ctx, uint(beatmapID))
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 		return err
 	}
 
-	beatmap, err := h.App.LookupBeatmap(ctx, params.Id, params.CheckSum, params.Filename)
+	beatmap, err := h.App.Beatmap.Lookup(ctx, params.Id, params.CheckSum, params.Filename)
 	if err != nil {
 		return err
 	}

@@ -20,6 +20,13 @@ type App struct {
 	Store store.Store
 	// Services that be enabled for this app
 	Services *services.Services
+
+	Chat
+	User
+	OAuth
+	Friend
+	Beatmap
+	BeatmapSet
 }
 
 // NewApp with DI
@@ -33,6 +40,15 @@ func NewApp(
 		Config:    config,
 		Services:  services,
 		Validator: validator.New(),
+	}
+
+	{ // setup app handlers
+		app.Chat = Chat{app}
+		app.User = User{app}
+		app.OAuth = OAuth{app}
+		app.Friend = Friend{app}
+		app.Beatmap = Beatmap{app}
+		app.BeatmapSet = BeatmapSet{app}
 	}
 
 	return app

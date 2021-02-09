@@ -29,10 +29,14 @@ var (
 	InvalidOAuthClientParamsErr = errors.New("oauth_invalid_client_params", http.StatusBadRequest, "Invalid oauth client")
 )
 
+type OAuth struct {
+	*App
+}
+
 // ValidateToken проверяет переданный функции токен доступа,
 // если все нормально и токен еще не истек то вернется entity.OAuthToken
 // при ошибке может вернуть InvalidAuthTokenErr или ExpiredAuthTokenErr
-func (a *App) ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
+func (a *OAuth) ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
 	_, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
 		return []byte(a.Config.JWT.Secret), nil
 	})
@@ -53,9 +57,9 @@ func (a *App) ValidateToken(ctx context.Context, accessToken string) (*entity.OA
 	return token, nil
 }
 
-// CreateOAuthClient создает новый entity.OAuthClient
+// CreateClient создает новый entity.OAuthClient
 // в случае InvalidOAuthClientParamsErr
-func (a App) CreateOAuthClient(ctx context.Context, userId uint, request request.CreateOAuthClient) (*entity.OAuthClient, error) {
+func (a OAuth) CreateClient(ctx context.Context, userId uint, request request.CreateOAuthClient) (*entity.OAuthClient, error) {
 	token, err := a.Store.OAuth().CreateClient(ctx, userId, request.Name, request.Redirect)
 	if err != nil {
 		return nil, InvalidOAuthClientParamsErr.WithCause(err)
@@ -65,7 +69,7 @@ func (a App) CreateOAuthClient(ctx context.Context, userId uint, request request
 }
 
 // RefreshToken and revoke old access token
-func (a *App) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error) {
+func (a *OAuth) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error) {
 	token, err := a.Store.OAuth().RefreshToken(ctx, refreshToken, clientID, clientSecret)
 	if err != nil {
 		return nil, NotFoundRefreshAuthErr.WithCause(err)
@@ -74,8 +78,8 @@ func (a *App) RefreshToken(ctx context.Context, refreshToken string, clientID ui
 	return token, nil
 }
 
-// CreateOAuthToken and return it
-func (a *App) CreateOAuthToken(ctx context.Context, request request.CreateOauthToken) (*entity.OAuthToken, error) {
+// CreateToken and return it
+func (a *OAuth) CreateToken(ctx context.Context, request request.CreateOauthToken) (*entity.OAuthToken, error) {
 	if !utils.ContainsString(OAuthGroundType, request.GrantType) {
 		request.GrantType = "password"
 	}

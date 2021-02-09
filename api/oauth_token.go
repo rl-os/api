@@ -24,7 +24,7 @@ func (h *OAuthTokenHandlers) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid token information")
 	}
 
-	token, err := h.App.CreateOAuthToken(ctx, *params)
+	token, err := h.App.OAuth.CreateToken(ctx, *params)
 	if err != nil {
 		return err
 	}
