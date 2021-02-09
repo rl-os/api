@@ -610,17 +610,17 @@ func (mr *MockUserMockRecorder) Deactivate(ctx, userId interface{}) *gomock.Call
 }
 
 // Ban mocks base method
-func (m *MockUser) Ban(ctx context.Context, userId uint, time time.Duration) error {
+func (m *MockUser) Ban(ctx context.Context, userId uint, duration time.Duration) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Ban", ctx, userId, time)
+	ret := m.ctrl.Call(m, "Ban", ctx, userId, duration)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Ban indicates an expected call of Ban
-func (mr *MockUserMockRecorder) Ban(ctx, userId, time interface{}) *gomock.Call {
+func (mr *MockUserMockRecorder) Ban(ctx, userId, duration interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Ban", reflect.TypeOf((*MockUser)(nil).Ban), ctx, userId, time)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Ban", reflect.TypeOf((*MockUser)(nil).Ban), ctx, userId, duration)
 }
 
 // UnBan mocks base method
@@ -638,17 +638,17 @@ func (mr *MockUserMockRecorder) UnBan(ctx, userId interface{}) *gomock.Call {
 }
 
 // Mute mocks base method
-func (m *MockUser) Mute(ctx context.Context, userId uint, time time.Duration) error {
+func (m *MockUser) Mute(ctx context.Context, userId uint, duration time.Duration) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Mute", ctx, userId, time)
+	ret := m.ctrl.Call(m, "Mute", ctx, userId, duration)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Mute indicates an expected call of Mute
-func (mr *MockUserMockRecorder) Mute(ctx, userId, time interface{}) *gomock.Call {
+func (mr *MockUserMockRecorder) Mute(ctx, userId, duration interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Mute", reflect.TypeOf((*MockUser)(nil).Mute), ctx, userId, time)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Mute", reflect.TypeOf((*MockUser)(nil).Mute), ctx, userId, duration)
 }
 
 // UnMute mocks base method

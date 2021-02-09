@@ -2,8 +2,10 @@ package server
 
 import (
 	"context"
+	echoPrometheus "github.com/globocom/echo-prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rl-os/api/api"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/config"
@@ -102,6 +104,12 @@ func (s *Server) Start() error {
 		go http.ListenAndServe(":8080", r)
 	}
 
+	if s.Config.Metrics.Enable {
+		addr := s.Config.Metrics.Host + ":" + s.Config.Metrics.Port
+
+		go http.ListenAndServe(addr, promhttp.Handler())
+	}
+
 	return nil
 }
 
@@ -145,7 +153,9 @@ func (s *Server) StartHTTPServer() {
 	srv.HideBanner = true
 	srv.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
 
+	echoPrometheus.DefaultConfig.Namespace = ""
 	srv.Use(
+		echoPrometheus.MetricsMiddleware(),
 		middleware.RequestID(),
 		permission.GlobalMiddleware(s.App),
 		reqest_context.GlobalMiddleware(s.App),

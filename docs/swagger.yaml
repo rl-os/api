@@ -1051,15 +1051,15 @@ paths:
   /api/v2/chat/channels/{id}/messages:
     get:
       parameters:
-        - description: limit 1-100, default 50
-          in: query
-          name: limit
-          required: true
-          type: integer
-        - description: channel id
-          in: path
-          name: id
-          type: string
+      - description: limit 1-100, default 50
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: channel id
+        in: path
+        name: id
+        type: string
       responses:
         "200":
           description: OK
@@ -1078,16 +1078,16 @@ paths:
       - Chat
     post:
       parameters:
-        - description: JSON payload
-          in: body
-          name: payload
-          required: true
-          schema:
-            $ref: '#/definitions/request.SendMessage'
-        - description: channel id
-          in: path
-          name: id
-          type: string
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.SendMessage'
+      - description: channel id
+        in: path
+        name: id
+        type: string
       responses:
         "200":
           description: OK

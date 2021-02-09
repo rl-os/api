@@ -43,11 +43,11 @@ func (_d UserWithLog) Activate(ctx context.Context, userId uint) (err error) {
 }
 
 // Ban implements store.User
-func (_d UserWithLog) Ban(ctx context.Context, userId uint, time time.Duration) (err error) {
+func (_d UserWithLog) Ban(ctx context.Context, userId uint, duration time.Duration) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
-		Interface("time", time).
+		Interface("duration", duration).
 		Msg("store.User.Ban: calling")
 	defer func() {
 		if err != nil {
@@ -58,7 +58,7 @@ func (_d UserWithLog) Ban(ctx context.Context, userId uint, time time.Duration) 
 				Msg("store.User.Ban: finished")
 		}
 	}()
-	return _d._base.Ban(ctx, userId, time)
+	return _d._base.Ban(ctx, userId, duration)
 }
 
 // ComputeFields implements store.User
@@ -175,11 +175,11 @@ func (_d UserWithLog) GetShort(ctx context.Context, userId uint, mode string) (u
 }
 
 // Mute implements store.User
-func (_d UserWithLog) Mute(ctx context.Context, userId uint, time time.Duration) (err error) {
+func (_d UserWithLog) Mute(ctx context.Context, userId uint, duration time.Duration) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
 		Interface("userId", userId).
-		Interface("time", time).
+		Interface("duration", duration).
 		Msg("store.User.Mute: calling")
 	defer func() {
 		if err != nil {
@@ -190,7 +190,7 @@ func (_d UserWithLog) Mute(ctx context.Context, userId uint, time time.Duration)
 				Msg("store.User.Mute: finished")
 		}
 	}()
-	return _d._base.Mute(ctx, userId, time)
+	return _d._base.Mute(ctx, userId, duration)
 }
 
 // UnBan implements store.User
