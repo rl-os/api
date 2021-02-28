@@ -37,7 +37,7 @@ func (h *ChatHandlers) NewPm(c echo.Context) error {
 		return err
 	}
 
-	channels, err := h.App.CreateChat(ctx, userId, params.TargetId, params.Message, params.IsAction)
+	channels, err := h.App.Chat.Create(ctx, userId, params.TargetId, params.Message, params.IsAction)
 	if err != nil {
 		return err
 	}
@@ -70,7 +70,7 @@ func (h *ChatHandlers) Updates(c echo.Context) error {
 		return err
 	}
 
-	updates, err := h.App.GetUpdatesInChat(
+	updates, err := h.App.Chat.GetUpdates(
 		ctx, userId, params.Since, params.ChannelId, params.Limit,
 	)
 	if err != nil {
@@ -104,7 +104,7 @@ func (h *ChatHandlers) Messages(c echo.Context) error {
 		return err
 	}
 
-	messages, err := h.App.GetMessages(
+	messages, err := h.App.Chat.Get(
 		ctx, userId, params.Limit,
 	)
 	if err != nil {
@@ -143,7 +143,7 @@ func (h *ChatHandlers) Send(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	messages, err := h.App.SendMessage(
+	messages, err := h.App.Chat.Send(
 		ctx, userId, uint(channelId), params.Message, params.IsAction,
 	)
 	if err != nil {
@@ -165,7 +165,7 @@ func (h *ChatHandlers) Send(c echo.Context) error {
 func (h *ChatHandlers) GetAll(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
-	channels, err := h.App.GetAllPublicChats(ctx)
+	channels, err := h.App.Chat.GetAllPublic(ctx)
 	if err != nil {
 		return err
 	}
@@ -190,7 +190,7 @@ func (h *ChatHandlers) GetJoined(c echo.Context) error {
 		return err
 	}
 
-	channels, err := h.App.GetAllChats(ctx, userId)
+	channels, err := h.App.Chat.GetAll(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -222,7 +222,7 @@ func (h *ChatHandlers) Join(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	channel, err := h.App.JoinToChat(ctx, userId, uint(channelId))
+	channel, err := h.App.Chat.Join(ctx, userId, uint(channelId))
 	if err != nil {
 		return err
 	}
@@ -254,7 +254,7 @@ func (h *ChatHandlers) Leave(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	err = h.App.LeaveFromChat(ctx, userId, uint(channelId))
+	err = h.App.Chat.Leave(ctx, userId, uint(channelId))
 	if err != nil {
 		return err
 	}

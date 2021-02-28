@@ -14,8 +14,12 @@ var (
 	ErrNotFoundUser = errors.New("not_found_user", http.StatusNotFound, "Not found")
 )
 
+type User struct {
+	*App
+}
+
 // GetUser from store and return 404 error if not exist
-func (a *App) GetUser(ctx context.Context, userID uint, mode string) (*entity.User, error) {
+func (a *User) Get(ctx context.Context, userID uint, mode string) (*entity.User, error) {
 	if !utils.ContainsString(modes, mode) {
 		mode = "std"
 	}

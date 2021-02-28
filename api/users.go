@@ -22,7 +22,7 @@ func (h *UsersHandlers) Get(c echo.Context) error {
 
 	mode := c.Param("mode")
 
-	user, err := h.App.GetUser(ctx, uint(userId), mode)
+	user, err := h.App.User.Get(ctx, uint(userId), mode)
 	if err != nil {
 		return err
 	}

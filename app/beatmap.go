@@ -13,9 +13,13 @@ var (
 	ErrNotFoundBM = errors.New("beatmap", http.StatusNotFound, "Beatmap not found")
 )
 
-// GetBeatmap from store
-func (a *App) GetBeatmap(ctx context.Context, id uint) (*entity.SingleBeatmap, error) {
-	data, err := a.Store.Beatmap().Get(ctx, id)
+type Beatmap struct {
+	*App
+}
+
+// Get from store
+func (b *Beatmap) Get(ctx context.Context, id uint) (*entity.SingleBeatmap, error) {
+	data, err := b.Store.Beatmap().Get(ctx, id)
 	if err != nil {
 		return nil, ErrNotFoundBM.WithCause(err)
 	}
@@ -23,14 +27,14 @@ func (a *App) GetBeatmap(ctx context.Context, id uint) (*entity.SingleBeatmap, e
 	return data, nil
 }
 
-func (a *App) LookupBeatmap(ctx context.Context, id uint, checksum string, filename string) (*entity.SingleBeatmap, error) {
+func (b *Beatmap) Lookup(ctx context.Context, id uint, checksum string, filename string) (*entity.SingleBeatmap, error) {
 	if checksum != "" {
 		// todo: search by md5
 		return nil, ErrNotFoundBM
 	}
 
 	if id != 0 {
-		beatmap, err := a.Store.Beatmap().Get(ctx, id)
+		beatmap, err := b.Store.Beatmap().Get(ctx, id)
 		if err != nil {
 			return nil, ErrNotFoundBM
 		}
