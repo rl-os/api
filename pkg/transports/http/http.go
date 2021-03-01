@@ -40,6 +40,8 @@ type Server struct {
 	DidFinishListen chan struct{}
 }
 
+type InitControllers func(r *echo.Echo)
+
 func NewOptions(v *viper.Viper) (*Options, error) {
 	var (
 		err error
@@ -53,20 +55,20 @@ func NewOptions(v *viper.Viper) (*Options, error) {
 	return o, err
 }
 
-func NewRouter(o *Options, log *zerolog.Logger) *echo.Echo {
+func NewRouter(o *Options, log *zerolog.Logger, init InitControllers) *echo.Echo {
 	docs.SwaggerInfo.Host = utils.IfThenElse(
 		o.APIAddr == "NOTSET",
 		"localhost:2400",
 		o.APIAddr,
 	).(string)
 
-	r := echo.New()
-	r.HidePort = true
-	r.HideBanner = true
-	r.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
+	srv := echo.New()
+	srv.HidePort = true
+	srv.HideBanner = true
+	srv.HTTPErrorHandler = customerror.CustomHTTPErrorHandler
 
 	echoPrometheus.DefaultConfig.Namespace = ""
-	r.Use(
+	srv.Use(
 		echoPrometheus.MetricsMiddleware(),
 		middleware.RequestID(),
 		//permission.GlobalMiddleware(s.App),
@@ -74,12 +76,19 @@ func NewRouter(o *Options, log *zerolog.Logger) *echo.Echo {
 		customlogger.Middleware(),
 	)
 
-	root := r.Group("")
+	init(srv)
+	srv.GET("/docs/*", echoSwagger.WrapHandler)
 
-	//api.New(app, root)
-	root.GET("/docs/*", echoSwagger.WrapHandler)
+	// log all routes
+	for _, route := range srv.Routes() {
+		log.Trace().
+			Str("name", route.Name).
+			Str("method", route.Method).
+			Str("path", route.Path).
+			Msg("Route loaded")
+	}
 
-	return r
+	return srv
 }
 
 func New(o *Options, log *zerolog.Logger, router *echo.Echo) (*Server, error) {

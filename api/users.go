@@ -2,17 +2,31 @@ package api
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
+	"github.com/rs/zerolog"
 	"net/http"
 	"strconv"
 )
 
-type UsersHandlers struct {
-	App *app.App
+type UserController struct {
+	App    *app.App
+	Logger *zerolog.Logger
 }
 
-func (h *UsersHandlers) Get(c echo.Context) error {
+var providerUserSet = wire.NewSet(
+	NewUserController,
+)
+
+func NewUserController(app *app.App, logger *zerolog.Logger) *UserController {
+	return &UserController{
+		app,
+		logger,
+	}
+}
+
+func (h *UserController) Get(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := strconv.ParseUint(c.Param("user"), 10, 32)

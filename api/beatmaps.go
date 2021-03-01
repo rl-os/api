@@ -2,15 +2,29 @@ package api
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rs/zerolog"
 	"net/http"
 	"strconv"
 )
 
-type BeatmapHandlers struct {
-	App *app.App
+var providerBeatmapSet = wire.NewSet(
+	NewBeatmapController,
+)
+
+type BeatmapController struct {
+	App    *app.App
+	Logger *zerolog.Logger
+}
+
+func NewBeatmapController(app *app.App, logger *zerolog.Logger) *BeatmapController {
+	return &BeatmapController{
+		app,
+		logger,
+	}
 }
 
 // Get beatmap by id
@@ -22,10 +36,10 @@ type BeatmapHandlers struct {
 //
 // @Success 200 {object} entity.SingleBeatmap
 // @Success 400 {object} errors.ResponseFormat
-func (h *BeatmapHandlers) Get(c echo.Context) error {
+func (h *BeatmapController) Get(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
-	beatmapID, err := strconv.ParseUint(c.Param("beatmap"), 10, 32)
+	beatmapID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
 	}
@@ -49,7 +63,7 @@ func (h *BeatmapHandlers) Get(c echo.Context) error {
 //
 // @Success 200 {object} entity.SingleBeatmap
 // @Success 400 {object} errors.ResponseFormat
-func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
+func (h *BeatmapController) Lookup(c echo.Context) (err error) {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := request.BeatmapLookup{}
@@ -76,13 +90,13 @@ func (h *BeatmapHandlers) Lookup(c echo.Context) (err error) {
 //
 // @Success 200 {object} entity.SingleBeatmap
 // @Success 400 {object} errors.ResponseFormat
-func (h *BeatmapHandlers) Scores(c echo.Context) (err error) {
+func (h *BeatmapController) Scores(c echo.Context) (err error) {
 	params := request.GetBeatmapScores{}
 	if err := c.Bind(&params); err != nil {
 		return err
 	}
 
-	_, err = strconv.ParseUint(c.Param("beatmap"), 10, 32)
+	_, err = strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
 	}

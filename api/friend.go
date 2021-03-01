@@ -2,15 +2,29 @@ package api
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rs/zerolog"
 	"net/http"
 )
 
-type FriendHandlers struct {
-	App *app.App
+type FriendController struct {
+	App    *app.App
+	Logger *zerolog.Logger
+}
+
+var providerFriendSet = wire.NewSet(
+	NewFriendController,
+)
+
+func NewFriendController(app *app.App, logger *zerolog.Logger) *FriendController {
+	return &FriendController{
+		app,
+		logger,
+	}
 }
 
 // GetAll friends/subscriptions
@@ -22,7 +36,7 @@ type FriendHandlers struct {
 //
 // @Success 200 {array} entity.UserShort
 // @Success 400 {object} errors.ResponseFormat
-func (h *FriendHandlers) GetAll(c echo.Context) error {
+func (h *FriendController) GetAll(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
@@ -49,7 +63,7 @@ func (h *FriendHandlers) GetAll(c echo.Context) error {
 //
 // @Success 200 {array} entity.UserShort
 // @Success 400 {object} errors.ResponseFormat
-func (h *FriendHandlers) Add(c echo.Context) error {
+func (h *FriendController) Add(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := request.FriendTargetId{}
@@ -85,7 +99,7 @@ func (h *FriendHandlers) Add(c echo.Context) error {
 //
 // @Success 200 {array} entity.UserShort
 // @Success 400 {object} errors.ResponseFormat
-func (h *FriendHandlers) Remove(c echo.Context) error {
+func (h *FriendController) Remove(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := request.FriendTargetId{}

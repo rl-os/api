@@ -2,17 +2,31 @@ package api
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rs/zerolog"
 	"net/http"
 )
 
-type OAuthTokenHandlers struct {
-	App *app.App
+type OAuthTokenController struct {
+	App    *app.App
+	Logger *zerolog.Logger
 }
 
-func (h *OAuthTokenHandlers) Create(c echo.Context) error {
+var providerOAuthTokenSet = wire.NewSet(
+	NewOAuthTokenController,
+)
+
+func NewOAuthTokenController(app *app.App, logger *zerolog.Logger) *OAuthTokenController {
+	return &OAuthTokenController{
+		app,
+		logger,
+	}
+}
+
+func (h *OAuthTokenController) Create(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := &request.CreateOauthToken{}

@@ -7,9 +7,15 @@ package main
 
 import (
 	"github.com/google/wire"
+	"github.com/rl-os/api/api"
+	"github.com/rl-os/api/app"
+	config2 "github.com/rl-os/api/config"
 	"github.com/rl-os/api/pkg/config"
 	"github.com/rl-os/api/pkg/log"
 	"github.com/rl-os/api/pkg/transports/http"
+	"github.com/rl-os/api/services"
+	"github.com/rl-os/api/services/bancho"
+	"github.com/rl-os/api/store/gorm"
 )
 
 // Injectors from wire.go:
@@ -31,7 +37,21 @@ func Injector(configPath string) (*http.Server, error) {
 	if err != nil {
 		return nil, err
 	}
-	echo := http.NewRouter(options, logger)
+	configConfig := config2.Init(configPath)
+	osuAPI := bancho.Init(configConfig)
+	servicesServices := services.NewServices(osuAPI)
+	store := sql.Init(configConfig, servicesServices)
+	appApp := app.NewApp(store, configConfig, servicesServices)
+	userController := api.NewUserController(appApp, logger)
+	chatController := api.NewChatController(appApp, logger)
+	friendController := api.NewFriendController(appApp, logger)
+	beatmapController := api.NewBeatmapController(appApp, logger)
+	beatmapSetController := api.NewBeatmapSetController(appApp, logger)
+	currentUserController := api.NewCurrentUserController(appApp, logger)
+	oAuthTokenController := api.NewOAuthTokenController(appApp, logger)
+	oAuthClientController := api.NewOAuthClientController(appApp, logger)
+	initControllers := api.CreateInitControllersFn(userController, chatController, friendController, beatmapController, beatmapSetController, currentUserController, oAuthTokenController, oAuthClientController)
+	echo := http.NewRouter(options, logger, initControllers)
 	server, err := http.New(options, logger, echo)
 	if err != nil {
 		return nil, err
@@ -41,4 +61,4 @@ func Injector(configPath string) (*http.Server, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(log.ProviderSet, config.ProviderSet, http.ProviderSet)
+var providerSet = wire.NewSet(log.ProviderSet, config.ProviderSet, http.ProviderSet, api.ProviderSet, services.ProviderSet, app.NewApp, sql.Init, config2.Init)

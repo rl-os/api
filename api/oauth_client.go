@@ -2,15 +2,29 @@ package api
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rs/zerolog"
 	"net/http"
 )
 
-type OAuthClientHandlers struct {
-	App *app.App
+type OAuthClientController struct {
+	App    *app.App
+	Logger *zerolog.Logger
+}
+
+var providerOAuthClientSet = wire.NewSet(
+	NewOAuthClientController,
+)
+
+func NewOAuthClientController(app *app.App, logger *zerolog.Logger) *OAuthClientController {
+	return &OAuthClientController{
+		app,
+		logger,
+	}
 }
 
 // Create new oauth client
@@ -23,7 +37,7 @@ type OAuthClientHandlers struct {
 //
 // @Success 200 {object} entity.OAuthClient
 // @Success 400 {object} errors.ResponseFormat
-func (h OAuthClientHandlers) Create(c echo.Context) error {
+func (h OAuthClientController) Create(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := &request.CreateOAuthClient{}
