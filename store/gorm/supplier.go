@@ -4,7 +4,6 @@ import (
 	osu "github.com/deissh/osu-go-client"
 	"github.com/jmoiron/sqlx"
 	"github.com/rl-os/api/config"
-	"github.com/rl-os/api/services"
 	"github.com/rl-os/api/store"
 	"github.com/rl-os/api/store/layers"
 	"github.com/rs/zerolog/log"
@@ -33,11 +32,10 @@ type Supplier struct {
 
 // Init new store
 // Using with DI
-func Init(cfg *config.Config, services *services.Services) store.Store {
+func Init(cfg *config.Config) store.Store {
 	log.Debug().Msg("Creating new SQL store")
 	supplier := &Supplier{
-		cfg:       cfg,
-		osuClient: services.Bancho,
+		cfg: cfg,
 	}
 
 	supplier.initConnection()

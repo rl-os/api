@@ -10,11 +10,11 @@ import (
 	"github.com/rl-os/api/api"
 	"github.com/rl-os/api/app"
 	config2 "github.com/rl-os/api/config"
+	"github.com/rl-os/api/pkg"
+	"github.com/rl-os/api/pkg/bancho"
 	"github.com/rl-os/api/pkg/config"
 	"github.com/rl-os/api/pkg/log"
 	"github.com/rl-os/api/pkg/transports/http"
-	"github.com/rl-os/api/services"
-	"github.com/rl-os/api/services/bancho"
 	"github.com/rl-os/api/store/gorm"
 )
 
@@ -25,23 +25,30 @@ func Injector(configPath string) (*http.Server, error) {
 	if err != nil {
 		return nil, err
 	}
-	options, err := http.NewOptions(viper)
+	options, err := log.NewOptions(viper)
 	if err != nil {
 		return nil, err
 	}
-	logOptions, err := log.NewOptions(viper)
+	logger, err := log.New(options)
 	if err != nil {
 		return nil, err
 	}
-	logger, err := log.New(logOptions)
+	httpOptions, err := http.NewOptions(logger, viper)
+	if err != nil {
+		return nil, err
+	}
+	appOptions, err := app.NewOptions(logger, viper)
 	if err != nil {
 		return nil, err
 	}
 	configConfig := config2.Init(configPath)
-	osuAPI := bancho.Init(configConfig)
-	servicesServices := services.NewServices(osuAPI)
-	_ = sql.Init(configConfig, servicesServices)
-	appApp := app.New(nil, nil, servicesServices)
+	store := sql.Init(configConfig)
+	banchoOptions, err := bancho.NewOptions(logger, viper)
+	if err != nil {
+		return nil, err
+	}
+	client := bancho.New(banchoOptions)
+	appApp := app.New(appOptions, store, client)
 	userController := api.NewUserController(appApp, logger)
 	chatController := api.NewChatController(appApp, logger)
 	friendController := api.NewFriendController(appApp, logger)
@@ -51,8 +58,8 @@ func Injector(configPath string) (*http.Server, error) {
 	oAuthTokenController := api.NewOAuthTokenController(appApp, logger)
 	oAuthClientController := api.NewOAuthClientController(appApp, logger)
 	initControllers := api.CreateInitControllersFn(userController, chatController, friendController, beatmapController, beatmapSetController, currentUserController, oAuthTokenController, oAuthClientController)
-	echo := http.NewRouter(options, logger, initControllers)
-	server, err := http.New(options, logger, echo)
+	echo := http.NewRouter(httpOptions, logger, initControllers)
+	server, err := http.New(httpOptions, logger, echo)
 	if err != nil {
 		return nil, err
 	}
@@ -61,4 +68,4 @@ func Injector(configPath string) (*http.Server, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(log.ProviderSet, config.ProviderSet, http.ProviderSet, api.ProviderSet, services.ProviderSet, app.New, sql.Init, config2.Init)
+var providerSet = wire.NewSet(pkg.ProviderSet, api.ProviderSet, app.ProviderSet, sql.Init, config2.Init)

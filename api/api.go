@@ -51,6 +51,7 @@ func CreateInitControllersFn(
 	oauthClient *OAuthClientController,
 ) http.InitControllers {
 	return func(root *echo.Echo) {
+		// TODO: move out to external oauth2 server
 		root.POST("/api/v2/oauth/token", oauthToken.Create)
 		root.POST("/api/v2/oauth/client", oauthClient.Create, permission.MustLogin)
 

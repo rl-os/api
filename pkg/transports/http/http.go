@@ -42,15 +42,22 @@ type Server struct {
 
 type InitControllers func(r *echo.Echo)
 
-func NewOptions(v *viper.Viper) (*Options, error) {
+func NewOptions(logger *zerolog.Logger, v *viper.Viper) (*Options, error) {
 	var (
 		err error
 		o   = new(Options)
 	)
 
-	if err = v.UnmarshalKey("http", o); err != nil {
+	logger.Debug().
+		Msg("Loading config file")
+
+	if err := v.UnmarshalKey("http", &o); err != nil {
 		return nil, err
 	}
+
+	logger.Debug().
+		Interface("http", o).
+		Msg("Loaded config")
 
 	return o, err
 }

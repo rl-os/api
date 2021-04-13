@@ -4,8 +4,9 @@ import (
 	"context"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
-	"github.com/rl-os/api/services"
+	"github.com/rl-os/api/pkg/bancho"
 	"github.com/rl-os/api/store"
+	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 )
 
@@ -29,17 +30,23 @@ type App struct {
 
 	// Store contains active implementation
 	Store store.Store
-	// Services that be enabled for this app
-	Services *services.Services
+
+	BanchoClient *bancho.Client
 }
 
 // NewOptions create and parse config from viper instance
-func NewOptions(v *viper.Viper) (*Options, error) {
+func NewOptions(logger *zerolog.Logger, v *viper.Viper) (*Options, error) {
 	o := Options{}
 
+	logger.Debug().
+		Msg("Loading config file")
 	if err := v.UnmarshalKey("app", &o); err != nil {
 		return nil, err
 	}
+
+	logger.Debug().
+		Interface("app", o).
+		Msg("Loaded config")
 
 	return &o, nil
 }
@@ -48,13 +55,13 @@ func NewOptions(v *viper.Viper) (*Options, error) {
 func New(
 	options *Options,
 	store store.Store,
-	services *services.Services,
+	bancho *bancho.Client,
 ) *App {
 	app := &App{
-		Store:     store,
-		Options:   options,
-		Services:  services,
-		Validator: validator.New(),
+		Store:        store,
+		Options:      options,
+		BanchoClient: bancho,
+		Validator:    validator.New(),
 	}
 
 	return app
