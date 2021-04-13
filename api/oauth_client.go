@@ -7,23 +7,30 @@ import (
 	"github.com/rl-os/api/app"
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rl-os/api/pkg/validator"
 	"github.com/rs/zerolog"
 	"net/http"
 )
 
 type OAuthClientController struct {
-	App    *app.App
-	Logger *zerolog.Logger
+	App       *app.App
+	Logger    *zerolog.Logger
+	Validator *validator.Inst
 }
 
 var providerOAuthClientSet = wire.NewSet(
 	NewOAuthClientController,
 )
 
-func NewOAuthClientController(app *app.App, logger *zerolog.Logger) *OAuthClientController {
+func NewOAuthClientController(
+	app *app.App,
+	logger *zerolog.Logger,
+	validator *validator.Inst,
+) *OAuthClientController {
 	return &OAuthClientController{
 		app,
 		logger,
+		validator,
 	}
 }
 
@@ -45,7 +52,7 @@ func (h OAuthClientController) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Client info not found")
 	}
 
-	if err := h.App.Validator.Struct(params); err != nil {
+	if err := h.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid client information")
 	}
 

@@ -8,22 +8,29 @@ import (
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
 	"github.com/rl-os/api/errors"
+	"github.com/rl-os/api/pkg/validator"
 	"github.com/rs/zerolog"
 )
 
 type CurrentUserController struct {
-	App    *app.App
-	Logger *zerolog.Logger
+	App       *app.App
+	Logger    *zerolog.Logger
+	Validator *validator.Inst
 }
 
 var providerMeSet = wire.NewSet(
 	NewCurrentUserController,
 )
 
-func NewCurrentUserController(app *app.App, logger *zerolog.Logger) *CurrentUserController {
+func NewCurrentUserController(
+	app *app.App,
+	logger *zerolog.Logger,
+	validator *validator.Inst,
+) *CurrentUserController {
 	return &CurrentUserController{
 		app,
 		logger,
+		validator,
 	}
 }
 
@@ -43,7 +50,7 @@ func (h *CurrentUserController) Create(c echo.Context) error {
 		return errors.New("request_params", 400, "Invalid params")
 	}
 
-	if err := h.App.Validator.Struct(params); err != nil {
+	if err := h.Validator.Struct(params); err != nil {
 		return errors.New("request_params", 400, "Invalid params")
 	}
 
@@ -57,7 +64,7 @@ func (h *CurrentUserController) Create(c echo.Context) error {
 	return c.JSON(200, user)
 }
 
-// Me, current user
+// Me (current user)
 //
 // @Router /api/v2/me/{mode} [get]
 // @Tags Current user

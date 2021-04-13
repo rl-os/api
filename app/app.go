@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
 	"github.com/rl-os/api/pkg/bancho"
 	"github.com/rl-os/api/store"
@@ -21,14 +20,9 @@ type Options struct {
 }
 
 type App struct {
-	// Global context
 	Context context.Context
-	// Global validation context
-	Validator *validator.Validate
-	// Global configuration
 	Options *Options
 
-	// Store contains active implementation
 	Store store.Store
 
 	BanchoClient *bancho.Client
@@ -61,7 +55,6 @@ func New(
 		Store:        store,
 		Options:      options,
 		BanchoClient: bancho,
-		Validator:    validator.New(),
 	}
 
 	return app

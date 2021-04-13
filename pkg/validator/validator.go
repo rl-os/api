@@ -7,7 +7,11 @@ import (
 
 var ProviderSet = wire.NewSet(New)
 
+type Inst struct {
+	*validator.Validate
+}
+
 // New validator instance
-func New() (*validator.Validate, error) {
-	return validator.New(), nil
+func New() (*Inst, error) {
+	return &Inst{validator.New()}, nil
 }

@@ -6,23 +6,30 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rl-os/api/pkg/validator"
 	"github.com/rs/zerolog"
 	"net/http"
 )
 
 type OAuthTokenController struct {
-	App    *app.App
-	Logger *zerolog.Logger
+	App       *app.App
+	Logger    *zerolog.Logger
+	Validator *validator.Inst
 }
 
 var providerOAuthTokenSet = wire.NewSet(
 	NewOAuthTokenController,
 )
 
-func NewOAuthTokenController(app *app.App, logger *zerolog.Logger) *OAuthTokenController {
+func NewOAuthTokenController(
+	app *app.App,
+	logger *zerolog.Logger,
+	validator *validator.Inst,
+) *OAuthTokenController {
 	return &OAuthTokenController{
 		app,
 		logger,
+		validator,
 	}
 }
 
@@ -34,7 +41,7 @@ func (h *OAuthTokenController) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Token info not found")
 	}
 
-	if err := h.App.Validator.Struct(params); err != nil {
+	if err := h.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid token information")
 	}
 

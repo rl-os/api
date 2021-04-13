@@ -11,6 +11,7 @@ import (
 	"github.com/rl-os/api/docs"
 	"github.com/rl-os/api/middlewares/customerror"
 	"github.com/rl-os/api/middlewares/customlogger"
+	"github.com/rl-os/api/pkg/transports"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 	echoSwagger "github.com/swaggo/echo-swagger"
@@ -98,7 +99,7 @@ func NewRouter(o *Options, log *zerolog.Logger, init InitControllers) *echo.Echo
 	return srv
 }
 
-func New(o *Options, log *zerolog.Logger, router *echo.Echo) (*Server, error) {
+func New(o *Options, log *zerolog.Logger, router *echo.Echo) (transports.Server, error) {
 	l := log.With().
 		Str("type", "http.Server").
 		Logger()

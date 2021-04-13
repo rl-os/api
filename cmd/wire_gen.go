@@ -14,13 +14,15 @@ import (
 	"github.com/rl-os/api/pkg/bancho"
 	"github.com/rl-os/api/pkg/config"
 	"github.com/rl-os/api/pkg/log"
+	"github.com/rl-os/api/pkg/transports"
 	"github.com/rl-os/api/pkg/transports/http"
+	"github.com/rl-os/api/pkg/validator"
 	"github.com/rl-os/api/store/gorm"
 )
 
 // Injectors from wire.go:
 
-func Injector(configPath string) (*http.Server, error) {
+func Injector(configPath string) (transports.Server, error) {
 	viper, err := config.New(configPath)
 	if err != nil {
 		return nil, err
@@ -49,14 +51,18 @@ func Injector(configPath string) (*http.Server, error) {
 	}
 	client := bancho.New(banchoOptions)
 	appApp := app.New(appOptions, store, client)
-	userController := api.NewUserController(appApp, logger)
-	chatController := api.NewChatController(appApp, logger)
-	friendController := api.NewFriendController(appApp, logger)
-	beatmapController := api.NewBeatmapController(appApp, logger)
-	beatmapSetController := api.NewBeatmapSetController(appApp, logger)
-	currentUserController := api.NewCurrentUserController(appApp, logger)
-	oAuthTokenController := api.NewOAuthTokenController(appApp, logger)
-	oAuthClientController := api.NewOAuthClientController(appApp, logger)
+	inst, err := validator.New()
+	if err != nil {
+		return nil, err
+	}
+	userController := api.NewUserController(appApp, logger, inst)
+	chatController := api.NewChatController(appApp, logger, inst)
+	friendController := api.NewFriendController(appApp, logger, inst)
+	beatmapController := api.NewBeatmapController(appApp, logger, inst)
+	beatmapSetController := api.NewBeatmapSetController(appApp, logger, inst)
+	currentUserController := api.NewCurrentUserController(appApp, logger, inst)
+	oAuthTokenController := api.NewOAuthTokenController(appApp, logger, inst)
+	oAuthClientController := api.NewOAuthClientController(appApp, logger, inst)
 	initControllers := api.CreateInitControllersFn(userController, chatController, friendController, beatmapController, beatmapSetController, currentUserController, oAuthTokenController, oAuthClientController)
 	echo := http.NewRouter(httpOptions, logger, initControllers)
 	server, err := http.New(httpOptions, logger, echo)
@@ -68,4 +74,4 @@ func Injector(configPath string) (*http.Server, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(pkg.ProviderSet, api.ProviderSet, app.ProviderSet, sql.Init, config2.Init)
+var providerSet = wire.NewSet(pkg.ProviderSet, api.ProviderSet, app.ProviderSet, http.ProviderSet, sql.Init, config2.Init)

@@ -7,23 +7,30 @@ import (
 	"github.com/rl-os/api/app"
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rl-os/api/pkg/validator"
 	"github.com/rs/zerolog"
 	"net/http"
 )
 
 type FriendController struct {
-	App    *app.App
-	Logger *zerolog.Logger
+	App       *app.App
+	Logger    *zerolog.Logger
+	Validator *validator.Inst
 }
 
 var providerFriendSet = wire.NewSet(
 	NewFriendController,
 )
 
-func NewFriendController(app *app.App, logger *zerolog.Logger) *FriendController {
+func NewFriendController(
+	app *app.App,
+	logger *zerolog.Logger,
+	validator *validator.Inst,
+) *FriendController {
 	return &FriendController{
 		app,
 		logger,
+		validator,
 	}
 }
 
@@ -71,7 +78,7 @@ func (h *FriendController) Add(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
 
-	if err := h.App.Validator.Struct(params); err != nil {
+	if err := h.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
 
@@ -107,7 +114,7 @@ func (h *FriendController) Remove(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
 
-	if err := h.App.Validator.Struct(params); err != nil {
+	if err := h.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
 
