@@ -14,5 +14,5 @@ var ProviderSet = wire.NewSet(
 	log.ProviderSet,
 	config.ProviderSet,
 	transports.ProviderSet,
-	bancho.ProiderSet,
+	bancho.ProviderSet,
 )

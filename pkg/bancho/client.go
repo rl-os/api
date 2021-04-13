@@ -9,10 +9,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-var ProiderSet = wire.NewSet(NewOptions, New)
+var ProviderSet = wire.NewSet(NewOptions, New)
 
 var (
-	BanchoAuthErr = errors.New("invalid login and password or oauth client")
+	AuthErr = errors.New("invalid login and password or oauth client")
 )
 
 type Options struct {
@@ -59,7 +59,7 @@ func New(options *Options) *Client {
 
 	if err != nil {
 		log.Warn().
-			Err(BanchoAuthErr).
+			Err(AuthErr).
 			Err(err).
 			Send()
 
