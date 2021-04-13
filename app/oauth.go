@@ -34,7 +34,7 @@ var (
 // при ошибке может вернуть InvalidAuthTokenErr или ExpiredAuthTokenErr
 func (a *App) ValidateToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {
 	_, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
-		return []byte(a.Config.JWT.Secret), nil
+		return []byte(a.Options.JWT.Secret), nil
 	})
 
 	if err != nil {

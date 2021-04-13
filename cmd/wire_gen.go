@@ -40,8 +40,8 @@ func Injector(configPath string) (*http.Server, error) {
 	configConfig := config2.Init(configPath)
 	osuAPI := bancho.Init(configConfig)
 	servicesServices := services.NewServices(osuAPI)
-	store := sql.Init(configConfig, servicesServices)
-	appApp := app.NewApp(store, configConfig, servicesServices)
+	_ = sql.Init(configConfig, servicesServices)
+	appApp := app.New(nil, nil, servicesServices)
 	userController := api.NewUserController(appApp, logger)
 	chatController := api.NewChatController(appApp, logger)
 	friendController := api.NewFriendController(appApp, logger)
@@ -61,4 +61,4 @@ func Injector(configPath string) (*http.Server, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(log.ProviderSet, config.ProviderSet, http.ProviderSet, api.ProviderSet, services.ProviderSet, app.NewApp, sql.Init, config2.Init)
+var providerSet = wire.NewSet(log.ProviderSet, config.ProviderSet, http.ProviderSet, api.ProviderSet, services.ProviderSet, app.New, sql.Init, config2.Init)

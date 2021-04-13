@@ -22,7 +22,7 @@ var ProviderSet = wire.NewSet(
 	providerUserSet,
 )
 
-// New api endpoint
+// CreateInitControllersFn
 //
 // @title osu!lazer API
 // @version 2.0

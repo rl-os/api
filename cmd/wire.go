@@ -21,8 +21,8 @@ var providerSet = wire.NewSet(
 	http.ProviderSet,
 	api.ProviderSet,
 	services.ProviderSet,
+	app.ProviderSet,
 
-	app.NewApp,
 	sql.Init,
 	oldCfg.Init,
 )
