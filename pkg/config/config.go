@@ -9,6 +9,9 @@ import (
 
 var ProviderSet = wire.NewSet(New)
 
+// New viper instance with preload config
+// from file if path is not empty
+// also load from env vars with ENV_PREFIX
 func New(path string) (*viper.Viper, error) {
 	var (
 		err       error
@@ -18,10 +21,16 @@ func New(path string) (*viper.Viper, error) {
 
 	v.AddConfigPath(".")
 	v.SetEnvPrefix(envPrefix)
-	v.SetConfigFile(path)
 
-	if err := v.ReadInConfig(); err != nil {
-		return nil, err
+	v.AutomaticEnv()
+
+	if path != "" {
+		v.SetConfigFile(path)
+
+		err := v.ReadInConfig()
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	fmt.Printf("loaded config file -> %s\n", v.ConfigFileUsed())
