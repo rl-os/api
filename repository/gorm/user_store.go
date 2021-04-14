@@ -1,4 +1,4 @@
-package sql
+package gorm
 
 import (
 	"context"
@@ -6,21 +6,21 @@ import (
 	"fmt"
 	"github.com/deissh/go-utils"
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"time"
 )
 
-type UserStore struct {
-	SqlStore
+type UserRepository struct {
+	*Supplier
 }
 
-func newSqlUserStore(sqlStore SqlStore) store.User {
-	return &UserStore{sqlStore}
+func NewUserRepository(supplier *Supplier) repository.User {
+	return &UserRepository{supplier}
 }
 
-func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.UserShort, error) {
+func (u UserRepository) GetByBasic(ctx context.Context, login, pwd string) (*entity.UserShort, error) {
 	var baseUser entity.UserShort
 
 	err := u.GetMaster().
@@ -40,7 +40,7 @@ func (u UserStore) GetByBasic(ctx context.Context, login, pwd string) (*entity.U
 	return &baseUser, nil
 }
 
-func (u UserStore) Get(ctx context.Context, userId uint, mode string) (*entity.User, error) {
+func (u UserRepository) Get(ctx context.Context, userId uint, mode string) (*entity.User, error) {
 	user := entity.User{}
 	user.Mode = mode
 
@@ -61,7 +61,7 @@ func (u UserStore) Get(ctx context.Context, userId uint, mode string) (*entity.U
 	return u.ComputeFields(ctx, user)
 }
 
-func (u UserStore) GetShort(ctx context.Context, userId uint, mode string) (*entity.UserShort, error) {
+func (u UserRepository) GetShort(ctx context.Context, userId uint, mode string) (*entity.UserShort, error) {
 	var user entity.UserShort
 
 	err := u.GetMaster().
@@ -78,7 +78,7 @@ func (u UserStore) GetShort(ctx context.Context, userId uint, mode string) (*ent
 	return &user, nil
 }
 
-func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity.User, error) {
+func (u UserRepository) Create(ctx context.Context, name, email, pwd string) (*entity.User, error) {
 	now := time.Now()
 
 	hashed, err := utils.GetHash(pwd)
@@ -142,14 +142,14 @@ func (u UserStore) Create(ctx context.Context, name, email, pwd string) (*entity
 		return nil, err
 	}
 
-	return u.User().Get(ctx, user.ID, "")
+	return u.Get(ctx, user.ID, "")
 }
 
-func (u UserStore) Update(ctx context.Context, userId uint, from interface{}) (*entity.UserShort, error) {
+func (u UserRepository) Update(ctx context.Context, userId uint, from interface{}) (*entity.UserShort, error) {
 	panic("implement me")
 }
 
-func (u UserStore) Activate(ctx context.Context, userId uint) error {
+func (u UserRepository) Activate(ctx context.Context, userId uint) error {
 	err := u.GetMaster().
 		WithContext(ctx).
 		Table("users").
@@ -163,7 +163,7 @@ func (u UserStore) Activate(ctx context.Context, userId uint) error {
 	return nil
 }
 
-func (u UserStore) Deactivate(ctx context.Context, userId uint) error {
+func (u UserRepository) Deactivate(ctx context.Context, userId uint) error {
 	err := u.GetMaster().
 		WithContext(ctx).
 		Table("users").
@@ -178,23 +178,23 @@ func (u UserStore) Deactivate(ctx context.Context, userId uint) error {
 	return nil
 }
 
-func (u UserStore) Ban(ctx context.Context, userId uint, time time.Duration) error {
+func (u UserRepository) Ban(ctx context.Context, userId uint, time time.Duration) error {
 	panic("implement me")
 }
 
-func (u UserStore) UnBan(ctx context.Context, userId uint) error {
+func (u UserRepository) UnBan(ctx context.Context, userId uint) error {
 	panic("implement me")
 }
 
-func (u UserStore) Mute(ctx context.Context, userId uint, time time.Duration) error {
+func (u UserRepository) Mute(ctx context.Context, userId uint, time time.Duration) error {
 	panic("implement me")
 }
 
-func (u UserStore) UnMute(ctx context.Context, userId uint) error {
+func (u UserRepository) UnMute(ctx context.Context, userId uint) error {
 	panic("implement me")
 }
 
-func (u UserStore) UpdateLastVisit(ctx context.Context, userId uint) error {
+func (u UserRepository) UpdateLastVisit(ctx context.Context, userId uint) error {
 	currentTime := time.Now().UTC()
 
 	err := u.GetMaster().
@@ -210,6 +210,6 @@ func (u UserStore) UpdateLastVisit(ctx context.Context, userId uint) error {
 	return nil
 }
 
-func (u UserStore) ComputeFields(ctx context.Context, user entity.User) (*entity.User, error) {
+func (u UserRepository) ComputeFields(ctx context.Context, user entity.User) (*entity.User, error) {
 	return &user, nil
 }

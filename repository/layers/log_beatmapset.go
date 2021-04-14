@@ -8,22 +8,22 @@ import (
 	"context"
 
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 	"github.com/rs/zerolog/log"
 )
 
-// BeatmapSetWithLog implements store.BeatmapSet that is instrumented with zerolog
+// BeatmapSetWithLog implements repository.BeatmapSet that is instrumented with zerolog
 type BeatmapSetWithLog struct {
-	_base store.BeatmapSet
+	_base repository.BeatmapSet
 }
 
-func NewBeatmapSetWithLog(base store.BeatmapSet) store.BeatmapSet {
+func NewBeatmapSetWithLog(base repository.BeatmapSet) repository.BeatmapSet {
 	return BeatmapSetWithLog{
 		_base: base,
 	}
 }
 
-// Create implements store.BeatmapSet
+// Create implements repository.BeatmapSet
 func (_d BeatmapSetWithLog) Create(ctx context.Context, from interface{}) (bp1 *entity.BeatmapSetFull, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -41,7 +41,7 @@ func (_d BeatmapSetWithLog) Create(ctx context.Context, from interface{}) (bp1 *
 	return _d._base.Create(ctx, from)
 }
 
-// Delete implements store.BeatmapSet
+// Delete implements repository.BeatmapSet
 func (_d BeatmapSetWithLog) Delete(ctx context.Context, id uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -59,7 +59,7 @@ func (_d BeatmapSetWithLog) Delete(ctx context.Context, id uint) (err error) {
 	return _d._base.Delete(ctx, id)
 }
 
-// Get implements store.BeatmapSet
+// Get implements repository.BeatmapSet
 func (_d BeatmapSetWithLog) Get(ctx context.Context, id uint) (bp1 *entity.BeatmapSetFull, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -77,7 +77,7 @@ func (_d BeatmapSetWithLog) Get(ctx context.Context, id uint) (bp1 *entity.Beatm
 	return _d._base.Get(ctx, id)
 }
 
-// SetFavourite implements store.BeatmapSet
+// SetFavourite implements repository.BeatmapSet
 func (_d BeatmapSetWithLog) SetFavourite(ctx context.Context, userId uint, id uint) (u1 uint, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -96,7 +96,7 @@ func (_d BeatmapSetWithLog) SetFavourite(ctx context.Context, userId uint, id ui
 	return _d._base.SetFavourite(ctx, userId, id)
 }
 
-// SetUnFavourite implements store.BeatmapSet
+// SetUnFavourite implements repository.BeatmapSet
 func (_d BeatmapSetWithLog) SetUnFavourite(ctx context.Context, userId uint, id uint) (u1 uint, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -115,7 +115,7 @@ func (_d BeatmapSetWithLog) SetUnFavourite(ctx context.Context, userId uint, id 
 	return _d._base.SetUnFavourite(ctx, userId, id)
 }
 
-// Update implements store.BeatmapSet
+// Update implements repository.BeatmapSet
 func (_d BeatmapSetWithLog) Update(ctx context.Context, id uint, from interface{}) (bp1 *entity.BeatmapSetFull, err error) {
 	log.Trace().
 		Interface("ctx", ctx).

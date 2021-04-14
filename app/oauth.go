@@ -41,7 +41,7 @@ func (a *App) ValidateToken(ctx context.Context, accessToken string) (*entity.OA
 		return nil, InvalidAuthTokenErr.WithCause(err)
 	}
 
-	token, err := a.Store.OAuth().GetToken(ctx, accessToken)
+	token, err := a.OAuthRepository.GetToken(ctx, accessToken)
 	if err != nil {
 		return nil, InvalidAuthTokenErr.WithCause(err, "Not found")
 	}
@@ -56,7 +56,7 @@ func (a *App) ValidateToken(ctx context.Context, accessToken string) (*entity.OA
 // CreateOAuthClient создает новый entity.OAuthClient
 // в случае InvalidOAuthClientParamsErr
 func (a App) CreateOAuthClient(ctx context.Context, userId uint, request request.CreateOAuthClient) (*entity.OAuthClient, error) {
-	token, err := a.Store.OAuth().CreateClient(ctx, userId, request.Name, request.Redirect)
+	token, err := a.OAuthRepository.CreateClient(ctx, userId, request.Name, request.Redirect)
 	if err != nil {
 		return nil, InvalidOAuthClientParamsErr.WithCause(err)
 	}
@@ -66,7 +66,7 @@ func (a App) CreateOAuthClient(ctx context.Context, userId uint, request request
 
 // RefreshToken and revoke old access token
 func (a *App) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error) {
-	token, err := a.Store.OAuth().RefreshToken(ctx, refreshToken, clientID, clientSecret)
+	token, err := a.OAuthRepository.RefreshToken(ctx, refreshToken, clientID, clientSecret)
 	if err != nil {
 		return nil, NotFoundRefreshAuthErr.WithCause(err)
 	}
@@ -81,7 +81,7 @@ func (a *App) CreateOAuthToken(ctx context.Context, request request.CreateOauthT
 	}
 
 	if request.GrantType == "password" {
-		user, err := a.Store.User().GetByBasic(
+		user, err := a.UserRepository.GetByBasic(
 			ctx,
 			request.Username,
 			request.Password,
@@ -90,7 +90,7 @@ func (a *App) CreateOAuthToken(ctx context.Context, request request.CreateOauthT
 			return nil, InvalidAuthParamsErr.WithCause(err)
 		}
 
-		token, err := a.Store.OAuth().CreateToken(
+		token, err := a.OAuthRepository.CreateToken(
 			ctx,
 			user.ID,
 			request.ClientID,

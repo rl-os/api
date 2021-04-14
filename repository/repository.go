@@ -1,6 +1,6 @@
-package store
+package repository
 
-//go:generate mockgen -destination=./mocks/generated.go -source=store.go
+//go:generate mockgen -destination=./mocks/generated.go -source=repository.go
 //go:generate gowrap gen -g -p . -i OAuth -t layers/log.tmpl -o layers/log_oauth.go
 //go:generate gowrap gen -g -p . -i Beatmap -t layers/log.tmpl -o layers/log_beatmap.go
 //go:generate gowrap gen -g -p . -i BeatmapSet -t layers/log.tmpl -o layers/log_beatmapset.go
@@ -13,17 +13,6 @@ import (
 	"github.com/rl-os/api/entity"
 	"time"
 )
-
-type Store interface {
-	OAuth() OAuth
-	Beatmap() Beatmap
-	BeatmapSet() BeatmapSet
-	User() User
-	Friend() Friend
-	Chat() Chat
-
-	Close()
-}
 
 type OAuth interface {
 	CreateClient(ctx context.Context, userId uint, name string, redirect string) (*entity.OAuthClient, error)
@@ -87,7 +76,6 @@ type Chat interface {
 	GetJoined(ctx context.Context, userId uint) (*[]entity.Channel, error)
 	GetMessage(ctx context.Context, messageId uint) (*entity.ChatMessage, error)
 	GetMessages(ctx context.Context, userId, since, limit uint) (*[]entity.ChatMessage, error)
-	GetUpdates(ctx context.Context, userId, since, channelId, limit uint) (*entity.ChannelUpdates, error)
 
 	SendMessage(ctx context.Context, userId, channelId uint, content string, isAction bool) (*entity.ChatMessage, error)
 	Join(ctx context.Context, userId, channelId uint) (*entity.Channel, error)

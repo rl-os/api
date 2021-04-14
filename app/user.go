@@ -14,13 +14,13 @@ var (
 	ErrNotFoundUser = errors.New("not_found_user", http.StatusNotFound, "Not found")
 )
 
-// GetUser from store and return 404 error if not exist
+// GetUser from repository and return 404 error if not exist
 func (a *App) GetUser(ctx context.Context, userID uint, mode string) (*entity.User, error) {
 	if !utils.ContainsString(modes, mode) {
 		mode = "std"
 	}
 
-	data, err := a.Store.User().Get(ctx, userID, mode)
+	data, err := a.UserRepository.Get(ctx, userID, mode)
 	if err != nil {
 		return nil, ErrNotFoundUser.WithCause(err)
 	}

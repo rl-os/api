@@ -2,11 +2,11 @@ package mock_store
 
 import (
 	"github.com/golang/mock/gomock"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 )
 
 // Interface assertion
-var _ store.Store = (*MockedStore)(nil)
+var _ repository.Store = (*MockedStore)(nil)
 
 type MockedStore struct {
 	ctrl *gomock.Controller
@@ -29,12 +29,12 @@ func InitStore(ctrl *gomock.Controller) MockedStore {
 
 func (ss MockedStore) Close() {}
 
-func (ss MockedStore) Beatmap() store.Beatmap       { return ss.beatmap }
-func (ss MockedStore) BeatmapSet() store.BeatmapSet { return ss.beatmapSet }
-func (ss MockedStore) User() store.User             { return ss.user }
-func (ss MockedStore) OAuth() store.OAuth           { return ss.oauth }
-func (ss MockedStore) Friend() store.Friend         { return ss.friend }
-func (ss MockedStore) Chat() store.Chat             { return ss.chat }
+func (ss MockedStore) Beatmap() repository.Beatmap       { return ss.beatmap }
+func (ss MockedStore) BeatmapSet() repository.BeatmapSet { return ss.beatmapSet }
+func (ss MockedStore) User() repository.User             { return ss.user }
+func (ss MockedStore) OAuth() repository.OAuth           { return ss.oauth }
+func (ss MockedStore) Friend() repository.Friend         { return ss.friend }
+func (ss MockedStore) Chat() repository.Chat             { return ss.chat }
 
 func (ss MockedStore) BeatmapExpect() *MockBeatmapMockRecorder       { return ss.beatmap.EXPECT() }
 func (ss MockedStore) BeatmapSetExpect() *MockBeatmapSetMockRecorder { return ss.beatmapSet.EXPECT() }

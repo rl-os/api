@@ -13,9 +13,9 @@ var (
 	ErrNotFoundBM = errors.New("beatmap", http.StatusNotFound, "Beatmap not found")
 )
 
-// GetBeatmap from store
+// GetBeatmap from repository
 func (a *App) GetBeatmap(ctx context.Context, id uint) (*entity.SingleBeatmap, error) {
-	data, err := a.Store.Beatmap().Get(ctx, id)
+	data, err := a.BeatmapRepository.Get(ctx, id)
 	if err != nil {
 		return nil, ErrNotFoundBM.WithCause(err)
 	}
@@ -30,7 +30,7 @@ func (a *App) LookupBeatmap(ctx context.Context, id uint, checksum string, filen
 	}
 
 	if id != 0 {
-		beatmap, err := a.Store.Beatmap().Get(ctx, id)
+		beatmap, err := a.BeatmapRepository.Get(ctx, id)
 		if err != nil {
 			return nil, ErrNotFoundBM
 		}

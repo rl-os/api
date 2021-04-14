@@ -15,9 +15,9 @@ var (
 	ErrInvalidBMSAction = errors.New("beatmapset", http.StatusBadRequest, "Invalid action")
 )
 
-// GetBeatmapset from store and return 404 error if not exist
+// GetBeatmapset from repository and return 404 error if not exist
 func (a *App) GetBeatmapset(ctx context.Context, beatmapsetID uint) (*entity.BeatmapSetFull, error) {
-	data, err := a.Store.BeatmapSet().Get(ctx, beatmapsetID)
+	data, err := a.BeatmapSetRepository.Get(ctx, beatmapsetID)
 	if err != nil {
 		return nil, ErrNotFoundBMS.WithCause(err)
 	}
@@ -26,12 +26,12 @@ func (a *App) GetBeatmapset(ctx context.Context, beatmapsetID uint) (*entity.Bea
 }
 
 func (a *App) LookupBeatmapset(ctx context.Context, beatmapId uint) (*entity.BeatmapSetFull, error) {
-	beatmap, err := a.Store.Beatmap().Get(ctx, beatmapId)
+	beatmap, err := a.BeatmapRepository.Get(ctx, beatmapId)
 	if err != nil {
 		return nil, err
 	}
 
-	return a.Store.BeatmapSet().Get(ctx, uint(beatmap.Beatmapset.ID))
+	return a.BeatmapSetRepository.Get(ctx, uint(beatmap.Beatmapset.ID))
 }
 
 func (a *App) SearchBeatmapset(ctx context.Context) (*entity.BeatmapsetSearchResult, error) {
@@ -46,7 +46,7 @@ func (a *App) FavouriteBeatmapset(ctx context.Context, action string, beatmapset
 	}
 
 	var count uint
-	store := a.Store.BeatmapSet()
+	store := a.BeatmapSetRepository
 
 	switch action {
 	case "favourite":

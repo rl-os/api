@@ -9,22 +9,22 @@ import (
 	"time"
 
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 	"github.com/rs/zerolog/log"
 )
 
-// UserWithLog implements store.User that is instrumented with zerolog
+// UserWithLog implements repository.User that is instrumented with zerolog
 type UserWithLog struct {
-	_base store.User
+	_base repository.User
 }
 
-func NewUserWithLog(base store.User) store.User {
+func NewUserWithLog(base repository.User) repository.User {
 	return UserWithLog{
 		_base: base,
 	}
 }
 
-// Activate implements store.User
+// Activate implements repository.User
 func (_d UserWithLog) Activate(ctx context.Context, userId uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -42,7 +42,7 @@ func (_d UserWithLog) Activate(ctx context.Context, userId uint) (err error) {
 	return _d._base.Activate(ctx, userId)
 }
 
-// Ban implements store.User
+// Ban implements repository.User
 func (_d UserWithLog) Ban(ctx context.Context, userId uint, duration time.Duration) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -61,7 +61,7 @@ func (_d UserWithLog) Ban(ctx context.Context, userId uint, duration time.Durati
 	return _d._base.Ban(ctx, userId, duration)
 }
 
-// ComputeFields implements store.User
+// ComputeFields implements repository.User
 func (_d UserWithLog) ComputeFields(ctx context.Context, user entity.User) (up1 *entity.User, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -79,7 +79,7 @@ func (_d UserWithLog) ComputeFields(ctx context.Context, user entity.User) (up1 
 	return _d._base.ComputeFields(ctx, user)
 }
 
-// Create implements store.User
+// Create implements repository.User
 func (_d UserWithLog) Create(ctx context.Context, name string, email string, pwd string) (up1 *entity.User, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -99,7 +99,7 @@ func (_d UserWithLog) Create(ctx context.Context, name string, email string, pwd
 	return _d._base.Create(ctx, name, email, pwd)
 }
 
-// Deactivate implements store.User
+// Deactivate implements repository.User
 func (_d UserWithLog) Deactivate(ctx context.Context, userId uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -117,7 +117,7 @@ func (_d UserWithLog) Deactivate(ctx context.Context, userId uint) (err error) {
 	return _d._base.Deactivate(ctx, userId)
 }
 
-// Get implements store.User
+// Get implements repository.User
 func (_d UserWithLog) Get(ctx context.Context, userId uint, mode string) (up1 *entity.User, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -136,7 +136,7 @@ func (_d UserWithLog) Get(ctx context.Context, userId uint, mode string) (up1 *e
 	return _d._base.Get(ctx, userId, mode)
 }
 
-// GetByBasic implements store.User
+// GetByBasic implements repository.User
 func (_d UserWithLog) GetByBasic(ctx context.Context, login string, pwd string) (up1 *entity.UserShort, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -155,7 +155,7 @@ func (_d UserWithLog) GetByBasic(ctx context.Context, login string, pwd string) 
 	return _d._base.GetByBasic(ctx, login, pwd)
 }
 
-// GetShort implements store.User
+// GetShort implements repository.User
 func (_d UserWithLog) GetShort(ctx context.Context, userId uint, mode string) (up1 *entity.UserShort, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -174,7 +174,7 @@ func (_d UserWithLog) GetShort(ctx context.Context, userId uint, mode string) (u
 	return _d._base.GetShort(ctx, userId, mode)
 }
 
-// Mute implements store.User
+// Mute implements repository.User
 func (_d UserWithLog) Mute(ctx context.Context, userId uint, duration time.Duration) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -193,7 +193,7 @@ func (_d UserWithLog) Mute(ctx context.Context, userId uint, duration time.Durat
 	return _d._base.Mute(ctx, userId, duration)
 }
 
-// UnBan implements store.User
+// UnBan implements repository.User
 func (_d UserWithLog) UnBan(ctx context.Context, userId uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -211,7 +211,7 @@ func (_d UserWithLog) UnBan(ctx context.Context, userId uint) (err error) {
 	return _d._base.UnBan(ctx, userId)
 }
 
-// UnMute implements store.User
+// UnMute implements repository.User
 func (_d UserWithLog) UnMute(ctx context.Context, userId uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -229,7 +229,7 @@ func (_d UserWithLog) UnMute(ctx context.Context, userId uint) (err error) {
 	return _d._base.UnMute(ctx, userId)
 }
 
-// Update implements store.User
+// Update implements repository.User
 func (_d UserWithLog) Update(ctx context.Context, userId uint, from interface{}) (up1 *entity.UserShort, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -248,7 +248,7 @@ func (_d UserWithLog) Update(ctx context.Context, userId uint, from interface{})
 	return _d._base.Update(ctx, userId, from)
 }
 
-// UpdateLastVisit implements store.User
+// UpdateLastVisit implements repository.User
 func (_d UserWithLog) UpdateLastVisit(ctx context.Context, userId uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).

@@ -8,22 +8,22 @@ import (
 	"context"
 
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 	"github.com/rs/zerolog/log"
 )
 
-// ChatWithLog implements store.Chat that is instrumented with zerolog
+// ChatWithLog implements repository.Chat that is instrumented with zerolog
 type ChatWithLog struct {
-	_base store.Chat
+	_base repository.Chat
 }
 
-func NewChatWithLog(base store.Chat) store.Chat {
+func NewChatWithLog(base repository.Chat) repository.Chat {
 	return ChatWithLog{
 		_base: base,
 	}
 }
 
-// CreatePm implements store.Chat
+// CreatePm implements repository.Chat
 func (_d ChatWithLog) CreatePm(ctx context.Context, userId uint, targetId uint) (cp1 *entity.Channel, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -42,7 +42,7 @@ func (_d ChatWithLog) CreatePm(ctx context.Context, userId uint, targetId uint) 
 	return _d._base.CreatePm(ctx, userId, targetId)
 }
 
-// Get implements store.Chat
+// Get implements repository.Chat
 func (_d ChatWithLog) Get(ctx context.Context, channelId uint) (cp1 *entity.Channel, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -60,7 +60,7 @@ func (_d ChatWithLog) Get(ctx context.Context, channelId uint) (cp1 *entity.Chan
 	return _d._base.Get(ctx, channelId)
 }
 
-// GetJoined implements store.Chat
+// GetJoined implements repository.Chat
 func (_d ChatWithLog) GetJoined(ctx context.Context, userId uint) (cap1 *[]entity.Channel, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -78,7 +78,7 @@ func (_d ChatWithLog) GetJoined(ctx context.Context, userId uint) (cap1 *[]entit
 	return _d._base.GetJoined(ctx, userId)
 }
 
-// GetMessage implements store.Chat
+// GetMessage implements repository.Chat
 func (_d ChatWithLog) GetMessage(ctx context.Context, messageId uint) (cp1 *entity.ChatMessage, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -96,7 +96,7 @@ func (_d ChatWithLog) GetMessage(ctx context.Context, messageId uint) (cp1 *enti
 	return _d._base.GetMessage(ctx, messageId)
 }
 
-// GetMessages implements store.Chat
+// GetMessages implements repository.Chat
 func (_d ChatWithLog) GetMessages(ctx context.Context, userId uint, since uint, limit uint) (cap1 *[]entity.ChatMessage, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -116,7 +116,7 @@ func (_d ChatWithLog) GetMessages(ctx context.Context, userId uint, since uint, 
 	return _d._base.GetMessages(ctx, userId, since, limit)
 }
 
-// GetPublic implements store.Chat
+// GetPublic implements repository.Chat
 func (_d ChatWithLog) GetPublic(ctx context.Context) (cap1 *[]entity.Channel, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -133,28 +133,7 @@ func (_d ChatWithLog) GetPublic(ctx context.Context) (cap1 *[]entity.Channel, er
 	return _d._base.GetPublic(ctx)
 }
 
-// GetUpdates implements store.Chat
-func (_d ChatWithLog) GetUpdates(ctx context.Context, userId uint, since uint, channelId uint, limit uint) (cp1 *entity.ChannelUpdates, err error) {
-	log.Trace().
-		Interface("ctx", ctx).
-		Interface("userId", userId).
-		Interface("since", since).
-		Interface("channelId", channelId).
-		Interface("limit", limit).
-		Msg("store.Chat.GetUpdates: calling")
-	defer func() {
-		if err != nil {
-			log.Trace().Err(err).
-				Msg("store.Chat.GetUpdates: returned an error")
-		} else {
-			log.Trace().
-				Msg("store.Chat.GetUpdates: finished")
-		}
-	}()
-	return _d._base.GetUpdates(ctx, userId, since, channelId, limit)
-}
-
-// Join implements store.Chat
+// Join implements repository.Chat
 func (_d ChatWithLog) Join(ctx context.Context, userId uint, channelId uint) (cp1 *entity.Channel, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -173,7 +152,7 @@ func (_d ChatWithLog) Join(ctx context.Context, userId uint, channelId uint) (cp
 	return _d._base.Join(ctx, userId, channelId)
 }
 
-// Leave implements store.Chat
+// Leave implements repository.Chat
 func (_d ChatWithLog) Leave(ctx context.Context, userId uint, channelId uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -192,7 +171,7 @@ func (_d ChatWithLog) Leave(ctx context.Context, userId uint, channelId uint) (e
 	return _d._base.Leave(ctx, userId, channelId)
 }
 
-// ReadMessage implements store.Chat
+// ReadMessage implements repository.Chat
 func (_d ChatWithLog) ReadMessage() {
 	log.Trace().Msg("store.Chat.ReadMessage: calling")
 	defer func() {
@@ -203,7 +182,7 @@ func (_d ChatWithLog) ReadMessage() {
 	return
 }
 
-// SendMessage implements store.Chat
+// SendMessage implements repository.Chat
 func (_d ChatWithLog) SendMessage(ctx context.Context, userId uint, channelId uint, content string, isAction bool) (cp1 *entity.ChatMessage, err error) {
 	log.Trace().
 		Interface("ctx", ctx).

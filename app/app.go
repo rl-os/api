@@ -3,8 +3,8 @@ package app
 import (
 	"context"
 	"github.com/google/wire"
+	"github.com/rl-os/api/repository"
 	"github.com/rl-os/api/services/bancho"
-	"github.com/rl-os/api/store"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 )
@@ -23,7 +23,12 @@ type App struct {
 	Context context.Context
 	Options *Options
 
-	Store store.Store
+	BeatmapRepository    repository.Beatmap
+	BeatmapSetRepository repository.BeatmapSet
+	ChatRepository       repository.Chat
+	FriendRepository     repository.Friend
+	OAuthRepository      repository.OAuth
+	UserRepository       repository.User
 
 	BanchoClient *bancho.Client
 }
@@ -48,13 +53,24 @@ func NewOptions(logger *zerolog.Logger, v *viper.Viper) (*Options, error) {
 // New with DI
 func New(
 	options *Options,
-	store store.Store,
 	bancho *bancho.Client,
+
+	BeatmapRepository repository.Beatmap,
+	BeatmapSetRepository repository.BeatmapSet,
+	ChatRepository repository.Chat,
+	FriendRepository repository.Friend,
+	OAuthRepository repository.OAuth,
+	UserRepository repository.User,
 ) *App {
 	app := &App{
-		Store:        store,
-		Options:      options,
-		BanchoClient: bancho,
+		Options:              options,
+		BanchoClient:         bancho,
+		BeatmapRepository:    BeatmapRepository,
+		BeatmapSetRepository: BeatmapSetRepository,
+		ChatRepository:       ChatRepository,
+		FriendRepository:     FriendRepository,
+		OAuthRepository:      OAuthRepository,
+		UserRepository:       UserRepository,
 	}
 
 	return app

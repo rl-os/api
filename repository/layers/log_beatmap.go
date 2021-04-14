@@ -8,22 +8,22 @@ import (
 	"context"
 
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 	"github.com/rs/zerolog/log"
 )
 
-// BeatmapWithLog implements store.Beatmap that is instrumented with zerolog
+// BeatmapWithLog implements repository.Beatmap that is instrumented with zerolog
 type BeatmapWithLog struct {
-	_base store.Beatmap
+	_base repository.Beatmap
 }
 
-func NewBeatmapWithLog(base store.Beatmap) store.Beatmap {
+func NewBeatmapWithLog(base repository.Beatmap) repository.Beatmap {
 	return BeatmapWithLog{
 		_base: base,
 	}
 }
 
-// Create implements store.Beatmap
+// Create implements repository.Beatmap
 func (_d BeatmapWithLog) Create(ctx context.Context, from interface{}) (bp1 *entity.Beatmap, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -41,7 +41,7 @@ func (_d BeatmapWithLog) Create(ctx context.Context, from interface{}) (bp1 *ent
 	return _d._base.Create(ctx, from)
 }
 
-// CreateBatch implements store.Beatmap
+// CreateBatch implements repository.Beatmap
 func (_d BeatmapWithLog) CreateBatch(ctx context.Context, from interface{}) (bap1 *[]entity.Beatmap, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -59,7 +59,7 @@ func (_d BeatmapWithLog) CreateBatch(ctx context.Context, from interface{}) (bap
 	return _d._base.CreateBatch(ctx, from)
 }
 
-// Delete implements store.Beatmap
+// Delete implements repository.Beatmap
 func (_d BeatmapWithLog) Delete(ctx context.Context, id uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -77,7 +77,7 @@ func (_d BeatmapWithLog) Delete(ctx context.Context, id uint) (err error) {
 	return _d._base.Delete(ctx, id)
 }
 
-// Get implements store.Beatmap
+// Get implements repository.Beatmap
 func (_d BeatmapWithLog) Get(ctx context.Context, id uint) (sp1 *entity.SingleBeatmap, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -95,7 +95,7 @@ func (_d BeatmapWithLog) Get(ctx context.Context, id uint) (sp1 *entity.SingleBe
 	return _d._base.Get(ctx, id)
 }
 
-// GetBySetId implements store.Beatmap
+// GetBySetId implements repository.Beatmap
 func (_d BeatmapWithLog) GetBySetId(ctx context.Context, beatmapsetId uint) (bap1 *[]entity.Beatmap, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -113,7 +113,7 @@ func (_d BeatmapWithLog) GetBySetId(ctx context.Context, beatmapsetId uint) (bap
 	return _d._base.GetBySetId(ctx, beatmapsetId)
 }
 
-// Update implements store.Beatmap
+// Update implements repository.Beatmap
 func (_d BeatmapWithLog) Update(ctx context.Context, id uint, from interface{}) (bp1 *entity.Beatmap, err error) {
 	log.Trace().
 		Interface("ctx", ctx).

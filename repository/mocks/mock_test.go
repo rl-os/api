@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/golang/mock/gomock"
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -20,7 +20,7 @@ func TestNewMockStore(t *testing.T) {
 			Get(gomock.Any(), gomock.Any()).
 			Return(&entity.SingleBeatmap{Beatmap: entity.Beatmap{ID: 123321}}, nil)
 
-		var s store.Store
+		var s repository.Store
 		s = mocked
 
 		data, err := s.Beatmap().Get(context.TODO(), 123)
@@ -40,7 +40,7 @@ func TestNewMockStore(t *testing.T) {
 			Get(gomock.Any(), gomock.Any()).
 			Return(nil, defError)
 
-		var s store.Store
+		var s repository.Store
 		s = mocked
 
 		data, err := s.Beatmap().Get(context.TODO(), 1)

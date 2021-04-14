@@ -8,22 +8,22 @@ import (
 	"context"
 
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 	"github.com/rs/zerolog/log"
 )
 
-// OAuthWithLog implements store.OAuth that is instrumented with zerolog
+// OAuthWithLog implements repository.OAuth that is instrumented with zerolog
 type OAuthWithLog struct {
-	_base store.OAuth
+	_base repository.OAuth
 }
 
-func NewOAuthWithLog(base store.OAuth) store.OAuth {
+func NewOAuthWithLog(base repository.OAuth) repository.OAuth {
 	return OAuthWithLog{
 		_base: base,
 	}
 }
 
-// CreateClient implements store.OAuth
+// CreateClient implements repository.OAuth
 func (_d OAuthWithLog) CreateClient(ctx context.Context, userId uint, name string, redirect string) (op1 *entity.OAuthClient, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -43,7 +43,7 @@ func (_d OAuthWithLog) CreateClient(ctx context.Context, userId uint, name strin
 	return _d._base.CreateClient(ctx, userId, name, redirect)
 }
 
-// CreateToken implements store.OAuth
+// CreateToken implements repository.OAuth
 func (_d OAuthWithLog) CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (op1 *entity.OAuthToken, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -64,7 +64,7 @@ func (_d OAuthWithLog) CreateToken(ctx context.Context, userId uint, clientID ui
 	return _d._base.CreateToken(ctx, userId, clientID, clientSecret, scopes)
 }
 
-// GetClient implements store.OAuth
+// GetClient implements repository.OAuth
 func (_d OAuthWithLog) GetClient(ctx context.Context, id uint, secret string) (op1 *entity.OAuthClient, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -83,7 +83,7 @@ func (_d OAuthWithLog) GetClient(ctx context.Context, id uint, secret string) (o
 	return _d._base.GetClient(ctx, id, secret)
 }
 
-// GetToken implements store.OAuth
+// GetToken implements repository.OAuth
 func (_d OAuthWithLog) GetToken(ctx context.Context, accessToken string) (op1 *entity.OAuthToken, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -101,7 +101,7 @@ func (_d OAuthWithLog) GetToken(ctx context.Context, accessToken string) (op1 *e
 	return _d._base.GetToken(ctx, accessToken)
 }
 
-// RefreshToken implements store.OAuth
+// RefreshToken implements repository.OAuth
 func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (op1 *entity.OAuthToken, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -121,7 +121,7 @@ func (_d OAuthWithLog) RefreshToken(ctx context.Context, refreshToken string, cl
 	return _d._base.RefreshToken(ctx, refreshToken, clientID, clientSecret)
 }
 
-// RevokeAllTokens implements store.OAuth
+// RevokeAllTokens implements repository.OAuth
 func (_d OAuthWithLog) RevokeAllTokens(ctx context.Context, userId uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).

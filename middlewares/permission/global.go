@@ -41,7 +41,7 @@ func GlobalMiddleware(app *app.App) echo.MiddlewareFunc {
 				}
 
 				// fixme: remove it
-				if err = app.Store.User().UpdateLastVisit(app.Context, token.UserID); err != nil {
+				if err = app.UserRepository.UpdateLastVisit(app.Context, token.UserID); err != nil {
 					log.Error().Err(err).Msg("updating last visit")
 				}
 

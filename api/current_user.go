@@ -56,7 +56,7 @@ func (h *CurrentUserController) Create(c echo.Context) error {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	user, err := h.App.Store.User().Create(ctx, params.Username, params.Email, params.Password)
+	user, err := h.App.UserRepository.Create(ctx, params.Username, params.Email, params.Password)
 	if err != nil {
 		return err
 	}

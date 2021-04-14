@@ -8,22 +8,22 @@ import (
 	"context"
 
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 	"github.com/rs/zerolog/log"
 )
 
-// FriendWithLog implements store.Friend that is instrumented with zerolog
+// FriendWithLog implements repository.Friend that is instrumented with zerolog
 type FriendWithLog struct {
-	_base store.Friend
+	_base repository.Friend
 }
 
-func NewFriendWithLog(base store.Friend) store.Friend {
+func NewFriendWithLog(base repository.Friend) repository.Friend {
 	return FriendWithLog{
 		_base: base,
 	}
 }
 
-// Add implements store.Friend
+// Add implements repository.Friend
 func (_d FriendWithLog) Add(ctx context.Context, userId uint, targetId uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -42,7 +42,7 @@ func (_d FriendWithLog) Add(ctx context.Context, userId uint, targetId uint) (er
 	return _d._base.Add(ctx, userId, targetId)
 }
 
-// GetSubscriptions implements store.Friend
+// GetSubscriptions implements repository.Friend
 func (_d FriendWithLog) GetSubscriptions(ctx context.Context, userId uint) (uap1 *[]entity.UserShort, err error) {
 	log.Trace().
 		Interface("ctx", ctx).
@@ -60,7 +60,7 @@ func (_d FriendWithLog) GetSubscriptions(ctx context.Context, userId uint) (uap1
 	return _d._base.GetSubscriptions(ctx, userId)
 }
 
-// Remove implements store.Friend
+// Remove implements repository.Friend
 func (_d FriendWithLog) Remove(ctx context.Context, userId uint, targetId uint) (err error) {
 	log.Trace().
 		Interface("ctx", ctx).

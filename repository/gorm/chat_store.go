@@ -1,24 +1,24 @@
-package sql
+package gorm
 
 import (
 	"context"
 	"github.com/lib/pq"
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"time"
 )
 
-type ChatStore struct {
-	SqlStore
+type ChatRepository struct {
+	*Supplier
 }
 
-func newSqlChatStore(sqlStore SqlStore) store.Chat {
-	return &ChatStore{sqlStore}
+func NewChatRepository(supplier *Supplier) repository.Chat {
+	return &ChatRepository{supplier}
 }
 
-func (c ChatStore) Get(ctx context.Context, channelId uint) (*entity.Channel, error) {
+func (c ChatRepository) Get(ctx context.Context, channelId uint) (*entity.Channel, error) {
 	var channel entity.Channel
 
 	err := c.GetMaster().
@@ -35,7 +35,7 @@ func (c ChatStore) Get(ctx context.Context, channelId uint) (*entity.Channel, er
 	return &channel, nil
 }
 
-func (c ChatStore) CreatePm(ctx context.Context, userId, targetId uint) (*entity.Channel, error) {
+func (c ChatRepository) CreatePm(ctx context.Context, userId, targetId uint) (*entity.Channel, error) {
 	channel := entity.Channel{
 		Name:        "PM",
 		Description: "-",
@@ -58,7 +58,7 @@ func (c ChatStore) CreatePm(ctx context.Context, userId, targetId uint) (*entity
 	return &channel, nil
 }
 
-func (c ChatStore) GetPublic(ctx context.Context) (*[]entity.Channel, error) {
+func (c ChatRepository) GetPublic(ctx context.Context) (*[]entity.Channel, error) {
 	var channels []entity.Channel
 
 	err := c.GetMaster().
@@ -75,7 +75,7 @@ func (c ChatStore) GetPublic(ctx context.Context) (*[]entity.Channel, error) {
 	return &channels, nil
 }
 
-func (c ChatStore) GetJoined(ctx context.Context, userId uint) (*[]entity.Channel, error) {
+func (c ChatRepository) GetJoined(ctx context.Context, userId uint) (*[]entity.Channel, error) {
 	var channels []entity.Channel
 
 	err := c.GetMaster().
@@ -92,7 +92,7 @@ func (c ChatStore) GetJoined(ctx context.Context, userId uint) (*[]entity.Channe
 	return &channels, nil
 }
 
-func (c ChatStore) GetMessages(ctx context.Context, userId, since, limit uint) (*[]entity.ChatMessage, error) {
+func (c ChatRepository) GetMessages(ctx context.Context, userId, since, limit uint) (*[]entity.ChatMessage, error) {
 	var msgs []entity.ChatMessage
 
 	err := c.GetMaster().
@@ -111,24 +111,7 @@ func (c ChatStore) GetMessages(ctx context.Context, userId, since, limit uint) (
 	return &msgs, nil
 }
 
-func (c ChatStore) GetUpdates(ctx context.Context, userId, since, channelId, limit uint) (*entity.ChannelUpdates, error) {
-	channels, err := c.Chat().GetJoined(ctx, userId)
-	if err != nil {
-		return nil, err
-	}
-
-	messages, err := c.Chat().GetMessages(ctx, userId, since, limit)
-	if err != nil {
-		return nil, err
-	}
-
-	return &entity.ChannelUpdates{
-		Presence: channels,
-		Messages: messages,
-	}, nil
-}
-
-func (c ChatStore) SendMessage(ctx context.Context, userId, channelId uint, content string, isAction bool) (*entity.ChatMessage, error) {
+func (c ChatRepository) SendMessage(ctx context.Context, userId, channelId uint, content string, isAction bool) (*entity.ChatMessage, error) {
 	msg := entity.ChatMessage{
 		SenderId:  userId,
 		ChannelId: channelId,
@@ -151,7 +134,7 @@ func (c ChatStore) SendMessage(ctx context.Context, userId, channelId uint, cont
 	return &msg, nil
 }
 
-func (c ChatStore) GetMessage(ctx context.Context, messageId uint) (*entity.ChatMessage, error) {
+func (c ChatRepository) GetMessage(ctx context.Context, messageId uint) (*entity.ChatMessage, error) {
 	var msg entity.ChatMessage
 
 	err := c.GetMaster().
@@ -169,7 +152,7 @@ func (c ChatStore) GetMessage(ctx context.Context, messageId uint) (*entity.Chat
 	return &msg, nil
 }
 
-func (c ChatStore) Join(ctx context.Context, userId, channelId uint) (*entity.Channel, error) {
+func (c ChatRepository) Join(ctx context.Context, userId, channelId uint) (*entity.Channel, error) {
 	err := c.GetMaster().
 		WithContext(ctx).
 		Table("channels").
@@ -187,10 +170,10 @@ func (c ChatStore) Join(ctx context.Context, userId, channelId uint) (*entity.Ch
 		return nil, err
 	}
 
-	return c.Chat().Get(ctx, channelId)
+	return c.Get(ctx, channelId)
 }
 
-func (c ChatStore) Leave(ctx context.Context, userId, channelId uint) error {
+func (c ChatRepository) Leave(ctx context.Context, userId, channelId uint) error {
 	err := c.GetMaster().
 		WithContext(ctx).
 		Table("channels").
@@ -207,6 +190,6 @@ func (c ChatStore) Leave(ctx context.Context, userId, channelId uint) error {
 	return nil
 }
 
-func (c ChatStore) ReadMessage() {
+func (c ChatRepository) ReadMessage() {
 	panic("implement me")
 }

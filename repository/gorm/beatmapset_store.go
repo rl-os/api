@@ -1,21 +1,21 @@
-package sql
+package gorm
 
 import (
 	"context"
 	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/store"
+	"github.com/rl-os/api/repository"
 	"gorm.io/gorm/clause"
 )
 
-type BeatmapSetStore struct {
-	SqlStore
+type BeatmapSetRepository struct {
+	*Supplier
 }
 
-func newSqlBeatmapSetStore(sqlStore SqlStore) store.BeatmapSet {
-	return &BeatmapSetStore{sqlStore}
+func NewBeatmapSetRepository(supplier *Supplier) repository.BeatmapSet {
+	return &BeatmapSetRepository{supplier}
 }
 
-func (s BeatmapSetStore) SetFavourite(ctx context.Context, userId uint, id uint) (uint, error) {
+func (s BeatmapSetRepository) SetFavourite(ctx context.Context, userId uint, id uint) (uint, error) {
 	_ = s.GetMaster().WithContext(ctx).
 		Table("user_beatmapset_favourite").
 		Create(map[string]interface{}{
@@ -36,7 +36,7 @@ func (s BeatmapSetStore) SetFavourite(ctx context.Context, userId uint, id uint)
 	return uint(count), nil
 }
 
-func (s BeatmapSetStore) SetUnFavourite(ctx context.Context, userId uint, id uint) (uint, error) {
+func (s BeatmapSetRepository) SetUnFavourite(ctx context.Context, userId uint, id uint) (uint, error) {
 	err := s.GetMaster().
 		Exec("DELETE FROM user_beatmapset_favourite WHERE beatmapset_id = ? AND user_id = ?", id, userId).
 		Error
@@ -57,7 +57,7 @@ func (s BeatmapSetStore) SetUnFavourite(ctx context.Context, userId uint, id uin
 	return uint(count), nil
 }
 
-func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetRepository) Get(ctx context.Context, id uint) (*entity.BeatmapSetFull, error) {
 	bms := entity.BeatmapSetFull{}
 
 	err := s.GetMaster().
@@ -75,14 +75,14 @@ func (s BeatmapSetStore) Get(ctx context.Context, id uint) (*entity.BeatmapSetFu
 	return &bms, nil
 }
 
-func (s BeatmapSetStore) Create(ctx context.Context, from interface{}) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetRepository) Create(ctx context.Context, from interface{}) (*entity.BeatmapSetFull, error) {
 	panic("implement me")
 }
 
-func (s BeatmapSetStore) Update(ctx context.Context, id uint, from interface{}) (*entity.BeatmapSetFull, error) {
+func (s BeatmapSetRepository) Update(ctx context.Context, id uint, from interface{}) (*entity.BeatmapSetFull, error) {
 	panic("implement me")
 }
 
-func (s BeatmapSetStore) Delete(ctx context.Context, id uint) error {
+func (s BeatmapSetRepository) Delete(ctx context.Context, id uint) error {
 	panic("implement me")
 }
