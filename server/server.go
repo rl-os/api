@@ -6,7 +6,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/rl-os/api/api"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/config"
 	"github.com/rl-os/api/docs"
@@ -165,7 +164,7 @@ func (s *Server) StartHTTPServer() {
 	s.Server = srv
 	s.RootRouter = srv.Group("")
 
-	api.New(s.App, s.RootRouter)
+	//api.New(s.App, s.RootRouter)
 
 	{
 		if s.Config.Server.APIAddr == "NOTSET" {

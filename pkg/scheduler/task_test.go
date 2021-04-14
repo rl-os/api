@@ -2,8 +2,9 @@ package scheduler
 
 import (
 	"context"
-	"reflect"
+	"sync"
 	"testing"
+	"time"
 )
 
 func TestCreateTask(t *testing.T) {
@@ -13,12 +14,12 @@ func TestCreateTask(t *testing.T) {
 		function TaskFunc
 	}
 	tests := []struct {
-		name string
-		args args
-		want *ScheduledTask
+		name    string
+		args    args
+		wantErr bool
 	}{
 		{
-			name: "Simple Task",
+			name: "simple task",
 			args: args{
 				ctx:      context.TODO(),
 				name:     "task_1",
@@ -26,18 +27,46 @@ func TestCreateTask(t *testing.T) {
 			},
 		},
 		{
-			name: "Task with panic",
+			name: "task with panic",
 			args: args{
 				ctx:      context.TODO(),
 				name:     "task_3",
 				function: func(ctx context.Context) { panic("catch me!") },
 			},
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CreateTask(tt.args.ctx, tt.args.name, tt.args.function); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("CreateTask() = %v, want %v", got, tt.want)
+			ctx, cancel := context.WithCancel(tt.args.ctx)
+
+			var mx sync.Mutex
+			val := int64(0)
+
+			ff := tt.args.function
+			task := CreateTask(ctx, tt.args.name, func(ctx context.Context) {
+				ff(ctx)
+
+				mx.Lock()
+				val++
+				mx.Unlock()
+			}).
+				WithInterval(time.Millisecond)
+
+			defer func() {
+				cancel()
+			}()
+
+			task.Run()
+
+			<-time.Tick(time.Millisecond * 10)
+
+			mx.Lock()
+			result := val
+			mx.Unlock()
+
+			if result == 0 && !tt.wantErr {
+				t.Errorf("invalid interval")
 			}
 		})
 	}

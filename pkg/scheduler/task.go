@@ -44,13 +44,13 @@ func CreateTask(ctx context.Context, name string, function TaskFunc) *ScheduledT
 }
 
 func (task *ScheduledTask) Cancel() {
-	close(task.cancel)
+	task.cancel <- struct{}{}
 	<-task.cancelled
 }
 
 func (task *ScheduledTask) String() string {
 	return fmt.Sprintf(
-		"%s\nInterval: %s\nDelay: %t\n",
+		"%s\nInterval: %s\nDelay: %s\n",
 		task.Name,
 		task.Interval.String(),
 		task.Delay.String(),
@@ -58,7 +58,7 @@ func (task *ScheduledTask) String() string {
 }
 
 func (task ScheduledTask) Run() {
-	ctx := context.WithValue(task.context, "task_name", task.Name)
+	ctx, cancelCtx := context.WithCancel(task.context)
 
 	go func() {
 		defer close(task.cancelled)
@@ -66,6 +66,8 @@ func (task ScheduledTask) Run() {
 		ticker := time.NewTicker(task.Interval)
 		defer func() {
 			ticker.Stop()
+			cancelCtx()
+			task.cancelled <- struct{}{}
 		}()
 
 		// task delay
@@ -81,6 +83,7 @@ func (task ScheduledTask) Run() {
 				task.function(ctx)
 			case <-ctx.Done():
 			case <-task.cancel:
+				task.cancelled <- struct{}{}
 				break loop
 			}
 		}
