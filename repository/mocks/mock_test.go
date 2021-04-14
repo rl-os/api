@@ -1,4 +1,4 @@
-package mock_store
+package mock_repository
 
 import (
 	"context"
