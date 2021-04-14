@@ -3,7 +3,7 @@ package app
 import (
 	"context"
 	"github.com/google/wire"
-	"github.com/rl-os/api/pkg/bancho"
+	"github.com/rl-os/api/services/bancho"
 	"github.com/rl-os/api/store"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"

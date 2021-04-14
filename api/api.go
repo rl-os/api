@@ -5,8 +5,10 @@ package api
 import (
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
+	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/middlewares/permission"
-	"github.com/rl-os/api/pkg/transports/http"
+	"github.com/rl-os/api/middlewares/reqest_context"
+	"github.com/rl-os/api/services/transports/http"
 )
 
 var ProviderSet = wire.NewSet(
@@ -41,6 +43,8 @@ var ProviderSet = wire.NewSet(
 // @scope.admin.* Grants access as admin
 // @scope.sys.* Grants access as system user (for example chatbot, worker and etc)
 func CreateInitControllersFn(
+	app *app.App,
+
 	user *UserController,
 	chat *ChatController,
 	friend *FriendController,
@@ -50,7 +54,13 @@ func CreateInitControllersFn(
 	oauthToken *OAuthTokenController,
 	oauthClient *OAuthClientController,
 ) http.InitControllers {
-	return func(root *echo.Echo) {
+	return func(router *echo.Echo) {
+		root := router.Group(
+			"",
+			permission.GlobalMiddleware(app),
+			reqest_context.GlobalMiddleware(app),
+		)
+
 		// TODO: move out to external oauth2 server
 		root.POST("/api/v2/oauth/token", oauthToken.Create)
 		root.POST("/api/v2/oauth/client", oauthClient.Create, permission.MustLogin)

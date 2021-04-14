@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/entity/request"
-	"github.com/rl-os/api/pkg/validator"
+	"github.com/rl-os/api/services/validator"
 	"github.com/rs/zerolog"
 	"net/http"
 	"strconv"

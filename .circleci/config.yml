@@ -36,7 +36,7 @@ jobs:
       - save_cache:
           key: go-mod-v2-{{ checksum "go.sum" }}
           paths:
-            - "/go/pkg/mod"
+            - "/go/services/mod"
 
   lint:
     docker:

@@ -11,7 +11,7 @@ import (
 	"github.com/rl-os/api/docs"
 	"github.com/rl-os/api/middlewares/customerror"
 	"github.com/rl-os/api/middlewares/customlogger"
-	"github.com/rl-os/api/pkg/transports"
+	"github.com/rl-os/api/services/transports"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 	echoSwagger "github.com/swaggo/echo-swagger"
@@ -79,8 +79,6 @@ func NewRouter(o *Options, log *zerolog.Logger, init InitControllers) *echo.Echo
 	srv.Use(
 		echoPrometheus.MetricsMiddleware(),
 		middleware.RequestID(),
-		//permission.GlobalMiddleware(s.App),
-		//reqest_context.GlobalMiddleware(s.App),
 		customlogger.Middleware(),
 	)
 

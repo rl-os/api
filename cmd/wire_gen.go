@@ -10,13 +10,13 @@ import (
 	"github.com/rl-os/api/api"
 	"github.com/rl-os/api/app"
 	config2 "github.com/rl-os/api/config"
-	"github.com/rl-os/api/pkg"
-	"github.com/rl-os/api/pkg/bancho"
-	"github.com/rl-os/api/pkg/config"
-	"github.com/rl-os/api/pkg/log"
-	"github.com/rl-os/api/pkg/transports"
-	"github.com/rl-os/api/pkg/transports/http"
-	"github.com/rl-os/api/pkg/validator"
+	"github.com/rl-os/api/services"
+	"github.com/rl-os/api/services/bancho"
+	"github.com/rl-os/api/services/config"
+	"github.com/rl-os/api/services/log"
+	"github.com/rl-os/api/services/transports"
+	"github.com/rl-os/api/services/transports/http"
+	"github.com/rl-os/api/services/validator"
 	"github.com/rl-os/api/store/gorm"
 )
 
@@ -63,7 +63,7 @@ func Injector(configPath string) (transports.Server, error) {
 	currentUserController := api.NewCurrentUserController(appApp, logger, inst)
 	oAuthTokenController := api.NewOAuthTokenController(appApp, logger, inst)
 	oAuthClientController := api.NewOAuthClientController(appApp, logger, inst)
-	initControllers := api.CreateInitControllersFn(userController, chatController, friendController, beatmapController, beatmapSetController, currentUserController, oAuthTokenController, oAuthClientController)
+	initControllers := api.CreateInitControllersFn(appApp, userController, chatController, friendController, beatmapController, beatmapSetController, currentUserController, oAuthTokenController, oAuthClientController)
 	echo := http.NewRouter(httpOptions, logger, initControllers)
 	server, err := http.New(httpOptions, logger, echo)
 	if err != nil {
@@ -74,4 +74,4 @@ func Injector(configPath string) (transports.Server, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(pkg.ProviderSet, api.ProviderSet, app.ProviderSet, http.ProviderSet, sql.Init, config2.Init)
+var providerSet = wire.NewSet(services.ProviderSet, api.ProviderSet, app.ProviderSet, http.ProviderSet, sql.Init, config2.Init)
