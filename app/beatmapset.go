@@ -39,10 +39,15 @@ func (a *BeatmapSetUseCase) GetBeatmapset(ctx context.Context, beatmapsetID uint
 func (a *BeatmapSetUseCase) LookupBeatmapset(ctx context.Context, beatmapId uint) (*entity.BeatmapSetFull, error) {
 	beatmap, err := a.BeatmapRepository.Get(ctx, beatmapId)
 	if err != nil {
-		return nil, err
+		return nil, ErrNotFoundBM.WithCause(err)
 	}
 
-	return a.BeatmapSetRepository.Get(ctx, uint(beatmap.Beatmapset.ID))
+	set, err := a.BeatmapSetRepository.Get(ctx, uint(beatmap.Beatmapset.ID))
+	if err != nil {
+		return nil, ErrNotFoundBMS.WithCause(err)
+	}
+
+	return set, nil
 }
 
 func (a *BeatmapSetUseCase) SearchBeatmapset(ctx context.Context) (*entity.BeatmapsetSearchResult, error) {
