@@ -13,7 +13,8 @@ import (
 )
 
 type CurrentUserController struct {
-	App       *app.App
+	UseCase *app.UserUseCase
+
 	Logger    *zerolog.Logger
 	Validator *validator.Inst
 }
@@ -23,12 +24,12 @@ var providerMeSet = wire.NewSet(
 )
 
 func NewCurrentUserController(
-	app *app.App,
+	useCase *app.UserUseCase,
 	logger *zerolog.Logger,
 	validator *validator.Inst,
 ) *CurrentUserController {
 	return &CurrentUserController{
-		app,
+		useCase,
 		logger,
 		validator,
 	}
@@ -56,7 +57,8 @@ func (h *CurrentUserController) Create(c echo.Context) error {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	user, err := h.App.UserRepository.Create(ctx, params.Username, params.Email, params.Password)
+	// FIXME: unsafe use
+	user, err := h.UseCase.UserRepository.Create(ctx, params.Username, params.Email, params.Password)
 	if err != nil {
 		return err
 	}
@@ -83,7 +85,7 @@ func (h *CurrentUserController) Me(c echo.Context) error {
 		return errors.New("request_params", 400, "Invalid params")
 	}
 
-	user, err := h.App.GetUser(ctx, userId, mode)
+	user, err := h.UseCase.GetUser(ctx, userId, mode)
 	if err != nil {
 		return err
 	}

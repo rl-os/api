@@ -12,7 +12,8 @@ import (
 )
 
 type OAuthTokenController struct {
-	App       *app.App
+	UseCase *app.OAuthUseCase
+
 	Logger    *zerolog.Logger
 	Validator *validator.Inst
 }
@@ -22,12 +23,12 @@ var providerOAuthTokenSet = wire.NewSet(
 )
 
 func NewOAuthTokenController(
-	app *app.App,
+	useCase *app.OAuthUseCase,
 	logger *zerolog.Logger,
 	validator *validator.Inst,
 ) *OAuthTokenController {
 	return &OAuthTokenController{
-		app,
+		useCase,
 		logger,
 		validator,
 	}
@@ -45,7 +46,7 @@ func (h *OAuthTokenController) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid token information")
 	}
 
-	token, err := h.App.CreateOAuthToken(ctx, *params)
+	token, err := h.UseCase.CreateOAuthToken(ctx, *params)
 	if err != nil {
 		return err
 	}

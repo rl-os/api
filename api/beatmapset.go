@@ -18,18 +18,19 @@ var providerBeatmapsetSet = wire.NewSet(
 )
 
 type BeatmapSetController struct {
-	App       *app.App
+	UseCase *app.BeatmapSetUseCase
+
 	Logger    *zerolog.Logger
 	Validator *validator.Inst
 }
 
 func NewBeatmapSetController(
-	app *app.App,
+	useCase *app.BeatmapSetUseCase,
 	logger *zerolog.Logger,
 	validator *validator.Inst,
 ) *BeatmapSetController {
 	return &BeatmapSetController{
-		app,
+		useCase,
 		logger,
 		validator,
 	}
@@ -52,7 +53,7 @@ func (h *BeatmapSetController) Get(c echo.Context) error {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	beatmapset, err := h.App.GetBeatmapset(ctx, uint(beatmapsetID))
+	beatmapset, err := h.UseCase.GetBeatmapset(ctx, uint(beatmapsetID))
 	if err != nil {
 		return err
 	}
@@ -77,7 +78,7 @@ func (h *BeatmapSetController) Lookup(c echo.Context) (err error) {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	beatmapset, err := h.App.LookupBeatmapset(ctx, params.Id)
+	beatmapset, err := h.UseCase.LookupBeatmapset(ctx, params.Id)
 	if err != nil {
 		return err
 	}
@@ -107,7 +108,7 @@ func (h *BeatmapSetController) Search(c echo.Context) (err error) {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	result, err := h.App.SearchBeatmapset(ctx)
+	result, err := h.UseCase.SearchBeatmapset(ctx)
 	if err != nil {
 		return err
 	}
@@ -141,7 +142,7 @@ func (h *BeatmapSetController) Favourite(c echo.Context) (err error) {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	total, err := h.App.FavouriteBeatmapset(ctx, params.Action, uint(beatmapsetID))
+	total, err := h.UseCase.FavouriteBeatmapset(ctx, params.Action, uint(beatmapsetID))
 	if err != nil {
 		return err
 	}

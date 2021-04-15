@@ -57,8 +57,8 @@ func CreateInitControllersFn(
 	return func(router *echo.Echo) {
 		root := router.Group(
 			"",
-			permission.GlobalMiddleware(app),
-			reqest_context.GlobalMiddleware(app),
+			reqest_context.GlobalMiddleware(app.Context),
+			permission.GlobalMiddleware(app.Context, user.UseCase, oauthToken.UseCase),
 		)
 
 		// TODO: move out to external oauth2 server

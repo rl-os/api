@@ -1,6 +1,7 @@
 package permission
 
 import (
+	"context"
 	"errors"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
@@ -27,21 +28,21 @@ func keyFromHeader(header string) func(echo.Context) (string, error) {
 }
 
 // GlobalMiddleware check access_token
-func GlobalMiddleware(app *app.App) echo.MiddlewareFunc {
+func GlobalMiddleware(ctx context.Context, user *app.UserUseCase, oauth *app.OAuthUseCase) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			extractor := keyFromHeader(echo.HeaderAuthorization)
 
 			// check token and write to reqest_context if user send one
 			if key, err := extractor(c); err == nil {
-				token, err := app.ValidateToken(app.Context, key)
+				token, err := oauth.ValidateToken(ctx, key)
 				if err != nil {
 					// todo
 					return next(c)
 				}
 
 				// fixme: remove it
-				if err = app.UserRepository.UpdateLastVisit(app.Context, token.UserID); err != nil {
+				if err = user.UpdateLastVisit(ctx, token.UserID); err != nil {
 					log.Error().Err(err).Msg("updating last visit")
 				}
 

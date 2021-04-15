@@ -13,7 +13,8 @@ import (
 )
 
 type OAuthClientController struct {
-	App       *app.App
+	UseCase *app.OAuthUseCase
+
 	Logger    *zerolog.Logger
 	Validator *validator.Inst
 }
@@ -23,12 +24,12 @@ var providerOAuthClientSet = wire.NewSet(
 )
 
 func NewOAuthClientController(
-	app *app.App,
+	useCase *app.OAuthUseCase,
 	logger *zerolog.Logger,
 	validator *validator.Inst,
 ) *OAuthClientController {
 	return &OAuthClientController{
-		app,
+		useCase,
 		logger,
 		validator,
 	}
@@ -61,7 +62,7 @@ func (h OAuthClientController) Create(c echo.Context) error {
 		return err
 	}
 
-	client, err := h.App.CreateOAuthClient(ctx, userId, *params)
+	client, err := h.UseCase.CreateOAuthClient(ctx, userId, *params)
 	if err != nil {
 		return err
 	}

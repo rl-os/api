@@ -14,7 +14,8 @@ import (
 )
 
 type ChatController struct {
-	App       *app.App
+	UseCase *app.ChatUseCase
+
 	Logger    *zerolog.Logger
 	Validator *validator.Inst
 }
@@ -24,12 +25,12 @@ var providerChatSet = wire.NewSet(
 )
 
 func NewChatController(
-	app *app.App,
+	useCase *app.ChatUseCase,
 	logger *zerolog.Logger,
 	validator *validator.Inst,
 ) *ChatController {
 	return &ChatController{
-		app,
+		useCase,
 		logger,
 		validator,
 	}
@@ -58,7 +59,7 @@ func (h *ChatController) NewPm(c echo.Context) error {
 		return err
 	}
 
-	channels, err := h.App.CreateChat(ctx, userId, params.TargetId, params.Message, params.IsAction)
+	channels, err := h.UseCase.CreateChat(ctx, userId, params.TargetId, params.Message, params.IsAction)
 	if err != nil {
 		return err
 	}
@@ -91,7 +92,7 @@ func (h *ChatController) Updates(c echo.Context) error {
 		return err
 	}
 
-	updates, err := h.App.GetUpdatesInChat(
+	updates, err := h.UseCase.GetUpdatesInChat(
 		ctx, userId, params.Since, params.ChannelId, params.Limit,
 	)
 	if err != nil {
@@ -125,7 +126,7 @@ func (h *ChatController) Messages(c echo.Context) error {
 		return err
 	}
 
-	messages, err := h.App.GetMessages(
+	messages, err := h.UseCase.GetMessages(
 		ctx, userId, params.Limit,
 	)
 	if err != nil {
@@ -164,7 +165,7 @@ func (h *ChatController) Send(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	messages, err := h.App.SendMessage(
+	messages, err := h.UseCase.SendMessage(
 		ctx, userId, uint(channelId), params.Message, params.IsAction,
 	)
 	if err != nil {
@@ -186,7 +187,7 @@ func (h *ChatController) Send(c echo.Context) error {
 func (h *ChatController) GetAll(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
-	channels, err := h.App.GetAllPublicChats(ctx)
+	channels, err := h.UseCase.GetAllPublicChats(ctx)
 	if err != nil {
 		return err
 	}
@@ -211,7 +212,7 @@ func (h *ChatController) GetJoined(c echo.Context) error {
 		return err
 	}
 
-	channels, err := h.App.GetAllChats(ctx, userId)
+	channels, err := h.UseCase.GetAllChats(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -243,7 +244,7 @@ func (h *ChatController) Join(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	channel, err := h.App.JoinToChat(ctx, userId, uint(channelId))
+	channel, err := h.UseCase.JoinToChat(ctx, userId, uint(channelId))
 	if err != nil {
 		return err
 	}
@@ -275,7 +276,7 @@ func (h *ChatController) Leave(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	err = h.App.LeaveFromChat(ctx, userId, uint(channelId))
+	err = h.UseCase.LeaveFromChat(ctx, userId, uint(channelId))
 	if err != nil {
 		return err
 	}

@@ -13,7 +13,8 @@ import (
 )
 
 type FriendController struct {
-	App       *app.App
+	UseCase *app.FriendUseCase
+
 	Logger    *zerolog.Logger
 	Validator *validator.Inst
 }
@@ -23,12 +24,12 @@ var providerFriendSet = wire.NewSet(
 )
 
 func NewFriendController(
-	app *app.App,
+	useCase *app.FriendUseCase,
 	logger *zerolog.Logger,
 	validator *validator.Inst,
 ) *FriendController {
 	return &FriendController{
-		app,
+		useCase,
 		logger,
 		validator,
 	}
@@ -51,7 +52,7 @@ func (h *FriendController) GetAll(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.App.GetAllFriends(ctx, userId)
+	users, err := h.UseCase.GetAllFriends(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -87,7 +88,7 @@ func (h *FriendController) Add(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.App.AddFriend(ctx, userId, params.TargetId)
+	users, err := h.UseCase.AddFriend(ctx, userId, params.TargetId)
 	if err != nil {
 		return err
 	}
@@ -123,7 +124,7 @@ func (h *FriendController) Remove(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.App.RemoveFriend(ctx, userId, params.TargetId)
+	users, err := h.UseCase.RemoveFriend(ctx, userId, params.TargetId)
 	if err != nil {
 		return err
 	}

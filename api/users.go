@@ -12,7 +12,8 @@ import (
 )
 
 type UserController struct {
-	App       *app.App
+	UseCase *app.UserUseCase
+
 	Logger    *zerolog.Logger
 	Validator *validator.Inst
 }
@@ -22,12 +23,12 @@ var providerUserSet = wire.NewSet(
 )
 
 func NewUserController(
-	app *app.App,
+	useCase *app.UserUseCase,
 	logger *zerolog.Logger,
 	validator *validator.Inst,
 ) *UserController {
 	return &UserController{
-		app,
+		useCase,
 		logger,
 		validator,
 	}
@@ -43,7 +44,7 @@ func (h *UserController) Get(c echo.Context) error {
 
 	mode := c.Param("mode")
 
-	user, err := h.App.GetUser(ctx, uint(userId), mode)
+	user, err := h.UseCase.GetUser(ctx, uint(userId), mode)
 	if err != nil {
 		return err
 	}

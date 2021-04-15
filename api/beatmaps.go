@@ -17,18 +17,19 @@ var providerBeatmapSet = wire.NewSet(
 )
 
 type BeatmapController struct {
-	App       *app.App
+	UseCase *app.BeatmapUseCase
+
 	Logger    *zerolog.Logger
 	Validator *validator.Inst
 }
 
 func NewBeatmapController(
-	app *app.App,
+	useCase *app.BeatmapUseCase,
 	logger *zerolog.Logger,
 	validator *validator.Inst,
 ) *BeatmapController {
 	return &BeatmapController{
-		app,
+		useCase,
 		logger,
 		validator,
 	}
@@ -51,7 +52,7 @@ func (h *BeatmapController) Get(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid beatmap id")
 	}
 
-	beatmaps, err := h.App.GetBeatmap(ctx, uint(beatmapID))
+	beatmaps, err := h.UseCase.GetBeatmap(ctx, uint(beatmapID))
 	if err != nil {
 		return err
 	}
@@ -78,7 +79,7 @@ func (h *BeatmapController) Lookup(c echo.Context) (err error) {
 		return err
 	}
 
-	beatmap, err := h.App.LookupBeatmap(ctx, params.Id, params.CheckSum, params.Filename)
+	beatmap, err := h.UseCase.LookupBeatmap(ctx, params.Id, params.CheckSum, params.Filename)
 	if err != nil {
 		return err
 	}

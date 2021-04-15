@@ -3,14 +3,13 @@ package app
 import (
 	"context"
 	"github.com/google/wire"
-	"github.com/rl-os/api/repository"
 	"github.com/rl-os/api/services/bancho"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 )
 
-// ProviderSet provide DI
-var ProviderSet = wire.NewSet(New, NewOptions)
+// ProviderAppSet provide DI
+var ProviderAppSet = wire.NewSet(New, NewOptions)
 
 // Options is app configuration struct
 type Options struct {
@@ -22,13 +21,6 @@ type Options struct {
 type App struct {
 	Context context.Context
 	Options *Options
-
-	BeatmapRepository    repository.Beatmap
-	BeatmapSetRepository repository.BeatmapSet
-	ChatRepository       repository.Chat
-	FriendRepository     repository.Friend
-	OAuthRepository      repository.OAuth
-	UserRepository       repository.User
 
 	BanchoClient *bancho.Client
 }
@@ -54,26 +46,13 @@ func NewOptions(logger *zerolog.Logger, v *viper.Viper) (*Options, error) {
 func New(
 	options *Options,
 	bancho *bancho.Client,
-
-	BeatmapRepository repository.Beatmap,
-	BeatmapSetRepository repository.BeatmapSet,
-	ChatRepository repository.Chat,
-	FriendRepository repository.Friend,
-	OAuthRepository repository.OAuth,
-	UserRepository repository.User,
 ) *App {
-	app := &App{
-		Options:              options,
-		BanchoClient:         bancho,
-		BeatmapRepository:    BeatmapRepository,
-		BeatmapSetRepository: BeatmapSetRepository,
-		ChatRepository:       ChatRepository,
-		FriendRepository:     FriendRepository,
-		OAuthRepository:      OAuthRepository,
-		UserRepository:       UserRepository,
-	}
+	ctx := context.TODO()
 
-	return app
+	return &App{
+		Context: ctx,
+		Options: options,
+	}
 }
 
 func (a *App) SetContext(ctx context.Context) {

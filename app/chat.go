@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"github.com/rl-os/api/repository"
 	"net/http"
 
 	"github.com/rl-os/api/entity"
@@ -16,7 +17,16 @@ var (
 	InvalidMessageBodyErr = errors.New("send_message_chat", http.StatusBadRequest, "Invalud message body")
 )
 
-func (a *App) CreateChat(ctx context.Context, userId, targetId uint, message string, isAction bool) (*entity.ChannelNewPm, error) {
+type ChatUseCase struct {
+	*App
+	ChatRepository repository.Chat
+}
+
+func NewChatUseCase(app *App, rep repository.Chat) *ChatUseCase {
+	return &ChatUseCase{app, rep}
+}
+
+func (a *ChatUseCase) CreateChat(ctx context.Context, userId, targetId uint, message string, isAction bool) (*entity.ChannelNewPm, error) {
 	channel, err := a.ChatRepository.CreatePm(ctx, userId, targetId)
 	if err != nil {
 		return nil, InvalidPMBodyErr.WithCause(err)
@@ -39,7 +49,7 @@ func (a *App) CreateChat(ctx context.Context, userId, targetId uint, message str
 	}, nil
 }
 
-func (a *App) GetUpdatesInChat(ctx context.Context, userId, since, channelId, limit uint) (*entity.ChannelUpdates, error) {
+func (a *ChatUseCase) GetUpdatesInChat(ctx context.Context, userId, since, channelId, limit uint) (*entity.ChannelUpdates, error) {
 	if limit >= 100 || limit <= 0 {
 		limit = 25
 	}
@@ -60,8 +70,8 @@ func (a *App) GetUpdatesInChat(ctx context.Context, userId, since, channelId, li
 	}, nil
 }
 
-// GetUpdatesInChat
-func (a *App) GetMessages(ctx context.Context, userId, limit uint) (*[]entity.ChatMessage, error) {
+// GetMessages by user id
+func (a *ChatUseCase) GetMessages(ctx context.Context, userId, limit uint) (*[]entity.ChatMessage, error) {
 	if limit >= 100 || limit <= 0 {
 		limit = 25
 	}
@@ -75,7 +85,7 @@ func (a *App) GetMessages(ctx context.Context, userId, limit uint) (*[]entity.Ch
 }
 
 // SendMessage to selected chat
-func (a *App) SendMessage(ctx context.Context, userId, channelId uint, content string, isAction bool) (*entity.ChatMessage, error) {
+func (a *ChatUseCase) SendMessage(ctx context.Context, userId, channelId uint, content string, isAction bool) (*entity.ChatMessage, error) {
 	if content == "" {
 		return nil, ErrEmptyMessage
 	}
@@ -88,7 +98,7 @@ func (a *App) SendMessage(ctx context.Context, userId, channelId uint, content s
 	return data, nil
 }
 
-func (a *App) GetAllPublicChats(ctx context.Context) (*[]entity.Channel, error) {
+func (a *ChatUseCase) GetAllPublicChats(ctx context.Context) (*[]entity.Channel, error) {
 	data, err := a.ChatRepository.GetPublic(ctx)
 	if err != nil {
 		return nil, ErrNotFoundChat.WithCause(err)
@@ -97,7 +107,7 @@ func (a *App) GetAllPublicChats(ctx context.Context) (*[]entity.Channel, error) 
 	return data, nil
 }
 
-func (a *App) GetAllChats(ctx context.Context, userId uint) (*[]entity.Channel, error) {
+func (a *ChatUseCase) GetAllChats(ctx context.Context, userId uint) (*[]entity.Channel, error) {
 	data, err := a.ChatRepository.GetJoined(ctx, userId)
 	if err != nil {
 		return nil, ErrNotFoundChat.WithCause(err)
@@ -106,7 +116,7 @@ func (a *App) GetAllChats(ctx context.Context, userId uint) (*[]entity.Channel, 
 	return data, nil
 }
 
-func (a *App) JoinToChat(ctx context.Context, userId, channelId uint) (*entity.Channel, error) {
+func (a *ChatUseCase) JoinToChat(ctx context.Context, userId, channelId uint) (*entity.Channel, error) {
 	data, err := a.ChatRepository.Join(ctx, userId, channelId)
 	if err != nil {
 		return nil, ErrNotFoundChat.WithCause(err)
@@ -115,7 +125,7 @@ func (a *App) JoinToChat(ctx context.Context, userId, channelId uint) (*entity.C
 	return data, nil
 }
 
-func (a *App) LeaveFromChat(ctx context.Context, userId, channelId uint) error {
+func (a *ChatUseCase) LeaveFromChat(ctx context.Context, userId, channelId uint) error {
 	err := a.ChatRepository.Leave(ctx, userId, channelId)
 	if err != nil {
 		return ErrNotFoundChat.WithCause(err)

@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"github.com/deissh/go-utils"
+	"github.com/rl-os/api/repository"
 	"net/http"
 
 	"github.com/rl-os/api/entity"
@@ -14,8 +15,17 @@ var (
 	ErrNotFoundUser = errors.New("not_found_user", http.StatusNotFound, "Not found")
 )
 
+type UserUseCase struct {
+	*App
+	UserRepository repository.User
+}
+
+func NewUserUseCase(app *App, rep repository.User) *UserUseCase {
+	return &UserUseCase{app, rep}
+}
+
 // GetUser from repository and return 404 error if not exist
-func (a *App) GetUser(ctx context.Context, userID uint, mode string) (*entity.User, error) {
+func (a *UserUseCase) GetUser(ctx context.Context, userID uint, mode string) (*entity.User, error) {
 	if !utils.ContainsString(modes, mode) {
 		mode = "std"
 	}
@@ -26,4 +36,13 @@ func (a *App) GetUser(ctx context.Context, userID uint, mode string) (*entity.Us
 	}
 
 	return data, nil
+}
+
+func (a *UserUseCase) UpdateLastVisit(ctx context.Context, userId uint) error {
+	err := a.UserRepository.UpdateLastVisit(ctx, userId)
+	if err != nil {
+		return ErrNotFoundUser.WithCause(err)
+	}
+
+	return nil
 }

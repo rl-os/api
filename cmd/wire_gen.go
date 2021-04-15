@@ -47,6 +47,7 @@ func Injector(configPath string) (transports.Server, error) {
 		return nil, err
 	}
 	client := bancho.New(banchoOptions)
+	appApp := app.New(appOptions, client)
 	gormOptions, err := gorm.NewOptions(logger, viper)
 	if err != nil {
 		return nil, err
@@ -55,29 +56,34 @@ func Injector(configPath string) (transports.Server, error) {
 	if err != nil {
 		return nil, err
 	}
-	beatmap := gorm.NewBeatmapRepository(supplier)
-	beatmapSet := gorm.NewBeatmapSetRepository(supplier)
+	user := gorm.NewUserRepository(supplier)
+	userUseCase := app.NewUserUseCase(appApp, user)
+	inst, err := validator.New()
+	if err != nil {
+		return nil, err
+	}
+	userController := api.NewUserController(userUseCase, logger, inst)
 	chat := gorm.NewChatRepository(supplier)
+	chatUseCase := app.NewChatUseCase(appApp, chat)
+	chatController := api.NewChatController(chatUseCase, logger, inst)
 	friend := gorm.NewFriendRepository(supplier)
+	friendUseCase := app.NewFriendUseCase(appApp, friend)
+	friendController := api.NewFriendController(friendUseCase, logger, inst)
+	beatmap := gorm.NewBeatmapRepository(supplier)
+	beatmapUseCase := app.NewBeatmapUseCase(appApp, beatmap)
+	beatmapController := api.NewBeatmapController(beatmapUseCase, logger, inst)
+	beatmapSet := gorm.NewBeatmapSetRepository(supplier)
+	beatmapSetUseCase := app.NewBeatmapSetUseCase(appApp, beatmap, beatmapSet)
+	beatmapSetController := api.NewBeatmapSetController(beatmapSetUseCase, logger, inst)
+	currentUserController := api.NewCurrentUserController(userUseCase, logger, inst)
 	oAuthOptions, err := gorm.NewOAuthOptions(logger, viper)
 	if err != nil {
 		return nil, err
 	}
 	oAuth := gorm.NewOAuthRepository(oAuthOptions, supplier)
-	user := gorm.NewUserRepository(supplier)
-	appApp := app.New(appOptions, client, beatmap, beatmapSet, chat, friend, oAuth, user)
-	inst, err := validator.New()
-	if err != nil {
-		return nil, err
-	}
-	userController := api.NewUserController(appApp, logger, inst)
-	chatController := api.NewChatController(appApp, logger, inst)
-	friendController := api.NewFriendController(appApp, logger, inst)
-	beatmapController := api.NewBeatmapController(appApp, logger, inst)
-	beatmapSetController := api.NewBeatmapSetController(appApp, logger, inst)
-	currentUserController := api.NewCurrentUserController(appApp, logger, inst)
-	oAuthTokenController := api.NewOAuthTokenController(appApp, logger, inst)
-	oAuthClientController := api.NewOAuthClientController(appApp, logger, inst)
+	oAuthUseCase := app.NewOAuthUseCase(appApp, oAuth, user)
+	oAuthTokenController := api.NewOAuthTokenController(oAuthUseCase, logger, inst)
+	oAuthClientController := api.NewOAuthClientController(oAuthUseCase, logger, inst)
 	initControllers := api.CreateInitControllersFn(appApp, userController, chatController, friendController, beatmapController, beatmapSetController, currentUserController, oAuthTokenController, oAuthClientController)
 	echo := http.NewRouter(httpOptions, logger, initControllers)
 	server, err := http.New(httpOptions, logger, echo)
