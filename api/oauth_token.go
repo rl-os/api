@@ -2,17 +2,35 @@ package api
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rs/zerolog"
 	"net/http"
 )
 
-type OAuthTokenHandlers struct {
-	App *app.App
+type OAuthTokenController struct {
+	UseCase *app.OAuthUseCase
+
+	Logger *zerolog.Logger
 }
 
-func (h *OAuthTokenHandlers) Create(c echo.Context) error {
+var providerOAuthTokenSet = wire.NewSet(
+	NewOAuthTokenController,
+)
+
+func NewOAuthTokenController(
+	useCase *app.OAuthUseCase,
+	logger *zerolog.Logger,
+) *OAuthTokenController {
+	return &OAuthTokenController{
+		useCase,
+		logger,
+	}
+}
+
+func (h *OAuthTokenController) Create(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := &request.CreateOauthToken{}
@@ -20,11 +38,7 @@ func (h *OAuthTokenHandlers) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Token info not found")
 	}
 
-	if err := h.App.Validator.Struct(params); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid token information")
-	}
-
-	token, err := h.App.OAuth.CreateToken(ctx, *params)
+	token, err := h.UseCase.CreateOAuthToken(ctx, *params)
 	if err != nil {
 		return err
 	}

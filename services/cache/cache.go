@@ -5,11 +5,14 @@ import (
 	"time"
 )
 
-// ErrKeyNotFound is the error when the given key is not found
-var KeyNotFoundErr = errors.New("key not found in storage")
+var (
+	KeyNotFoundErr     = errors.New("key not found in storage")
+	InvalidStorageErr  = errors.New("invalid storage")
+	InternalStorageErr = errors.New("internal storage error")
+)
 
 type Cache interface {
-	// Set adds the given key and value to the store without an expiry. If the key already exists,
+	// Set adds the given key and value to the repository without an expiry. If the key already exists,
 	// it will overwrite the previous value.
 	Set(key string, value interface{}) error
 	// SetWithExpiry adds the given key and value to the cache with the given expiry. If the key

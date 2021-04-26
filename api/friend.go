@@ -2,15 +2,33 @@ package api
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rs/zerolog"
 	"net/http"
 )
 
-type FriendHandlers struct {
-	App *app.App
+type FriendController struct {
+	UseCase *app.FriendUseCase
+
+	Logger *zerolog.Logger
+}
+
+var providerFriendSet = wire.NewSet(
+	NewFriendController,
+)
+
+func NewFriendController(
+	useCase *app.FriendUseCase,
+	logger *zerolog.Logger,
+) *FriendController {
+	return &FriendController{
+		useCase,
+		logger,
+	}
 }
 
 // GetAll friends/subscriptions
@@ -22,7 +40,7 @@ type FriendHandlers struct {
 //
 // @Success 200 {array} entity.UserShort
 // @Success 400 {object} errors.ResponseFormat
-func (h *FriendHandlers) GetAll(c echo.Context) error {
+func (h *FriendController) GetAll(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
@@ -30,7 +48,7 @@ func (h *FriendHandlers) GetAll(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.App.Friend.GetAll(ctx, userId)
+	users, err := h.UseCase.GetAllFriends(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -49,15 +67,11 @@ func (h *FriendHandlers) GetAll(c echo.Context) error {
 //
 // @Success 200 {array} entity.UserShort
 // @Success 400 {object} errors.ResponseFormat
-func (h *FriendHandlers) Add(c echo.Context) error {
+func (h *FriendController) Add(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := request.FriendTargetId{}
 	if err := c.Bind(params); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
-	}
-
-	if err := h.App.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
 
@@ -66,7 +80,7 @@ func (h *FriendHandlers) Add(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.App.Friend.Add(ctx, userId, params.TargetId)
+	users, err := h.UseCase.AddFriend(ctx, userId, params.TargetId)
 	if err != nil {
 		return err
 	}
@@ -85,15 +99,11 @@ func (h *FriendHandlers) Add(c echo.Context) error {
 //
 // @Success 200 {array} entity.UserShort
 // @Success 400 {object} errors.ResponseFormat
-func (h *FriendHandlers) Remove(c echo.Context) error {
+func (h *FriendController) Remove(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := request.FriendTargetId{}
 	if err := c.Bind(params); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
-	}
-
-	if err := h.App.Validator.Struct(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed validate", err)
 	}
 
@@ -102,7 +112,7 @@ func (h *FriendHandlers) Remove(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.App.Friend.Remove(ctx, userId, params.TargetId)
+	users, err := h.UseCase.RemoveFriend(ctx, userId, params.TargetId)
 	if err != nil {
 		return err
 	}

@@ -2,16 +2,34 @@ package api
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/entity/request"
 	"github.com/rl-os/api/errors"
+	"github.com/rs/zerolog"
 	"net/http"
 	"strconv"
 )
 
-type BeatmapSetHandlers struct {
-	App *app.App
+var providerBeatmapsetSet = wire.NewSet(
+	NewBeatmapSetController,
+)
+
+type BeatmapSetController struct {
+	UseCase *app.BeatmapSetUseCase
+
+	Logger *zerolog.Logger
+}
+
+func NewBeatmapSetController(
+	useCase *app.BeatmapSetUseCase,
+	logger *zerolog.Logger,
+) *BeatmapSetController {
+	return &BeatmapSetController{
+		useCase,
+		logger,
+	}
 }
 
 // Get beatmap by id
@@ -23,15 +41,15 @@ type BeatmapSetHandlers struct {
 //
 // @Success 200 {object} entity.BeatmapSetFull
 // @Success 400 {object} errors.ResponseFormat
-func (h *BeatmapSetHandlers) Get(c echo.Context) error {
-	beatmapsetID, err := strconv.ParseUint(c.Param("beatmapset"), 10, 32)
+func (h *BeatmapSetController) Get(c echo.Context) error {
+	beatmapsetID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		return errors.New("request_params", 400, "Invalid beatmapset id")
 	}
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	beatmapset, err := h.App.BeatmapSet.Get(ctx, uint(beatmapsetID))
+	beatmapset, err := h.UseCase.GetBeatmapset(ctx, uint(beatmapsetID))
 	if err != nil {
 		return err
 	}
@@ -48,7 +66,7 @@ func (h *BeatmapSetHandlers) Get(c echo.Context) error {
 //
 // @Success 200 {object} entity.BeatmapSetFull
 // @Success 400 {object} errors.ResponseFormat
-func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
+func (h *BeatmapSetController) Lookup(c echo.Context) (err error) {
 	params := request.BeatmapsetLookup{}
 	if err := c.Bind(&params); err != nil {
 		return errors.New("request_params", 400, "Invalid params")
@@ -56,7 +74,7 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	beatmapset, err := h.App.BeatmapSet.Lookup(ctx, params.Id)
+	beatmapset, err := h.UseCase.LookupBeatmapset(ctx, params.Id)
 	if err != nil {
 		return err
 	}
@@ -78,7 +96,7 @@ func (h *BeatmapSetHandlers) Lookup(c echo.Context) (err error) {
 //
 // @Success 200 {object} entity.BeatmapsetSearchResult
 // @Success 400 {object} errors.ResponseFormat
-func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
+func (h *BeatmapSetController) Search(c echo.Context) (err error) {
 	params := request.BeatmapsetSearch{}
 	if err := c.Bind(&params); err != nil {
 		return errors.New("request_params", 400, "Invalid params")
@@ -86,7 +104,7 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	result, err := h.App.BeatmapSet.Search(ctx)
+	result, err := h.UseCase.SearchBeatmapset(ctx)
 	if err != nil {
 		return err
 	}
@@ -105,8 +123,8 @@ func (h *BeatmapSetHandlers) Search(c echo.Context) (err error) {
 //
 // @Success 200 {object} object
 // @Success 400 {object} errors.ResponseFormat
-func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
-	beatmapsetID, err := strconv.ParseUint(c.Param("beatmapset"), 10, 32)
+func (h *BeatmapSetController) Favourite(c echo.Context) (err error) {
+	beatmapsetID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		return errors.New("request_params", 400, "Invalid beatmapset id")
 	}
@@ -120,7 +138,7 @@ func (h *BeatmapSetHandlers) Favourite(c echo.Context) (err error) {
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	total, err := h.App.BeatmapSet.Favourite(ctx, params.Action, uint(beatmapsetID))
+	total, err := h.UseCase.FavouriteBeatmapset(ctx, params.Action, uint(beatmapsetID))
 	if err != nil {
 		return err
 	}

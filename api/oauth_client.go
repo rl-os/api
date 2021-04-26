@@ -2,15 +2,33 @@ package api
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rs/zerolog"
 	"net/http"
 )
 
-type OAuthClientHandlers struct {
-	App *app.App
+type OAuthClientController struct {
+	UseCase *app.OAuthUseCase
+
+	Logger *zerolog.Logger
+}
+
+var providerOAuthClientSet = wire.NewSet(
+	NewOAuthClientController,
+)
+
+func NewOAuthClientController(
+	useCase *app.OAuthUseCase,
+	logger *zerolog.Logger,
+) *OAuthClientController {
+	return &OAuthClientController{
+		useCase,
+		logger,
+	}
 }
 
 // Create new oauth client
@@ -23,16 +41,12 @@ type OAuthClientHandlers struct {
 //
 // @Success 200 {object} entity.OAuthClient
 // @Success 400 {object} errors.ResponseFormat
-func (h OAuthClientHandlers) Create(c echo.Context) error {
+func (h OAuthClientController) Create(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
-	params := &request.CreateOAuthClient{}
-	if err := c.Bind(params); err != nil {
+	params := request.CreateOAuthClient{}
+	if err := c.Bind(&params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Client info not found")
-	}
-
-	if err := h.App.Validator.Struct(params); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid client information")
 	}
 
 	userId, err := myctx.GetUserID(ctx)
@@ -40,7 +54,7 @@ func (h OAuthClientHandlers) Create(c echo.Context) error {
 		return err
 	}
 
-	client, err := h.App.OAuth.CreateClient(ctx, userId, *params)
+	client, err := h.UseCase.CreateOAuthClient(ctx, userId, params)
 	if err != nil {
 		return err
 	}

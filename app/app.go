@@ -2,56 +2,61 @@ package app
 
 import (
 	"context"
-	"github.com/go-playground/validator/v10"
-	"github.com/rl-os/api/config"
-	"github.com/rl-os/api/services"
-	"github.com/rl-os/api/store"
+	"github.com/google/wire"
+	"github.com/rl-os/api/services/bancho"
+	"github.com/rl-os/api/services/validator"
+	"github.com/rs/zerolog"
+	"github.com/spf13/viper"
 )
 
-type App struct {
-	// Global context
-	Context context.Context
-	// Global validation context
-	Validator *validator.Validate
-	// Global configuration
-	Config *config.Config
+// ProviderAppSet provide DI
+var ProviderAppSet = wire.NewSet(New, NewOptions)
 
-	// Store contains active implementation
-	Store store.Store
-	// Services that be enabled for this app
-	Services *services.Services
-
-	Chat
-	User
-	OAuth
-	Friend
-	Beatmap
-	BeatmapSet
+// Options is app configuration struct
+type Options struct {
+	JWT struct {
+		Secret string
+	}
 }
 
-// NewApp with DI
-func NewApp(
-	store store.Store,
-	config *config.Config,
-	services *services.Services,
+type App struct {
+	Context context.Context
+	Options *Options
+
+	Validator    *validator.Inst
+	BanchoClient *bancho.Client
+}
+
+// NewOptions create and parse config from viper instance
+func NewOptions(logger *zerolog.Logger, v *viper.Viper) (*Options, error) {
+	o := Options{}
+
+	logger.Debug().
+		Msg("Loading config file")
+	if err := v.UnmarshalKey("app", &o); err != nil {
+		return nil, err
+	}
+
+	logger.Debug().
+		Interface("app", o).
+		Msg("Loaded config")
+
+	return &o, nil
+}
+
+// New with DI
+func New(
+	options *Options,
+	bancho *bancho.Client,
+	validator *validator.Inst,
 ) *App {
-	app := &App{
-		Store:     store,
-		Config:    config,
-		Services:  services,
-		Validator: validator.New(),
-	}
+	ctx := context.TODO()
 
-	{ // setup app handlers
-		app.Chat = Chat{app}
-		app.User = User{app}
-		app.OAuth = OAuth{app}
-		app.Friend = Friend{app}
-		app.Beatmap = Beatmap{app}
-		app.BeatmapSet = BeatmapSet{app}
+	return &App{
+		Context:   ctx,
+		Options:   options,
+		Validator: validator,
 	}
-
-	return app
 }
 
 func (a *App) SetContext(ctx context.Context) {

@@ -2,16 +2,34 @@ package api
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
 	"github.com/rl-os/api/errors"
+	"github.com/rs/zerolog"
 	"strconv"
 )
 
-type ChatHandlers struct {
-	App *app.App
+type ChatController struct {
+	UseCase *app.ChatUseCase
+
+	Logger *zerolog.Logger
+}
+
+var providerChatSet = wire.NewSet(
+	NewChatController,
+)
+
+func NewChatController(
+	useCase *app.ChatUseCase,
+	logger *zerolog.Logger,
+) *ChatController {
+	return &ChatController{
+		useCase,
+		logger,
+	}
 }
 
 // NewPm between 2 users
@@ -24,7 +42,7 @@ type ChatHandlers struct {
 //
 // @Success 200 {object} entity.ChannelNewPm
 // @Success 400 {object} errors.ResponseFormat
-func (h *ChatHandlers) NewPm(c echo.Context) error {
+func (h *ChatController) NewPm(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := request.CreateNewChat{}
@@ -37,7 +55,7 @@ func (h *ChatHandlers) NewPm(c echo.Context) error {
 		return err
 	}
 
-	channels, err := h.App.Chat.Create(ctx, userId, params.TargetId, params.Message, params.IsAction)
+	channels, err := h.UseCase.CreateChat(ctx, userId, params.TargetId, params.Message, params.IsAction)
 	if err != nil {
 		return err
 	}
@@ -57,7 +75,7 @@ func (h *ChatHandlers) NewPm(c echo.Context) error {
 //
 // @Success 200 {object} entity.ChannelUpdates
 // @Success 400 {object} errors.ResponseFormat
-func (h *ChatHandlers) Updates(c echo.Context) error {
+func (h *ChatController) Updates(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := request.GetChatUpdates{}
@@ -70,7 +88,7 @@ func (h *ChatHandlers) Updates(c echo.Context) error {
 		return err
 	}
 
-	updates, err := h.App.Chat.GetUpdates(
+	updates, err := h.UseCase.GetUpdatesInChat(
 		ctx, userId, params.Since, params.ChannelId, params.Limit,
 	)
 	if err != nil {
@@ -91,7 +109,7 @@ func (h *ChatHandlers) Updates(c echo.Context) error {
 //
 // @Success 200 {array} entity.ChatMessage
 // @Success 400 {object} errors.ResponseFormat
-func (h *ChatHandlers) Messages(c echo.Context) error {
+func (h *ChatController) Messages(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := request.GetMessages{}
@@ -104,7 +122,7 @@ func (h *ChatHandlers) Messages(c echo.Context) error {
 		return err
 	}
 
-	messages, err := h.App.Chat.Get(
+	messages, err := h.UseCase.GetMessages(
 		ctx, userId, params.Limit,
 	)
 	if err != nil {
@@ -125,7 +143,7 @@ func (h *ChatHandlers) Messages(c echo.Context) error {
 //
 // @Success 200 {object} entity.ChatMessage
 // @Success 400 {object} errors.ResponseFormat
-func (h *ChatHandlers) Send(c echo.Context) error {
+func (h *ChatController) Send(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	params := request.SendMessage{}
@@ -138,12 +156,12 @@ func (h *ChatHandlers) Send(c echo.Context) error {
 		return err
 	}
 
-	channelId, err := strconv.ParseUint(c.Param("channel"), 10, 32)
+	channelId, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	messages, err := h.App.Chat.Send(
+	messages, err := h.UseCase.SendMessage(
 		ctx, userId, uint(channelId), params.Message, params.IsAction,
 	)
 	if err != nil {
@@ -162,10 +180,10 @@ func (h *ChatHandlers) Send(c echo.Context) error {
 //
 // @Success 200 {array} entity.Channel
 // @Success 400 {object} errors.ResponseFormat
-func (h *ChatHandlers) GetAll(c echo.Context) error {
+func (h *ChatController) GetAll(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
-	channels, err := h.App.Chat.GetAllPublic(ctx)
+	channels, err := h.UseCase.GetAllPublicChats(ctx)
 	if err != nil {
 		return err
 	}
@@ -182,7 +200,7 @@ func (h *ChatHandlers) GetAll(c echo.Context) error {
 //
 // @Success 200 {array} entity.Channel
 // @Success 400 {object} errors.ResponseFormat
-func (h *ChatHandlers) GetJoined(c echo.Context) error {
+func (h *ChatController) GetJoined(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
@@ -190,7 +208,7 @@ func (h *ChatHandlers) GetJoined(c echo.Context) error {
 		return err
 	}
 
-	channels, err := h.App.Chat.GetAll(ctx, userId)
+	channels, err := h.UseCase.GetAllChats(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -209,7 +227,7 @@ func (h *ChatHandlers) GetJoined(c echo.Context) error {
 //
 // @Success 200 {object} entity.Channel
 // @Success 400 {object} errors.ResponseFormat
-func (h *ChatHandlers) Join(c echo.Context) error {
+func (h *ChatController) Join(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
@@ -217,12 +235,12 @@ func (h *ChatHandlers) Join(c echo.Context) error {
 		return err
 	}
 
-	channelId, err := strconv.ParseUint(c.Param("channel"), 10, 32)
+	channelId, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	channel, err := h.App.Chat.Join(ctx, userId, uint(channelId))
+	channel, err := h.UseCase.JoinToChat(ctx, userId, uint(channelId))
 	if err != nil {
 		return err
 	}
@@ -241,7 +259,7 @@ func (h *ChatHandlers) Join(c echo.Context) error {
 //
 // @Success 200 {object} interface{}
 // @Success 400 {object} errors.ResponseFormat
-func (h *ChatHandlers) Leave(c echo.Context) error {
+func (h *ChatController) Leave(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
 	userId, err := myctx.GetUserID(ctx)
@@ -254,7 +272,7 @@ func (h *ChatHandlers) Leave(c echo.Context) error {
 		return errors.New("requires_params", 400, "invalid channelId")
 	}
 
-	err = h.App.Chat.Leave(ctx, userId, uint(channelId))
+	err = h.UseCase.LeaveFromChat(ctx, userId, uint(channelId))
 	if err != nil {
 		return err
 	}

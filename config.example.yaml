@@ -1,23 +1,40 @@
-# API server configuration
-server:
-  host: 0.0.0.0
-  port: 2400
+---
+app:
+  jwt:
+    secret: 'change_me_plz'
+  enable_jobs: true
+  enable_profile: true
+
+transport:
+  http:
+    host: 127.0.0.1
+    port: 2400
 
 database:
   driver: postgres
   dsn: postgres://postgres:postgres@/osuserver?sslmode=disable
 
+log:
+  level: trace
+  no_color: false
 
-# Slave database configuration
-mirror:
-  bancho:
-    username: 'none'
-    password: 'none'
+bancho:
+  username: example
+  password: pwd
+  oauth_client:
+    id: '5'
+    secret: 'FGc9GAtyHzeQDshWP5Ah7dega8hJACAJpQtw6OXk'
 
+cache:
+  type: redis
+
+storage:
+  fs:
+    path: /var/storage
   s3:
+    bucket: beatmaps
     secret_id: 123
     secret_key: 321
-    bucket: beatmaps
 
 metrics:
   enable: true

@@ -3,12 +3,28 @@
 package api
 
 import (
+	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/middlewares/permission"
+	"github.com/rl-os/api/middlewares/reqest_context"
+	"github.com/rl-os/api/services/transports/http"
 )
 
-// New api endpoint
+var ProviderSet = wire.NewSet(
+	CreateInitControllersFn,
+
+	providerBeatmapSet,
+	providerBeatmapsetSet,
+	providerChatSet,
+	providerFriendSet,
+	providerMeSet,
+	providerOAuthClientSet,
+	providerOAuthTokenSet,
+	providerUserSet,
+)
+
+// CreateInitControllersFn
 //
 // @title osu!lazer API
 // @version 2.0
@@ -26,150 +42,92 @@ import (
 // @scope.user.* Grants access as user (without system and admin api)
 // @scope.admin.* Grants access as admin
 // @scope.sys.* Grants access as system user (for example chatbot, worker and etc)
-func New(app *app.App, root *echo.Group) {
-	signup := root.Group("/users")
-	{
-		h := RegistrationHandlers{app}
-		signup.POST("", h.Create)
-	}
+func CreateInitControllersFn(
+	app *app.App,
 
-	// osu! lazer oauth2 support
-	// HACK: remove if possible
-	oauth := root.Group("/oauth")
-	{
-		h := OAuthTokenHandlers{app}
-		oauth.POST("/token", h.Create)
-	}
+	user *UserController,
+	chat *ChatController,
+	friend *FriendController,
+	beatmap *BeatmapController,
+	beatmapSet *BeatmapSetController,
+	current *CurrentUserController,
+	oauthToken *OAuthTokenController,
+	oauthClient *OAuthClientController,
+) http.InitControllers {
+	return func(router *echo.Echo) {
+		root := router.Group(
+			"",
+			reqest_context.GlobalMiddleware(app.Context),
+			permission.GlobalMiddleware(app.Context, user.UseCase, oauthToken.UseCase),
+		)
 
-	v2 := root.Group("/api/v2")
-	{
-		v2.GET("/ping", echo.MethodNotAllowedHandler)
+		// TODO: move out to external oauth2 server
+		root.POST("/api/v2/oauth/token", oauthToken.Create)
+		root.POST("/api/v2/oauth/client", oauthClient.Create, permission.MustLogin)
 
-		// === Me ===
-		me := v2.Group("/me", permission.MustLogin)
-		{
-			h := MeHandlers{app}
-			me.GET("/", h.Me)
-			me.GET("/:mode", h.Me)
-			me.GET("/me/download-quota-check", echo.MethodNotAllowedHandler)
-		}
+		root.POST("/users", current.Create) // WARNING: LEGACY HANDLER
+		root.POST("/api/v2/registration", current.Create)
+		root.GET("/api/v2/me", current.Me, permission.MustLogin)
+		root.GET("/api/v2/me/:mode", current.Me, permission.MustLogin)
+		root.GET("/me/download-quota-check", echo.NotFoundHandler, permission.MustLogin)
 
-		// === Friends ===
-		friends := v2.Group("/friends", permission.MustLogin)
-		{
-			h := FriendHandlers{app}
-			friends.GET("", h.GetAll)
-			friends.PUT("", h.Add)
-			friends.DELETE("", h.Remove)
-		}
+		root.GET("/api/v2/users/:user", user.Get)
+		root.GET("/api/v2/users/:user/", user.Get)
+		root.GET("/api/v2/users/:user/:mode", user.Get)
+		root.GET("/api/v2/users/:user/kudosu", echo.MethodNotAllowedHandler)
+		root.GET("/api/v2/users/:user/scores/:type", echo.MethodNotAllowedHandler)
+		root.GET("/api/v2/users/:user/beatmapsets/:type", echo.MethodNotAllowedHandler)
+		root.GET("/api/v2/users/:user/recent_activity", echo.MethodNotAllowedHandler)
 
-		// === Users ===
-		users := v2.Group("/users")
-		{
-			h := UsersHandlers{app}
-			users.GET("/:user/kudosu", echo.MethodNotAllowedHandler)
-			users.GET("/:user/scores/:type", echo.MethodNotAllowedHandler)
-			users.GET("/:user/beatmapsets/:type", echo.MethodNotAllowedHandler)
-			users.GET("/:user/recent_activity", echo.MethodNotAllowedHandler)
-			users.GET("/:user/:mode", h.Get)
-			users.GET("/:user/", h.Get)
-			users.GET("/:user", h.Get)
-		}
+		root.GET("/api/v2/friends", friend.GetAll)
+		root.PUT("/api/v2/friends", friend.Add)
+		root.DELETE("/api/v2/friends", friend.Remove)
 
-		// === Beatmaps ===
-		bmaps := v2.Group("/beatmaps")
-		{
-			h := BeatmapHandlers{app}
-			bmaps.GET("/lookup", h.Lookup)
-			bmaps.GET("/:beatmap", h.Get)
-			bmaps.GET("/:beatmap/scores", h.Scores)
-		}
+		root.POST("/api/v2/chat/new", chat.NewPm, permission.MustLogin)
+		root.GET("/api/v2/chat/updates", chat.Updates, permission.MustLogin)
+		root.GET("/api/v2/chat/channels/:id/messages", chat.Messages, permission.MustLogin)
+		root.POST("/api/v2/chat/channels/:id/messages", chat.Send, permission.MustLogin)
+		root.GET("/api/v2/chat/channels", chat.GetAll, permission.MustLogin)
+		root.GET("/api/v2/chat/channels/joined", chat.GetJoined, permission.MustLogin)
+		root.PUT("/api/v2/chat/channels/:id/users/:user", chat.Join, permission.MustLogin)
+		root.DELETE("/api/v2/chat/channels/:id/users/:user", chat.Leave, permission.MustLogin)
 
-		// === Beatmapsets ===
-		bmsets := v2.Group("/beatmapsets")
-		{
-			h := BeatmapSetHandlers{app}
-			bmsets.GET("/lookup", h.Lookup)
-			bmsets.GET("/search", h.Search)
-			bmsets.GET("/search/:filters", h.Search) // ???
-			bmsets.GET("/:beatmapset", h.Get)
-			bmsets.GET("/:beatmapset/download", echo.MethodNotAllowedHandler, permission.MustLogin)
-			bmsets.POST("/:beatmapset/favourites", h.Favourite, permission.MustLogin)
-		}
+		root.GET("/api/v2/beatmapsets/:id", beatmapSet.Get)
+		root.GET("/api/v2/beatmapsets/lookup", beatmapSet.Lookup)
+		root.GET("/api/v2/beatmapsets/search", beatmapSet.Search)
+		root.POST("/api/v2/beatmapsets/:id/favourites", beatmapSet.Favourite, permission.MustLogin)
 
-		// === Scores ===
-		scores := v2.Group("/scores")
-		{
-			scores.GET("/:mode/:score/download", echo.MethodNotAllowedHandler)
-		}
+		root.GET("/api/v2/beatmaps/lookup", beatmap.Lookup)
+		root.GET("/api/v2/beatmaps/:id", beatmap.Get)
+		root.GET("/api/v2/beatmaps/:id/scores", beatmap.Scores)
 
-		// === Rooms ===
-		rooms := v2.Group("/rooms")
-		{
-			rooms.POST("", echo.MethodNotAllowedHandler)
-			rooms.GET("/:room", echo.MethodNotAllowedHandler)
-			rooms.PUT("/:room/users/:user", echo.MethodNotAllowedHandler)
-			rooms.DELETE("/:room/users/:user", echo.MethodNotAllowedHandler)
-			rooms.GET("/:room/leaderboard", echo.MethodNotAllowedHandler)
-			rooms.POST("/:room/playlist/:playlist/scores", echo.MethodNotAllowedHandler)
-			rooms.PUT("/:room/playlist/:playlist/scores/:score", echo.MethodNotAllowedHandler)
-		}
+		root.GET("/api/v2/ping", echo.MethodNotAllowedHandler)
 
-		// === Chats ===
-		chat := v2.Group("/chat", permission.MustLogin)
-		{
-			h := ChatHandlers{app}
-			chat.POST("/new", h.NewPm)
-			chat.GET("/updates", h.Updates)
-			chat.GET("/presence", echo.MethodNotAllowedHandler) // ???
-			chat.GET("/channels", h.GetAll)
-			chat.GET("/channels/joined", h.GetJoined)
-			chat.GET("/channels/:channel/messages", h.Messages)
-			chat.POST("/channels/:channel/messages", h.Send)
-			chat.PUT("/channels/:channel/users/:user", h.Join)
-			chat.DELETE("/channels/:channel/users/:user", h.Leave)
-			chat.PUT("/channels/:channel/mark-as-read/:message", echo.MethodNotAllowedHandler) // todo
-		}
+		root.GET("/api/v2/scores/:mode/:score/download", echo.MethodNotAllowedHandler)
 
-		// === Comments ===
-		comments := v2.Group("/comments")
-		{
-			comments.GET("/", echo.MethodNotAllowedHandler)
-			comments.POST("/", echo.MethodNotAllowedHandler)
-			comments.GET("/:comment", echo.MethodNotAllowedHandler)
-			comments.PUT("/:comment", echo.MethodNotAllowedHandler)
-			comments.PATCH("/:comment", echo.MethodNotAllowedHandler)
-			comments.DELETE("/:comment", echo.MethodNotAllowedHandler)
-			comments.POST("/:comment/vote", echo.MethodNotAllowedHandler)
-			comments.DELETE("/:comment/vote", echo.MethodNotAllowedHandler)
-		}
+		root.POST("/api/v2/rooms/", echo.MethodNotAllowedHandler)
+		root.GET("/api/v2/rooms/:room", echo.MethodNotAllowedHandler)
+		root.PUT("/api/v2/rooms/:room/users/:user", echo.MethodNotAllowedHandler)
+		root.DELETE("/api/v2/rooms/:room/users/:user", echo.MethodNotAllowedHandler)
+		root.GET("/api/v2/rooms/:room/leaderboard", echo.MethodNotAllowedHandler)
+		root.POST("/api/v2/rooms/:room/playlist/:playlist/scores", echo.MethodNotAllowedHandler)
+		root.PUT("/api/v2/rooms/:room/playlist/:playlist/scores/:score", echo.MethodNotAllowedHandler)
 
-		// === Notifications ===
-		notif := v2.Group("/Notifications", permission.MustLogin)
-		{
-			notif.GET("/", echo.MethodNotAllowedHandler)
-			notif.POST("/mark-read", echo.MethodNotAllowedHandler)
-		}
+		root.GET("/api/v2/comments/", echo.MethodNotAllowedHandler)
+		root.POST("/api/v2/comments/", echo.MethodNotAllowedHandler)
+		root.GET("/api/v2/comments/:comment", echo.MethodNotAllowedHandler)
+		root.PUT("/api/v2/comments/:comment", echo.MethodNotAllowedHandler)
+		root.PATCH("/api/v2/comments/:comment", echo.MethodNotAllowedHandler)
+		root.DELETE("/api/v2/comments/:comment", echo.MethodNotAllowedHandler)
+		root.POST("/api/v2/comments/:comment/vote", echo.MethodNotAllowedHandler)
+		root.DELETE("/api/v2/comments/:comment/vote", echo.MethodNotAllowedHandler)
 
-		// === Private OAuth configurations
-		oauth := v2.Group("/oauth")
-		{
-			client := oauth.Group("/client")
-			{
-				h := OAuthClientHandlers{app}
-				client.POST("", h.Create, permission.MustLogin)
-			}
-
-			token := oauth.Group("/token")
-			{
-				h := OAuthTokenHandlers{app}
-				token.POST("", h.Create)
-			}
-		}
+		root.GET("/api/v2/Notifications/", echo.MethodNotAllowedHandler)
+		root.POST("/api/v2/Notifications/mark-read", echo.MethodNotAllowedHandler)
 
 		// === Misc ===
-		v2.POST("/reports", echo.MethodNotAllowedHandler)
-		v2.GET("/changelog", echo.MethodNotAllowedHandler)
-		v2.GET("/changelog/:changelog", echo.MethodNotAllowedHandler)
+		root.POST("/api/v2/reports", echo.MethodNotAllowedHandler)
+		root.GET("/api/v2/changelog", echo.MethodNotAllowedHandler)
+		root.GET("/api/v2/changelog/:changelog", echo.MethodNotAllowedHandler)
 	}
 }

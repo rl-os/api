@@ -53,7 +53,7 @@ func (e Error) Error() string {
 	return mes
 }
 
-// responseFormat format an errors and return interface that must be show user
+// ResponseFormat format an errors and return interface that must be show user
 func (e *Error) ResponseFormat() ResponseFormat {
 	return ResponseFormat{
 		e.Id,

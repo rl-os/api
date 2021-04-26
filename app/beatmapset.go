@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"github.com/rl-os/api/repository"
 	"net/http"
 
 	myctx "github.com/rl-os/api/ctx"
@@ -15,13 +16,19 @@ var (
 	ErrInvalidBMSAction = errors.New("beatmapset", http.StatusBadRequest, "Invalid action")
 )
 
-type BeatmapSet struct {
+type BeatmapSetUseCase struct {
 	*App
+	BeatmapRepository    repository.Beatmap
+	BeatmapSetRepository repository.BeatmapSet
 }
 
-// Get from store and return 404 error if not exist
-func (a *BeatmapSet) Get(ctx context.Context, beatmapsetID uint) (*entity.BeatmapSetFull, error) {
-	data, err := a.Store.BeatmapSet().Get(ctx, beatmapsetID)
+func NewBeatmapSetUseCase(app *App, beatmap repository.Beatmap, beatmapset repository.BeatmapSet) *BeatmapSetUseCase {
+	return &BeatmapSetUseCase{app, beatmap, beatmapset}
+}
+
+// GetBeatmapset from repository and return 404 error if not exist
+func (a *BeatmapSetUseCase) GetBeatmapset(ctx context.Context, beatmapsetID uint) (*entity.BeatmapSetFull, error) {
+	data, err := a.BeatmapSetRepository.Get(ctx, beatmapsetID)
 	if err != nil {
 		return nil, ErrNotFoundBMS.WithCause(err)
 	}
@@ -29,28 +36,33 @@ func (a *BeatmapSet) Get(ctx context.Context, beatmapsetID uint) (*entity.Beatma
 	return data, nil
 }
 
-func (a *BeatmapSet) Lookup(ctx context.Context, beatmapId uint) (*entity.BeatmapSetFull, error) {
-	beatmap, err := a.Store.Beatmap().Get(ctx, beatmapId)
+func (a *BeatmapSetUseCase) LookupBeatmapset(ctx context.Context, beatmapId uint) (*entity.BeatmapSetFull, error) {
+	beatmap, err := a.BeatmapRepository.Get(ctx, beatmapId)
 	if err != nil {
-		return nil, err
+		return nil, ErrNotFoundBM.WithCause(err)
 	}
 
-	return a.Store.BeatmapSet().Get(ctx, uint(beatmap.Beatmapset.ID))
+	set, err := a.BeatmapSetRepository.Get(ctx, uint(beatmap.Beatmapset.ID))
+	if err != nil {
+		return nil, ErrNotFoundBMS.WithCause(err)
+	}
+
+	return set, nil
 }
 
-func (a *BeatmapSet) Search(ctx context.Context) (*entity.BeatmapsetSearchResult, error) {
+func (a *BeatmapSetUseCase) SearchBeatmapset(ctx context.Context) (*entity.BeatmapsetSearchResult, error) {
 	// TODO: this
 	return nil, nil
 }
 
-func (a *BeatmapSet) Favourite(ctx context.Context, action string, beatmapsetID uint) (uint, error) {
+func (a *BeatmapSetUseCase) FavouriteBeatmapset(ctx context.Context, action string, beatmapsetID uint) (uint, error) {
 	userId, err := myctx.GetUserID(ctx)
 	if err != nil {
 		return 0, ErrNotFoundBMS.WithCause(err)
 	}
 
 	var count uint
-	store := a.Store.BeatmapSet()
+	store := a.BeatmapSetRepository
 
 	switch action {
 	case "favourite":
