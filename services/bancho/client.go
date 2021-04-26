@@ -22,7 +22,7 @@ type Options struct {
 	OAuthClient struct {
 		Id     string
 		Secret string
-	}
+	} `mapstructure:"oauth_client"`
 }
 
 type Client struct {

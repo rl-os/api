@@ -27,7 +27,7 @@ const WAIT_FOR_CONNECTIONS_BEFORE_SHUTDOWN = time.Second * 2
 type Options struct {
 	Port    string
 	Host    string
-	APIAddr string
+	APIAddr string `mapstructure:"api_addr"`
 }
 
 // Server is echo server struct
@@ -52,7 +52,7 @@ func NewOptions(logger *zerolog.Logger, v *viper.Viper) (*Options, error) {
 	logger.Debug().
 		Msg("Loading config file")
 
-	if err := v.UnmarshalKey("http", &o); err != nil {
+	if err := v.UnmarshalKey("transport.http", &o); err != nil {
 		return nil, err
 	}
 
