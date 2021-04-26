@@ -7,7 +7,6 @@ import (
 	"github.com/rl-os/api/app"
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
-	"github.com/rl-os/api/services/validator"
 	"github.com/rs/zerolog"
 	"net/http"
 )
@@ -15,8 +14,7 @@ import (
 type OAuthClientController struct {
 	UseCase *app.OAuthUseCase
 
-	Logger    *zerolog.Logger
-	Validator *validator.Inst
+	Logger *zerolog.Logger
 }
 
 var providerOAuthClientSet = wire.NewSet(
@@ -26,12 +24,10 @@ var providerOAuthClientSet = wire.NewSet(
 func NewOAuthClientController(
 	useCase *app.OAuthUseCase,
 	logger *zerolog.Logger,
-	validator *validator.Inst,
 ) *OAuthClientController {
 	return &OAuthClientController{
 		useCase,
 		logger,
-		validator,
 	}
 }
 
@@ -48,13 +44,9 @@ func NewOAuthClientController(
 func (h OAuthClientController) Create(c echo.Context) error {
 	ctx, _ := c.Get("context").(context.Context)
 
-	params := &request.CreateOAuthClient{}
-	if err := c.Bind(params); err != nil {
+	params := request.CreateOAuthClient{}
+	if err := c.Bind(&params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Client info not found")
-	}
-
-	if err := h.Validator.Struct(params); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid client information")
 	}
 
 	userId, err := myctx.GetUserID(ctx)
@@ -62,7 +54,7 @@ func (h OAuthClientController) Create(c echo.Context) error {
 		return err
 	}
 
-	client, err := h.UseCase.CreateOAuthClient(ctx, userId, *params)
+	client, err := h.UseCase.CreateOAuthClient(ctx, userId, params)
 	if err != nil {
 		return err
 	}

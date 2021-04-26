@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"github.com/deissh/go-utils"
+	"github.com/rl-os/api/entity/request"
 	"github.com/rl-os/api/repository"
 	"net/http"
 
@@ -11,8 +12,9 @@ import (
 )
 
 var (
-	modes           = []string{"std", "mania", "catch", "taiko"}
-	ErrNotFoundUser = errors.New("not_found_user", http.StatusNotFound, "Not found")
+	modes             = []string{"std", "mania", "catch", "taiko"}
+	ErrNotFoundUser   = errors.New("not_found_user", http.StatusNotFound, "Not found")
+	ErrUserNotCreated = errors.New("user_not_created", http.StatusBadRequest, "Bad request")
 )
 
 type UserUseCase struct {
@@ -45,4 +47,17 @@ func (a *UserUseCase) UpdateLastVisit(ctx context.Context, userId uint) error {
 	}
 
 	return nil
+}
+
+func (a UserUseCase) Create(ctx context.Context, user request.CreateUser) (*entity.User, error) {
+	if err := a.Validator.Struct(&user); err != nil {
+		return nil, InvalidAuthParamsErr.WithCause(err)
+	}
+
+	data, err := a.UserRepository.Create(ctx, user.Username, user.Email, user.Password)
+	if err != nil {
+		return nil, ErrUserNotCreated.WithCause(err)
+	}
+
+	return data, nil
 }

@@ -6,7 +6,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/entity/request"
-	"github.com/rl-os/api/services/validator"
 	"github.com/rs/zerolog"
 	"net/http"
 	"strconv"
@@ -19,19 +18,16 @@ var providerBeatmapSet = wire.NewSet(
 type BeatmapController struct {
 	UseCase *app.BeatmapUseCase
 
-	Logger    *zerolog.Logger
-	Validator *validator.Inst
+	Logger *zerolog.Logger
 }
 
 func NewBeatmapController(
 	useCase *app.BeatmapUseCase,
 	logger *zerolog.Logger,
-	validator *validator.Inst,
 ) *BeatmapController {
 	return &BeatmapController{
 		useCase,
 		logger,
-		validator,
 	}
 }
 

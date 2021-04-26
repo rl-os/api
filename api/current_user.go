@@ -8,15 +8,13 @@ import (
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
 	"github.com/rl-os/api/errors"
-	"github.com/rl-os/api/services/validator"
 	"github.com/rs/zerolog"
 )
 
 type CurrentUserController struct {
 	UseCase *app.UserUseCase
 
-	Logger    *zerolog.Logger
-	Validator *validator.Inst
+	Logger *zerolog.Logger
 }
 
 var providerMeSet = wire.NewSet(
@@ -26,12 +24,10 @@ var providerMeSet = wire.NewSet(
 func NewCurrentUserController(
 	useCase *app.UserUseCase,
 	logger *zerolog.Logger,
-	validator *validator.Inst,
 ) *CurrentUserController {
 	return &CurrentUserController{
 		useCase,
 		logger,
-		validator,
 	}
 }
 
@@ -45,20 +41,15 @@ func NewCurrentUserController(
 // @Success 200 {object} entity.User
 // @Success 400 {object} errors.ResponseFormat
 func (h *CurrentUserController) Create(c echo.Context) error {
-	params := &request.CreateUser{}
+	params := request.CreateUser{}
 
-	if err := c.Bind(params); err != nil {
-		return errors.New("request_params", 400, "Invalid params")
-	}
-
-	if err := h.Validator.Struct(params); err != nil {
+	if err := c.Bind(&params); err != nil {
 		return errors.New("request_params", 400, "Invalid params")
 	}
 
 	ctx, _ := c.Get("context").(context.Context)
 
-	// FIXME: unsafe use
-	user, err := h.UseCase.UserRepository.Create(ctx, params.Username, params.Email, params.Password)
+	user, err := h.UseCase.Create(ctx, params)
 	if err != nil {
 		return err
 	}

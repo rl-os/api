@@ -5,7 +5,6 @@ import (
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 	"github.com/rl-os/api/app"
-	"github.com/rl-os/api/services/validator"
 	"github.com/rs/zerolog"
 	"net/http"
 	"strconv"
@@ -14,8 +13,7 @@ import (
 type UserController struct {
 	UseCase *app.UserUseCase
 
-	Logger    *zerolog.Logger
-	Validator *validator.Inst
+	Logger *zerolog.Logger
 }
 
 var providerUserSet = wire.NewSet(
@@ -25,12 +23,10 @@ var providerUserSet = wire.NewSet(
 func NewUserController(
 	useCase *app.UserUseCase,
 	logger *zerolog.Logger,
-	validator *validator.Inst,
 ) *UserController {
 	return &UserController{
 		useCase,
 		logger,
-		validator,
 	}
 }
 

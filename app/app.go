@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/google/wire"
 	"github.com/rl-os/api/services/bancho"
+	"github.com/rl-os/api/services/validator"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 )
@@ -22,6 +23,7 @@ type App struct {
 	Context context.Context
 	Options *Options
 
+	Validator    *validator.Inst
 	BanchoClient *bancho.Client
 }
 
@@ -46,12 +48,14 @@ func NewOptions(logger *zerolog.Logger, v *viper.Viper) (*Options, error) {
 func New(
 	options *Options,
 	bancho *bancho.Client,
+	validator *validator.Inst,
 ) *App {
 	ctx := context.TODO()
 
 	return &App{
-		Context: ctx,
-		Options: options,
+		Context:   ctx,
+		Options:   options,
+		Validator: validator,
 	}
 }
 

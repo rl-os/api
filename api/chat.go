@@ -8,7 +8,6 @@ import (
 	myctx "github.com/rl-os/api/ctx"
 	"github.com/rl-os/api/entity/request"
 	"github.com/rl-os/api/errors"
-	"github.com/rl-os/api/services/validator"
 	"github.com/rs/zerolog"
 	"strconv"
 )
@@ -16,8 +15,7 @@ import (
 type ChatController struct {
 	UseCase *app.ChatUseCase
 
-	Logger    *zerolog.Logger
-	Validator *validator.Inst
+	Logger *zerolog.Logger
 }
 
 var providerChatSet = wire.NewSet(
@@ -27,12 +25,10 @@ var providerChatSet = wire.NewSet(
 func NewChatController(
 	useCase *app.ChatUseCase,
 	logger *zerolog.Logger,
-	validator *validator.Inst,
 ) *ChatController {
 	return &ChatController{
 		useCase,
 		logger,
-		validator,
 	}
 }
 

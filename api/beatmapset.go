@@ -7,7 +7,6 @@ import (
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/entity/request"
 	"github.com/rl-os/api/errors"
-	"github.com/rl-os/api/services/validator"
 	"github.com/rs/zerolog"
 	"net/http"
 	"strconv"
@@ -20,19 +19,16 @@ var providerBeatmapsetSet = wire.NewSet(
 type BeatmapSetController struct {
 	UseCase *app.BeatmapSetUseCase
 
-	Logger    *zerolog.Logger
-	Validator *validator.Inst
+	Logger *zerolog.Logger
 }
 
 func NewBeatmapSetController(
 	useCase *app.BeatmapSetUseCase,
 	logger *zerolog.Logger,
-	validator *validator.Inst,
 ) *BeatmapSetController {
 	return &BeatmapSetController{
 		useCase,
 		logger,
-		validator,
 	}
 }
 

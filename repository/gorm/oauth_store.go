@@ -94,7 +94,7 @@ func (o OAuthRepository) CreateToken(ctx context.Context, userId uint, clientID 
 
 	token, err := tokenCreate(
 		o.JWTSecret,
-		time.Duration(int(time.Hour)*o.HoursBeforeRevoke),
+		time.Duration(int(time.Hour)*24),
 		userId,
 		clientID,
 		scopes,

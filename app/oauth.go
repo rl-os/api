@@ -68,6 +68,10 @@ func (a *OAuthUseCase) ValidateToken(ctx context.Context, accessToken string) (*
 // CreateOAuthClient создает новый entity.OAuthClient
 // в случае InvalidOAuthClientParamsErr
 func (a *OAuthUseCase) CreateOAuthClient(ctx context.Context, userId uint, request request.CreateOAuthClient) (*entity.OAuthClient, error) {
+	if err := a.Validator.Struct(&request); err != nil {
+		return nil, InvalidAuthParamsErr.WithCause(err)
+	}
+
 	token, err := a.OAuthRepository.CreateClient(ctx, userId, request.Name, request.Redirect)
 	if err != nil {
 		return nil, InvalidOAuthClientParamsErr.WithCause(err)
@@ -88,6 +92,10 @@ func (a *OAuthUseCase) RefreshToken(ctx context.Context, refreshToken string, cl
 
 // CreateOAuthToken and return it
 func (a *OAuthUseCase) CreateOAuthToken(ctx context.Context, request request.CreateOauthToken) (*entity.OAuthToken, error) {
+	if err := a.Validator.Struct(request); err != nil {
+		return nil, InvalidAuthParamsErr.WithCause(err)
+	}
+
 	if !utils.ContainsString(OAuthGroundType, request.GrantType) {
 		request.GrantType = "password"
 	}
