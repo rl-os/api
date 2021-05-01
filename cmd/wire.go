@@ -9,6 +9,7 @@ import (
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/repository/gorm"
 	"github.com/rl-os/api/services"
+	"github.com/rl-os/api/services/cache"
 	"github.com/rl-os/api/services/transports"
 	"github.com/rl-os/api/services/transports/http"
 )
@@ -19,6 +20,7 @@ var providerSet = wire.NewSet(
 	app.ProviderSet,
 	http.ProviderSet,
 	gorm.ProviderSet,
+	cache.ProviderSet,
 )
 
 func Injector(configPath string) (transports.Server, error) {

@@ -11,9 +11,10 @@ import (
 	"github.com/rl-os/api/app"
 	"github.com/rl-os/api/repository/gorm"
 	"github.com/rl-os/api/services"
-	"github.com/rl-os/api/services/bancho"
+	"github.com/rl-os/api/services/cache"
 	"github.com/rl-os/api/services/config"
 	"github.com/rl-os/api/services/log"
+	"github.com/rl-os/api/services/redis"
 	"github.com/rl-os/api/services/transports"
 	"github.com/rl-os/api/services/transports/http"
 	"github.com/rl-os/api/services/validator"
@@ -38,20 +39,25 @@ func Injector(configPath string) (transports.Server, error) {
 	if err != nil {
 		return nil, err
 	}
+	redisOptions := cache.NewRedisOptions()
+	options2, err := redis.NewOptions(logger, viper)
+	if err != nil {
+		return nil, err
+	}
+	pool := redis.New(logger, options2)
+	cacheCache, err := cache.NewRedis(redisOptions, pool)
+	if err != nil {
+		return nil, err
+	}
 	appOptions, err := app.NewOptions(logger, viper)
 	if err != nil {
 		return nil, err
 	}
-	banchoOptions, err := bancho.NewOptions(logger, viper)
-	if err != nil {
-		return nil, err
-	}
-	client := bancho.New(banchoOptions)
 	inst, err := validator.New()
 	if err != nil {
 		return nil, err
 	}
-	appApp := app.New(appOptions, client, inst)
+	appApp := app.New(cacheCache, appOptions, inst)
 	gormOptions, err := gorm.NewOptions(logger, viper)
 	if err != nil {
 		return nil, err
@@ -73,7 +79,7 @@ func Injector(configPath string) (transports.Server, error) {
 	beatmapUseCase := app.NewBeatmapUseCase(appApp, beatmap)
 	beatmapController := api.NewBeatmapController(beatmapUseCase, logger)
 	beatmapSet := gorm.NewBeatmapSetRepository(supplier)
-	beatmapSetUseCase := app.NewBeatmapSetUseCase(appApp, beatmap, beatmapSet)
+	beatmapSetUseCase := app.NewBeatmapSetUseCase(appApp, beatmapUseCase, beatmapSet)
 	beatmapSetController := api.NewBeatmapSetController(beatmapSetUseCase, logger)
 	currentUserController := api.NewCurrentUserController(userUseCase, logger)
 	oAuthOptions, err := gorm.NewOAuthOptions(logger, viper)
@@ -95,4 +101,4 @@ func Injector(configPath string) (transports.Server, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(services.ProviderSet, api.ProviderSet, app.ProviderSet, http.ProviderSet, gorm.ProviderSet)
+var providerSet = wire.NewSet(services.ProviderSet, api.ProviderSet, app.ProviderSet, http.ProviderSet, gorm.ProviderSet, cache.ProviderSet)

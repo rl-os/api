@@ -3,7 +3,7 @@ package app
 import (
 	"context"
 	"github.com/google/wire"
-	"github.com/rl-os/api/services/bancho"
+	"github.com/rl-os/api/services/cache"
 	"github.com/rl-os/api/services/validator"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
@@ -23,8 +23,8 @@ type App struct {
 	Context context.Context
 	Options *Options
 
-	Validator    *validator.Inst
-	BanchoClient *bancho.Client
+	Validator *validator.Inst
+	Cache     cache.Cache
 }
 
 // NewOptions create and parse config from viper instance
@@ -46,8 +46,8 @@ func NewOptions(logger *zerolog.Logger, v *viper.Viper) (*Options, error) {
 
 // New with DI
 func New(
+	cache cache.Cache,
 	options *Options,
-	bancho *bancho.Client,
 	validator *validator.Inst,
 ) *App {
 	ctx := context.TODO()
@@ -56,6 +56,7 @@ func New(
 		Context:   ctx,
 		Options:   options,
 		Validator: validator,
+		Cache:     cache,
 	}
 }
 

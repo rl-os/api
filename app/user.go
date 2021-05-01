@@ -2,13 +2,13 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"github.com/deissh/go-utils"
+	"github.com/rl-os/api/entity"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rl-os/api/errors"
 	"github.com/rl-os/api/repository"
 	"net/http"
-
-	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/errors"
 )
 
 var (
@@ -26,16 +26,26 @@ func NewUserUseCase(app *App, rep repository.User) *UserUseCase {
 	return &UserUseCase{app, rep}
 }
 
-// GetUser from repository and return 404 error if not exist
-func (a *UserUseCase) GetUser(ctx context.Context, userID uint, mode string) (*entity.User, error) {
+// Get from repository and return 404 error if not exist
+func (a *UserUseCase) Get(ctx context.Context, userID uint, mode string) (*entity.User, error) {
 	if !utils.ContainsString(modes, mode) {
 		mode = "std"
+	}
+
+	var cached entity.User
+
+	key := fmt.Sprintf("%d__%s", userID, mode)
+	err := a.Cache.Get("user", key, &cached)
+	if err == nil {
+		return &cached, nil
 	}
 
 	data, err := a.UserRepository.Get(ctx, userID, mode)
 	if err != nil {
 		return nil, ErrNotFoundUser.WithCause(err)
 	}
+
+	a.Cache.Set("user", key, data)
 
 	return data, nil
 }

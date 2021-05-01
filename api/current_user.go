@@ -76,7 +76,7 @@ func (h *CurrentUserController) Me(c echo.Context) error {
 		return errors.New("request_params", 400, "Invalid params")
 	}
 
-	user, err := h.UseCase.GetUser(ctx, userId, mode)
+	user, err := h.UseCase.Get(ctx, userId, mode)
 	if err != nil {
 		return err
 	}

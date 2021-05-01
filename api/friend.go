@@ -48,7 +48,7 @@ func (h *FriendController) GetAll(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.UseCase.GetAllFriends(ctx, userId)
+	users, err := h.UseCase.Get(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -80,7 +80,7 @@ func (h *FriendController) Add(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.UseCase.AddFriend(ctx, userId, params.TargetId)
+	users, err := h.UseCase.Add(ctx, userId, params.TargetId)
 	if err != nil {
 		return err
 	}
@@ -112,7 +112,7 @@ func (h *FriendController) Remove(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	users, err := h.UseCase.RemoveFriend(ctx, userId, params.TargetId)
+	users, err := h.UseCase.Remove(ctx, userId, params.TargetId)
 	if err != nil {
 		return err
 	}

@@ -40,7 +40,7 @@ func (h *UserController) Get(c echo.Context) error {
 
 	mode := c.Param("mode")
 
-	user, err := h.UseCase.GetUser(ctx, uint(userId), mode)
+	user, err := h.UseCase.Get(ctx, uint(userId), mode)
 	if err != nil {
 		return err
 	}

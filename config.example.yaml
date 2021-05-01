@@ -14,6 +14,9 @@ database:
   driver: postgres
   dsn: postgres://postgres:postgres@/osuserver?sslmode=disable
 
+redis:
+  url: 'redis://localhost:6379'
+
 log:
   level: trace
   no_color: false
