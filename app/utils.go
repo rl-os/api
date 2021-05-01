@@ -1,4 +1,4 @@
-package gorm
+package app
 
 import (
 	"fmt"

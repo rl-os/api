@@ -5,41 +5,15 @@ import (
 	"github.com/deissh/go-utils"
 	"github.com/rl-os/api/entity"
 	"github.com/rl-os/api/repository"
-	"github.com/rs/zerolog"
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
-	"time"
 )
-
-type OAuthOptions struct {
-	JWTSecret         string
-	HoursBeforeRevoke int
-}
-
-// NewOAuthOptions create and parse config from viper instance
-func NewOAuthOptions(logger *zerolog.Logger, v *viper.Viper) (*OAuthOptions, error) {
-	o := OAuthOptions{}
-
-	logger.Debug().
-		Msg("Loading config file")
-	if err := v.UnmarshalKey("oauth", &o); err != nil {
-		return nil, err
-	}
-
-	logger.Debug().
-		Interface("oauth", o).
-		Msg("Loaded config")
-
-	return &o, nil
-}
 
 type OAuthRepository struct {
 	*Supplier
-	*OAuthOptions
 }
 
-func NewOAuthRepository(options *OAuthOptions, supplier *Supplier) repository.OAuth {
-	return &OAuthRepository{supplier, options}
+func NewOAuthRepository(supplier *Supplier) repository.OAuth {
+	return &OAuthRepository{supplier}
 }
 
 func (o OAuthRepository) CreateClient(ctx context.Context, userId uint, name string, redirect string) (*entity.OAuthClient, error) {
@@ -86,24 +60,8 @@ func (o OAuthRepository) GetClient(ctx context.Context, id uint, secret string) 
 	return &client, err
 }
 
-func (o OAuthRepository) CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (*entity.OAuthToken, error) {
-	_, err := o.GetClient(ctx, clientID, clientSecret)
-	if err != nil {
-		return nil, err
-	}
-
-	token, err := tokenCreate(
-		o.JWTSecret,
-		time.Duration(int(time.Hour)*24),
-		userId,
-		clientID,
-		scopes,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	err = o.GetMaster().WithContext(ctx).
+func (o OAuthRepository) CreateToken(ctx context.Context, token entity.OAuthToken) (*entity.OAuthToken, error) {
+	err := o.GetMaster().WithContext(ctx).
 		Table("oauth_token").
 		Create(&token).
 		Error
@@ -128,7 +86,7 @@ func (o OAuthRepository) RevokeAllTokens(ctx context.Context, userId uint) error
 	return nil
 }
 
-func (o OAuthRepository) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error) {
+func (o OAuthRepository) RefreshToken(ctx context.Context, refreshToken string) (*entity.OAuthToken, error) {
 	token := entity.OAuthToken{}
 
 	err := o.GetMaster().
@@ -142,7 +100,7 @@ func (o OAuthRepository) RefreshToken(ctx context.Context, refreshToken string, 
 		return nil, err
 	}
 
-	return o.CreateToken(ctx, token.UserID, token.ClientID, clientSecret, token.Scopes)
+	return o.CreateToken(ctx, token)
 }
 
 func (o OAuthRepository) GetToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error) {

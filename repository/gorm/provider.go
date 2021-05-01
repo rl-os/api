@@ -14,7 +14,6 @@ var ProviderSet = wire.NewSet(
 
 	NewFriendRepository,
 
-	NewOAuthOptions,
 	NewOAuthRepository,
 
 	NewUserRepository,

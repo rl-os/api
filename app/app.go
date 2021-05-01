@@ -7,6 +7,7 @@ import (
 	"github.com/rl-os/api/services/validator"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
+	"time"
 )
 
 // ProviderAppSet provide DI
@@ -15,7 +16,8 @@ var ProviderAppSet = wire.NewSet(New, NewOptions)
 // Options is app configuration struct
 type Options struct {
 	JWT struct {
-		Secret string
+		Secret       string
+		BeforeRevoke time.Duration
 	}
 }
 

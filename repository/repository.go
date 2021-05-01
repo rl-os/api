@@ -18,9 +18,9 @@ type OAuth interface {
 	CreateClient(ctx context.Context, userId uint, name string, redirect string) (*entity.OAuthClient, error)
 	GetClient(ctx context.Context, id uint, secret string) (*entity.OAuthClient, error)
 
-	CreateToken(ctx context.Context, userId uint, clientID uint, clientSecret string, scopes string) (*entity.OAuthToken, error)
+	CreateToken(ctx context.Context, token entity.OAuthToken) (*entity.OAuthToken, error)
 	RevokeAllTokens(ctx context.Context, userId uint) error
-	RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error)
+	RefreshToken(ctx context.Context, refreshToken string) (*entity.OAuthToken, error)
 	GetToken(ctx context.Context, accessToken string) (*entity.OAuthToken, error)
 }
 

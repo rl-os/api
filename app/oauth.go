@@ -4,12 +4,12 @@ import (
 	"context"
 	"github.com/deissh/go-utils"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/rl-os/api/entity"
 	"github.com/rl-os/api/entity/request"
+	"github.com/rl-os/api/errors"
 	"github.com/rl-os/api/repository"
 	"net/http"
-
-	"github.com/rl-os/api/entity"
-	"github.com/rl-os/api/errors"
+	"time"
 )
 
 var (
@@ -81,8 +81,8 @@ func (a *OAuthUseCase) CreateOAuthClient(ctx context.Context, userId uint, reque
 }
 
 // RefreshToken and revoke old access token
-func (a *OAuthUseCase) RefreshToken(ctx context.Context, refreshToken string, clientID uint, clientSecret string) (*entity.OAuthToken, error) {
-	token, err := a.OAuthRepository.RefreshToken(ctx, refreshToken, clientID, clientSecret)
+func (a *OAuthUseCase) RefreshToken(ctx context.Context, refreshToken string) (*entity.OAuthToken, error) {
+	token, err := a.OAuthRepository.RefreshToken(ctx, refreshToken)
 	if err != nil {
 		return nil, NotFoundRefreshAuthErr.WithCause(err)
 	}
@@ -110,25 +110,22 @@ func (a *OAuthUseCase) CreateOAuthToken(ctx context.Context, request request.Cre
 			return nil, InvalidAuthParamsErr.WithCause(err)
 		}
 
-		token, err := a.OAuthRepository.CreateToken(
-			ctx,
+		rawToken, _ := tokenCreate(
+			a.Options.JWT.Secret,
+			time.Hour*24,
 			user.ID,
 			request.ClientID,
-			request.ClientSecret,
 			request.Scope,
 		)
+
+		token, err := a.OAuthRepository.CreateToken(ctx, rawToken)
 		if err != nil {
 			return nil, InvalidAuthParamsErr.WithCause(err)
 		}
 
 		return token, nil
 	} else if request.GrantType == "refresh_token" {
-		return a.RefreshToken(
-			ctx,
-			request.RefreshToken,
-			request.ClientID,
-			request.ClientSecret,
-		)
+		return a.RefreshToken(ctx, request.RefreshToken)
 	}
 
 	return nil, InvalidAuthParamsErr.WithCause(nil, "invalid grant type")
