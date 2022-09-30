@@ -18,7 +18,7 @@ require (
 	github.com/google/go-cmp v0.5.5 // indirect
 	github.com/google/wire v0.4.0
 	github.com/jmoiron/sqlx v1.2.0
-	github.com/labstack/echo/v4 v4.1.17
+	github.com/labstack/echo/v4 v4.9.0
 	github.com/lib/pq v1.8.0
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
@@ -36,10 +36,6 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/echo-swagger v1.0.0
 	github.com/swaggo/swag v1.6.7
-	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
-	golang.org/x/net v0.0.0-20201202161906-c7110b5ffcbb // indirect
-	golang.org/x/sys v0.0.0-20210228012217-479acdf4ea46 // indirect
-	golang.org/x/text v0.3.5 // indirect
 	golang.org/x/tools v0.0.0-20201224043029-2b0845dc783e // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
